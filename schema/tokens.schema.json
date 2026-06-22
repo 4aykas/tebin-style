@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tebin-style/schema/tokens.schema.json",
+  "type": "object",
+  "$defs": {
+    "tokenLeaf": {
+      "type": "object",
+      "required": ["$type", "$value"],
+      "properties": {
+        "$type": { "type": "string", "enum": ["color", "fontFamily", "dimension", "shadow", "fontWeight", "number", "duration"] },
+        "$value": {},
+        "$description": { "type": "string" }
+      }
+    },
+    "tokenNode": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "$ref": "#/$defs/tokenLeaf" },
+          { "$ref": "#/$defs/tokenNode" }
+        ]
+      }
+    }
+  },
+  "allOf": [{ "$ref": "#/$defs/tokenNode" }]
+}
