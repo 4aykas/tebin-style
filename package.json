@@ -1,0 +1,23 @@
+{
+  "name": "tebin-style",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "A registry of reusable themes (brand kits) for AI coding agents: DTCG design tokens, brand assets, and metadata.",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "tsx scripts/build.ts && tsx scripts/build-index.ts",
+    "validate": "tsx scripts/validate.ts",
+    "check": "tsx scripts/check.ts",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "style-dictionary": "^4.3.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
