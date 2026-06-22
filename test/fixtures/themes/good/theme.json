@@ -1,0 +1,7 @@
+{
+  "id": "good",
+  "name": "Good Fixture",
+  "version": "1.0.0",
+  "license": { "tokens": "MIT", "assets": "© Test" },
+  "assets": [{ "id": "logo", "type": "logo", "format": "svg", "path": "assets/logo.svg" }]
+}
