@@ -1,7 +1,7 @@
 import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { diffTheme } from '../src/check.js';
+import { diffTheme, diffRules } from '../src/check.js';
 import { buildIndex } from '../src/index-builder.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -36,6 +36,16 @@ if (existsSync(themesRoot)) {
     console.error('✗ registry/index.json is out of date — run `pnpm build`');
   } else {
     console.log('✓ registry/index.json');
+  }
+}
+
+if (existsSync(join(root, 'rules', 'rules.json'))) {
+  const rulesDrift = diffRules();
+  if (rulesDrift.length) {
+    failed = true;
+    console.error('✗ rules/dist/rules.md is out of date — run `pnpm build`');
+  } else {
+    console.log('✓ rules/dist/rules.md');
   }
 }
 

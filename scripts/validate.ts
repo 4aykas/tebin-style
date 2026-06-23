@@ -1,7 +1,7 @@
-import { readdirSync, existsSync } from 'node:fs';
+import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { validateThemeDir } from '../src/validate.js';
+import { validateThemeDir, validateRulesData } from '../src/validate.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const themesRoot = join(root, 'themes');
@@ -26,6 +26,27 @@ if (existsSync(themesRoot)) {
   }
 } else {
   console.log('no themes/ directory yet');
+}
+
+const rulesPath = join(root, 'rules', 'rules.json');
+if (existsSync(rulesPath)) {
+  const rules = JSON.parse(readFileSync(rulesPath, 'utf8'));
+  const res = validateRulesData(rules);
+  const ids = new Set<string>();
+  let dup = false;
+  if (Array.isArray(rules)) {
+    for (const r of rules) {
+      if (ids.has(r.id)) { dup = true; console.error(`✗ duplicate rule id: ${r.id}`); }
+      ids.add(r.id);
+    }
+  }
+  if (res.valid && !dup) {
+    console.log('✓ rules');
+  } else {
+    failed = true;
+    console.error('✗ rules');
+    for (const e of res.errors) console.error(`    ${e}`);
+  }
 }
 
 if (failed) process.exit(1);

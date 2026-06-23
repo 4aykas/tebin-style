@@ -12,9 +12,11 @@ addFormats(ajv);
 
 const themeSchema = JSON.parse(readFileSync(join(schemaDir, 'theme.schema.json'), 'utf8'));
 const tokensSchema = JSON.parse(readFileSync(join(schemaDir, 'tokens.schema.json'), 'utf8'));
+const rulesSchema = JSON.parse(readFileSync(join(schemaDir, 'rules.schema.json'), 'utf8'));
 
 const validateThemeFn = ajv.compile(themeSchema);
 const validateTokensFn = ajv.compile(tokensSchema);
+const validateRulesFn = ajv.compile(rulesSchema);
 
 export interface ValidationResult {
   valid: boolean;
@@ -36,6 +38,11 @@ export function validateThemeMetadata(obj: unknown): ValidationResult {
 export function validateTokens(obj: unknown): ValidationResult {
   const valid = validateTokensFn(obj) as boolean;
   return toResult(valid, validateTokensFn.errors);
+}
+
+export function validateRulesData(obj: unknown): ValidationResult {
+  const valid = validateRulesFn(obj) as boolean;
+  return toResult(valid, validateRulesFn.errors);
 }
 
 export function validateThemeDir(dir: string): ValidationResult {
