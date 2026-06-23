@@ -25,7 +25,7 @@ if (existsSync(themesRoot)) {
   const committed = existsSync(committedPath) ? readFileSync(committedPath, 'utf8') : '';
   const fresh =
     JSON.stringify(
-      buildIndex(themesRoot, { rawBaseUrl: 'https://raw.githubusercontent.com/OWNER/tebin-style/main' }),
+      buildIndex(themesRoot, { rawBaseUrl: 'https://raw.githubusercontent.com/4aykas/tebin-style/main' }),
       null,
       2,
     ) + '\n';

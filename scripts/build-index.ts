@@ -5,7 +5,7 @@ import { buildIndex } from '../src/index-builder.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const themesRoot = join(root, 'themes');
-const rawBaseUrl = 'https://raw.githubusercontent.com/OWNER/tebin-style/main';
+const rawBaseUrl = 'https://raw.githubusercontent.com/4aykas/tebin-style/main';
 
 const index = buildIndex(themesRoot, { rawBaseUrl });
 mkdirSync(join(root, 'registry'), { recursive: true });
