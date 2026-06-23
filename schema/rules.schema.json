@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tebin-style/schema/rules.schema.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "category", "severity", "statement"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "category": { "type": "string", "minLength": 1 },
+      "severity": { "type": "string", "enum": ["MUST", "SHOULD", "NEVER"] },
+      "statement": { "type": "string", "minLength": 1 },
+      "rationale": { "type": "string" },
+      "tags": { "type": "array", "items": { "type": "string" } },
+      "source": { "type": "string" }
+    }
+  }
+}
