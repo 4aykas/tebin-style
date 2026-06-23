@@ -4,6 +4,7 @@ import {
   loadIndex, loadThemeManifest, readFormat, readAssetFile, FORMAT_FILES, NotFoundError,
   type Format,
 } from '../src/registry.js';
+import { filterRules, getRule as getRuleById, type Rule } from '../src/rules.js';
 
 const FORMATS = Object.keys(FORMAT_FILES) as Format[];
 
@@ -51,6 +52,17 @@ export function getAsset(input: { id: string; assetId?: string }) {
   };
 }
 
+export function listRules(input: { category?: string; severity?: string; tag?: string; query?: string }): {
+  count: number; rules: Rule[];
+} {
+  const rules = filterRules(input);
+  return { count: rules.length, rules };
+}
+
+export function getRuleTool(input: { id: string }): Rule {
+  return getRuleById(input.id);
+}
+
 export interface ToolDef {
   name: string;
   description: string;
@@ -86,5 +98,24 @@ export const toolDefinitions: ToolDef[] = [
       assetId: z.string().optional(),
     },
     handler: getAsset,
+  },
+  {
+    name: 'list_rules',
+    description: 'List design rules (UI/UX/accessibility guidelines), filtered by category, severity, tag, or query.',
+    inputSchema: {
+      category: z.string().optional(),
+      severity: z.enum(['MUST', 'SHOULD', 'NEVER']).optional(),
+      tag: z.string().optional(),
+      query: z.string().optional(),
+    },
+    handler: listRules,
+  },
+  {
+    name: 'get_rule',
+    description: 'Get a single design rule by id.',
+    inputSchema: {
+      id: z.string(),
+    },
+    handler: getRuleTool,
   },
 ];

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { listThemes, getTheme, getAsset, toolDefinitions } from '../mcp/tools.js';
+import { listThemes, getTheme, getAsset, listRules, getRuleTool, toolDefinitions } from '../mcp/tools.js';
 import { NotFoundError } from '../src/registry.js';
 
 describe('list_themes', () => {
@@ -52,8 +52,24 @@ describe('get_asset', () => {
   });
 });
 
+describe('list_rules / get_rule', () => {
+  it('lists rules filtered by category', () => {
+    const r = listRules({ category: 'forms' });
+    expect(r.count).toBe(r.rules.length);
+    expect(r.rules.every((x) => x.category === 'forms')).toBe(true);
+  });
+  it('gets a rule by id', () => {
+    expect(getRuleTool({ id: 'forms-loading-button' }).severity).toBe('MUST');
+  });
+  it('throws for an unknown rule', () => {
+    expect(() => getRuleTool({ id: 'nope' })).toThrow(NotFoundError);
+  });
+});
+
 describe('toolDefinitions', () => {
-  it('declares the three tools', () => {
-    expect(toolDefinitions.map((t) => t.name)).toEqual(['list_themes', 'get_theme', 'get_asset']);
+  it('declares the five tools', () => {
+    expect(toolDefinitions.map((t) => t.name)).toEqual([
+      'list_themes', 'get_theme', 'get_asset', 'list_rules', 'get_rule',
+    ]);
   });
 });
