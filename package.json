@@ -13,7 +13,8 @@
     "build": "tsx scripts/build.ts && tsx scripts/build-index.ts",
     "validate": "tsx scripts/validate.ts",
     "check": "tsx scripts/check.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "start:mcp": "tsx mcp/server.ts"
   },
   "devDependencies": {
     "ajv": "^8.17.1",

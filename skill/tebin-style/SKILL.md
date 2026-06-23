@@ -39,6 +39,8 @@ project. The registry is a set of static files; this skill only reads them.
 - With a local clone (skill installed as a plugin): read files from disk.
 - Without a clone: fetch from `raw.githubusercontent.com/OWNER/tebin-style/main/...`
   using the `rawUrl` fields in `registry/index.json`.
+- Via MCP: if the `tebin-style` MCP server is registered, call its
+  `list_themes` / `get_theme` / `get_asset` tools instead of reading files.
 
 See `references/formats.md` for how to insert each output format, and
 `references/licensing.md` for how to interpret the license fields.

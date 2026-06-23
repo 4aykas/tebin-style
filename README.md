@@ -12,6 +12,23 @@ The [`tebin-style` skill](./skill/tebin-style/SKILL.md) reads
 right output format for the target project. See the skill for the full
 discover → inspect → apply workflow.
 
+## MCP server
+
+`tebin-style` also ships a local [MCP](https://modelcontextprotocol.io) server
+exposing read-only tools `list_themes`, `get_theme`, and `get_asset`.
+
+Run it: `pnpm start:mcp` (stdio). Register it in an MCP client, e.g.:
+
+```jsonc
+{ "mcpServers": {
+  "tebin-style": { "command": "pnpm", "args": ["--dir", "/abs/path/to/tebin-style", "start:mcp"] }
+} }
+```
+
+- `list_themes({ industry?, mood?, query? })` → matching theme summaries
+- `get_theme({ id, format? })` → tokens in `css` | `tailwind` | `dtcg` | `ts` (default `css`)
+- `get_asset({ id, assetId? })` → asset list, or one asset (SVG as text, binary as base64)
+
 ## For humans
 
 Browse [`themes/`](./themes). Each theme has:
