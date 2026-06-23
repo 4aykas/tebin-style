@@ -1,0 +1,5 @@
+# Keep generated and source text files LF in the working tree so `pnpm check`
+# (which diffs committed dist/* against a fresh build) is stable across OSes.
+* text=auto eol=lf
+*.png binary
+*.ico binary
