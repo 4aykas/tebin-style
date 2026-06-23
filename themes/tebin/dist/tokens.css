@@ -1,0 +1,19 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-brand: #da291c;
+  --color-brand-dark: #b82217;
+  --color-charcoal: #242424;
+  --color-ink: #292929;
+  --color-muted: #666666;
+  --color-topbar: #f9f9f9;
+  --color-subtle: #c1c1c1;
+  --color-rule: #ececec;
+  --font-sans: Roboto, Helvetica, Arial, sans-serif;
+  --font-condensed: 'Roboto Condensed', Roboto, sans-serif;
+  --radius-panel: 2px;
+  --radius-control: 4px;
+  --radius-card: 8px;
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "id": "tebin",
+  "name": "TEBIN",
+  "description": "Industrial design-and-engineering brand: condensed type, signal red on charcoal.",
+  "version": "1.0.0",
+  "industry": ["engineering", "industrial", "b2b"],
+  "mood": ["bold", "technical", "high-contrast"],
+  "source": { "url": "https://tebin.pro", "extractedBy": "manual" },
+  "license": { "tokens": "MIT", "assets": "© TEBIN — all rights reserved" },
+  "author": "TEBIN",
+  "createdAt": "2026-06-22",
+  "updatedAt": "2026-06-22",
+  "assets": [
+    { "id": "logo-full", "type": "logo", "variant": "full", "format": "svg", "path": "assets/logo/logo-full.svg" },
+    { "id": "favicon-svg", "type": "favicon", "format": "svg", "path": "assets/favicon/favicon.svg" },
+    { "id": "favicon-png", "type": "favicon", "format": "png", "path": "assets/favicon/favicon.png" },
+    { "id": "favicon-ico", "type": "favicon", "format": "ico", "path": "assets/favicon/favicon.ico" },
+    { "id": "corner-outline", "type": "pattern", "format": "svg", "path": "assets/misc/corner_outline.svg" },
+    { "id": "fxptebin", "type": "image", "format": "png", "path": "assets/misc/fxptebin.png" }
+  ]
+}

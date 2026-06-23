@@ -1,0 +1,69 @@
+{
+  "color": {
+    "brand": {
+      "$type": "color",
+      "$value": "#DA291C"
+    },
+    "brand-dark": {
+      "$type": "color",
+      "$value": "#B82217"
+    },
+    "charcoal": {
+      "$type": "color",
+      "$value": "#242424"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "#292929"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "#666666"
+    },
+    "topbar": {
+      "$type": "color",
+      "$value": "#F9F9F9"
+    },
+    "subtle": {
+      "$type": "color",
+      "$value": "#C1C1C1"
+    },
+    "rule": {
+      "$type": "color",
+      "$value": "#ECECEC"
+    }
+  },
+  "font": {
+    "sans": {
+      "$type": "fontFamily",
+      "$value": [
+        "Roboto",
+        "Helvetica",
+        "Arial",
+        "sans-serif"
+      ]
+    },
+    "condensed": {
+      "$type": "fontFamily",
+      "$value": [
+        "Roboto Condensed",
+        "Roboto",
+        "sans-serif"
+      ]
+    }
+  },
+  "radius": {
+    "panel": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "control": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "card": {
+      "$type": "dimension",
+      "$value": "8px"
+    }
+  }
+}

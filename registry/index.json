@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-06-23",
+  "count": 1,
+  "themes": [
+    {
+      "id": "tebin",
+      "name": "TEBIN",
+      "version": "1.0.0",
+      "industry": [
+        "engineering",
+        "industrial",
+        "b2b"
+      ],
+      "mood": [
+        "bold",
+        "technical",
+        "high-contrast"
+      ],
+      "preview": {
+        "brand": "#DA291C",
+        "ink": "#292929",
+        "topbar": "#F9F9F9"
+      },
+      "formats": {
+        "css": "themes/tebin/dist/tokens.css",
+        "tailwind": "themes/tebin/dist/tailwind.css",
+        "dtcg": "themes/tebin/dist/tokens.dtcg.json",
+        "ts": "themes/tebin/dist/theme.ts"
+      },
+      "assets": [
+        {
+          "id": "logo-full",
+          "type": "logo",
+          "path": "themes/tebin/assets/logo/logo-full.svg",
+          "rawUrl": "https://raw.githubusercontent.com/OWNER/tebin-style/main/themes/tebin/assets/logo/logo-full.svg"
+        },
+        {
+          "id": "favicon-svg",
+          "type": "favicon",
+          "path": "themes/tebin/assets/favicon/favicon.svg",
+          "rawUrl": "https://raw.githubusercontent.com/OWNER/tebin-style/main/themes/tebin/assets/favicon/favicon.svg"
+        },
+        {
+          "id": "favicon-png",
+          "type": "favicon",
+          "path": "themes/tebin/assets/favicon/favicon.png",
+          "rawUrl": "https://raw.githubusercontent.com/OWNER/tebin-style/main/themes/tebin/assets/favicon/favicon.png"
+        },
+        {
+          "id": "favicon-ico",
+          "type": "favicon",
+          "path": "themes/tebin/assets/favicon/favicon.ico",
+          "rawUrl": "https://raw.githubusercontent.com/OWNER/tebin-style/main/themes/tebin/assets/favicon/favicon.ico"
+        },
+        {
+          "id": "corner-outline",
+          "type": "pattern",
+          "path": "themes/tebin/assets/misc/corner_outline.svg",
+          "rawUrl": "https://raw.githubusercontent.com/OWNER/tebin-style/main/themes/tebin/assets/misc/corner_outline.svg"
+        },
+        {
+          "id": "fxptebin",
+          "type": "image",
+          "path": "themes/tebin/assets/misc/fxptebin.png",
+          "rawUrl": "https://raw.githubusercontent.com/OWNER/tebin-style/main/themes/tebin/assets/misc/fxptebin.png"
+        }
+      ]
+    }
+  ]
+}
