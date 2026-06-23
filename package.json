@@ -10,7 +10,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsx scripts/build.ts && tsx scripts/build-index.ts",
+    "build": "tsx scripts/build.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
     "validate": "tsx scripts/validate.ts",
     "check": "tsx scripts/check.ts",
     "test": "vitest run",
