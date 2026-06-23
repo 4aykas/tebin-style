@@ -29,6 +29,15 @@ Run it: `pnpm start:mcp` (stdio). Register it in an MCP client, e.g.:
 - `get_theme({ id, format? })` → tokens in `css` | `tailwind` | `dtcg` | `ts` (default `css`)
 - `get_asset({ id, assetId? })` → asset list, or one asset (SVG as text, binary as base64)
 
+## Design rules
+
+`tebin-style` includes a global, theme-independent database of UI/UX/accessibility
+rules (MUST/SHOULD/NEVER), seeded from a generalized engineering rulebook.
+
+- Source: [`rules/rules.json`](./rules/rules.json) (canonical).
+- Digest: [`rules/dist/rules.md`](./rules/dist/rules.md) (generated).
+- MCP tools: `list_rules({ category?, severity?, tag?, query? })` and `get_rule({ id })`.
+
 ## For humans
 
 Browse [`themes/`](./themes). Each theme has:

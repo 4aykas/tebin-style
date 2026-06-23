@@ -16,3 +16,11 @@
    `registry/index.json`. Open a PR. CI runs the same four commands.
 
 Do not hand-edit `dist/*` or `registry/index.json`.
+
+## Contributing a design rule
+
+1. Add an object to `rules/rules.json` with a unique kebab-case `id`, a
+   `category`, a `severity` (`MUST` | `SHOULD` | `NEVER`), and a `statement`
+   (optional `rationale`, `tags`, `source`).
+2. Run `pnpm validate && pnpm build && pnpm check && pnpm test`.
+3. Commit `rules/rules.json` and the regenerated `rules/dist/rules.md`.

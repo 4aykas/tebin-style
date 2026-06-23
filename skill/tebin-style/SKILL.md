@@ -3,8 +3,10 @@ name: tebin-style
 description: >
   Use when the user wants to apply, borrow, or reuse a ready-made visual theme
   / brand kit (color palette, typography, spacing, shadows, logos) in a
-  project. Triggers: "use the TEBIN theme", "apply a brand kit", "give me an
-  industrial palette", "theme this project like X", "borrow styles".
+  project, OR wants design rules / UI guidelines / accessibility rules while
+  building or reviewing UI. Triggers: "use the TEBIN theme", "apply a brand
+  kit", "give me an industrial palette", "theme this project like X", "borrow
+  styles", "UI rules", "accessibility guidelines", "design dos and don'ts".
 ---
 
 # tebin-style — applying a theme from the registry
@@ -33,6 +35,16 @@ project. The registry is a set of static files; this skill only reads them.
    `registry/index.json` to download — ask which they want.
 6. **Verify.** Report which theme and version were applied, which token block
    and asset files were added, and any license caveats.
+
+## Design rules
+
+When building or reviewing UI, consult the rules database for
+MUST/SHOULD/NEVER guidance:
+
+- Filter via the MCP tool `list_rules({ category?, severity?, tag?, query? })`,
+  or read the digest at `rules/dist/rules.md`.
+- Fetch one rule with `get_rule({ id })`.
+- When reviewing, cite the `MUST`/`NEVER` rules the code violates.
 
 ## Reading the registry
 
