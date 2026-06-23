@@ -6,7 +6,9 @@
   "description": "A registry of reusable themes (brand kits) for AI coding agents: DTCG design tokens, brand assets, and metadata.",
   "license": "MIT",
   "packageManager": "pnpm@11.0.9",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsx scripts/build.ts && tsx scripts/build-index.ts",
     "validate": "tsx scripts/validate.ts",
@@ -20,5 +22,9 @@
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.76"
   }
 }
