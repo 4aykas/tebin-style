@@ -1,7 +1,34 @@
 {
   "generatedAt": "2026-06-23",
-  "count": 1,
+  "count": 2,
   "themes": [
+    {
+      "id": "slate",
+      "name": "Slate",
+      "version": "1.0.0",
+      "industry": [
+        "saas",
+        "web",
+        "general"
+      ],
+      "mood": [
+        "minimal",
+        "calm",
+        "modern"
+      ],
+      "preview": {
+        "brand": "#2563EB",
+        "ink": "#0F172A",
+        "topbar": "#F8FAFC"
+      },
+      "formats": {
+        "css": "themes/slate/dist/tokens.css",
+        "tailwind": "themes/slate/dist/tailwind.css",
+        "dtcg": "themes/slate/dist/tokens.dtcg.json",
+        "ts": "themes/slate/dist/theme.ts"
+      },
+      "assets": []
+    },
     {
       "id": "tebin",
       "name": "TEBIN",

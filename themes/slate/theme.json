@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "id": "slate",
+  "name": "Slate",
+  "description": "Neutral, modern SaaS palette: cool grays with a blue accent, Inter + JetBrains Mono.",
+  "version": "1.0.0",
+  "industry": ["saas", "web", "general"],
+  "mood": ["minimal", "calm", "modern"],
+  "source": { "extractedBy": "manual" },
+  "license": { "tokens": "MIT", "assets": "MIT" },
+  "author": "tebin-style",
+  "createdAt": "2026-06-23",
+  "updatedAt": "2026-06-23",
+  "assets": []
+}

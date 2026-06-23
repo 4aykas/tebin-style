@@ -42,6 +42,7 @@ Browse [`themes/`](./themes). Each theme has:
 | id | name | industry | preview (brand) |
 |----|------|----------|-----------------|
 | tebin | TEBIN | engineering, industrial | `#DA291C` |
+| slate | Slate | saas, web, general | `#2563EB` |
 
 (Keep this table in sync with `registry/index.json`.)
 

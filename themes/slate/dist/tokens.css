@@ -1,0 +1,17 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --color-brand: #2563eb;
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-topbar: #f8fafc;
+  --color-surface: #ffffff;
+  --color-rule: #e2e8f0;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}

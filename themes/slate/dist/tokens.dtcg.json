@@ -1,0 +1,60 @@
+{
+  "color": {
+    "brand": {
+      "$type": "color",
+      "$value": "#2563EB"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "#0F172A"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "#64748B"
+    },
+    "topbar": {
+      "$type": "color",
+      "$value": "#F8FAFC"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    },
+    "rule": {
+      "$type": "color",
+      "$value": "#E2E8F0"
+    }
+  },
+  "font": {
+    "sans": {
+      "$type": "fontFamily",
+      "$value": [
+        "Inter",
+        "system-ui",
+        "sans-serif"
+      ]
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "JetBrains Mono",
+        "ui-monospace",
+        "monospace"
+      ]
+    }
+  },
+  "radius": {
+    "sm": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "12px"
+    }
+  }
+}
