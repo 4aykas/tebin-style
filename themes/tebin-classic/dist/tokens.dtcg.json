@@ -1,0 +1,89 @@
+{
+  "color": {
+    "brand": {
+      "$type": "color",
+      "$value": "#DA291C"
+    },
+    "grey": {
+      "$type": "color",
+      "$value": "#898D8D"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "#1A1A1A"
+    },
+    "topbar": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    },
+    "maroon": {
+      "$type": "color",
+      "$value": "#B02954"
+    },
+    "brick": {
+      "$type": "color",
+      "$value": "#A43F39"
+    },
+    "salmon": {
+      "$type": "color",
+      "$value": "#EB807A"
+    },
+    "orange": {
+      "$type": "color",
+      "$value": "#F38B4C"
+    },
+    "yellow": {
+      "$type": "color",
+      "$value": "#FBD551"
+    },
+    "teal": {
+      "$type": "color",
+      "$value": "#69B7C2"
+    },
+    "grey-light": {
+      "$type": "color",
+      "$value": "#B3B4B6"
+    },
+    "grey-lighter": {
+      "$type": "color",
+      "$value": "#CDCDCE"
+    }
+  },
+  "font": {
+    "sans": {
+      "$type": "fontFamily",
+      "$value": [
+        "Roboto",
+        "Arial",
+        "Helvetica",
+        "sans-serif"
+      ]
+    },
+    "document": {
+      "$type": "fontFamily",
+      "$value": [
+        "Arial",
+        "Helvetica",
+        "sans-serif"
+      ]
+    }
+  },
+  "fontWeight": {
+    "regular": {
+      "$type": "fontWeight",
+      "$value": 400
+    },
+    "medium": {
+      "$type": "fontWeight",
+      "$value": 500
+    },
+    "bold": {
+      "$type": "fontWeight",
+      "$value": 700
+    },
+    "black": {
+      "$type": "fontWeight",
+      "$value": 900
+    }
+  }
+}

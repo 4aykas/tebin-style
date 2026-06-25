@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-06-25",
-  "count": 2,
+  "count": 3,
   "themes": [
     {
       "id": "slate",
@@ -108,6 +108,58 @@
           "type": "image",
           "path": "themes/tebin/assets/misc/fxptebin.png",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/fxptebin.png"
+        }
+      ]
+    },
+    {
+      "id": "tebin-classic",
+      "name": "TEBIN Classic",
+      "version": "1.0.0",
+      "industry": [
+        "engineering",
+        "industrial",
+        "b2b"
+      ],
+      "mood": [
+        "classic",
+        "corporate",
+        "print"
+      ],
+      "preview": {
+        "brand": "#DA291C",
+        "ink": "#1A1A1A",
+        "topbar": "#FFFFFF"
+      },
+      "formats": {
+        "css": "themes/tebin-classic/dist/tokens.css",
+        "tailwind": "themes/tebin-classic/dist/tailwind.css",
+        "dtcg": "themes/tebin-classic/dist/tokens.dtcg.json",
+        "ts": "themes/tebin-classic/dist/theme.ts"
+      },
+      "assets": [
+        {
+          "id": "logo-full",
+          "type": "logo",
+          "path": "themes/tebin-classic/assets/logo/logo-full.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full.svg"
+        },
+        {
+          "id": "logo-full-white",
+          "type": "logo",
+          "path": "themes/tebin-classic/assets/logo/logo-full-white.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg"
+        },
+        {
+          "id": "corner-mark",
+          "type": "pattern",
+          "path": "themes/tebin-classic/assets/misc/corner-mark.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/misc/corner-mark.svg"
+        },
+        {
+          "id": "corner-mark-white",
+          "type": "pattern",
+          "path": "themes/tebin-classic/assets/misc/corner-mark-white.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/misc/corner-mark-white.svg"
         }
       ]
     }
