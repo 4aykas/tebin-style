@@ -27,3 +27,20 @@ describe('rules read layer', () => {
     expect(filterRules({ query: 'spinner' }).some((r) => r.id === 'forms-loading-button')).toBe(true);
   });
 });
+
+describe('brand logo rules', () => {
+  it('exposes exactly the three brand-category rules', () => {
+    const ids = filterRules({ category: 'brand' }).map((r) => r.id).sort();
+    expect(ids).toEqual([
+      'brand-corner-mark-decorative',
+      'brand-logo-no-color-on-dark',
+      'brand-logo-white-on-dark',
+    ]);
+  });
+
+  it('assigns the expected severities', () => {
+    expect(getRule('brand-logo-white-on-dark').severity).toBe('MUST');
+    expect(getRule('brand-logo-no-color-on-dark').severity).toBe('NEVER');
+    expect(getRule('brand-corner-mark-decorative').severity).toBe('SHOULD');
+  });
+});
