@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-23",
+  "generatedAt": "2026-06-25",
   "count": 2,
   "themes": [
     {
@@ -62,6 +62,12 @@
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg"
         },
         {
+          "id": "logo-full-white",
+          "type": "logo",
+          "path": "themes/tebin/assets/logo/logo-full-white.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full-white.svg"
+        },
+        {
           "id": "favicon-svg",
           "type": "favicon",
           "path": "themes/tebin/assets/favicon/favicon.svg",
@@ -84,6 +90,18 @@
           "type": "pattern",
           "path": "themes/tebin/assets/misc/corner_outline.svg",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/corner_outline.svg"
+        },
+        {
+          "id": "corner-mark",
+          "type": "pattern",
+          "path": "themes/tebin/assets/misc/corner-mark.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/corner-mark.svg"
+        },
+        {
+          "id": "corner-mark-white",
+          "type": "pattern",
+          "path": "themes/tebin/assets/misc/corner-mark-white.svg",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/corner-mark-white.svg"
         },
         {
           "id": "fxptebin",
