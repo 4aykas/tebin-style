@@ -12,6 +12,12 @@
 - **[MUST]** Animate only compositor-friendly properties (transform, opacity). — _Avoids layout thrash and jank._
 - **[NEVER]** Never use transition: all; list the properties explicitly.
 
+## brand
+
+- **[MUST]** On dark or saturated brand-color (e.g. corporate red) backgrounds, use the all-white monochrome logo — the corner mark and every letter white. — _The two-color logo loses the grey "IN" and puts red on red._
+- **[NEVER]** Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
+- **[SHOULD]** The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
+
 ## content
 
 - **[MUST]** Prefer native semantics (button, a, label, table) before ARIA.
