@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "id": "tebin-classic",
+  "name": "TEBIN Classic",
+  "description": "Faithful reproduction of the 2017 TEBIN print brand book: Pantone red + grey, Roboto / Arial, corporate-print identity.",
+  "version": "1.0.0",
+  "industry": ["engineering", "industrial", "b2b"],
+  "mood": ["classic", "corporate", "print"],
+  "source": { "url": "TEBIN Branding Principles & Style Guide (2017, Rev. A)", "extractedBy": "manual" },
+  "license": { "tokens": "MIT", "assets": "© TEBIN — all rights reserved" },
+  "author": "TEBIN",
+  "createdAt": "2026-06-25",
+  "updatedAt": "2026-06-25",
+  "assets": [
+    { "id": "logo-full", "type": "logo", "variant": "full", "format": "svg", "path": "assets/logo/logo-full.svg" },
+    { "id": "logo-full-white", "type": "logo", "variant": "white", "format": "svg", "path": "assets/logo/logo-full-white.svg" },
+    { "id": "corner-mark", "type": "pattern", "variant": "solid", "format": "svg", "path": "assets/misc/corner-mark.svg" },
+    { "id": "corner-mark-white", "type": "pattern", "variant": "white", "format": "svg", "path": "assets/misc/corner-mark-white.svg" }
+  ]
+}

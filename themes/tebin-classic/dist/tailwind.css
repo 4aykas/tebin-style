@@ -1,0 +1,20 @@
+@theme {
+  --color-brand: #da291c;
+  --color-grey: #898d8d;
+  --color-ink: #1a1a1a;
+  --color-topbar: #ffffff;
+  --color-maroon: #b02954;
+  --color-brick: #a43f39;
+  --color-salmon: #eb807a;
+  --color-orange: #f38b4c;
+  --color-yellow: #fbd551;
+  --color-teal: #69b7c2;
+  --color-grey-light: #b3b4b6;
+  --color-grey-lighter: #cdcdce;
+  --font-sans: Roboto, Arial, Helvetica, sans-serif;
+  --font-document: Arial, Helvetica, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+}

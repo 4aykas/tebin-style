@@ -29,12 +29,18 @@ describe('rules read layer', () => {
 });
 
 describe('brand logo rules', () => {
-  it('exposes exactly the three brand-category rules', () => {
+  it('exposes the full brand-category rule set', () => {
     const ids = filterRules({ category: 'brand' }).map((r) => r.id).sort();
     expect(ids).toEqual([
       'brand-corner-mark-decorative',
+      'brand-font-roboto-arial',
       'brand-logo-no-color-on-dark',
+      'brand-logo-no-distort',
+      'brand-logo-no-recolor',
+      'brand-logo-no-shadow',
+      'brand-logo-safezone',
       'brand-logo-white-on-dark',
+      'brand-logo-white-rectangle-on-busy',
     ]);
   });
 
@@ -42,5 +48,11 @@ describe('brand logo rules', () => {
     expect(getRule('brand-logo-white-on-dark').severity).toBe('MUST');
     expect(getRule('brand-logo-no-color-on-dark').severity).toBe('NEVER');
     expect(getRule('brand-corner-mark-decorative').severity).toBe('SHOULD');
+    expect(getRule('brand-logo-safezone').severity).toBe('MUST');
+    expect(getRule('brand-logo-no-distort').severity).toBe('NEVER');
+    expect(getRule('brand-logo-no-shadow').severity).toBe('NEVER');
+    expect(getRule('brand-logo-no-recolor').severity).toBe('NEVER');
+    expect(getRule('brand-logo-white-rectangle-on-busy').severity).toBe('SHOULD');
+    expect(getRule('brand-font-roboto-arial').severity).toBe('SHOULD');
   });
 });

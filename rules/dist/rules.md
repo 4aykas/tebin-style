@@ -17,6 +17,12 @@
 - **[MUST]** On dark or saturated brand-color (e.g. corporate red) backgrounds, use the all-white monochrome logo — the corner mark and every letter white. — _The two-color logo loses the grey "IN" and puts red on red._
 - **[NEVER]** Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
 - **[SHOULD]** The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
+- **[MUST]** Keep clear space around the logo at least the height of the "B" in the wordmark on all sides.
+- **[SHOULD]** On colored or photographic backgrounds where the white logo lacks contrast, place the logo inside a white rectangle (e.g. sponsorship contexts).
+- **[NEVER]** Never apply disproportional transforms to the logo or rescale its elements independently.
+- **[NEVER]** Never add shadows or other effects to the logo.
+- **[NEVER]** Never recolor the logo outside the approved palette (red, grey, all-white, all-black).
+- **[SHOULD]** Set brand text in Roboto; fall back to Arial where Roboto is unavailable (e.g. MS Office documents).
 
 ## content
 
