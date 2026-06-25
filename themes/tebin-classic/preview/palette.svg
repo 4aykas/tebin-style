@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 352" font-family="Roboto, Arial, Helvetica, sans-serif">
+<rect width="900" height="352" fill="#FFFFFF"/>
+<text x="16" y="26" font-size="13" font-weight="700" fill="#1A1A1A">Primary</text>
+<rect x="16" y="38" width="205" height="110" rx="4" fill="#DA291C" stroke="#E5E5E5"/>
+<text x="118" y="170" font-size="13" font-weight="700" fill="#1A1A1A" text-anchor="middle">Brand red</text>
+<text x="118" y="188" font-size="12" fill="#898D8D" text-anchor="middle">#DA291C · Pantone 485C</text>
+<rect x="237" y="38" width="205" height="110" rx="4" fill="#898D8D" stroke="#E5E5E5"/>
+<text x="340" y="170" font-size="13" font-weight="700" fill="#1A1A1A" text-anchor="middle">Grey</text>
+<text x="340" y="188" font-size="12" fill="#898D8D" text-anchor="middle">#898D8D · Pantone 423C</text>
+<rect x="458" y="38" width="205" height="110" rx="4" fill="#1A1A1A" stroke="#E5E5E5"/>
+<text x="560" y="170" font-size="13" font-weight="700" fill="#1A1A1A" text-anchor="middle">Ink</text>
+<text x="560" y="188" font-size="12" fill="#898D8D" text-anchor="middle">#1A1A1A · text</text>
+<rect x="679" y="38" width="205" height="110" rx="4" fill="#FFFFFF" stroke="#E5E5E5"/>
+<text x="782" y="170" font-size="13" font-weight="700" fill="#1A1A1A" text-anchor="middle">Paper</text>
+<text x="782" y="188" font-size="12" fill="#898D8D" text-anchor="middle">#FFFFFF · surfaces</text>
+<text x="16" y="232" font-size="13" font-weight="700" fill="#1A1A1A">Secondary</text>
+<rect x="16" y="244" width="100" height="64" rx="4" fill="#B02954" stroke="#E5E5E5"/>
+<text x="66" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Maroon</text>
+<text x="66" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#B02954</text>
+<rect x="126" y="244" width="100" height="64" rx="4" fill="#A43F39" stroke="#E5E5E5"/>
+<text x="176" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Brick</text>
+<text x="176" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#A43F39</text>
+<rect x="235" y="244" width="100" height="64" rx="4" fill="#EB807A" stroke="#E5E5E5"/>
+<text x="285" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Salmon</text>
+<text x="285" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#EB807A</text>
+<rect x="345" y="244" width="100" height="64" rx="4" fill="#F38B4C" stroke="#E5E5E5"/>
+<text x="395" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Orange</text>
+<text x="395" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#F38B4C</text>
+<rect x="455" y="244" width="100" height="64" rx="4" fill="#FBD551" stroke="#E5E5E5"/>
+<text x="505" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Yellow</text>
+<text x="505" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#FBD551</text>
+<rect x="565" y="244" width="100" height="64" rx="4" fill="#69B7C2" stroke="#E5E5E5"/>
+<text x="615" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Teal</text>
+<text x="615" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#69B7C2</text>
+<rect x="674" y="244" width="100" height="64" rx="4" fill="#B3B4B6" stroke="#E5E5E5"/>
+<text x="724" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Grey light</text>
+<text x="724" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#B3B4B6</text>
+<rect x="784" y="244" width="100" height="64" rx="4" fill="#CDCDCE" stroke="#E5E5E5"/>
+<text x="834" y="326" font-size="11" font-weight="700" fill="#1A1A1A" text-anchor="middle">Grey lighter</text>
+<text x="834" y="340" font-size="10" fill="#898D8D" text-anchor="middle">#CDCDCE</text>
+</svg>
