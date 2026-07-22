@@ -3,10 +3,38 @@
 Industrial design-and-engineering brand kit: signal red (`#DA291C`) on charcoal,
 Roboto / Roboto Condensed type.
 
+> **Type on tebin.pro is unloaded by design.** The site requests no webfont, so
+> `--font-condensed` and `--font-sans` resolve to the visitor's system sans.
+> Only the `og-preview/*` routes load Roboto Condensed, because the OG images
+> are screenshotted from them and must render in the real face. If you are about
+> to "fix" a missing font request on a public page — don't; it is deliberate.
+> Consumers of this theme that *do* load webfonts get the intended face for free.
+
 ## Tokens
 
 Canonical source: [`tokens.json`](./tokens.json) (DTCG). Generated outputs in
 [`dist/`](./dist): `tokens.css`, `tailwind.css`, `tokens.dtcg.json`, `theme.ts`.
+
+### Translucent scale
+
+Every semi-transparent colour comes from a step, never from an ad-hoc alpha.
+Step 1 is always the strongest.
+
+| Group | Steps | Use |
+| --- | --- | --- |
+| `--on-dark-1…10` | .90 → .20 | Text and icons on dark surfaces |
+| `--on-light-1…7` | .82 → .30 | Text and icons on light surfaces |
+| `--rule-dark-1…4` | .13 → .06 | Hairlines on dark |
+| `--rule-light-1…3` | .20 → .06 | Hairlines on light |
+| `--surface-dark-1…3` | .05 → .02 | Raised panels on dark |
+| `--brand-a1…a7` | .88 → .06 | Brand red at reduced opacity |
+
+Contrast floor: `--on-dark-6` on the dark bands, `--on-light-3` on the cream
+band. The steps below those are for decoration, not for type — see
+`accessibility-text-contrast` in [`rules/dist/rules.md`](../../rules/dist/rules.md).
+
+`--color-paper` (`#FCFBF8`) is the base page surface. Pure `#fff` is not used:
+it reads flat beside the cream band and the dark sections.
 
 ## Assets
 

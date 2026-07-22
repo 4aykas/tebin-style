@@ -11,8 +11,43 @@
   --color-topbar: #f9f9f9;
   --color-subtle: #c1c1c1;
   --color-rule: #ececec;
-  --font-sans: Roboto, Helvetica, Arial, sans-serif;
-  --font-condensed: 'Roboto Condensed', Roboto, sans-serif;
+  --color-paper: #fcfbf8; /** Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections. */
+  --on-dark-1: rgba(255, 255, 255, 0.9); /** Primary text on dark surfaces. */
+  --on-dark-2: rgba(255, 255, 255, 0.82);
+  --on-dark-3: rgba(255, 255, 255, 0.72);
+  --on-dark-4: rgba(255, 255, 255, 0.62);
+  --on-dark-5: rgba(255, 255, 255, 0.52); /** Labels and secondary text. Lowest step that clears 4.5:1 on every dark band in use. */
+  --on-dark-6: rgba(255, 255, 255, 0.48); /** Body copy. 0.45 lands at 4.3:1 on #111318, just under the floor. */
+  --on-dark-7: rgba(255, 255, 255, 0.38); /** Decorative only — below the contrast floor for text. */
+  --on-dark-8: rgba(255, 255, 255, 0.32); /** Decorative only. */
+  --on-dark-9: rgba(255, 255, 255, 0.26); /** Decorative only. */
+  --on-dark-10: rgba(255, 255, 255, 0.2); /** Decorative only. */
+  --on-light-1: rgba(0, 0, 0, 0.82); /** Primary text on light surfaces. */
+  --on-light-2: rgba(0, 0, 0, 0.72);
+  --on-light-3: rgba(0, 0, 0, 0.62); /** Lowest step that clears 4.5:1 on the cream band. */
+  --on-light-4: rgba(0, 0, 0, 0.52); /** Decorative only — 3.9:1 on cream. */
+  --on-light-5: rgba(0, 0, 0, 0.45); /** Decorative only. */
+  --on-light-6: rgba(0, 0, 0, 0.38); /** Decorative only. */
+  --on-light-7: rgba(0, 0, 0, 0.3); /** Decorative only. */
+  --rule-dark-1: rgba(255, 255, 255, 0.13); /** Hairlines on dark surfaces, strongest to faintest. */
+  --rule-dark-2: rgba(255, 255, 255, 0.1);
+  --rule-dark-3: rgba(255, 255, 255, 0.08);
+  --rule-dark-4: rgba(255, 255, 255, 0.06);
+  --rule-light-1: rgba(0, 0, 0, 0.2); /** Hairlines on light surfaces. */
+  --rule-light-2: rgba(0, 0, 0, 0.12);
+  --rule-light-3: rgba(0, 0, 0, 0.06);
+  --surface-dark-1: rgba(255, 255, 255, 0.05); /** Raised panels on dark surfaces. Elevation comes from lightness, never shadow. */
+  --surface-dark-2: rgba(255, 255, 255, 0.03);
+  --surface-dark-3: rgba(255, 255, 255, 0.02);
+  --brand-a1: rgba(218, 41, 28, 0.88); /** Brand red at reduced opacity, strongest to faintest. */
+  --brand-a2: rgba(218, 41, 28, 0.72);
+  --brand-a3: rgba(218, 41, 28, 0.55);
+  --brand-a4: rgba(218, 41, 28, 0.4);
+  --brand-a5: rgba(218, 41, 28, 0.28);
+  --brand-a6: rgba(218, 41, 28, 0.14);
+  --brand-a7: rgba(218, 41, 28, 0.06);
+  --font-sans: Roboto, Helvetica, Arial, sans-serif; /** tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win. */
+  --font-condensed: 'Roboto Condensed', Roboto, sans-serif; /** Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it. */
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
