@@ -46,8 +46,8 @@
   --brand-a5: rgba(218, 41, 28, 0.28);
   --brand-a6: rgba(218, 41, 28, 0.14);
   --brand-a7: rgba(218, 41, 28, 0.06);
-  --font-sans: Roboto, Helvetica, Arial, sans-serif;
-  --font-condensed: 'Roboto Condensed', Roboto, sans-serif;
+  --font-sans: Roboto, Helvetica, Arial, sans-serif; /** tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win. */
+  --font-condensed: 'Roboto Condensed', Roboto, sans-serif; /** Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it. */
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
