@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-25",
+  "generatedAt": "2026-07-22",
   "count": 3,
   "themes": [
     {
@@ -32,7 +32,7 @@
     {
       "id": "tebin",
       "name": "TEBIN",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "industry": [
         "engineering",
         "industrial",

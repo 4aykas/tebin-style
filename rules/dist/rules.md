@@ -5,12 +5,16 @@
 ## accessibility
 
 - **[NEVER]** Never disable browser zoom (user-scalable=no or maximum-scale=1).
+- **[MUST]** Text meets 4.5:1 against its own background (3:1 at 24px or larger). On the dark bands that means --on-dark-6 or stronger; on the cream band, --on-light-3 or stronger. The fainter steps are for decoration, not type. — _Before this rule the faintest labels on tebin.pro measured 1.8:1._
+- **[MUST]** Set body content, list items, table headers and clickable text at 11px or larger, and 13px or larger for running lists. Reserve 9px mono for non-essential kickers and codes.
 
 ## animation
 
 - **[MUST]** Honor prefers-reduced-motion with a reduced or disabled variant.
 - **[MUST]** Animate only compositor-friendly properties (transform, opacity). — _Avoids layout thrash and jank._
 - **[NEVER]** Never use transition: all; list the properties explicitly.
+- **[NEVER]** Never use overshoot or bounce easing (a cubic-bezier whose second control point exceeds 1) on UI state — reveals, buttons, modals, tooltips. — _Overshoot on UI state is a recognised generated-design tell; reserve it for genuine physical interactions such as a drag release._
+- **[SHOULD]** Limit scroll reveals to one orchestrated entrance plus the major content blocks; never stagger every item of a mapped list or fade in every section head. — _When everything animates on scroll the page never settles, and a staggered list is the clearest sign the reveal was applied by rule rather than by intent._
 
 ## brand
 
@@ -30,6 +34,8 @@
 - **[MUST]** Give icon-only buttons a descriptive aria-label.
 - **[MUST]** Convey status with more than color alone; pair icons with text labels.
 - **[MUST]** Use font-variant-numeric: tabular-nums when comparing numbers in columns.
+- **[NEVER]** Never re-draw operating-system or browser chrome — traffic-light window bars, phone frames, fake IDE tabs — around a screenshot or code block; frame them typographically instead, with a rule, a filename and a rule. — _The reader already has real chrome; a painted-on copy is always slightly wrong and advertises that the surface is fake._
+- **[SHOULD]** Use a numbered section eyebrow only where the content is genuinely ordinal, cap it at one or two per page, and stack the heading directly beneath it rather than beside it. — _Numbering every section erases the hierarchy it implies — when each one is a chapter, none is._
 
 ## feedback
 
@@ -75,6 +81,10 @@
 
 - **[MUST]** Set color-scheme: dark on <html> for dark themes.
 - **[MUST]** Give native <select> an explicit background-color and color (Windows fix).
+- **[MUST]** Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
+- **[MUST]** Take translucent colours from the scale — on-dark, on-light, rule-dark, rule-light, surface-dark, brand-a — rather than inventing an alpha per use. — _Forty-odd different white alphas read as looseness even when no single value looks wrong._
+- **[NEVER]** Never use #fff as a page or panel surface; use --color-paper. — _Pure white reads flat and synthetic beside the cream band and the dark sections._
+- **[SHOULD]** On dark surfaces express elevation with a lighter surface step, not a shadow. — _A shadow on a dark ground reads as a coloured halo rather than as depth._
 
 ## touch
 
