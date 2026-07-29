@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, basename } from 'node:path';
 import { buildTheme } from './build.js';
 import { buildColorsCsv } from './colors-csv.js';
+import { buildPaletteSvg } from './palette-preview.js';
 import { plannedOutputs, readManifest, sha256OfFile } from './raster.js';
 import { REPO_ROOT } from './registry.js';
 import { loadRules } from './rules.js';
@@ -76,6 +77,10 @@ export async function diffTheme(themeDir: string): Promise<string[]> {
     const committedCsvPath = join(themeDir, 'dist', 'colors.csv');
     const committedCsv = existsSync(committedCsvPath) ? readFileSync(committedCsvPath, 'utf8') : null;
     if (committedCsv !== buildColorsCsv(themeDir)) drift.push('dist/colors.csv');
+    // Only the SVG is compared; palette.png is raster and follows the no-byte-compare rule.
+    const committedSvgPath = join(themeDir, 'preview', 'palette.svg');
+    const committedSvg = existsSync(committedSvgPath) ? readFileSync(committedSvgPath, 'utf8') : null;
+    if (committedSvg !== buildPaletteSvg(themeDir)) drift.push('preview/palette.svg');
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

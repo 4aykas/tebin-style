@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1144 154" width="1144" height="154">
+  <rect x="0" y="0" width="120" height="120" fill="#DA291C" />
+  <text x="10" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brand</text>
+  <text x="10" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#DA291C</text>
+  <rect x="128" y="0" width="120" height="120" fill="#B82217" />
+  <text x="138" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brand-dark</text>
+  <text x="138" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#B82217</text>
+  <rect x="256" y="0" width="120" height="120" fill="#242424" />
+  <text x="266" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">charcoal</text>
+  <text x="266" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#242424</text>
+  <rect x="384" y="0" width="120" height="120" fill="#292929" />
+  <text x="394" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">ink</text>
+  <text x="394" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#292929</text>
+  <rect x="512" y="0" width="120" height="120" fill="#666666" />
+  <text x="522" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">muted</text>
+  <text x="522" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#666666</text>
+  <rect x="640" y="0" width="120" height="120" fill="#F9F9F9" />
+  <text x="650" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">topbar</text>
+  <text x="650" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#F9F9F9</text>
+  <rect x="768" y="0" width="120" height="120" fill="#C1C1C1" />
+  <text x="778" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">subtle</text>
+  <text x="778" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#C1C1C1</text>
+  <rect x="896" y="0" width="120" height="120" fill="#ECECEC" />
+  <text x="906" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">rule</text>
+  <text x="906" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#ECECEC</text>
+  <rect x="1024" y="0" width="120" height="120" fill="#FCFBF8" />
+  <text x="1034" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">paper</text>
+  <text x="1034" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#FCFBF8</text>
+</svg>

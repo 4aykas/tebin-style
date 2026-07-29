@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildTheme } from '../src/build.js';
 import { writeColorsCsv } from '../src/colors-csv.js';
+import { writePalettePreview } from '../src/palette-preview.js';
 import { diffTheme, diffAssets } from '../src/check.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -18,7 +19,10 @@ beforeAll(async () => {
     JSON.stringify({ color: { brand: { $type: 'color', $value: '#DA291C' } } }),
   );
   await buildTheme(join(dir, 'sample'));
-  writeColorsCsv(join(dir, 'sample')); // the fixture must mirror the build pipeline
+  // The fixture must mirror the full build pipeline, or diffTheme reports
+  // drift for artifacts the fixture never generated.
+  writeColorsCsv(join(dir, 'sample'));
+  await writePalettePreview(join(dir, 'sample'));
 });
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
