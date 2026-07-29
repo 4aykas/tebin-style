@@ -2,8 +2,10 @@
 
 ## 1.0.0 — 2026-07-29
 
-First published release. The npm name `tebin-style` was free (checked
-2026-07-29), so the package publishes unscoped.
+First tagged release. npm publication was considered and dropped — the
+registry is for internal use and partner hand-offs, which the GitHub
+Release ZIP covers; the npm name `tebin-style` was free as of 2026-07-29
+if that ever changes.
 
 ### Added
 - PNG brand assets in three widths per logo and three per corner mark, with
@@ -19,8 +21,8 @@ First published release. The npm name `tebin-style` was free (checked
   `theming-policy-enforced` (53 → 61).
 - Four guides in `docs/guide/`, and a README that opens with a download rather
   than a clone.
-- A release workflow that attaches `tebin-brand-pack.zip` to the GitHub Release
-  and publishes to npm.
+- A release workflow that attaches `tebin-brand-pack.zip` to the GitHub
+  Release.
 
 ### Changed
 - The README no longer documents installation, MCP tools or development; those

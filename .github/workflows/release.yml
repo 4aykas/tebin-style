@@ -4,7 +4,6 @@ on:
     tags: ['v*']
 permissions:
   contents: write
-  id-token: write
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -15,17 +14,17 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
       - run: pnpm validate
       # check runs before packing, so a release can never ship a stale tree.
       - run: pnpm check
       - run: pnpm test
       - run: pnpm tsx scripts/build-pack.ts --write
+      # npm publication was dropped 2026-07-30: the registry is internal-use,
+      # partners get the ZIP from the GitHub Release. Restore the publish step
+      # (plus id-token permission, registry-url and an NPM_TOKEN secret) if a
+      # package ever becomes wanted.
       - uses: softprops/action-gh-release@v2
         with:
           files: .tmp/tebin-brand-pack.zip
           generate_release_notes: true
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
