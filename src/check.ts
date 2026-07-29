@@ -2,6 +2,7 @@ import { mkdtempSync, readFileSync, existsSync, rmSync, cpSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, basename } from 'node:path';
 import { buildTheme } from './build.js';
+import { buildColorsCsv } from './colors-csv.js';
 import { REPO_ROOT } from './registry.js';
 import { loadRules } from './rules.js';
 import { buildRulesMarkdown } from './rules-build.js';
@@ -31,6 +32,9 @@ export async function diffTheme(themeDir: string): Promise<string[]> {
       const b = existsSync(fresh) ? readFileSync(fresh, 'utf8') : null;
       if (a !== b) drift.push(`dist/${f}`);
     }
+    const committedCsvPath = join(themeDir, 'dist', 'colors.csv');
+    const committedCsv = existsSync(committedCsvPath) ? readFileSync(committedCsvPath, 'utf8') : null;
+    if (committedCsv !== buildColorsCsv(themeDir)) drift.push('dist/colors.csv');
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

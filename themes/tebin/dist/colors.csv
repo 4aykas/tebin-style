@@ -1,0 +1,10 @@
+token,hex,r,g,b,pantone,cmyk,purpose
+color.brand,#DA291C,218,41,28,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.brand-dark,#B82217,184,34,23,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.charcoal,#242424,36,36,36,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.ink,#292929,41,41,41,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.muted,#666666,102,102,102,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.topbar,#F9F9F9,249,249,249,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.subtle,#C1C1C1,193,193,193,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.rule,#ECECEC,236,236,236,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.paper,#FCFBF8,252,251,248,not specified in the 2017 brand book,not specified in the 2017 brand book,"Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections."

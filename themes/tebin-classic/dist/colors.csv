@@ -1,0 +1,13 @@
+token,hex,r,g,b,pantone,cmyk,purpose
+color.brand,#DA291C,218,41,28,485 C,0/95/100/0,
+color.grey,#898D8D,137,141,141,423 C,22/14/18/45,
+color.ink,#1A1A1A,26,26,26,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.topbar,#FFFFFF,255,255,255,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.maroon,#B02954,176,41,84,not specified in the 2017 brand book,23/97/54/8,
+color.brick,#A43F39,164,63,57,not specified in the 2017 brand book,24/85/81/57,
+color.salmon,#EB807A,235,128,122,not specified in the 2017 brand book,2/62/46/0,
+color.orange,#F38B4C,243,139,76,not specified in the 2017 brand book,0/54/80/0,
+color.yellow,#FBD551,251,213,81,not specified in the 2017 brand book,2/13/84/0,
+color.teal,#69B7C2,105,183,194,not specified in the 2017 brand book,58/10/21/0,
+color.grey-light,#B3B4B6,179,180,182,not specified in the 2017 brand book,31/23/23/0,
+color.grey-lighter,#CDCDCE,205,205,206,not specified in the 2017 brand book,19/15/15/0,
