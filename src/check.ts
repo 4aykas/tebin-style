@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, basename } from 'node:path';
 import { buildTheme } from './build.js';
 import { buildColorsCsv } from './colors-csv.js';
+import { buildDesignDoc } from './design-doc.js';
 import { buildPaletteSvg } from './palette-preview.js';
 import { plannedOutputs, readManifest, sha256OfFile } from './raster.js';
 import { REPO_ROOT } from './registry.js';
@@ -81,6 +82,13 @@ export async function diffTheme(themeDir: string): Promise<string[]> {
     const committedSvgPath = join(themeDir, 'preview', 'palette.svg');
     const committedSvg = existsSync(committedSvgPath) ? readFileSync(committedSvgPath, 'utf8') : null;
     if (committedSvg !== buildPaletteSvg(themeDir)) drift.push('preview/palette.svg');
+    // buildDesignDoc reads rules through REPO_ROOT, so it takes themeDir, not the temp copy.
+    // It needs theme.json, which test fixtures may not have.
+    if (existsSync(join(themeDir, 'theme.json'))) {
+      const committedDocPath = join(themeDir, 'DESIGN.md');
+      const committedDoc = existsSync(committedDocPath) ? readFileSync(committedDocPath, 'utf8') : null;
+      if (committedDoc !== buildDesignDoc(themeDir)) drift.push('DESIGN.md');
+    }
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }

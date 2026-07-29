@@ -1,8 +1,8 @@
 token,hex,r,g,b,pantone,cmyk,purpose
-color.brand,#DA291C,218,41,28,485 C,0/95/100/0,
-color.grey,#898D8D,137,141,141,423 C,22/14/18/45,
-color.ink,#1A1A1A,26,26,26,not specified in the 2017 brand book,not specified in the 2017 brand book,
-color.topbar,#FFFFFF,255,255,255,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.brand,#DA291C,218,41,28,485 C,0/95/100/0,Brand red — emphasis and the logo. Never recolor the logo with the secondary palette.
+color.grey,#898D8D,137,141,141,423 C,22/14/18/45,"Brand grey — secondary text and UI, the IN of the wordmark."
+color.ink,#1A1A1A,26,26,26,not specified in the 2017 brand book,not specified in the 2017 brand book,Body text.
+color.topbar,#FFFFFF,255,255,255,not specified in the 2017 brand book,not specified in the 2017 brand book,Surfaces.
 color.maroon,#B02954,176,41,84,not specified in the 2017 brand book,23/97/54/8,
 color.brick,#A43F39,164,63,57,not specified in the 2017 brand book,24/85/81/57,
 color.salmon,#EB807A,235,128,122,not specified in the 2017 brand book,2/62/46/0,
