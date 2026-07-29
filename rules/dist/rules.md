@@ -76,6 +76,7 @@
 - **[MUST]** Set explicit image dimensions to prevent layout shift (CLS).
 - **[MUST]** Virtualize large lists (more than about 50 items).
 - **[MUST]** Preload above-the-fold images and lazy-load the rest.
+- **[NEVER]** Never add a webfont request to a project that deliberately ships none. — _On tebin.pro the font stack is unloaded on purpose; a well-meant @font-face or Google Fonts link silently changes every page._
 
 ## theming
 
@@ -85,8 +86,18 @@
 - **[MUST]** Take translucent colours from the scale — on-dark, on-light, rule-dark, rule-light, surface-dark, brand-a — rather than inventing an alpha per use. — _Forty-odd different white alphas read as looseness even when no single value looks wrong._
 - **[NEVER]** Never use #fff as a page or panel surface; use --color-paper. — _Pure white reads flat and synthetic beside the cream band and the dark sections._
 - **[SHOULD]** On dark surfaces express elevation with a lighter surface step, not a shadow. — _A shadow on a dark ground reads as a coloured halo rather than as depth._
+- **[SHOULD]** Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
 
 ## touch
 
 - **[MUST]** Use hit targets of at least 24px (44px on mobile); expand the hit area if the visual is smaller.
 - **[MUST]** Set touch-action: manipulation to prevent double-tap zoom delays.
+
+## typography
+
+- **[NEVER]** A heading never breaks a word — not mid-letter and not with a hyphen. Do not put hyphens: auto, overflow-wrap: anywhere or &shy; on display type; resize the type or rewrite the line. — _Settled by the owner on 2026-07-29, reversing a sweep of 177 wrap rules made the day before; &shy; is not an escape hatch because the HTML minifier strips it._
+- **[SHOULD]** Body copy carries overflow-wrap: anywhere and hyphens: auto so long technical strings cannot overflow their column. — _The pair is right for running text and wrong for display type — the distinction is the rule._
+- **[MUST]** Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
+- **[NEVER]** Never set a negative letter-spacing; tracking is zero or positive.
+- **[NEVER]** Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
+- **[SHOULD]** Take heading sizes from the global type scale rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._

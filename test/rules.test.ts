@@ -56,3 +56,39 @@ describe('brand logo rules', () => {
     expect(getRule('brand-font-roboto-arial').severity).toBe('SHOULD');
   });
 });
+
+describe('post-audit rules (2026-07-29)', () => {
+  const NEW_IDS = [
+    'typography-heading-word-break',
+    'typography-body-wrap',
+    'typography-display-multilingual',
+    'typography-negative-tracking',
+    'typography-manual-line-breaks',
+    'typography-heading-scale',
+    'performance-webfont-policy',
+    'theming-policy-enforced',
+  ];
+
+  it('carries all eight', () => {
+    const ids = loadRules().map((r) => r.id);
+    for (const id of NEW_IDS) {
+      expect(ids, id).toContain(id);
+    }
+  });
+
+  it('has 61 rules with unique ids', () => {
+    const rules = loadRules();
+    expect(rules).toHaveLength(61);
+    expect(new Set(rules.map((r) => r.id)).size).toBe(61);
+  });
+
+  it('opens a typography category of six', () => {
+    expect(filterRules({ category: 'typography' })).toHaveLength(6);
+  });
+
+  it('states the heading rule as a NEVER and names the shy escape hatch', () => {
+    const rule = getRule('typography-heading-word-break');
+    expect(rule.severity).toBe('NEVER');
+    expect(rule.statement).toContain('&shy;');
+  });
+});
