@@ -1,10 +1,29 @@
 {
   "name": "tebin-style",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "type": "module",
   "description": "A registry of reusable themes (brand kits) for AI coding agents: DTCG design tokens, brand assets, and metadata.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4aykas/tebin-style.git"
+  },
+  "files": [
+    "themes/*/tokens.json",
+    "themes/*/theme.json",
+    "themes/*/DESIGN.md",
+    "themes/*/dist/**",
+    "themes/*/assets/**",
+    "themes/*/preview/**",
+    "rules/rules.json",
+    "rules/dist",
+    "registry/index.json",
+    "schema",
+    "skill",
+    "README.md",
+    "LICENSE"
+  ],
   "packageManager": "pnpm@11.0.9",
   "engines": {
     "node": ">=18"
