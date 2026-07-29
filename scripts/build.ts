@@ -2,6 +2,7 @@ import { readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildTheme } from '../src/build.js';
+import { writeColorsCsv } from '../src/colors-csv.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const themesRoot = join(root, 'themes');
@@ -14,5 +15,6 @@ if (!existsSync(themesRoot)) {
 for (const entry of readdirSync(themesRoot, { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
   await buildTheme(join(themesRoot, entry.name));
+  writeColorsCsv(join(themesRoot, entry.name));
   console.log(`built ${entry.name}`);
 }

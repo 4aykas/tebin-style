@@ -3,10 +3,10 @@
  */
 
 :root {
-  --color-brand: #da291c;
-  --color-grey: #898d8d;
-  --color-ink: #1a1a1a;
-  --color-topbar: #ffffff;
+  --color-brand: #da291c; /** Brand red — emphasis and the logo. Never recolor the logo with the secondary palette. */
+  --color-grey: #898d8d; /** Brand grey — secondary text and UI, the IN of the wordmark. */
+  --color-ink: #1a1a1a; /** Body text. */
+  --color-topbar: #ffffff; /** Surfaces. */
   --color-maroon: #b02954;
   --color-brick: #a43f39;
   --color-salmon: #eb807a;

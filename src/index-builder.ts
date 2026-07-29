@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { readManifest } from './raster.js';
 
 export const PREVIEW_KEYS = ['brand', 'ink', 'topbar'];
 
@@ -49,6 +50,19 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
       ...(opts.rawBaseUrl ? { rawUrl: `${opts.rawBaseUrl}/${base}/${a.path}` } : {}),
     }));
 
+    // Raster outputs join the index as first-class assets (logo-full@1024,
+    // logo-full-white@1024-on-brand), so get_asset serves PNGs with no new code.
+    const rasterAssets = (readManifest(dir)?.outputs ?? []).map((o) => {
+      const suffix = o.variant === 'transparent' ? '' : `-${o.variant}`;
+      const sourceAsset = (theme.assets ?? []).find((a: { id: string }) => a.id === o.assetId);
+      return {
+        id: `${o.assetId}@${o.width}${suffix}`,
+        type: sourceAsset?.type ?? 'raster',
+        path: `${base}/${o.path}`,
+        ...(opts.rawBaseUrl ? { rawUrl: `${opts.rawBaseUrl}/${base}/${o.path}` } : {}),
+      };
+    });
+
     themes.push({
       id: theme.id,
       name: theme.name,
@@ -62,7 +76,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
         dtcg: `${base}/dist/tokens.dtcg.json`,
         ts: `${base}/dist/theme.ts`,
       },
-      assets,
+      assets: [...assets, ...rasterAssets],
     });
   }
   return { generatedAt: today(), count: themes.length, themes };

@@ -9,7 +9,21 @@
       "properties": {
         "$type": { "type": "string", "enum": ["color", "fontFamily", "dimension", "shadow", "fontWeight", "number", "duration"] },
         "$value": {},
-        "$description": { "type": "string" }
+        "$description": { "type": "string" },
+        "$extensions": {
+          "type": "object",
+          "properties": {
+            "pro.tebin.print": {
+              "type": "object",
+              "additionalProperties": false,
+              "minProperties": 1,
+              "properties": {
+                "pantone": { "type": "string", "minLength": 1 },
+                "cmyk": { "type": "string", "pattern": "^[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}$" }
+              }
+            }
+          }
+        }
       }
     },
     "tokenNode": {

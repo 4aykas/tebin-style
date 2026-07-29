@@ -2,3 +2,5 @@ node_modules/
 *.log
 .DS_Store
 .tmp/
+# Internal brand material: the 2017 style guide PDF stays out of the public repo.
+.input/

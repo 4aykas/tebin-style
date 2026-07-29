@@ -1,16 +1,35 @@
 {
   "name": "tebin-style",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "type": "module",
   "description": "A registry of reusable themes (brand kits) for AI coding agents: DTCG design tokens, brand assets, and metadata.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4aykas/tebin-style.git"
+  },
+  "files": [
+    "themes/*/tokens.json",
+    "themes/*/theme.json",
+    "themes/*/DESIGN.md",
+    "themes/*/dist/**",
+    "themes/*/assets/**",
+    "themes/*/preview/**",
+    "rules/rules.json",
+    "rules/dist",
+    "registry/index.json",
+    "schema",
+    "skill",
+    "README.md",
+    "LICENSE"
+  ],
   "packageManager": "pnpm@11.0.9",
   "engines": {
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsx scripts/build.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
+    "build": "tsx scripts/build.ts && tsx scripts/build-assets.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
     "validate": "tsx scripts/validate.ts",
     "check": "tsx scripts/check.ts",
     "test": "vitest run",
@@ -26,6 +45,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@resvg/resvg-js": "^2.6.2",
     "zod": "^3.25.76"
   }
 }

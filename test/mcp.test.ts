@@ -50,6 +50,16 @@ describe('get_asset', () => {
   it('throws for an unknown asset', () => {
     expect(() => getAsset({ id: 'tebin', assetId: 'nope' })).toThrow(NotFoundError);
   });
+  it('returns a generated PNG as base64', () => {
+    const r = getAsset({ id: 'tebin-classic', assetId: 'logo-full@1024' }) as {
+      encoding: string;
+      format: string;
+      content: string;
+    };
+    expect(r.encoding).toBe('base64');
+    expect(r.format).toBe('png');
+    expect(r.content.length).toBeGreaterThan(1000);
+  });
 });
 
 describe('list_rules / get_rule', () => {

@@ -1,7 +1,7 @@
 import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { diffTheme, diffRules } from '../src/check.js';
+import { diffTheme, diffRules, diffAssets } from '../src/check.js';
 import { buildIndex } from '../src/index-builder.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -11,7 +11,8 @@ let failed = false;
 if (existsSync(themesRoot)) {
   for (const entry of readdirSync(themesRoot, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    const drift = await diffTheme(join(themesRoot, entry.name));
+    const themeDir = join(themesRoot, entry.name);
+    const drift = [...(await diffTheme(themeDir)), ...diffAssets(themeDir)];
     if (drift.length) {
       failed = true;
       console.error(`✗ ${entry.name} drift: ${drift.join(', ')}`);

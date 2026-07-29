@@ -1,0 +1,147 @@
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { collectColorRows, NO_PRINT_VALUE } from './colors-csv.js';
+import { readManifest } from './raster.js';
+import { filterRules, type Rule } from './rules.js';
+
+export const BLOB_BASE = 'https://github.com/4aykas/tebin-style/blob/main';
+export const RAW_BASE = 'https://raw.githubusercontent.com/4aykas/tebin-style/main';
+export const DOC_CATEGORIES = ['brand', 'typography', 'theming'];
+
+interface ThemeManifest {
+  id: string;
+  name: string;
+  description?: string;
+  version: string;
+  license: { tokens: string; assets: string };
+  source?: { url?: string };
+  assets?: Array<{ id: string; type: string; variant?: string; format: string; path: string }>;
+}
+
+/** A human-facing download link: the blob page renders a preview and offers Download. */
+function download(themeId: string, repoRelPath: string): string {
+  return `${BLOB_BASE}/themes/${themeId}/${repoRelPath}?raw=1`;
+}
+
+/** A script/agent link: raw bytes, no HTML around them. */
+function raw(themeId: string, repoRelPath: string): string {
+  return `${RAW_BASE}/themes/${themeId}/${repoRelPath}`;
+}
+
+function readTokens(themeDir: string): Record<string, any> {
+  return JSON.parse(readFileSync(join(themeDir, 'tokens.json'), 'utf8'));
+}
+
+function tokenTable(themeDir: string): string {
+  const rows = collectColorRows(themeDir);
+  let out = '| Token | HEX | RGB (Word, Excel) | Pantone | CMYK | Purpose |\n';
+  out += '| --- | --- | --- | --- | --- | --- |\n';
+  for (const row of rows) {
+    const rgb = `${row.rgb.r}, ${row.rgb.g}, ${row.rgb.b}`;
+    out += `| \`${row.token}\` | \`${row.hex}\` | ${rgb} | ${row.pantone} | ${row.cmyk} | ${row.purpose || '—'} |\n`;
+  }
+  return out;
+}
+
+function translucentNote(themeDir: string, themeId: string): string {
+  const tokens = readTokens(themeDir);
+  const groups = ['on-dark', 'on-light', 'rule-dark', 'rule-light', 'surface-dark'].filter((g) => g in tokens);
+  if (groups.length === 0) return '';
+  return (
+    `\n### Translucent scale\n\n` +
+    `Every semi-transparent colour comes from a step, never from an ad-hoc alpha; step 1 is always the strongest. ` +
+    `Groups present in this theme: ${groups.map((g) => `\`${g}\``).join(', ')}. ` +
+    `The steps below the contrast floor are for decoration, not for type. ` +
+    `Full values: [tokens.json](${raw(themeId, 'tokens.json')}).\n`
+  );
+}
+
+function typeSection(themeDir: string): string {
+  const tokens = readTokens(themeDir) as {
+    font?: Record<string, { $value?: string[]; $description?: string }>;
+    fontWeight?: Record<string, { $value?: number }>;
+  };
+  let out = '\n## Type\n\n';
+  for (const [name, leaf] of Object.entries(tokens.font ?? {})) {
+    out += `- **${name}** — ${(leaf.$value ?? []).join(', ')}${leaf.$description ? ` — ${leaf.$description}` : ''}\n`;
+  }
+  const weights = Object.entries(tokens.fontWeight ?? {});
+  if (weights.length) {
+    out += `- **Weights** — ${weights.map(([n, l]) => `${n} ${l.$value}`).join(', ')}\n`;
+  }
+  out += `\nIn Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.\n`;
+  return out;
+}
+
+function geometrySection(themeDir: string): string {
+  const tokens = readTokens(themeDir) as { radius?: Record<string, { $value?: string }> };
+  const radii = Object.entries(tokens.radius ?? {});
+  if (!radii.length) return '';
+  return `\n## Geometry\n\n${radii.map(([n, l]) => `- \`radius.${n}\` — ${l.$value}`).join('\n')}\n`;
+}
+
+function assetSection(themeDir: string, theme: ThemeManifest): string {
+  const id = theme.id;
+  const assets = theme.assets ?? [];
+  if (assets.length === 0) return '';
+  const manifest = readManifest(themeDir);
+  let out = '\n## Assets\n\n| Asset | Vector | PNG |\n| --- | --- | --- |\n';
+
+  for (const asset of assets) {
+    const pngs = (manifest?.outputs ?? [])
+      .filter((o) => o.assetId === asset.id)
+      .sort((a, b) => a.width - b.width || a.variant.localeCompare(b.variant))
+      .map((o) => {
+        const label = o.variant === 'transparent' ? `${o.width} px` : `${o.width} px ${o.variant.replace('on-', 'on ')}`;
+        return `[${label}](${download(id, o.path)})`;
+      });
+    out += `| \`${asset.id}\` | [SVG](${download(id, asset.path)}) | ${pngs.join(' · ') || '—'} |\n`;
+  }
+
+  out += `\nFor scripts and agents, the same files without the HTML page around them: \`${RAW_BASE}/themes/${id}/…\`. Note that a raw SVG is served as \`text/plain\`, so a browser shows its source — use the vector links above to download one by hand.\n`;
+  out += `\nColour table as a spreadsheet: [colors.csv](${download(id, 'dist/colors.csv')}).\n`;
+  return out;
+}
+
+function rulesSection(): string {
+  let out = '\n## Rules\n';
+  for (const category of DOC_CATEGORIES) {
+    const rules: Rule[] = filterRules({ category });
+    if (!rules.length) continue;
+    out += `\n### ${category}\n\n`;
+    for (const rule of rules) {
+      const rationale = rule.rationale ? ` — _${rule.rationale}_` : '';
+      out += `- **[${rule.severity}]** ${rule.statement}${rationale}\n`;
+    }
+  }
+  return out;
+}
+
+export function buildDesignDoc(themeDir: string): string {
+  const theme = JSON.parse(readFileSync(join(themeDir, 'theme.json'), 'utf8')) as ThemeManifest;
+  const introPath = join(themeDir, 'design.intro.md');
+  const intro = existsSync(introPath) ? readFileSync(introPath, 'utf8').trim() : '';
+
+  let out = `# ${theme.name} — design\n\n`;
+  out += `> Generated from \`tokens.json\`, \`theme.json\` and \`rules/rules.json\` — do not edit by hand.\n\n`;
+  if (intro) out += `${intro}\n`;
+  out += `\n**Version** ${theme.version}. **Tokens** ${theme.license.tokens}. **Assets** ${theme.license.assets}.\n`;
+  if (theme.source?.url) out += `**Source** ${theme.source.url}.\n`;
+  out += `\n## Palette\n\n${tokenTable(themeDir)}`;
+  out += `\nWhere a cell reads "${NO_PRINT_VALUE}", no value was printed there — do not convert one from the RGB.\n`;
+  out += translucentNote(themeDir, theme.id);
+  out += typeSection(themeDir);
+  out += geometrySection(themeDir);
+  out += assetSection(themeDir, theme);
+  out += rulesSection();
+  out += `\n## Using this elsewhere\n\n`;
+  out += `- Word, Excel, PowerPoint, Google Docs — [the Office guide](${BLOB_BASE}/docs/guide/office.md).\n`;
+  out += `- A coding agent — [the agent guide](${BLOB_BASE}/docs/guide/ai-agents.md).\n`;
+  out += `- A web project — [the developer guide](${BLOB_BASE}/docs/guide/developers.md).\n`;
+  out += `\nEvery link in this file is absolute, so the file keeps working when it is pasted into a chat or saved beside a document.\n`;
+  return out;
+}
+
+export function writeDesignDoc(themeDir: string): void {
+  writeFileSync(join(themeDir, 'DESIGN.md'), buildDesignDoc(themeDir));
+}
