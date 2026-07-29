@@ -1,0 +1,244 @@
+{
+  "outputs": [
+    {
+      "assetId": "corner-mark",
+      "source": "assets/misc/corner-mark.svg",
+      "sourceSha256": "e5bbc3a54ee9059a33a74a772f699c221e24b38f324bd426a5e6c59ac1144855",
+      "width": 128,
+      "height": 130,
+      "variant": "transparent",
+      "path": "assets/png/corner-mark-128.png",
+      "sha256": "3407e9d0cf175cef00792b3f114ba36bb9f265a3baf02d56cd67c119a1959701"
+    },
+    {
+      "assetId": "corner-mark",
+      "source": "assets/misc/corner-mark.svg",
+      "sourceSha256": "e5bbc3a54ee9059a33a74a772f699c221e24b38f324bd426a5e6c59ac1144855",
+      "width": 256,
+      "height": 260,
+      "variant": "transparent",
+      "path": "assets/png/corner-mark-256.png",
+      "sha256": "b2025676742b8d3760a27f7add4ab360d0b73e78436086987c1aec678b306adc"
+    },
+    {
+      "assetId": "corner-mark",
+      "source": "assets/misc/corner-mark.svg",
+      "sourceSha256": "e5bbc3a54ee9059a33a74a772f699c221e24b38f324bd426a5e6c59ac1144855",
+      "width": 512,
+      "height": 520,
+      "variant": "transparent",
+      "path": "assets/png/corner-mark-512.png",
+      "sha256": "1e6a6e18d0683c4ec8f681da39d87f0c655ce96044d31e03fc9a775a6c2025c4"
+    },
+    {
+      "assetId": "corner-mark-white",
+      "source": "assets/misc/corner-mark-white.svg",
+      "sourceSha256": "0df3b751121dddb867a867baedaa2f1d97275e57351657a3e0ec7bff8e2e7169",
+      "width": 128,
+      "height": 129,
+      "variant": "on-brand",
+      "path": "assets/png/corner-mark-white-128-on-brand.png",
+      "sha256": "1faf360774265b170bc356f5a1b81033f60ac845a0a5dee08a23c8fc2321eb9d"
+    },
+    {
+      "assetId": "corner-mark-white",
+      "source": "assets/misc/corner-mark-white.svg",
+      "sourceSha256": "0df3b751121dddb867a867baedaa2f1d97275e57351657a3e0ec7bff8e2e7169",
+      "width": 128,
+      "height": 129,
+      "variant": "on-charcoal",
+      "path": "assets/png/corner-mark-white-128-on-charcoal.png",
+      "sha256": "9c33944632f391c9393da949ba213a3732e63bce275f92bfd5c1db2965019387"
+    },
+    {
+      "assetId": "corner-mark-white",
+      "source": "assets/misc/corner-mark-white.svg",
+      "sourceSha256": "0df3b751121dddb867a867baedaa2f1d97275e57351657a3e0ec7bff8e2e7169",
+      "width": 256,
+      "height": 258,
+      "variant": "on-brand",
+      "path": "assets/png/corner-mark-white-256-on-brand.png",
+      "sha256": "91b1a1c12f58a842e9ed57c9745489298d8cbf9ab070c7cc8443504227a5b2c4"
+    },
+    {
+      "assetId": "corner-mark-white",
+      "source": "assets/misc/corner-mark-white.svg",
+      "sourceSha256": "0df3b751121dddb867a867baedaa2f1d97275e57351657a3e0ec7bff8e2e7169",
+      "width": 256,
+      "height": 258,
+      "variant": "on-charcoal",
+      "path": "assets/png/corner-mark-white-256-on-charcoal.png",
+      "sha256": "1668d21df5d4694e00dcd0dc2cddf4869e19950fc38ccb44040cb839fead05ed"
+    },
+    {
+      "assetId": "corner-mark-white",
+      "source": "assets/misc/corner-mark-white.svg",
+      "sourceSha256": "0df3b751121dddb867a867baedaa2f1d97275e57351657a3e0ec7bff8e2e7169",
+      "width": 512,
+      "height": 515,
+      "variant": "on-brand",
+      "path": "assets/png/corner-mark-white-512-on-brand.png",
+      "sha256": "ce90f0c6d2696722f956d73396a23a78bd5e23be0830a9f818e49de14171e829"
+    },
+    {
+      "assetId": "corner-mark-white",
+      "source": "assets/misc/corner-mark-white.svg",
+      "sourceSha256": "0df3b751121dddb867a867baedaa2f1d97275e57351657a3e0ec7bff8e2e7169",
+      "width": 512,
+      "height": 515,
+      "variant": "on-charcoal",
+      "path": "assets/png/corner-mark-white-512-on-charcoal.png",
+      "sha256": "73d9f9f256c9ad35ac9056ba45985cc9626982c32836bbe44101fef78d1021c8"
+    },
+    {
+      "assetId": "corner-outline",
+      "source": "assets/misc/corner_outline.svg",
+      "sourceSha256": "54b21bc7e1493d4773af77fbf355879b871f84a0a8cd460ecb324c63fe63608c",
+      "width": 128,
+      "height": 130,
+      "variant": "transparent",
+      "path": "assets/png/corner-outline-128.png",
+      "sha256": "bbeb93cca61b6bdedfc6327f119579e4862966d729e6415f4b38a9daa932273b"
+    },
+    {
+      "assetId": "corner-outline",
+      "source": "assets/misc/corner_outline.svg",
+      "sourceSha256": "54b21bc7e1493d4773af77fbf355879b871f84a0a8cd460ecb324c63fe63608c",
+      "width": 256,
+      "height": 260,
+      "variant": "transparent",
+      "path": "assets/png/corner-outline-256.png",
+      "sha256": "5032504be4895c4d2e131f21fcf2d3c6d9a8bcc69060fcdc05bfeb98afe69736"
+    },
+    {
+      "assetId": "corner-outline",
+      "source": "assets/misc/corner_outline.svg",
+      "sourceSha256": "54b21bc7e1493d4773af77fbf355879b871f84a0a8cd460ecb324c63fe63608c",
+      "width": 512,
+      "height": 520,
+      "variant": "transparent",
+      "path": "assets/png/corner-outline-512.png",
+      "sha256": "98413789a72ede506a8c495d30287a411c8209d74e0dabecf82e8fd7ab94e725"
+    },
+    {
+      "assetId": "favicon-svg",
+      "source": "assets/favicon/favicon.svg",
+      "sourceSha256": "1739c81b1e0876cdde5456de093cf2bcfe529568551e2eb9efc96f3b30bdd43e",
+      "width": 128,
+      "height": 128,
+      "variant": "transparent",
+      "path": "assets/png/favicon-svg-128.png",
+      "sha256": "59b4cacf15a0c5bf2d1846b36baa93a27fa24ba2be86821d546d9e57a9bdf334"
+    },
+    {
+      "assetId": "favicon-svg",
+      "source": "assets/favicon/favicon.svg",
+      "sourceSha256": "1739c81b1e0876cdde5456de093cf2bcfe529568551e2eb9efc96f3b30bdd43e",
+      "width": 256,
+      "height": 256,
+      "variant": "transparent",
+      "path": "assets/png/favicon-svg-256.png",
+      "sha256": "7af2c8826eaa4fe969b177f0a85080ab24bbe40892d16817060ec420fb6391c9"
+    },
+    {
+      "assetId": "favicon-svg",
+      "source": "assets/favicon/favicon.svg",
+      "sourceSha256": "1739c81b1e0876cdde5456de093cf2bcfe529568551e2eb9efc96f3b30bdd43e",
+      "width": 512,
+      "height": 512,
+      "variant": "transparent",
+      "path": "assets/png/favicon-svg-512.png",
+      "sha256": "3f9858ab24095fde1a8020f01cabac8ed779a2813fda615f0614b183cf1a2754"
+    },
+    {
+      "assetId": "logo-full",
+      "source": "assets/logo/logo-full.svg",
+      "sourceSha256": "cfae974e691e69074280c55e73bd289f5a12c7ca0fbc81f3dfff2d7b7ba5c2bc",
+      "width": 1024,
+      "height": 319,
+      "variant": "transparent",
+      "path": "assets/png/logo-full-1024.png",
+      "sha256": "bf3d8591b9eeb8ce788e0e5f1be5aad824c59f8b8ae0f4a2da2ba55f79d3311d"
+    },
+    {
+      "assetId": "logo-full",
+      "source": "assets/logo/logo-full.svg",
+      "sourceSha256": "cfae974e691e69074280c55e73bd289f5a12c7ca0fbc81f3dfff2d7b7ba5c2bc",
+      "width": 2048,
+      "height": 638,
+      "variant": "transparent",
+      "path": "assets/png/logo-full-2048.png",
+      "sha256": "d5a53217b4265b76987cb3be75f10d249f97025e3e348d19c28573c65ea729ab"
+    },
+    {
+      "assetId": "logo-full",
+      "source": "assets/logo/logo-full.svg",
+      "sourceSha256": "cfae974e691e69074280c55e73bd289f5a12c7ca0fbc81f3dfff2d7b7ba5c2bc",
+      "width": 512,
+      "height": 160,
+      "variant": "transparent",
+      "path": "assets/png/logo-full-512.png",
+      "sha256": "00908307db8d4268cca7921941f81fbbf0ca74ae14ce077d6011ed5b762c6352"
+    },
+    {
+      "assetId": "logo-full-white",
+      "source": "assets/logo/logo-full-white.svg",
+      "sourceSha256": "2952c4fd1298946ce18222c0029d0e8e345ea271b5d81cd3710713531db2e4f7",
+      "width": 1024,
+      "height": 533,
+      "variant": "on-brand",
+      "path": "assets/png/logo-full-white-1024-on-brand.png",
+      "sha256": "f41b777712b7051e0b0d7893d6f18d55b30d99a785ca2962f94443aa017cb4f4"
+    },
+    {
+      "assetId": "logo-full-white",
+      "source": "assets/logo/logo-full-white.svg",
+      "sourceSha256": "2952c4fd1298946ce18222c0029d0e8e345ea271b5d81cd3710713531db2e4f7",
+      "width": 1024,
+      "height": 533,
+      "variant": "on-charcoal",
+      "path": "assets/png/logo-full-white-1024-on-charcoal.png",
+      "sha256": "7eabe13e51716ef97053d02bc92595ecaece2ff331a8a946e0b401f2b1de41c1"
+    },
+    {
+      "assetId": "logo-full-white",
+      "source": "assets/logo/logo-full-white.svg",
+      "sourceSha256": "2952c4fd1298946ce18222c0029d0e8e345ea271b5d81cd3710713531db2e4f7",
+      "width": 2048,
+      "height": 1067,
+      "variant": "on-brand",
+      "path": "assets/png/logo-full-white-2048-on-brand.png",
+      "sha256": "0f3b2d841e1df3870d0e78090d57c111e1e3b75cff00a81bbc8404686da85a0d"
+    },
+    {
+      "assetId": "logo-full-white",
+      "source": "assets/logo/logo-full-white.svg",
+      "sourceSha256": "2952c4fd1298946ce18222c0029d0e8e345ea271b5d81cd3710713531db2e4f7",
+      "width": 2048,
+      "height": 1067,
+      "variant": "on-charcoal",
+      "path": "assets/png/logo-full-white-2048-on-charcoal.png",
+      "sha256": "10f05cea080228d8f3883d7e7731944f6ec48e77ef0c653a9ca461fbd6bb0ce8"
+    },
+    {
+      "assetId": "logo-full-white",
+      "source": "assets/logo/logo-full-white.svg",
+      "sourceSha256": "2952c4fd1298946ce18222c0029d0e8e345ea271b5d81cd3710713531db2e4f7",
+      "width": 512,
+      "height": 267,
+      "variant": "on-brand",
+      "path": "assets/png/logo-full-white-512-on-brand.png",
+      "sha256": "014827bb8000cd75429831cb3784422b6d5ee32f8dda2f9ec151932430a7e617"
+    },
+    {
+      "assetId": "logo-full-white",
+      "source": "assets/logo/logo-full-white.svg",
+      "sourceSha256": "2952c4fd1298946ce18222c0029d0e8e345ea271b5d81cd3710713531db2e4f7",
+      "width": 512,
+      "height": 267,
+      "variant": "on-charcoal",
+      "path": "assets/png/logo-full-white-512-on-charcoal.png",
+      "sha256": "4c1b48a291dd8a3e80a14ffa21f2d38024b26720ad82a5a99e6a574f98c77a0f"
+    }
+  ]
+}

@@ -10,7 +10,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "tsx scripts/build.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
+    "build": "tsx scripts/build.ts && tsx scripts/build-assets.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
     "validate": "tsx scripts/validate.ts",
     "check": "tsx scripts/check.ts",
     "test": "vitest run",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@resvg/resvg-js": "^2.6.2",
     "zod": "^3.25.76"
   }
 }
