@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, basename } from 'node:path';
 import { buildTheme } from './build.js';
 import { buildColorsCsv } from './colors-csv.js';
+import { plannedOutputs, readManifest, sha256OfFile } from './raster.js';
 import { REPO_ROOT } from './registry.js';
 import { loadRules } from './rules.js';
 import { buildRulesMarkdown } from './rules-build.js';
@@ -14,6 +15,46 @@ export function diffRules(): string[] {
   const committed = existsSync(committedPath) ? readFileSync(committedPath, 'utf8') : '';
   const fresh = buildRulesMarkdown(loadRules());
   return committed === fresh ? [] : ['rules/dist/rules.md'];
+}
+
+/**
+ * Staleness of the raster pack, without comparing PNG bytes: resvg output can
+ * differ across versions and platforms, and a check that fails for its own
+ * reasons stops being read. Regeneration is required exactly when a source SVG
+ * or the size ladder changes.
+ */
+export function diffAssets(themeDir: string): string[] {
+  const planned = plannedOutputs(themeDir);
+  if (planned.length === 0) return [];
+
+  const manifest = readManifest(themeDir);
+  if (!manifest) return ['assets/png/manifest.json is missing'];
+
+  const drift: string[] = [];
+  const byPath = new Map(manifest.outputs.map((o) => [o.path, o]));
+
+  for (const item of planned) {
+    if (!byPath.has(item.path)) drift.push(`assets/png/manifest.json does not list ${item.path}`);
+  }
+  for (const out of manifest.outputs) {
+    if (!planned.some((p) => p.path === out.path)) {
+      drift.push(`assets/png/manifest.json lists ${out.path}, which the ladder no longer plans`);
+    }
+    const outAbs = join(themeDir, out.path);
+    if (!existsSync(outAbs)) {
+      drift.push(`${out.path} is missing`);
+      continue;
+    }
+    const sourceAbs = join(themeDir, out.source);
+    if (!existsSync(sourceAbs)) {
+      drift.push(`${out.source} is missing`);
+      continue;
+    }
+    if (sha256OfFile(sourceAbs) !== out.sourceSha256) {
+      drift.push(`${out.source} changed since ${out.path} was generated`);
+    }
+  }
+  return [...new Set(drift)];
 }
 
 export async function diffTheme(themeDir: string): Promise<string[]> {
