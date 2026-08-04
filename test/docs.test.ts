@@ -54,8 +54,11 @@ describe('README', () => {
   });
 
   it('offers a PNG download before an SVG one', () => {
-    expect(readme.indexOf('.png')).toBeGreaterThan(-1);
-    expect(readme.indexOf('.png?raw=1')).toBeLessThan(readme.indexOf('.svg?raw=1'));
+    // Markdown link targets end with `.png)` / `.svg)`; the hero <img src>
+    // uses quotes, so it does not shadow the first download link.
+    expect(readme.indexOf('.png)')).toBeGreaterThan(-1);
+    expect(readme.indexOf('.svg)')).toBeGreaterThan(-1);
+    expect(readme.indexOf('.png)')).toBeLessThan(readme.indexOf('.svg)'));
   });
 
   it('shows RGB values, not only a palette image', () => {
