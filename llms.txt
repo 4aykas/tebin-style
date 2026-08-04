@@ -22,6 +22,16 @@ Other sizes (128–2048 px) follow the same URL pattern: `logo-full-512.png`,
 - [TEBIN Classic logo white SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg): vector, dark/red backgrounds
 - [TEBIN (web theme) logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg): vector
 
+## Themes
+
+Three themes ship in this repo:
+
+- **tebin-classic** — the 2017 print-era corporate identity (Pantone red + grey, Roboto/Arial). Logos above; tokens at `themes/tebin-classic/dist/`.
+- **tebin** — the modern web theme (red on charcoal, translucent scales). Logos above; tokens at `themes/tebin/dist/`.
+- **slate** — a neutral SaaS/web starter theme. **Design tokens only, no logo assets.** Tokens at `themes/slate/dist/`, guide: [slate DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/slate/DESIGN.md).
+
+Each theme's `dist/` has `tokens.css`, `tailwind.css`, `tokens.dtcg.json`, `theme.ts`, `colors.csv`.
+
 ## Machine-readable indexes
 
 - [Full asset index](https://raw.githubusercontent.com/4aykas/tebin-style/main/registry/index.json): every theme, every asset (SVG + all PNG sizes/variants) with direct rawUrl fields
