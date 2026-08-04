@@ -30,8 +30,14 @@ project. The registry is a set of static files; this skill only reads them.
 4. **Apply tokens.** Insert the chosen `dist/*` into the target, following the
    target project's existing patterns (e.g. paste the `@theme` block into the
    main stylesheet, or import `theme.ts`).
-5. **Apply assets.** For each entry in `theme.json.assets`, either copy the file
-   into the target (`public/`, `assets/`) or give the user the `rawUrl` from
+5. **Apply assets.** List assets from `registry/index.json` — a superset of
+   `theme.json.assets`: it also carries every pre-rendered PNG, with ids of the
+   form `<assetId>@<size>[-<variant>]` (e.g. `logo-full@1024`,
+   `corner-mark-white@512-on-brand`). Pick the format the target can use:
+   SVG for the web; **PNG for documents and Office files** (Word, Excel,
+   PowerPoint — and libraries like openpyxl / python-docx cannot embed SVG at
+   all), served from `themes/<id>/assets/png/`. Then either copy the file into
+   the target (`public/`, `assets/`) or give the user the `rawUrl` from
    `registry/index.json` to download — ask which they want.
 6. **Verify.** Report which theme and version were applied, which token block
    and asset files were added, and any license caveats.

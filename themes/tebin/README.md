@@ -37,6 +37,11 @@ it reads flat beside the cream band and the dark sections.
 Logos and favicons live in [`assets/`](./assets). License: © TEBIN — all rights
 reserved (do not reuse the TEBIN logo for other brands).
 
+Need a PNG instead of SVG — e.g. for Word, Excel, PowerPoint, or a tool that
+cannot embed SVG? Every logo ships pre-rendered in [`assets/png/`](./assets/png)
+(128–2048 px, including flattened `-on-brand` / `-on-charcoal` variants for the
+white logo). Direct download links for every size: [DESIGN.md](./DESIGN.md).
+
 - `logo-full` — default two-color logo (red `TEB` + corner, grey `IN`).
 - `logo-full-white` — all-white monochrome logo for dark or red backgrounds.
 - `corner-mark` / `corner-mark-white` — the solid corner mark on its own, for
