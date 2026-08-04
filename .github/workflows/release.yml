@@ -8,9 +8,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
@@ -24,7 +24,7 @@ jobs:
       # partners get the ZIP from the GitHub Release. Restore the publish step
       # (plus id-token permission, registry-url and an NPM_TOKEN secret) if a
       # package ever becomes wanted.
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: .tmp/tebin-brand-pack.zip
           generate_release_notes: true
