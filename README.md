@@ -14,17 +14,21 @@ self-contained design guide per theme.
 
 ## Download
 
-No terminal needed — click a size, then the Download button on the page that opens.
+No terminal needed — click a size, then save the image that opens
+(right-click → "Save image as…"). All links are direct, permanent URLs —
+paste one anywhere (a chat, a document, a script) and it serves the file.
 
 | | PNG for documents | Vector | The whole design |
 |---|---|---|---|
-| **TEBIN Classic** logo | [512 px](themes/tebin-classic/assets/png/logo-full-512.png?raw=1) · [1024 px](themes/tebin-classic/assets/png/logo-full-1024.png?raw=1) · [2048 px](themes/tebin-classic/assets/png/logo-full-2048.png?raw=1) | [SVG](themes/tebin-classic/assets/logo/logo-full.svg?raw=1) | [DESIGN.md](themes/tebin-classic/DESIGN.md) |
-| white, on red / charcoal | [on red](themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png?raw=1) · [on charcoal](themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png?raw=1) | [SVG](themes/tebin-classic/assets/logo/logo-full-white.svg?raw=1) | |
-| corner mark | [128 px](themes/tebin-classic/assets/png/corner-mark-128.png?raw=1) · [256 px](themes/tebin-classic/assets/png/corner-mark-256.png?raw=1) · [512 px](themes/tebin-classic/assets/png/corner-mark-512.png?raw=1) | [SVG](themes/tebin-classic/assets/misc/corner-mark.svg?raw=1) | |
+| **TEBIN Classic** logo | [512 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-512.png) · [1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-1024.png) · [2048 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-2048.png) | [SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full.svg) | [DESIGN.md](themes/tebin-classic/DESIGN.md) |
+| white, on red / charcoal | [on red](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png) · [on charcoal](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png) | [SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg) | |
+| corner mark | [128 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-128.png) · [256 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-256.png) · [512 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-512.png) | [SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/misc/corner-mark.svg) | |
+| **TEBIN** (web theme) logo | [512 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-512.png) · [1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-1024.png) · [2048 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-2048.png) | [SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg) | [DESIGN.md](themes/tebin/DESIGN.md) |
 
-Colour table for Excel: [colors.csv](themes/tebin-classic/dist/colors.csv?raw=1).
-Every size of every asset, including the TEBIN web theme:
+Colour table for Excel: [colors.csv](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/dist/colors.csv).
+Every size of every asset:
 [tebin-classic/DESIGN.md](themes/tebin-classic/DESIGN.md) · [tebin/DESIGN.md](themes/tebin/DESIGN.md).
+Machine-readable index of all assets: [llms.txt](llms.txt) · [registry/index.json](registry/index.json).
 
 ## Palette
 
