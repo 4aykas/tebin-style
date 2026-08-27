@@ -5,7 +5,7 @@
 A neutral SaaS starter palette — blue accent, grey neutrals. Not a TEBIN brand:
 use it when a project needs a competent default rather than a corporate identity.
 
-**Version** 1.1.0. **Tokens** MIT. **Assets** MIT.
+**Version** 1.2.0. **Tokens** MIT. **Assets** MIT.
 
 ## Palette
 
@@ -16,6 +16,9 @@ use it when a project needs a competent default rather than a corporate identity
 | `color.muted` | `#64748B` | 100, 116, 139 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.topbar` | `#F8FAFC` | 248, 250, 252 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.surface` | `#FFFFFF` | 255, 255, 255 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.error` | `#C7251A` | 199, 37, 26 | not specified in the 2017 brand book | not specified in the 2017 brand book | Error text. 5.66:1 on #FFFFFF. |
+| `color.warning` | `#8A5300` | 138, 83, 0 | not specified in the 2017 brand book | not specified in the 2017 brand book | Warning text. 6.33:1 on #FFFFFF. |
+| `color.success` | `#1F6F43` | 31, 111, 67 | not specified in the 2017 brand book | not specified in the 2017 brand book | Success text. 6.15:1 on #FFFFFF. |
 | `color.rule` | `#E2E8F0` | 226, 232, 240 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 
 Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
@@ -31,6 +34,9 @@ A role is a pointer, not a copy — change the colour it names and every role us
 | `role.on-surface` | `color.ink` | Primary text on the base surface. |
 | `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
 | `role.outline` | `color.rule` | Hairlines and dividers. |
+| `role.error` | `color.error` | Error text. |
+| `role.warning` | `color.warning` | Warning text. |
+| `role.success` | `color.success` | Success text. |
 
 ## Typography
 

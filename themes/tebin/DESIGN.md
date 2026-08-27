@@ -12,7 +12,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.2.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.3.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette
@@ -29,6 +29,10 @@ Roboto Condensed type.
 | `color.topbar` | `#F9F9F9` | 249, 249, 249 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.subtle` | `#C1C1C1` | 193, 193, 193 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.rule` | `#ECECEC` | 236, 236, 236 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.warning-on-light` | `#8A5300` | 138, 83, 0 | not specified in the 2017 brand book | not specified in the 2017 brand book | Warning text on light surfaces. 5.45:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.warning-on-dark` | `#F0B429` | 240, 180, 41 | not specified in the 2017 brand book | not specified in the 2017 brand book | Warning text on dark surfaces. 7.93:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.success-on-light` | `#1F6F43` | 31, 111, 67 | not specified in the 2017 brand book | not specified in the 2017 brand book | Success text on light surfaces. 5.30:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.success-on-dark` | `#5FCF8E` | 95, 207, 142 | not specified in the 2017 brand book | not specified in the 2017 brand book | Success text on dark surfaces. 7.60:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours. |
 | `color.paper` | `#FCFBF8` | 252, 251, 248 | not specified in the 2017 brand book | not specified in the 2017 brand book | Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections. |
 
 Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
@@ -51,6 +55,12 @@ A role is a pointer, not a copy — change the colour it names and every role us
 | `role.on-surface` | `color.ink` | Primary text on the base surface. |
 | `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
 | `role.outline` | `color.rule` | Hairlines and dividers on light surfaces. |
+| `role.error-on-light` | `color.brand-on-light` | Error text on a light surface. Deliberately the brand red: a second red would ask the reader to tell two reds apart, and status is never signalled by colour alone. |
+| `role.error-on-dark` | `color.brand-on-dark` | Error text on a dark surface. See error-on-light. |
+| `role.warning-on-light` | `color.warning-on-light` | Warning text on a light surface. |
+| `role.warning-on-dark` | `color.warning-on-dark` | Warning text on a dark surface. |
+| `role.success-on-light` | `color.success-on-light` | Success text on a light surface. |
+| `role.success-on-dark` | `color.success-on-dark` | Success text on a dark surface. |
 
 ## Typography
 

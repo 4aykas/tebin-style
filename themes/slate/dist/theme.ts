@@ -5,6 +5,9 @@ export const slate = {
     "muted": "#64748B",
     "topbar": "#F8FAFC",
     "surface": "#FFFFFF",
+    "error": "#C7251A",
+    "warning": "#8A5300",
+    "success": "#1F6F43",
     "rule": "#E2E8F0"
   },
   "role": {
@@ -12,7 +15,10 @@ export const slate = {
     "surface": "#FFFFFF",
     "on-surface": "#0F172A",
     "on-surface-muted": "#64748B",
-    "outline": "#E2E8F0"
+    "outline": "#E2E8F0",
+    "error": "#C7251A",
+    "warning": "#8A5300",
+    "success": "#1F6F43"
   },
   "font": {
     "sans": [

@@ -4,4 +4,7 @@ color.ink,#0F172A,15,23,42,not specified in the 2017 brand book,not specified in
 color.muted,#64748B,100,116,139,not specified in the 2017 brand book,not specified in the 2017 brand book,
 color.topbar,#F8FAFC,248,250,252,not specified in the 2017 brand book,not specified in the 2017 brand book,
 color.surface,#FFFFFF,255,255,255,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.error,#C7251A,199,37,26,not specified in the 2017 brand book,not specified in the 2017 brand book,Error text. 5.66:1 on #FFFFFF.
+color.warning,#8A5300,138,83,0,not specified in the 2017 brand book,not specified in the 2017 brand book,Warning text. 6.33:1 on #FFFFFF.
+color.success,#1F6F43,31,111,67,not specified in the 2017 brand book,not specified in the 2017 brand book,Success text. 6.15:1 on #FFFFFF.
 color.rule,#E2E8F0,226,232,240,not specified in the 2017 brand book,not specified in the 2017 brand book,

@@ -9,4 +9,8 @@ color.muted,#666666,102,102,102,not specified in the 2017 brand book,not specifi
 color.topbar,#F9F9F9,249,249,249,not specified in the 2017 brand book,not specified in the 2017 brand book,
 color.subtle,#C1C1C1,193,193,193,not specified in the 2017 brand book,not specified in the 2017 brand book,
 color.rule,#ECECEC,236,236,236,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.warning-on-light,#8A5300,138,83,0,not specified in the 2017 brand book,not specified in the 2017 brand book,"Warning text on light surfaces. 5.45:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours."
+color.warning-on-dark,#F0B429,240,180,41,not specified in the 2017 brand book,not specified in the 2017 brand book,"Warning text on dark surfaces. 7.93:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours."
+color.success-on-light,#1F6F43,31,111,67,not specified in the 2017 brand book,not specified in the 2017 brand book,"Success text on light surfaces. 5.30:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours."
+color.success-on-dark,#5FCF8E,95,207,142,not specified in the 2017 brand book,not specified in the 2017 brand book,"Success text on dark surfaces. 7.60:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours."
 color.paper,#FCFBF8,252,251,248,not specified in the 2017 brand book,not specified in the 2017 brand book,"Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections."

@@ -65,8 +65,10 @@ describe('semantic roles', () => {
     expect(role['primary-on-light'].$value).toBe('{color.brand-on-light}');
   });
 
-  it('invents no error role, because no theme has an error colour', () => {
-    for (const id of THEMES) expect(load(id).role.error).toBeUndefined();
+  it('gives a status role to the themes that render state, not to the print theme', () => {
+    expect(load('slate').role.error).toBeDefined();
+    expect(load('tebin').role['error-on-light']).toBeDefined();
+    expect(load('tebin-classic').role.error).toBeUndefined();
   });
 
   it('maps outline only where a colour is documented as a hairline', () => {
@@ -178,5 +180,51 @@ describe('spacing and layout', () => {
     expect(tokens.layout['container-default'].$value).toBe('1200px');
     expect(tokens.layout['container-wide'].$value).toBe('1400px');
     expect(tokens.layout['container-reading'].$value).toBe('760px');
+  });
+});
+
+describe('status roles', () => {
+  it('tebin carries all three statuses in both surface variants', () => {
+    const { role } = load('tebin');
+    for (const name of [
+      'error-on-light', 'error-on-dark',
+      'warning-on-light', 'warning-on-dark',
+      'success-on-light', 'success-on-dark',
+    ]) {
+      expect(role[name]?.$value, name).toMatch(/^\{color\./);
+    }
+  });
+
+  it('reuses the brand reds for error rather than adding a second red', () => {
+    const { role, color } = load('tebin');
+    expect(role['error-on-light'].$value).toBe('{color.brand-on-light}');
+    expect(role['error-on-dark'].$value).toBe('{color.brand-on-dark}');
+    const reds = Object.keys(color).filter((k) => k.startsWith('error'));
+    expect(reds).toEqual([]);
+  });
+
+  it('slate carries one variant per status, because it has one surface family', () => {
+    const { role } = load('slate');
+    for (const name of ['error', 'warning', 'success']) {
+      expect(role[name]?.$value, name).toMatch(/^\{color\./);
+    }
+    expect(role['error-on-dark']).toBeUndefined();
+  });
+
+  it('leaves the document theme alone — a printed page has no status state', () => {
+    const { role } = load('tebin-classic');
+    for (const name of ['error', 'warning', 'success', 'error-on-light']) {
+      expect(role[name], name).toBeUndefined();
+    }
+  });
+
+  it('records the measured ratio and the surface it was measured against', () => {
+    const { color } = load('tebin');
+    for (const name of ['warning-on-light', 'success-on-light']) {
+      expect(color[name].$description, name).toContain('#EFEEE9');
+    }
+    for (const name of ['warning-on-dark', 'success-on-dark']) {
+      expect(color[name].$description, name).toContain('#242830');
+    }
   });
 });
