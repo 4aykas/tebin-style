@@ -22,6 +22,11 @@ Every step below depends on how you are reading. Pick one, once:
 - **Neither** — fetch
   `https://raw.githubusercontent.com/4aykas/tebin-style/main/<path>`, or use the
   `rawUrl` fields already in `registry/index.json`.
+- **No network at all** — some hosts refuse a raw link outright. Read
+  `llms.txt`: it inlines the vector source of the wordmark and the corner mark,
+  in both colourways, so no fetch is needed. Still never draw the mark
+  yourself. For Word, Excel or PowerPoint, which cannot embed SVG, ask the user
+  to hand over a PNG.
 
 ## Apply a theme
 

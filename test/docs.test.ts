@@ -86,3 +86,32 @@ describe('developer guide', () => {
     }
   });
 });
+
+describe('llms.txt carries the real vector source', () => {
+  const llms = readFileSync(join(root, 'llms.txt'), 'utf8');
+
+  /** Every "### `path`" heading followed by an ```svg fence. */
+  const blocks = [...llms.matchAll(/### `([^`]+)`[\s\S]*?```svg\n([\s\S]*?)\n```/g)]
+    .map((m) => ({ path: m[1], body: m[2] }));
+
+  it('inlines the four marks an offline agent needs', () => {
+    expect(blocks.map((b) => b.path)).toEqual([
+      'themes/tebin-classic/assets/logo/logo-full.svg',
+      'themes/tebin-classic/assets/logo/logo-full-white.svg',
+      'themes/tebin-classic/assets/misc/corner-mark.svg',
+      'themes/tebin-classic/assets/misc/corner-mark-white.svg',
+    ]);
+  });
+
+  for (const { path, body } of blocks) {
+    it(`${path} is quoted exactly, not approximately`, () => {
+      const onDisk = readFileSync(join(root, path), 'utf8').replace(/\r\n/g, '\n').trimEnd();
+      expect(body.replace(/\r\n/g, '\n').trimEnd()).toBe(onDisk);
+    });
+  }
+
+  it('says why an offline agent still may not draw the mark itself', () => {
+    expect(llms).toContain('brand-logo-never-typeset');
+    expect(llms).toContain('cannot embed SVG');
+  });
+});

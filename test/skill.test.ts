@@ -60,3 +60,10 @@ describe('the skill forbids drawing the logo instead of fetching it', () => {
     expect(skill).toContain('drawn');
   });
 });
+
+describe('the skill covers a host with no network', () => {
+  it('points an offline agent at the inlined vector source', () => {
+    expect(skill).toContain('No network at all');
+    expect(skill).toContain('llms.txt');
+  });
+});
