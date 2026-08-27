@@ -76,19 +76,33 @@ describe('post-audit rules (2026-07-29)', () => {
     }
   });
 
-  it('has 61 rules with unique ids', () => {
+  it('has 62 rules with unique ids', () => {
     const rules = loadRules();
-    expect(rules).toHaveLength(61);
-    expect(new Set(rules.map((r) => r.id)).size).toBe(61);
+    expect(rules).toHaveLength(62);
+    expect(new Set(rules.map((r) => r.id)).size).toBe(62);
   });
 
-  it('opens a typography category of six', () => {
-    expect(filterRules({ category: 'typography' })).toHaveLength(6);
+  it('opens a typography category of seven', () => {
+    expect(filterRules({ category: 'typography' })).toHaveLength(7);
   });
 
   it('states the heading rule as a NEVER and names the shy escape hatch', () => {
     const rule = getRule('typography-heading-word-break');
     expect(rule.severity).toBe('NEVER');
     expect(rule.statement).toContain('&shy;');
+  });
+});
+
+describe('rules that point at tokens', () => {
+  it('the heading-scale rule names the token group that now carries the scale', () => {
+    const rule = filterRules({ category: 'typography' }).find((r) => /scale/.test(r.statement));
+    expect(rule).toBeDefined();
+    expect(rule!.statement).toContain('type.h1');
+  });
+
+  it('names the supported way to shape a heading, not only the forbidden ones', () => {
+    const rule = getRule('typography-heading-balance');
+    expect(rule.severity).toBe('SHOULD');
+    expect(rule.statement).toContain('text-wrap: balance');
   });
 });

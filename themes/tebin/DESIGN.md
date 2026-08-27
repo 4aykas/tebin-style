@@ -12,7 +12,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.1.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.2.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette
@@ -132,7 +132,8 @@ Colour table as a spreadsheet: [colors.csv](https://github.com/4aykas/tebin-styl
 - **[MUST]** Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
 - **[NEVER]** Never set a negative letter-spacing; tracking is zero or positive.
 - **[NEVER]** Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
-- **[SHOULD]** Take heading sizes from the global type scale rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._
 
 ### theming
 
