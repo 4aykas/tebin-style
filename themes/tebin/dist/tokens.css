@@ -53,4 +53,12 @@
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
+  --role-primary: var(--color-brand); /** Identity red. Logo, fills, borders and large text. Not small text — use the on-dark or on-light variant there. */
+  --role-primary-on-dark: var(--color-brand-on-dark); /** Small red text on a dark surface. */
+  --role-primary-on-light: var(--color-brand-on-light); /** Small red text on a light surface. */
+  --role-surface: var(--color-paper); /** The base page surface. */
+  --role-surface-inverse: var(--color-charcoal); /** The dark bands. */
+  --role-on-surface: var(--color-ink); /** Primary text on the base surface. */
+  --role-on-surface-muted: var(--color-muted); /** Secondary text on the base surface. */
+  --role-outline: var(--color-rule); /** Hairlines and dividers on light surfaces. */
 }

@@ -5,6 +5,11 @@
   --color-topbar: #f8fafc;
   --color-surface: #ffffff;
   --color-rule: #e2e8f0;
+  --role-primary: #2563eb;
+  --role-surface: #ffffff;
+  --role-on-surface: #0f172a;
+  --role-on-surface-muted: #64748b;
+  --role-outline: #e2e8f0;
   --font-sans: Inter, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --radius-sm: 4px;

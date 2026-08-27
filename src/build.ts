@@ -69,7 +69,7 @@ export function registerFormats(): void {
   StyleDictionary.registerFormat({
     name: 'javascript/theme-ts',
     format: ({ dictionary, options }) => {
-      const tree = nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => rawValue(t));
+      const tree = nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => outValue(t));
       const name = (options as { themeName: string }).themeName;
       const safe = name.replace(/-/g, '_');
       const typeName =
@@ -94,7 +94,9 @@ export async function buildTheme(themeDir: string): Promise<void> {
       css: {
         transformGroup: 'css',
         buildPath,
-        files: [{ destination: 'tokens.css', format: 'css/variables' }],
+        files: [
+          { destination: 'tokens.css', format: 'css/variables', options: { outputReferences: true } },
+        ],
       },
       tailwind: {
         transformGroup: 'css',

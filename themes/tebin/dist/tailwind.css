@@ -44,6 +44,14 @@
   --brand-a5: rgba(218, 41, 28, 0.28);
   --brand-a6: rgba(218, 41, 28, 0.14);
   --brand-a7: rgba(218, 41, 28, 0.06);
+  --role-primary: #da291c;
+  --role-primary-on-dark: #ea6359;
+  --role-primary-on-light: #c7251a;
+  --role-surface: #fcfbf8;
+  --role-surface-inverse: #242424;
+  --role-on-surface: #292929;
+  --role-on-surface-muted: #666666;
+  --role-outline: #ececec;
   --font-sans: Roboto, Helvetica, Arial, sans-serif;
   --font-condensed: 'Roboto Condensed', Roboto, sans-serif;
   --radius-panel: 2px;

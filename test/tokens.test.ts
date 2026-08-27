@@ -39,3 +39,45 @@ describe('accessible brand text colours', () => {
     expect(classic.color['brand-on-light']).toBeUndefined();
   });
 });
+
+describe('semantic roles', () => {
+  const THEMES = ['tebin', 'tebin-classic', 'slate'];
+
+  for (const id of THEMES) {
+    it(`${id} maps the three roles every theme can honour`, () => {
+      const { role } = load(id);
+      for (const name of ['primary', 'surface', 'on-surface']) {
+        expect(role?.[name]?.$value, `${id}.${name}`).toMatch(/^\{[a-z-]+\.[a-z0-9-]+\}$/);
+      }
+    });
+
+    it(`${id} states no role as a literal — a role is a pointer, not a copy`, () => {
+      for (const [name, leaf] of Object.entries(load(id).role as Record<string, { $value: string }>)) {
+        expect(leaf.$value, `${id}.${name}`).not.toMatch(/^#/);
+      }
+    });
+  }
+
+  it('separates the red that fills from the red that can be read', () => {
+    const { role } = load('tebin');
+    expect(role.primary.$value).toBe('{color.brand}');
+    expect(role['primary-on-dark'].$value).toBe('{color.brand-on-dark}');
+    expect(role['primary-on-light'].$value).toBe('{color.brand-on-light}');
+  });
+
+  it('invents no error role, because no theme has an error colour', () => {
+    for (const id of THEMES) expect(load(id).role.error).toBeUndefined();
+  });
+
+  it('maps outline only where a colour is documented as a hairline', () => {
+    expect(load('tebin').role.outline.$value).toBe('{color.rule}');
+    expect(load('slate').role.outline.$value).toBe('{color.rule}');
+    expect(load('tebin-classic').role.outline).toBeUndefined();
+  });
+
+  it('keeps roles out of the spreadsheet, which lists real colours only', async () => {
+    const { collectColorRows } = await import('../src/colors-csv.js');
+    const rows = collectColorRows(join(root, 'themes', 'tebin'));
+    expect(rows.some((r) => r.token.startsWith('role.'))).toBe(false);
+  });
+});

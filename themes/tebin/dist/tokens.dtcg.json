@@ -193,6 +193,40 @@
       "$value": "rgba(218,41,28,0.06)"
     }
   },
+  "role": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.brand}"
+    },
+    "primary-on-dark": {
+      "$type": "color",
+      "$value": "{color.brand-on-dark}"
+    },
+    "primary-on-light": {
+      "$type": "color",
+      "$value": "{color.brand-on-light}"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "{color.paper}"
+    },
+    "surface-inverse": {
+      "$type": "color",
+      "$value": "{color.charcoal}"
+    },
+    "on-surface": {
+      "$type": "color",
+      "$value": "{color.ink}"
+    },
+    "on-surface-muted": {
+      "$type": "color",
+      "$value": "{color.muted}"
+    },
+    "outline": {
+      "$type": "color",
+      "$value": "{color.rule}"
+    }
+  },
   "font": {
     "sans": {
       "$type": "fontFamily",

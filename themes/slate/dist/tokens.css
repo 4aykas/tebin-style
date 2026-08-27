@@ -14,4 +14,9 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --role-primary: var(--color-brand); /** Accent. Fills, borders and large text. */
+  --role-surface: var(--color-surface); /** The base page surface. */
+  --role-on-surface: var(--color-ink); /** Primary text on the base surface. */
+  --role-on-surface-muted: var(--color-muted); /** Secondary text on the base surface. */
+  --role-outline: var(--color-rule); /** Hairlines and dividers. */
 }

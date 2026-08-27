@@ -11,6 +11,10 @@
   --color-teal: #69b7c2;
   --color-grey-light: #b3b4b6;
   --color-grey-lighter: #cdcdce;
+  --role-primary: #da291c;
+  --role-surface: #ffffff;
+  --role-on-surface: #1a1a1a;
+  --role-on-surface-muted: #898d8d;
   --font-sans: Roboto, Arial, Helvetica, sans-serif;
   --font-document: Arial, Helvetica, sans-serif;
   --font-weight-regular: 400;

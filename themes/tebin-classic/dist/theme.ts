@@ -13,6 +13,12 @@ export const tebin_classic = {
     "grey-light": "#B3B4B6",
     "grey-lighter": "#CDCDCE"
   },
+  "role": {
+    "primary": "#DA291C",
+    "surface": "#FFFFFF",
+    "on-surface": "#1A1A1A",
+    "on-surface-muted": "#898D8D"
+  },
   "font": {
     "sans": [
       "Roboto",

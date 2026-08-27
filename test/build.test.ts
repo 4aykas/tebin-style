@@ -46,3 +46,36 @@ describe('buildTheme', () => {
     expect(ts).toContain('export type SampleTheme');
   });
 });
+
+describe('aliases', () => {
+  let aliasDir: string;
+
+  beforeAll(async () => {
+    aliasDir = mkdtempSync(join(tmpdir(), 'ts-alias-'));
+    mkdirSync(join(aliasDir, 'aliased'), { recursive: true });
+    writeFileSync(
+      join(aliasDir, 'aliased', 'tokens.json'),
+      JSON.stringify({
+        color: { brand: { $type: 'color', $value: '#DA291C' } },
+        role: { primary: { $type: 'color', $value: '{color.brand}' } },
+      }),
+    );
+    await buildTheme(join(aliasDir, 'aliased'));
+  });
+
+  afterAll(() => rmSync(aliasDir, { recursive: true, force: true }));
+
+  const readAlias = (f: string) => readFileSync(join(aliasDir, 'aliased', 'dist', f), 'utf8');
+
+  it('keeps the reference in CSS so a role follows its colour', () => {
+    expect(readAlias('tokens.css')).toContain('--role-primary: var(--color-brand);');
+  });
+
+  it('keeps the reference in the DTCG export, where an alias is a first-class value', () => {
+    expect(JSON.parse(readAlias('tokens.dtcg.json')).role.primary.$value).toBe('{color.brand}');
+  });
+
+  it('resolves the reference in the TS export, where a consumer wants a colour', () => {
+    expect(readAlias('theme.ts')).toContain('"primary": "#DA291C"');
+  });
+});

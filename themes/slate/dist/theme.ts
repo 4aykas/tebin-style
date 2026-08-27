@@ -7,6 +7,13 @@ export const slate = {
     "surface": "#FFFFFF",
     "rule": "#E2E8F0"
   },
+  "role": {
+    "primary": "#2563EB",
+    "surface": "#FFFFFF",
+    "on-surface": "#0F172A",
+    "on-surface-muted": "#64748B",
+    "outline": "#E2E8F0"
+  },
   "font": {
     "sans": [
       "Inter",

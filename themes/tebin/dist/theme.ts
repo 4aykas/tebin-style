@@ -58,6 +58,16 @@ export const tebin = {
     "a6": "rgba(218,41,28,0.14)",
     "a7": "rgba(218,41,28,0.06)"
   },
+  "role": {
+    "primary": "#DA291C",
+    "primary-on-dark": "#EA6359",
+    "primary-on-light": "#C7251A",
+    "surface": "#FCFBF8",
+    "surface-inverse": "#242424",
+    "on-surface": "#292929",
+    "on-surface-muted": "#666666",
+    "outline": "#ECECEC"
+  },
   "font": {
     "sans": [
       "Roboto",
