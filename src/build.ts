@@ -11,6 +11,12 @@ interface Leaf {
   original: { $value?: unknown; $type?: string; value?: unknown };
 }
 
+interface FluidTriple {
+  min: string;
+  pref: string;
+  max: string;
+}
+
 /** Transformed value (css pipeline writes $value; fall back to value). */
 function outValue(t: Leaf): unknown {
   return t.$value ?? t.value;
@@ -47,6 +53,28 @@ export function registerFormats(): void {
   if (registered) return;
   registered = true;
 
+  StyleDictionary.registerTransform({
+    name: 'tebin/fluid-clamp',
+    type: 'value',
+    transitive: true,
+    filter: (token) =>
+      Boolean(
+        (token as { $extensions?: Record<string, unknown> }).$extensions?.['pro.tebin.fluid'] ??
+          (token.original as { $extensions?: Record<string, unknown> })?.$extensions?.['pro.tebin.fluid'],
+      ),
+    transform: (token) => {
+      const ext =
+        (token as { $extensions?: Record<string, FluidTriple> }).$extensions?.['pro.tebin.fluid'] ??
+        (token.original as { $extensions: Record<string, FluidTriple> }).$extensions['pro.tebin.fluid'];
+      return `clamp(${ext.min}, ${ext.pref}, ${ext.max})`;
+    },
+  });
+
+  StyleDictionary.registerTransformGroup({
+    name: 'css-tebin',
+    transforms: [...StyleDictionary.hooks.transformGroups.css, 'tebin/fluid-clamp'],
+  });
+
   StyleDictionary.registerFormat({
     name: 'css/tailwind-theme',
     format: ({ dictionary }) =>
@@ -69,7 +97,7 @@ export function registerFormats(): void {
   StyleDictionary.registerFormat({
     name: 'javascript/theme-ts',
     format: ({ dictionary, options }) => {
-      const tree = nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => rawValue(t));
+      const tree = nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => outValue(t));
       const name = (options as { themeName: string }).themeName;
       const safe = name.replace(/-/g, '_');
       const typeName =
@@ -92,12 +120,14 @@ export async function buildTheme(themeDir: string): Promise<void> {
     source: [join(themeDir, 'tokens.json')],
     platforms: {
       css: {
-        transformGroup: 'css',
+        transformGroup: 'css-tebin',
         buildPath,
-        files: [{ destination: 'tokens.css', format: 'css/variables' }],
+        files: [
+          { destination: 'tokens.css', format: 'css/variables', options: { outputReferences: true } },
+        ],
       },
       tailwind: {
-        transformGroup: 'css',
+        transformGroup: 'css-tebin',
         buildPath,
         files: [{ destination: 'tailwind.css', format: 'css/tailwind-theme' }],
       },

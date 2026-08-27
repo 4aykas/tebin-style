@@ -21,4 +21,8 @@
   --font-weight-medium: 500;
   --font-weight-bold: 700;
   --font-weight-black: 900;
+  --role-primary: var(--color-brand); /** Identity red. Fills and large text. */
+  --role-surface: var(--color-topbar); /** The white page a document prints on. */
+  --role-on-surface: var(--color-ink); /** Body text on the page. */
+  --role-on-surface-muted: var(--color-grey); /** Secondary text on the page. */
 }

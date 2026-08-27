@@ -49,6 +49,24 @@
       "$value": "#CDCDCE"
     }
   },
+  "role": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.brand}"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "{color.topbar}"
+    },
+    "on-surface": {
+      "$type": "color",
+      "$value": "{color.ink}"
+    },
+    "on-surface-muted": {
+      "$type": "color",
+      "$value": "{color.grey}"
+    }
+  },
   "font": {
     "sans": {
       "$type": "fontFamily",

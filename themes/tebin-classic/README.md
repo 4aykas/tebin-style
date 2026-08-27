@@ -27,3 +27,12 @@ white logo). Direct download links for every size: [DESIGN.md](./DESIGN.md).
 
 See the `brand` rules in [`rules/dist/rules.md`](../../rules/dist/rules.md) for
 logo usage (safezone, backgrounds, do-nots).
+
+## Roles
+
+`role.primary`, `role.surface`, `role.on-surface` and `role.on-surface-muted`
+point at palette colours rather than copying them.
+
+This theme has no `role.outline`: nothing in the 2017 brand book is named as a
+hairline colour, and picking one of the greys would be inventing a rule the
+book does not state.

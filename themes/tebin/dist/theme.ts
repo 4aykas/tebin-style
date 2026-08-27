@@ -2,6 +2,8 @@ export const tebin = {
   "color": {
     "brand": "#DA291C",
     "brand-dark": "#B82217",
+    "brand-on-dark": "#EA6359",
+    "brand-on-light": "#C7251A",
     "charcoal": "#242424",
     "ink": "#292929",
     "muted": "#666666",
@@ -56,6 +58,16 @@ export const tebin = {
     "a6": "rgba(218,41,28,0.14)",
     "a7": "rgba(218,41,28,0.06)"
   },
+  "role": {
+    "primary": "#DA291C",
+    "primary-on-dark": "#EA6359",
+    "primary-on-light": "#C7251A",
+    "surface": "#FCFBF8",
+    "surface-inverse": "#242424",
+    "on-surface": "#292929",
+    "on-surface-muted": "#666666",
+    "outline": "#ECECEC"
+  },
   "font": {
     "sans": [
       "Roboto",
@@ -68,6 +80,32 @@ export const tebin = {
       "Roboto",
       "sans-serif"
     ]
+  },
+  "fontWeight": {
+    "heading": 700
+  },
+  "lineHeight": {
+    "heading": 1.35,
+    "body": 1.7
+  },
+  "type": {
+    "h1": "38px",
+    "h2": "34px",
+    "h3": "28px",
+    "h4": "24px",
+    "h5": "20px",
+    "body": "16px"
+  },
+  "spacing": {
+    "gutter": "48px",
+    "section-compact": "64px",
+    "section-standard": "88px",
+    "section-feature": "112px"
+  },
+  "layout": {
+    "container-default": "1200px",
+    "container-wide": "1400px",
+    "container-reading": "760px"
   },
   "radius": {
     "panel": "2px",

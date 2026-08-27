@@ -5,6 +5,8 @@
 :root {
   --color-brand: #da291c;
   --color-brand-dark: #b82217;
+  --color-brand-on-dark: #ea6359; /** Small red TEXT on dark surfaces only. 4.5:1 on #242830, the lightest dark surface in use, and more on every darker one. The identity red #DA291C stays the colour for the logo, fills, borders and large text, which need only 3:1. */
+  --color-brand-on-light: #c7251a; /** Small red TEXT on light surfaces only. 4.87:1 on #EFEEE9 and 5.32:1 on #F8F8F4. No single red clears 4.5:1 on both surface families: the luminance window is empty for any hue, so this is two tokens by arithmetic, not by preference. */
   --color-charcoal: #242424;
   --color-ink: #292929;
   --color-muted: #666666;
@@ -48,7 +50,31 @@
   --brand-a7: rgba(218, 41, 28, 0.06);
   --font-sans: Roboto, Helvetica, Arial, sans-serif; /** tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win. */
   --font-condensed: 'Roboto Condensed', Roboto, sans-serif; /** Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it. */
+  --font-weight-heading: 700;
+  --line-height-heading: 1.35;
+  --line-height-body: 1.7;
+  --type-h1: clamp(28px, 4.5vw, 38px); /** Set in the condensed face at weight 700, leading 1.35. The value is the ceiling of a fluid range, not a fixed size: display type is sized against the locale with the longest words, because a vw size that fitted English overlapped the next column by 343px in German. */
+  --type-h2: clamp(24px, 3.8vw, 34px); /** Ceiling of a fluid range sized against the longest-word locale. See h1. */
+  --type-h3: clamp(20px, 3vw, 28px); /** Ceiling of a fluid range sized against the longest-word locale. See h1. */
+  --type-h4: clamp(18px, 2.4vw, 24px); /** Ceiling of a fluid range sized against the longest-word locale. See h1. */
+  --type-h5: clamp(16px, 2vw, 20px); /** Ceiling of a fluid range sized against the longest-word locale. See h1. */
+  --type-body: 16px; /** Body copy is a fixed size with leading 1.7. Running text is not display type and does not scale with the viewport. */
+  --spacing-gutter: clamp(20px, 4vw, 48px); /** Page gutter. Ceiling of a fluid range. */
+  --spacing-section-compact: clamp(40px, 5.5vw, 64px); /** Vertical rhythm between tight sections. Ceiling of a fluid range. */
+  --spacing-section-standard: clamp(56px, 7vw, 88px); /** The default band spacing. Ceiling of a fluid range. */
+  --spacing-section-feature: clamp(72px, 9vw, 112px); /** Around a feature band. Ceiling of a fluid range. */
+  --layout-container-default: 1200px; /** Default content width. */
+  --layout-container-wide: 1400px; /** Wide content width. */
+  --layout-container-reading: 760px; /** Measure for long-form running text. */
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
+  --role-primary: var(--color-brand); /** Identity red. Logo, fills, borders and large text. Not small text — use the on-dark or on-light variant there. */
+  --role-primary-on-dark: var(--color-brand-on-dark); /** Small red text on a dark surface. */
+  --role-primary-on-light: var(--color-brand-on-light); /** Small red text on a light surface. */
+  --role-surface: var(--color-paper); /** The base page surface. */
+  --role-surface-inverse: var(--color-charcoal); /** The dark bands. */
+  --role-on-surface: var(--color-ink); /** Primary text on the base surface. */
+  --role-on-surface-muted: var(--color-muted); /** Secondary text on the base surface. */
+  --role-outline: var(--color-rule); /** Hairlines and dividers on light surfaces. */
 }

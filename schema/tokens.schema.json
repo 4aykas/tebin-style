@@ -21,6 +21,16 @@
                 "pantone": { "type": "string", "minLength": 1 },
                 "cmyk": { "type": "string", "pattern": "^[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}/[0-9]{1,3}$" }
               }
+            },
+            "pro.tebin.fluid": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["min", "pref", "max"],
+              "properties": {
+                "min":  { "type": "string", "pattern": "^-?[0-9.]+(px|rem|em)$" },
+                "pref": { "type": "string", "minLength": 1 },
+                "max":  { "type": "string", "pattern": "^-?[0-9.]+(px|rem|em)$" }
+              }
             }
           }
         }

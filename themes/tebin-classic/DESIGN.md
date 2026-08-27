@@ -10,7 +10,7 @@ certificate, a slide deck, a business card.
 The grey is specified twice in the book — Pantone 423 C and "Black 60%" — two
 routes to the same ink; the tokens carry the Pantone name.
 
-**Version** 1.0.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.1.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** TEBIN Branding Principles & Style Guide (2017, Rev. A).
 
 ## Palette
@@ -32,7 +32,18 @@ routes to the same ink; the tokens carry the Pantone name.
 
 Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
 
-## Type
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Identity red. Fills and large text. |
+| `role.surface` | `color.topbar` | The white page a document prints on. |
+| `role.on-surface` | `color.ink` | Body text on the page. |
+| `role.on-surface-muted` | `color.grey` | Secondary text on the page. |
+
+## Typography
 
 - **sans** — Roboto, Arial, Helvetica, sans-serif
 - **document** — Arial, Helvetica, sans-serif
@@ -42,7 +53,7 @@ In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's
 
 ## Assets
 
-| Asset | Vector | PNG |
+| Asset | Source | PNG |
 | --- | --- | --- |
 | `logo-full` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/logo/logo-full.svg?raw=1) | [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-512.png?raw=1) · [1024 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-1024.png?raw=1) · [2048 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-2048.png?raw=1) |
 | `logo-full-white` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/logo/logo-full-white.svg?raw=1) | [512 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-512-on-brand.png?raw=1) · [512 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-512-on-charcoal.png?raw=1) · [1024 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png?raw=1) · [1024 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png?raw=1) · [2048 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-brand.png?raw=1) · [2048 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-charcoal.png?raw=1) |
@@ -74,7 +85,8 @@ Colour table as a spreadsheet: [colors.csv](https://github.com/4aykas/tebin-styl
 - **[MUST]** Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
 - **[NEVER]** Never set a negative letter-spacing; tracking is zero or positive.
 - **[NEVER]** Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
-- **[SHOULD]** Take heading sizes from the global type scale rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._
 
 ### theming
 

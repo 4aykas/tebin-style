@@ -5,7 +5,7 @@
 A neutral SaaS starter palette — blue accent, grey neutrals. Not a TEBIN brand:
 use it when a project needs a competent default rather than a corporate identity.
 
-**Version** 1.0.0. **Tokens** MIT. **Assets** MIT.
+**Version** 1.1.0. **Tokens** MIT. **Assets** MIT.
 
 ## Palette
 
@@ -20,7 +20,19 @@ use it when a project needs a competent default rather than a corporate identity
 
 Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
 
-## Type
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Accent. Fills, borders and large text. |
+| `role.surface` | `color.surface` | The base page surface. |
+| `role.on-surface` | `color.ink` | Primary text on the base surface. |
+| `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
+| `role.outline` | `color.rule` | Hairlines and dividers. |
+
+## Typography
 
 - **sans** — Inter, system-ui, sans-serif
 - **mono** — JetBrains Mono, ui-monospace, monospace
@@ -54,7 +66,8 @@ In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's
 - **[MUST]** Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
 - **[NEVER]** Never set a negative letter-spacing; tracking is zero or positive.
 - **[NEVER]** Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
-- **[SHOULD]** Take heading sizes from the global type scale rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._
 
 ### theming
 

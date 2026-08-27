@@ -25,6 +25,28 @@
       "$value": "#E2E8F0"
     }
   },
+  "role": {
+    "primary": {
+      "$type": "color",
+      "$value": "{color.brand}"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "{color.surface}"
+    },
+    "on-surface": {
+      "$type": "color",
+      "$value": "{color.ink}"
+    },
+    "on-surface-muted": {
+      "$type": "color",
+      "$value": "{color.muted}"
+    },
+    "outline": {
+      "$type": "color",
+      "$value": "{color.rule}"
+    }
+  },
   "font": {
     "sans": {
       "$type": "fontFamily",
