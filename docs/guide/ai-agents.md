@@ -52,10 +52,19 @@ client.
 | Tool | Input | Returns |
 |------|-------|---------|
 | `list_themes` | `{ industry?, mood?, query? }` | matching theme summaries |
-| `get_theme` | `{ id, format? }` | tokens in `css` \| `tailwind` \| `dtcg` \| `ts` |
+| `get_theme` | `{ id, format? }` | tokens in `css` \| `tailwind` \| `dtcg` \| `ts` \| `design-md` |
 | `get_asset` | `{ id, assetId? }` | asset list, or one asset (SVG text / binary base64) |
 | `list_rules` | `{ category?, severity?, tag?, query? }` | matching design rules |
 | `get_rule` | `{ id }` | a single design rule |
+| `lint_theme` | `{ id }` | contrast failures and broken references, with the ratio and the surface used |
+| `diff_themes` | `{ a, b }` | token diff by group, plus a regression flag |
+
+`design-md` returns the whole self-contained document, front matter included —
+the same file a host with no MCP can be handed directly.
+
+`lint_theme` reports what it could **not** check as well as what failed. A
+finding with no ratio means no pairing rule reached that role; treat it as
+uncovered, not as a pass.
 
 `get_asset` also serves the generated PNGs, by ids of the form
 `logo-full@1024` and `logo-full-white@1024-on-brand` — list a theme's assets

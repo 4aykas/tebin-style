@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.3.0 — 2026-08-27
+
+The design system can now check itself. Its own rules database says a policy
+that lives only in prose is enforced only where somebody remembered it — and
+every contrast figure this repository published lived in a `$description`
+string that nothing verified.
+
+### Added
+- `surfaces` in `theme.json`: the binding surfaces as data. For `tebin` those
+  are `#EFEEE9`, the darkest light surface in use, and `#242830`, the lightest
+  dark one — the two numbers every `*-on-*` colour was measured against, and
+  which until now existed only inside prose.
+- `omitted` in `theme.json`: an absence with a reason. A declared gap stops
+  looking like an oversight, and the lint stops warning about it.
+- `pnpm lint:themes` and the `lint_theme` MCP tool. Pairs each role with a
+  surface by naming rule, reports a ratio under 4.5:1 as an error and a broken
+  `{reference}` as a warning — **and reports what it could not check**, because
+  a silent skip reads as a pass.
+- `diff_themes` and `src/diff.ts`: token-level added / removed / modified per
+  group, each side's lint summary, and a `regression` flag set only when
+  contrast errors increase. A removed token is often the point of a change.
+- YAML front matter in every generated `DESIGN.md`, mapping roles, the type
+  scale, spacing and radii onto the DESIGN.md format. Roles resolve to values;
+  a fluid level contributes its ceiling.
+- `design-md` as a `get_theme` format, returning the whole document.
+
+### Removed
+- `role.on-surface-muted` from `tebin-classic`. The lint caught it on its first
+  run: it pointed at the brand book's grey `#898D8D`, which is **3.36:1 on
+  white** — below the floor for small text. That is the brand-red mistake one
+  level over, a colour to paint with used as a colour to read. The book prices
+  no darker grey, so the theme has no secondary text colour and says so.
+
 ## 1.2.0 — 2026-08-27
 
 ### Added

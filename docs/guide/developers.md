@@ -88,6 +88,17 @@ The `vw` term is deliberate. Display type is sized against the locale with the
 longest words: a range that fits English becomes an English-only cap, and
 German compounds once overflowed the next column by 343px.
 
+## Checking a theme
+
+`pnpm lint:themes` measures every role that a naming rule can pair with a
+surface, using the `surfaces` block in `theme.json` — the darkest light
+surface and the lightest dark surface actually in use. A role under 4.5:1 is
+an error; a broken `{reference}` is a warning.
+
+It also prints what it could not check. A role no rule reaches is reported,
+not skipped, because a checker that quietly covers half the palette reads as
+"everything passes".
+
 ## Generated versus hand-edited
 
 Hand-edited, per theme: `tokens.json` (the DTCG source), `theme.json`
@@ -109,5 +120,6 @@ fail CI for its own reasons.
 pnpm validate   # JSON Schema and integrity checks
 pnpm build      # generate everything listed above
 pnpm check      # fail if a generated file drifts from its source
+pnpm lint:themes # fail on a contrast error or a broken token reference
 pnpm test       # run the test suite
 ```
