@@ -228,3 +228,30 @@ describe('status roles', () => {
     }
   });
 });
+
+describe('label sizes', () => {
+  const tokens = load('tebin');
+
+  it('carries the three sizes the measurement found', () => {
+    expect(tokens.type['label-sm'].$value).toBe('9px');
+    expect(tokens.type['label-md'].$value).toBe('10px');
+    expect(tokens.type['label-lg'].$value).toBe('11px');
+  });
+
+  it('keeps labels fixed — a 9px label does not scale with the viewport', () => {
+    for (const l of ['label-sm', 'label-md', 'label-lg']) {
+      expect(tokens.type[l].$extensions, l).toBeUndefined();
+    }
+  });
+
+  it('tokenises no tracking, because the measurement found no scale', () => {
+    expect(tokens.letterSpacing).toBeUndefined();
+    for (const l of ['label-sm', 'label-md', 'label-lg']) {
+      expect(tokens.type[l].$description, l).toContain('tracking');
+    }
+  });
+
+  it('records what the sizes were measured from', () => {
+    expect(tokens.type['label-sm'].$description).toContain('612');
+  });
+});

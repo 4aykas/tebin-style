@@ -326,6 +326,18 @@
     "body": {
       "$type": "dimension",
       "$value": "16px"
+    },
+    "label-sm": {
+      "$type": "dimension",
+      "$value": "9px"
+    },
+    "label-md": {
+      "$type": "dimension",
+      "$value": "10px"
+    },
+    "label-lg": {
+      "$type": "dimension",
+      "$value": "11px"
     }
   },
   "spacing": {

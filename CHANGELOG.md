@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.2.0 — 2026-08-27
+
+### Added
+- `type.label-sm` (9px), `type.label-md` (10px) and `type.label-lg` (11px) on
+  `tebin`. Measured, not chosen: 1324 CSS rule blocks on tebin.pro set
+  `text-transform: uppercase`, and they are two populations — 612 labels at a
+  fixed size and 451 headings using `clamp()`, which `type.h*` already covers.
+  Among the labels, 9, 10 and 11px cover 72%.
+- Label sizes are fixed. A 9px label does not scale with the viewport.
+
+### Not included
+- A tracking token. The same measurement found 20 distinct `letter-spacing`
+  values across the label population with no winner — the most common holds
+  17% — so tracking is chosen per role, not per size. There is no scale to
+  describe, and inventing one would dress a guess as a measurement.
+
 ## 1.1.0 — 2026-08-27
 
 Token depth: the themes carried colours, font stacks and radii and nothing
