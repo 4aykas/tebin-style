@@ -59,6 +59,13 @@
   --type-h4: clamp(18px, 2.4vw, 24px); /** Ceiling of a fluid range sized against the longest-word locale. See h1. */
   --type-h5: clamp(16px, 2vw, 20px); /** Ceiling of a fluid range sized against the longest-word locale. See h1. */
   --type-body: 16px; /** Body copy is a fixed size with leading 1.7. Running text is not display type and does not scale with the viewport. */
+  --spacing-gutter: clamp(20px, 4vw, 48px); /** Page gutter. Ceiling of a fluid range. */
+  --spacing-section-compact: clamp(40px, 5.5vw, 64px); /** Vertical rhythm between tight sections. Ceiling of a fluid range. */
+  --spacing-section-standard: clamp(56px, 7vw, 88px); /** The default band spacing. Ceiling of a fluid range. */
+  --spacing-section-feature: clamp(72px, 9vw, 112px); /** Around a feature band. Ceiling of a fluid range. */
+  --layout-container-default: 1200px; /** Default content width. */
+  --layout-container-wide: 1400px; /** Wide content width. */
+  --layout-container-reading: 760px; /** Measure for long-form running text. */
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;

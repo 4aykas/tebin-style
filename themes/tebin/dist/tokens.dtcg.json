@@ -288,6 +288,38 @@
       "$value": "16px"
     }
   },
+  "spacing": {
+    "gutter": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "section-compact": {
+      "$type": "dimension",
+      "$value": "64px"
+    },
+    "section-standard": {
+      "$type": "dimension",
+      "$value": "88px"
+    },
+    "section-feature": {
+      "$type": "dimension",
+      "$value": "112px"
+    }
+  },
+  "layout": {
+    "container-default": {
+      "$type": "dimension",
+      "$value": "1200px"
+    },
+    "container-wide": {
+      "$type": "dimension",
+      "$value": "1400px"
+    },
+    "container-reading": {
+      "$type": "dimension",
+      "$value": "760px"
+    }
+  },
   "radius": {
     "panel": {
       "$type": "dimension",

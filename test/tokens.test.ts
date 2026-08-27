@@ -153,3 +153,30 @@ describe('typography scale', () => {
     expect(tokens.type.h1.$description).toContain('longest');
   });
 });
+
+describe('spacing and layout', () => {
+  const tokens = load('tebin');
+
+  it('carries the page gutter as a fluid value', () => {
+    expect(tokens.spacing.gutter.$value).toBe('48px');
+    expect(tokens.spacing.gutter.$extensions['pro.tebin.fluid'].pref).toBe('4vw');
+  });
+
+  it('carries the three section rhythms', () => {
+    for (const step of ['section-compact', 'section-standard', 'section-feature']) {
+      expect(tokens.spacing[step], step).toBeDefined();
+    }
+  });
+
+  it('grows monotonically from compact to feature', () => {
+    const steps = ['section-compact', 'section-standard', 'section-feature']
+      .map((s) => parseFloat(tokens.spacing[s].$value));
+    for (let i = 1; i < steps.length; i++) expect(steps[i]).toBeGreaterThan(steps[i - 1]);
+  });
+
+  it('carries the three container widths as fixed maxima', () => {
+    expect(tokens.layout['container-default'].$value).toBe('1200px');
+    expect(tokens.layout['container-wide'].$value).toBe('1400px');
+    expect(tokens.layout['container-reading'].$value).toBe('760px');
+  });
+});

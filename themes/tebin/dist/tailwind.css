@@ -63,6 +63,13 @@
   --type-h4: clamp(18px, 2.4vw, 24px);
   --type-h5: clamp(16px, 2vw, 20px);
   --type-body: 16px;
+  --spacing-gutter: clamp(20px, 4vw, 48px);
+  --spacing-section-compact: clamp(40px, 5.5vw, 64px);
+  --spacing-section-standard: clamp(56px, 7vw, 88px);
+  --spacing-section-feature: clamp(72px, 9vw, 112px);
+  --layout-container-default: 1200px;
+  --layout-container-wide: 1400px;
+  --layout-container-reading: 760px;
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;

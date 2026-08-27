@@ -96,6 +96,17 @@ export const tebin = {
     "h5": "20px",
     "body": "16px"
   },
+  "spacing": {
+    "gutter": "48px",
+    "section-compact": "64px",
+    "section-standard": "88px",
+    "section-feature": "112px"
+  },
+  "layout": {
+    "container-default": "1200px",
+    "container-wide": "1400px",
+    "container-reading": "760px"
+  },
   "radius": {
     "panel": "2px",
     "control": "4px",
