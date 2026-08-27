@@ -21,6 +21,8 @@ Roboto Condensed type.
 | --- | --- | --- | --- | --- | --- |
 | `color.brand` | `#DA291C` | 218, 41, 28 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.brand-dark` | `#B82217` | 184, 34, 23 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.brand-on-dark` | `#EA6359` | 234, 99, 89 | not specified in the 2017 brand book | not specified in the 2017 brand book | Small red TEXT on dark surfaces only. 4.5:1 on #242830, the lightest dark surface in use, and more on every darker one. The identity red #DA291C stays the colour for the logo, fills, borders and large text, which need only 3:1. |
+| `color.brand-on-light` | `#C7251A` | 199, 37, 26 | not specified in the 2017 brand book | not specified in the 2017 brand book | Small red TEXT on light surfaces only. 4.87:1 on #EFEEE9 and 5.32:1 on #F8F8F4. No single red clears 4.5:1 on both surface families: the luminance window is empty for any hue, so this is two tokens by arithmetic, not by preference. |
 | `color.charcoal` | `#242424` | 36, 36, 36 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.ink` | `#292929` | 41, 41, 41 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
 | `color.muted` | `#666666` | 102, 102, 102 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |

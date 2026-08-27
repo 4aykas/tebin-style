@@ -8,6 +8,14 @@
       "$type": "color",
       "$value": "#B82217"
     },
+    "brand-on-dark": {
+      "$type": "color",
+      "$value": "#EA6359"
+    },
+    "brand-on-light": {
+      "$type": "color",
+      "$value": "#C7251A"
+    },
     "charcoal": {
       "$type": "color",
       "$value": "#242424"

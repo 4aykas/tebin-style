@@ -1,6 +1,8 @@
 @theme {
   --color-brand: #da291c;
   --color-brand-dark: #b82217;
+  --color-brand-on-dark: #ea6359;
+  --color-brand-on-light: #c7251a;
   --color-charcoal: #242424;
   --color-ink: #292929;
   --color-muted: #666666;

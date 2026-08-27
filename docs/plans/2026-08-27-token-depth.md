@@ -117,7 +117,8 @@ describe('accessible brand text colours', () => {
   });
 
   it('says the identity red is still the one for fills and large text', () => {
-    expect(tokens.color['brand-on-dark'].$description).toContain('small text');
+    expect(tokens.color['brand-on-dark'].$description).toContain('fills');
+    expect(tokens.color['brand-on-dark'].$description).toContain('large text');
   });
 
   it('invents no print values for them', () => {

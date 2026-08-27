@@ -5,6 +5,8 @@
 :root {
   --color-brand: #da291c;
   --color-brand-dark: #b82217;
+  --color-brand-on-dark: #ea6359; /** Small red TEXT on dark surfaces only. 4.5:1 on #242830, the lightest dark surface in use, and more on every darker one. The identity red #DA291C stays the colour for the logo, fills, borders and large text, which need only 3:1. */
+  --color-brand-on-light: #c7251a; /** Small red TEXT on light surfaces only. 4.87:1 on #EFEEE9 and 5.32:1 on #F8F8F4. No single red clears 4.5:1 on both surface families: the luminance window is empty for any hue, so this is two tokens by arithmetic, not by preference. */
   --color-charcoal: #242424;
   --color-ink: #292929;
   --color-muted: #666666;

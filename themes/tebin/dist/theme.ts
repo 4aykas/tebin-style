@@ -2,6 +2,8 @@ export const tebin = {
   "color": {
     "brand": "#DA291C",
     "brand-dark": "#B82217",
+    "brand-on-dark": "#EA6359",
+    "brand-on-light": "#C7251A",
     "charcoal": "#242424",
     "ink": "#292929",
     "muted": "#666666",
