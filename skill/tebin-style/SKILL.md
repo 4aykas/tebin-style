@@ -61,6 +61,11 @@ and large text. **Small red text takes `role.primary-on-dark` or
 `role.primary-on-light`** — one red cannot clear 4.5:1 on both a dark and a
 light surface, because the luminance window is empty for any hue.
 
+**An error is not the signal red.** Error, warning and success text take
+`role.error-*`, `role.warning-*` and `role.success-*`. Reaching for
+`role.primary-on-light` to colour a validation message paints it in the brand
+colour and makes every error read as a call to action.
+
 On `tebin`, `type.*` and `spacing.*` values are **ceilings**: the token's
 `$value` is the top of a fluid range, and the CSS output carries the real
 `clamp()`. Size display type against the locale with the longest words.

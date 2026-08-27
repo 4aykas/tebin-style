@@ -28,3 +28,13 @@ describe('contrastRatio', () => {
     expect(() => relativeLuminance('rgba(255,255,255,0.9)')).toThrow(/opaque hex/);
   });
 });
+
+describe('the figures brick publishes', () => {
+  it('reproduces 5.40:1 for brick on the binding light surface', () => {
+    expect(contrastRatio('#A43F39', '#EFEEE9')).toBeCloseTo(5.40, 2);
+  });
+
+  it('reproduces 4.81:1 for the derived dark twin', () => {
+    expect(contrastRatio('#D07C77', '#242830')).toBeCloseTo(4.81, 2);
+  });
+});

@@ -68,6 +68,10 @@ Roles separate fills from text. `role.primary` paints the logo, fills, borders
 and large text. Small red text takes `role.primary-on-dark` or
 `role.primary-on-light` — one red cannot clear 4.5:1 on both surface families.
 
+Status text is separate again: `role.error-*`, `role.warning-*` and
+`role.success-*`. The error red is `brick`, not the signal red, so an error
+does not read as a call to action.
+
 ### Fluid values
 
 The type and spacing scales are fluid. `$value` holds the ceiling as plain
