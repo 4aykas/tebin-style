@@ -104,7 +104,10 @@ export const tebin = {
     "h3": "28px",
     "h4": "24px",
     "h5": "20px",
-    "body": "16px"
+    "body": "16px",
+    "label-sm": "9px",
+    "label-md": "10px",
+    "label-lg": "11px"
   },
   "spacing": {
     "gutter": "48px",

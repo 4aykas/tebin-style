@@ -73,6 +73,9 @@
   --type-h4: clamp(18px, 2.4vw, 24px);
   --type-h5: clamp(16px, 2vw, 20px);
   --type-body: 16px;
+  --type-label-sm: 9px;
+  --type-label-md: 10px;
+  --type-label-lg: 11px;
   --spacing-gutter: clamp(20px, 4vw, 48px);
   --spacing-section-compact: clamp(40px, 5.5vw, 64px);
   --spacing-section-standard: clamp(56px, 7vw, 88px);

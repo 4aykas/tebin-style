@@ -12,7 +12,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.3.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.4.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette
@@ -80,6 +80,9 @@ In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's
 | `type.h4` | 24px | `clamp(18px, 2.4vw, 24px)` |
 | `type.h5` | 20px | `clamp(16px, 2vw, 20px)` |
 | `type.body` | 16px | fixed |
+| `type.label-sm` | 9px | fixed |
+| `type.label-md` | 10px | fixed |
+| `type.label-lg` | 11px | fixed |
 
 Where a level shows a fluid range, the size column is its **ceiling**, not a fixed size. Display type is sized against the locale with the longest words — a range that fits English alone is an English-only cap.
 

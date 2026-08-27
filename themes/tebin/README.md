@@ -65,6 +65,11 @@ already requires an icon and a label beside any status.
 `lineHeight.heading` (1.35), `lineHeight.body` (1.7) and
 `fontWeight.heading` (700).
 
+`type.label-sm` (9px), `type.label-md` (10px) and `type.label-lg` (11px) carry
+the uppercase label sizes. They are fixed, not fluid, and they carry no
+tracking token: measuring the 612 fixed-size uppercase blocks on tebin.pro
+found 20 tracking values with no winner, so tracking is chosen per role.
+
 `spacing.gutter` and `spacing.section-compact` / `-standard` / `-feature`
 carry the vertical rhythm. `layout.container-default` (1200px), `-wide`
 (1400px) and `-reading` (760px) carry the content widths.
