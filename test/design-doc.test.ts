@@ -102,3 +102,22 @@ describe('the new token groups reach the document', () => {
     expect(slate).not.toContain('## Spacing');
   });
 });
+
+describe('the asset table names the real format', () => {
+  const tebin = buildDesignDoc(join(root, 'themes', 'tebin'));
+
+  it('does not call a PNG or an ICO a vector', () => {
+    const rows = tebin.split(/\r?\n/).filter((l) => l.startsWith('| `favicon-'));
+    const png = rows.find((l) => l.includes('favicon-png'))!;
+    const ico = rows.find((l) => l.includes('favicon-ico'))!;
+    expect(png).toContain('[PNG]');
+    expect(ico).toContain('[ICO]');
+    expect(png).not.toContain('[SVG]');
+    expect(ico).not.toContain('[SVG]');
+  });
+
+  it('still labels a real vector SVG', () => {
+    const row = tebin.split(/\r?\n/).find((l) => l.startsWith('| `logo-full` |'))!;
+    expect(row).toContain('[SVG]');
+  });
+});

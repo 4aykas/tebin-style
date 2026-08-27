@@ -153,7 +153,7 @@ function assetSection(themeDir: string, theme: ThemeManifest): string {
   const assets = theme.assets ?? [];
   if (assets.length === 0) return '';
   const manifest = readManifest(themeDir);
-  let out = '\n## Assets\n\n| Asset | Vector | PNG |\n| --- | --- | --- |\n';
+  let out = '\n## Assets\n\n| Asset | Source | PNG |\n| --- | --- | --- |\n';
 
   for (const asset of assets) {
     const pngs = (manifest?.outputs ?? [])
@@ -163,7 +163,7 @@ function assetSection(themeDir: string, theme: ThemeManifest): string {
         const label = o.variant === 'transparent' ? `${o.width} px` : `${o.width} px ${o.variant.replace('on-', 'on ')}`;
         return `[${label}](${download(id, o.path)})`;
       });
-    out += `| \`${asset.id}\` | [SVG](${download(id, asset.path)}) | ${pngs.join(' · ') || '—'} |\n`;
+    out += `| \`${asset.id}\` | [${asset.format.toUpperCase()}](${download(id, asset.path)}) | ${pngs.join(' · ') || '—'} |\n`;
   }
 
   out += `\nFor scripts and agents, the same files without the HTML page around them: \`${RAW_BASE}/themes/${id}/…\`. Note that a raw SVG is served as \`text/plain\`, so a browser shows its source — use the vector links above to download one by hand.\n`;

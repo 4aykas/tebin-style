@@ -53,7 +53,7 @@ In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's
 
 ## Assets
 
-| Asset | Vector | PNG |
+| Asset | Source | PNG |
 | --- | --- | --- |
 | `logo-full` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/logo/logo-full.svg?raw=1) | [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-512.png?raw=1) · [1024 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-1024.png?raw=1) · [2048 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-2048.png?raw=1) |
 | `logo-full-white` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/logo/logo-full-white.svg?raw=1) | [512 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-512-on-brand.png?raw=1) · [512 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-512-on-charcoal.png?raw=1) · [1024 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png?raw=1) · [1024 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png?raw=1) · [2048 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-brand.png?raw=1) · [2048 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-charcoal.png?raw=1) |
