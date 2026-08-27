@@ -81,6 +81,21 @@ export const tebin = {
       "sans-serif"
     ]
   },
+  "fontWeight": {
+    "heading": 700
+  },
+  "lineHeight": {
+    "heading": 1.35,
+    "body": 1.7
+  },
+  "type": {
+    "h1": "38px",
+    "h2": "34px",
+    "h3": "28px",
+    "h4": "24px",
+    "h5": "20px",
+    "body": "16px"
+  },
   "radius": {
     "panel": "2px",
     "control": "4px",

@@ -246,6 +246,48 @@
       ]
     }
   },
+  "fontWeight": {
+    "heading": {
+      "$type": "fontWeight",
+      "$value": 700
+    }
+  },
+  "lineHeight": {
+    "heading": {
+      "$type": "number",
+      "$value": 1.35
+    },
+    "body": {
+      "$type": "number",
+      "$value": 1.7
+    }
+  },
+  "type": {
+    "h1": {
+      "$type": "dimension",
+      "$value": "38px"
+    },
+    "h2": {
+      "$type": "dimension",
+      "$value": "34px"
+    },
+    "h3": {
+      "$type": "dimension",
+      "$value": "28px"
+    },
+    "h4": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "h5": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "body": {
+      "$type": "dimension",
+      "$value": "16px"
+    }
+  },
   "radius": {
     "panel": {
       "$type": "dimension",

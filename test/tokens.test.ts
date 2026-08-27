@@ -111,3 +111,45 @@ describe('the fluid extension contract', () => {
     expect(validateTokens(good).valid).toBe(true);
   });
 });
+
+describe('typography scale', () => {
+  const tokens = load('tebin');
+
+  it('has the five heading levels the site ships', () => {
+    for (const level of ['h1', 'h2', 'h3', 'h4', 'h5']) {
+      expect(tokens.type?.[level], level).toBeDefined();
+    }
+  });
+
+  it('carries h1 as the real fluid triple, ceiling on $value', () => {
+    expect(tokens.type.h1.$value).toBe('38px');
+    expect(tokens.type.h1.$extensions['pro.tebin.fluid']).toEqual({
+      min: '28px',
+      pref: '4.5vw',
+      max: '38px',
+    });
+  });
+
+  it('descends monotonically', () => {
+    const sizes = ['h1', 'h2', 'h3', 'h4', 'h5'].map((l) => parseFloat(tokens.type[l].$value));
+    for (let i = 1; i < sizes.length; i++) expect(sizes[i]).toBeLessThan(sizes[i - 1]);
+  });
+
+  it('carries body copy as a fixed size — it is not display type', () => {
+    expect(tokens.type.body.$value).toBe('16px');
+    expect(tokens.type.body.$extensions).toBeUndefined();
+  });
+
+  it('carries both leadings', () => {
+    expect(tokens.lineHeight.heading.$value).toBe(1.35);
+    expect(tokens.lineHeight.body.$value).toBe(1.7);
+  });
+
+  it('carries the heading weight', () => {
+    expect(tokens.fontWeight.heading.$value).toBe(700);
+  });
+
+  it('says the ceiling is a ceiling, so nobody reads it as a fixed size', () => {
+    expect(tokens.type.h1.$description).toContain('longest');
+  });
+});

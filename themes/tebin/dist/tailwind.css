@@ -54,6 +54,15 @@
   --role-outline: #ececec;
   --font-sans: Roboto, Helvetica, Arial, sans-serif;
   --font-condensed: 'Roboto Condensed', Roboto, sans-serif;
+  --font-weight-heading: 700;
+  --line-height-heading: 1.35;
+  --line-height-body: 1.7;
+  --type-h1: clamp(28px, 4.5vw, 38px);
+  --type-h2: clamp(24px, 3.8vw, 34px);
+  --type-h3: clamp(20px, 3vw, 28px);
+  --type-h4: clamp(18px, 2.4vw, 24px);
+  --type-h5: clamp(16px, 2vw, 20px);
+  --type-body: 16px;
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
