@@ -35,9 +35,10 @@ describe('buildFrontMatter', () => {
     expect(tebin).toContain('container-default: 1200px');
   });
 
-  it('declares the omissions with their reasons', () => {
-    expect(tebin).toContain('- section: "components"');
-    expect(tebin).toContain('reason: "No canonical button');
+  it('declares an omission with its reason, where one exists', () => {
+    const classic = fm('tebin-classic');
+    expect(classic).toContain('- section: "components"');
+    expect(classic).toContain('reason: "No canonical button');
   });
 
   it('omits a key entirely when the group is absent, rather than emitting an empty map', () => {
@@ -45,5 +46,27 @@ describe('buildFrontMatter', () => {
     expect(slate).not.toContain('typography:');
     expect(slate).not.toContain('spacing:');
     expect(slate).toContain('colors:');
+  });
+});
+
+describe('components in the front matter', () => {
+  const tebin = fm('tebin');
+
+  it('emits the components section the format defines', () => {
+    expect(tebin).toContain('components:');
+    expect(tebin).toContain('  button-primary:');
+  });
+
+  it('rewrites our group names onto the format\'s', () => {
+    expect(tebin).toContain('backgroundColor: "{colors.on-surface}"');
+    expect(tebin).toContain('rounded: "{rounded.control}"');
+    expect(tebin).not.toContain('{role.');
+    expect(tebin).not.toContain('{radius.');
+  });
+
+  it('writes out a colour that has no section to point at', () => {
+    // button-primary-hover names color.charcoal, which is not a role, so the
+    // format has nowhere to reference and gets the value instead.
+    expect(tebin).toContain('backgroundColor: "#242424"');
   });
 });

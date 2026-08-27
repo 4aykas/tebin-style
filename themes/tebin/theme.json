@@ -3,7 +3,7 @@
   "id": "tebin",
   "name": "TEBIN",
   "description": "Industrial design-and-engineering brand: condensed type, signal red on charcoal.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "industry": [
     "engineering",
     "industrial",
@@ -29,12 +29,7 @@
     "light": "#EFEEE9",
     "dark": "#242830"
   },
-  "omitted": [
-    {
-      "section": "components",
-      "reason": "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
-    }
-  ],
+  "omitted": [],
   "assets": [
     {
       "id": "logo-full",

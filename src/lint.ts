@@ -118,6 +118,38 @@ export function lintTheme(themeDir: string): LintResult {
     });
   }
 
+  // A component states both of its colours, so it is the one pair that needs no
+  // naming convention to find. A variant that overrides only one of them
+  // inherits the other from its base — 'button-primary-hover' from
+  // 'button-primary' — which is how the source stylesheets are written.
+  const components = (tokens.components ?? {}) as Record<string, Record<string, Leaf>>;
+  for (const [name, parts] of Object.entries(components)) {
+    const base = name.replace(/-(hover|active|pressed|focus)$/, '');
+    const inherited = base === name ? undefined : components[base];
+    const pick = (prop: string) =>
+      resolve(tokens, parts[prop]?.$value ?? inherited?.[prop]?.$value);
+
+    const fg = pick('textColor');
+    const bg = pick('backgroundColor');
+    const path = `components.${name}`;
+    if (!fg || !bg) {
+      push({ severity: 'info', path, message: 'not checked: states no text or no background colour' });
+      continue;
+    }
+    if (!hexToRgb(fg) || !hexToRgb(bg)) {
+      push({ severity: 'info', path, message: 'not checked: not an opaque colour' });
+      continue;
+    }
+    const ratio = Math.round(contrastRatio(fg, bg) * 100) / 100;
+    push({
+      severity: ratio >= AA_NORMAL ? 'info' : 'error',
+      path,
+      message: `label ${fg} on ${bg} is ${ratio}:1`,
+      ratio,
+      required: AA_NORMAL,
+    });
+  }
+
   if (!('role' in tokens) && !omitted.has('role')) {
     push({ severity: 'warning', path: 'role', message: 'no role group, and no omitted entry explaining why' });
   }

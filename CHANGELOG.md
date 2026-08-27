@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.4.0 — 2026-08-27
+
+Component tokens, after the reason for deferring them turned out to be wrong.
+
+The recorded blocker was "no canonical button exists across the TEBIN apps".
+Measuring settled it: `tebin-expenses` carries a reasoned button system in its
+global stylesheet, commented with the decision itself — *the everyday action is
+ink, not red; red is the colour of commitment.* `cv-astro` has the same shape
+in a page-scoped copy. What tebin.pro has is not a variant of that button at
+all but a different component: a square, uppercase, bordered editorial CTA.
+
+So the answer was not one component with variants. It was two.
+
+### Added
+- A `components` group on `tebin`: `button-primary`, `button-commit`,
+  `button-quiet`, `button-danger`, their hover variants, and `cta` with its own
+  hover. Every colour is a reference; no component states a literal.
+- `button-commit` exists because red carries meaning here. It is for submitting,
+  publishing, sending — never a casual action. `button-primary` is ink.
+- **The lint now measures a label against its own button.** This is the one
+  contrast pair that needs no naming convention, because the component states
+  both halves. A variant that overrides only the background inherits the base
+  label colour, which is the pair a reader actually sees. All eight components
+  pass; `button-commit` sits at 4.7:1, just over the floor.
+- A `## Components` table in the generated `DESIGN.md`, carrying each
+  component's reason and not only its values.
+- `components` in the front matter, in the format's own shape. References are
+  rewritten onto the format's sections — `{role.x}` becomes `{colors.x}`,
+  `{radius.x}` becomes `{rounded.x}` — and a colour with no section to point at
+  is written out as a value.
+
+### Note on the format
+`borderColor` is not in the DESIGN.md property set, which names only
+`backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`,
+`height` and `width`. A quiet button *is* its border, so the token stays; the
+format's own rule for an unknown component property is to accept it with a
+warning.
+
 ## 1.3.0 — 2026-08-27
 
 The design system can now check itself. Its own rules database says a policy

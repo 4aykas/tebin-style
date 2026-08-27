@@ -149,6 +149,31 @@ function spacingSection(themeDir: string): string {
   return out;
 }
 
+function componentSection(themeDir: string): string {
+  const tokens = readTokens(themeDir) as {
+    components?: Record<string, Record<string, { $value?: string; $description?: string }>>;
+  };
+  const entries = Object.entries(tokens.components ?? {});
+  if (!entries.length) return '';
+  let out = '\n## Components\n\n';
+  const notes: string[] = [];
+  out += '| Component | Background | Text | Border | Shape | Padding | Height |\n';
+  out += '| --- | --- | --- | --- | --- | --- | --- |\n';
+  for (const [name, parts] of entries) {
+    const cell = (p: string) => {
+      const v = parts[p]?.$value;
+      return v ? `\`${v.replace(/^\{|\}$/g, '')}\`` : '—';
+    };
+    out += `| \`${name}\` | ${cell('backgroundColor')} | ${cell('textColor')} | ${cell('borderColor')} | ${cell('rounded')} | ${cell('padding')} | ${cell('height')} |\n`;
+    for (const [prop, leaf] of Object.entries(parts)) {
+      if (leaf.$description) notes.push(`- **\`${name}.${prop}\`** — ${leaf.$description}`);
+    }
+  }
+  out += '\nA variant states only what it changes; everything else comes from the component it names.\n';
+  if (notes.length) out += `\n${notes.join('\n')}\n`;
+  return out;
+}
+
 function assetSection(themeDir: string, theme: ThemeManifest): string {
   const id = theme.id;
   const assets = theme.assets ?? [];
@@ -205,6 +230,7 @@ export function buildDesignDoc(themeDir: string): string {
   out += typeScaleSection(themeDir);
   out += geometrySection(themeDir);
   out += spacingSection(themeDir);
+  out += componentSection(themeDir);
   out += assetSection(themeDir, theme);
   out += rulesSection();
   out += `\n## Using this elsewhere\n\n`;

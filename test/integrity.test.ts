@@ -63,11 +63,13 @@ describe('the manifest declares what the lint needs', () => {
     expect(manifest('tebin').surfaces.dark).toBe('#242830');
   });
 
-  it('every theme declares why it has no component tokens', () => {
-    for (const id of ['tebin', 'tebin-classic', 'slate']) {
+  it('a theme without component tokens says why, and one with them does not claim to lack them', () => {
+    for (const id of ['tebin-classic', 'slate']) {
       const sections = (manifest(id).omitted ?? []).map((o: { section: string }) => o.section);
       expect(sections, id).toContain('components');
     }
+    const tebin = (manifest('tebin').omitted ?? []).map((o: { section: string }) => o.section);
+    expect(tebin).not.toContain('components');
   });
 
   it('rejects an omission with no reason — a bare skip explains nothing', async () => {
