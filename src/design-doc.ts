@@ -61,7 +61,7 @@ function typeSection(themeDir: string): string {
     font?: Record<string, { $value?: string[]; $description?: string }>;
     fontWeight?: Record<string, { $value?: number }>;
   };
-  let out = '\n## Type\n\n';
+  let out = '\n## Typography\n\n';
   for (const [name, leaf] of Object.entries(tokens.font ?? {})) {
     out += `- **${name}** — ${(leaf.$value ?? []).join(', ')}${leaf.$description ? ` — ${leaf.$description}` : ''}\n`;
   }
@@ -78,6 +78,74 @@ function geometrySection(themeDir: string): string {
   const radii = Object.entries(tokens.radius ?? {});
   if (!radii.length) return '';
   return `\n## Geometry\n\n${radii.map(([n, l]) => `- \`radius.${n}\` — ${l.$value}`).join('\n')}\n`;
+}
+
+function roleSection(themeDir: string): string {
+  const tokens = readTokens(themeDir) as {
+    role?: Record<string, { $value?: string; $description?: string }>;
+  };
+  const roles = Object.entries(tokens.role ?? {});
+  if (!roles.length) return '';
+  let out =
+    '\n## Roles\n\nA role is a pointer, not a copy — change the colour it names and every role using it follows.\n\n';
+  out += '| Role | Points at | Use for |\n| --- | --- | --- |\n';
+  for (const [name, leaf] of roles) {
+    const target = (leaf.$value ?? '').replace(/^\{|\}$/g, '');
+    out += `| \`role.${name}\` | \`${target}\` | ${leaf.$description ?? '—'} |\n`;
+  }
+  return out;
+}
+
+function typeScaleSection(themeDir: string): string {
+  const tokens = readTokens(themeDir) as {
+    type?: Record<string, {
+      $value?: string;
+      $extensions?: Record<string, { min: string; pref: string; max: string }>;
+    }>;
+    lineHeight?: Record<string, { $value?: number }>;
+    fontWeight?: Record<string, { $value?: number }>;
+  };
+  const levels = Object.entries(tokens.type ?? {});
+  if (!levels.length) return '';
+  let out = '\n### Scale\n\n| Level | Size | Fluid range |\n| --- | --- | --- |\n';
+  for (const [name, leaf] of levels) {
+    const fluid = leaf.$extensions?.['pro.tebin.fluid'];
+    const range = fluid ? `\`clamp(${fluid.min}, ${fluid.pref}, ${fluid.max})\`` : 'fixed';
+    out += `| \`type.${name}\` | ${leaf.$value} | ${range} |\n`;
+  }
+  out +=
+    '\nWhere a level shows a fluid range, the size column is its **ceiling**, not a fixed size. Display type is sized against the locale with the longest words — a range that fits English alone is an English-only cap.\n';
+  const lh = Object.entries(tokens.lineHeight ?? {});
+  if (lh.length) out += `\nLeading: ${lh.map(([n, l]) => `${n} ${l.$value}`).join(', ')}.\n`;
+  const fw = Object.entries(tokens.fontWeight ?? {});
+  if (fw.length) out += `Weights: ${fw.map(([n, l]) => `${n} ${l.$value}`).join(', ')}.\n`;
+  return out;
+}
+
+function spacingSection(themeDir: string): string {
+  const tokens = readTokens(themeDir) as {
+    spacing?: Record<string, {
+      $value?: string;
+      $extensions?: Record<string, { min: string; pref: string; max: string }>;
+    }>;
+    layout?: Record<string, { $value?: string; $description?: string }>;
+  };
+  const steps = Object.entries(tokens.spacing ?? {});
+  const containers = Object.entries(tokens.layout ?? {});
+  if (!steps.length && !containers.length) return '';
+  let out = '\n## Spacing\n\n';
+  if (steps.length) {
+    out += '| Step | Ceiling | Fluid range |\n| --- | --- | --- |\n';
+    for (const [name, leaf] of steps) {
+      const fluid = leaf.$extensions?.['pro.tebin.fluid'];
+      const range = fluid ? `\`clamp(${fluid.min}, ${fluid.pref}, ${fluid.max})\`` : 'fixed';
+      out += `| \`spacing.${name}\` | ${leaf.$value} | ${range} |\n`;
+    }
+  }
+  if (containers.length) {
+    out += `\nContainer widths: ${containers.map(([n, l]) => `\`${n}\` ${l.$value}`).join(', ')}.\n`;
+  }
+  return out;
 }
 
 function assetSection(themeDir: string, theme: ThemeManifest): string {
@@ -130,8 +198,11 @@ export function buildDesignDoc(themeDir: string): string {
   out += `\n## Palette\n\n${tokenTable(themeDir)}`;
   out += `\nWhere a cell reads "${NO_PRINT_VALUE}", no value was printed there — do not convert one from the RGB.\n`;
   out += translucentNote(themeDir, theme.id);
+  out += roleSection(themeDir);
   out += typeSection(themeDir);
+  out += typeScaleSection(themeDir);
   out += geometrySection(themeDir);
+  out += spacingSection(themeDir);
   out += assetSection(themeDir, theme);
   out += rulesSection();
   out += `\n## Using this elsewhere\n\n`;

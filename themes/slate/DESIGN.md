@@ -20,7 +20,19 @@ use it when a project needs a competent default rather than a corporate identity
 
 Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
 
-## Type
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Accent. Fills, borders and large text. |
+| `role.surface` | `color.surface` | The base page surface. |
+| `role.on-surface` | `color.ink` | Primary text on the base surface. |
+| `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
+| `role.outline` | `color.rule` | Hairlines and dividers. |
+
+## Typography
 
 - **sans** — Inter, system-ui, sans-serif
 - **mono** — JetBrains Mono, ui-monospace, monospace

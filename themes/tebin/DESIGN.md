@@ -37,7 +37,22 @@ Where a cell reads "not specified in the 2017 brand book", no value was printed 
 
 Every semi-transparent colour comes from a step, never from an ad-hoc alpha; step 1 is always the strongest. Groups present in this theme: `on-dark`, `on-light`, `rule-dark`, `rule-light`, `surface-dark`. The steps below the contrast floor are for decoration, not for type. Full values: [tokens.json](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/tokens.json).
 
-## Type
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Identity red. Logo, fills, borders and large text. Not small text — use the on-dark or on-light variant there. |
+| `role.primary-on-dark` | `color.brand-on-dark` | Small red text on a dark surface. |
+| `role.primary-on-light` | `color.brand-on-light` | Small red text on a light surface. |
+| `role.surface` | `color.paper` | The base page surface. |
+| `role.surface-inverse` | `color.charcoal` | The dark bands. |
+| `role.on-surface` | `color.ink` | Primary text on the base surface. |
+| `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
+| `role.outline` | `color.rule` | Hairlines and dividers on light surfaces. |
+
+## Typography
 
 - **sans** — Roboto, Helvetica, Arial, sans-serif — tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win.
 - **condensed** — Roboto Condensed, Roboto, sans-serif — Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it.
@@ -45,11 +60,38 @@ Every semi-transparent colour comes from a step, never from an ad-hoc alpha; ste
 
 In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.
 
+### Scale
+
+| Level | Size | Fluid range |
+| --- | --- | --- |
+| `type.h1` | 38px | `clamp(28px, 4.5vw, 38px)` |
+| `type.h2` | 34px | `clamp(24px, 3.8vw, 34px)` |
+| `type.h3` | 28px | `clamp(20px, 3vw, 28px)` |
+| `type.h4` | 24px | `clamp(18px, 2.4vw, 24px)` |
+| `type.h5` | 20px | `clamp(16px, 2vw, 20px)` |
+| `type.body` | 16px | fixed |
+
+Where a level shows a fluid range, the size column is its **ceiling**, not a fixed size. Display type is sized against the locale with the longest words — a range that fits English alone is an English-only cap.
+
+Leading: heading 1.35, body 1.7.
+Weights: heading 700.
+
 ## Geometry
 
 - `radius.panel` — 2px
 - `radius.control` — 4px
 - `radius.card` — 8px
+
+## Spacing
+
+| Step | Ceiling | Fluid range |
+| --- | --- | --- |
+| `spacing.gutter` | 48px | `clamp(20px, 4vw, 48px)` |
+| `spacing.section-compact` | 64px | `clamp(40px, 5.5vw, 64px)` |
+| `spacing.section-standard` | 88px | `clamp(56px, 7vw, 88px)` |
+| `spacing.section-feature` | 112px | `clamp(72px, 9vw, 112px)` |
+
+Container widths: `container-default` 1200px, `container-wide` 1400px, `container-reading` 760px.
 
 ## Assets
 

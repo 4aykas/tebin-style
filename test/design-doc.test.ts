@@ -72,3 +72,33 @@ describe('every theme', () => {
     expect(doc).toContain('on-dark');
   });
 });
+
+describe('the new token groups reach the document', () => {
+  const tebin = buildDesignDoc(join(root, 'themes', 'tebin'));
+
+  it('lists the roles and what each points at', () => {
+    expect(tebin).toContain('## Roles');
+    expect(tebin).toContain('`role.primary`');
+    expect(tebin).toContain('`color.brand`');
+  });
+
+  it('warns that the fill red is not the text red', () => {
+    expect(tebin).toContain('role.primary-on-dark');
+    expect(tebin).toContain('small text');
+  });
+
+  it('prints the type scale with its fluid range, not just the ceiling', () => {
+    expect(tebin).toContain('## Typography');
+    expect(tebin).toContain('clamp(28px, 4.5vw, 38px)');
+  });
+
+  it('prints the spacing scale and the container widths', () => {
+    expect(tebin).toContain('## Spacing');
+    expect(tebin).toContain('1200px');
+  });
+
+  it('omits the sections a theme does not have', () => {
+    const slate = buildDesignDoc(join(root, 'themes', 'slate'));
+    expect(slate).not.toContain('## Spacing');
+  });
+});

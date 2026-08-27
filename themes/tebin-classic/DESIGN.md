@@ -32,7 +32,18 @@ routes to the same ink; the tokens carry the Pantone name.
 
 Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
 
-## Type
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Identity red. Fills and large text. |
+| `role.surface` | `color.topbar` | The white page a document prints on. |
+| `role.on-surface` | `color.ink` | Body text on the page. |
+| `role.on-surface-muted` | `color.grey` | Secondary text on the page. |
+
+## Typography
 
 - **sans** — Roboto, Arial, Helvetica, sans-serif
 - **document** — Arial, Helvetica, sans-serif
