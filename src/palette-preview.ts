@@ -1,18 +1,23 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
-import { collectColorRows, hexToRgb } from './colors-csv.js';
+import { collectColorRows } from './colors-csv.js';
+import { contrastRatio } from './contrast.js';
 
 const SWATCH = 120;
 const GAP = 8;
 const LABEL_HEIGHT = 34;
 
-/** Black or white label, whichever clears contrast on the swatch. */
+/**
+ * Black or white label, whichever actually measures better on the swatch.
+ *
+ * This used to decide on a YIQ brightness threshold, which is a different
+ * quantity: #EA6359 and #D07C77 both scored just under it and took a white
+ * label at 3.27:1 and 3.07:1, against 6.43 and 6.83 for black. A preview that
+ * publishes a contrast floor should not print its own labels below it.
+ */
 function labelColor(hex: string): string {
-  const rgb = hexToRgb(hex);
-  if (!rgb) return '#000000';
-  const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
-  return luminance > 0.6 ? '#000000' : '#FFFFFF';
+  return contrastRatio('#000000', hex) > contrastRatio('#FFFFFF', hex) ? '#000000' : '#FFFFFF';
 }
 
 export function buildPaletteSvg(themeDir: string): string {

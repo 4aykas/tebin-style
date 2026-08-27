@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.5.1 — 2026-08-27
+
+Three consistency gaps a code review found after 1.5.0, all of them the same
+shape: a change to the tokens that its neighbours were never told about.
+
+### Fixed
+- **The agent-facing guidance still sent errors to the signal red.**
+  `skill/tebin-style/SKILL.md` and `docs/guide/developers.md` both said small
+  red text takes `role.primary-on-*` — true while `role.error-*` aliased the
+  brand reds, and wrong the moment 1.5.0 moved errors to brick. An agent
+  colouring a validation message would have followed that sentence straight
+  back to the colour the release moved off. Both now name `role.error-*`,
+  `role.warning-*` and `role.success-*`, and a test pins it.
+- **Palette previews printed labels below the floor this repo enforces.**
+  `labelColor()` promised "black or white, whichever clears contrast" and in
+  fact decided on a YIQ brightness threshold — a different quantity. `#EA6359`
+  and `#D07C77` both landed just under it and took white labels at 3.27:1 and
+  3.07:1, where black gives 6.43 and 6.83. It now picks by measured ratio, and
+  a test asserts every swatch label in every theme clears 4.5:1.
+- **Two published contrast figures were unpinned.** `contrast.test.ts` exists
+  to stop a printed ratio drifting from the colour beside it, but 1.5.0 added
+  "5.40:1 on #EFEEE9" and "4.81:1 on #242830" without adding the pins. Those
+  strings are copied into `DESIGN.md`, `colors.csv` and `tokens.css`, so a
+  later edit could have shipped a stale number in four files while every gate
+  stayed green.
+
 ## 1.5.0 — 2026-08-27
 
 The error colour was never missing. It was called something else.

@@ -6,7 +6,7 @@
   <text x="138" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brand-dark</text>
   <text x="138" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#B82217</text>
   <rect x="256" y="0" width="120" height="120" fill="#EA6359" />
-  <text x="266" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brand-on-dark</text>
+  <text x="266" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">brand-on-dark</text>
   <text x="266" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#EA6359</text>
   <rect x="384" y="0" width="120" height="120" fill="#C7251A" />
   <text x="394" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brand-on-light</text>
@@ -33,7 +33,7 @@
   <text x="1290" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brick</text>
   <text x="1290" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#A43F39</text>
   <rect x="1408" y="0" width="120" height="120" fill="#D07C77" />
-  <text x="1418" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">brick-on-dark</text>
+  <text x="1418" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">brick-on-dark</text>
   <text x="1418" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#D07C77</text>
   <rect x="1536" y="0" width="120" height="120" fill="#8A5300" />
   <text x="1546" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">warning-on-light</text>

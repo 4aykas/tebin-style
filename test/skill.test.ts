@@ -46,3 +46,10 @@ describe('SKILL.md carries no stale instruction', () => {
     expect(skill).not.toContain('| `tokens.css` |');
   });
 });
+
+describe('the skill routes status colours correctly', () => {
+  it('sends errors to role.error, not to the signal red', () => {
+    expect(skill).toContain('role.error-*');
+    expect(skill).toContain('An error is not the signal red');
+  });
+});
