@@ -1,64 +1,74 @@
 ---
 name: tebin-style
 description: >
-  Use when the user wants to apply, borrow, or reuse a ready-made visual theme
-  / brand kit (color palette, typography, spacing, shadows, logos) in a
-  project, OR wants design rules / UI guidelines / accessibility rules while
-  building or reviewing UI. Triggers: "use the TEBIN theme", "apply a brand
-  kit", "give me an industrial palette", "theme this project like X", "borrow
-  styles", "UI rules", "accessibility guidelines", "design dos and don'ts".
+  Apply a stored brand theme — design tokens (colour, semantic roles, type,
+  spacing, radii) and brand assets — to a project, or consult the design-rules
+  database while building or reviewing UI. Use when the user names a theme or
+  asks for a brand kit, or when the work needs UI, accessibility or design
+  rules.
 ---
 
 # tebin-style — applying a theme from the registry
 
-This skill applies a stored theme (design tokens + brand assets) to the current
-project. The registry is a set of static files; this skill only reads them.
+The registry is a set of static files. This skill only reads them.
 
-## Workflow
+## Reach the registry first
 
-1. **Discover.** Read `registry/index.json`. List or filter themes by
-   `industry`, `mood`, or name. For a vague request ("something industrial"),
-   show 2–3 candidates with their `preview` colors and ask the user to pick.
-2. **Inspect.** Open the chosen theme's `themes/<id>/README.md` and
-   `themes/<id>/theme.json` — note metadata and the `license` of tokens and
-   assets. If an asset license is restricted, warn the user before copying.
-3. **Detect target.** Inspect the current project's stack and choose a format:
-   - Tailwind v4 (`@theme` / `@import "tailwindcss"`) → `dist/tailwind.css`
-   - plain CSS → `dist/tokens.css`
-   - React / CSS-in-JS / needs types → `dist/theme.ts`
-   - other tooling (Figma, Style Dictionary) → `dist/tokens.dtcg.json`
-4. **Apply tokens.** Insert the chosen `dist/*` into the target, following the
-   target project's existing patterns (e.g. paste the `@theme` block into the
-   main stylesheet, or import `theme.ts`).
-5. **Apply assets.** List assets from `registry/index.json` — a superset of
-   `theme.json.assets`: it also carries every pre-rendered PNG, with ids of the
-   form `<assetId>@<size>[-<variant>]` (e.g. `logo-full@1024`,
-   `corner-mark-white@512-on-brand`). Pick the format the target can use:
-   SVG for the web; **PNG for documents and Office files** (Word, Excel,
-   PowerPoint — and libraries like openpyxl / python-docx cannot embed SVG at
-   all), served from `themes/<id>/assets/png/`. Then either copy the file into
-   the target (`public/`, `assets/`) or give the user the `rawUrl` from
-   `registry/index.json` to download — ask which they want.
-6. **Verify.** Report which theme and version were applied, which token block
-   and asset files were added, and any license caveats.
+Every step below depends on how you are reading. Pick one, once:
+
+- **MCP** — if the `tebin-style` server is registered, call `list_themes`,
+  `get_theme`, `get_asset`, `list_rules`, `get_rule`. Prefer this.
+- **Local clone** — read the files from disk.
+- **Neither** — fetch
+  `https://raw.githubusercontent.com/4aykas/tebin-style/main/<path>`, or use the
+  `rawUrl` fields already in `registry/index.json`.
+
+## Apply a theme
+
+1. **Discover.** Read `registry/index.json`. Filter by `industry`, `mood` or
+   name. For a vague request ("something industrial"), offer 2–3 candidates
+   with their preview colours and let the user pick. Done when one theme id is
+   settled.
+2. **Read its `DESIGN.md`.** `themes/<id>/DESIGN.md` is generated to be
+   self-contained: palette with RGB and print values, semantic roles, the type
+   and spacing scales, every asset, and the brand rules. Read it before
+   `README.md` or `theme.json` — those add metadata, not guidance.
+3. **Detect the target and pick one format.** Match how the project already
+   styles things: Tailwind v4 → `dist/tailwind.css`; plain CSS →
+   `dist/tokens.css`; React, CSS-in-JS or TypeScript → `dist/theme.ts`; Figma
+   or Style Dictionary → `dist/tokens.dtcg.json`. One format per project.
+   `references/formats.md` has the insertion detail for each.
+4. **Apply the tokens.** Insert the chosen `dist/*` following the target's
+   existing patterns. Done when the target builds and the tokens resolve.
+5. **Apply the assets.** `registry/index.json` is a superset of
+   `theme.json.assets`: it also carries every pre-rendered PNG, with ids like
+   `logo-full@1024` and `corner-mark-white@512-on-brand`. Use SVG for the web
+   and **PNG for documents and Office files** — Word, Excel, PowerPoint and
+   libraries like openpyxl or python-docx cannot embed SVG. Ask the user
+   whether to copy the file into the project or hand them the `rawUrl`.
+   `references/licensing.md` governs what may be copied at all.
+6. **Report.** Name the theme and version applied, the token block and asset
+   files added, and the `license.assets` string verbatim for anything copied.
+
+## Reach for a role, not a raw colour
+
+Themes carry semantic roles that point at palette colours: `role.surface`,
+`role.on-surface`, `role.outline`, `role.primary`. Style through the role, so
+repointing a colour moves everything that names it.
+
+Roles separate fills from text. `role.primary` paints the logo, fills, borders
+and large text. **Small red text takes `role.primary-on-dark` or
+`role.primary-on-light`** — one red cannot clear 4.5:1 on both a dark and a
+light surface, because the luminance window is empty for any hue.
+
+On `tebin`, `type.*` and `spacing.*` values are **ceilings**: the token's
+`$value` is the top of a fluid range, and the CSS output carries the real
+`clamp()`. Size display type against the locale with the longest words.
 
 ## Design rules
 
-When building or reviewing UI, consult the rules database for
-MUST/SHOULD/NEVER guidance:
-
-- Filter via the MCP tool `list_rules({ category?, severity?, tag?, query? })`,
-  or read the digest at `rules/dist/rules.md`.
-- Fetch one rule with `get_rule({ id })`.
-- When reviewing, cite the `MUST`/`NEVER` rules the code violates.
-
-## Reading the registry
-
-- With a local clone (skill installed as a plugin): read files from disk.
-- Without a clone: fetch from `raw.githubusercontent.com/OWNER/tebin-style/main/...`
-  using the `rawUrl` fields in `registry/index.json`.
-- Via MCP: if the `tebin-style` MCP server is registered, call its
-  `list_themes` / `get_theme` / `get_asset` tools instead of reading files.
-
-See `references/formats.md` for how to insert each output format, and
-`references/licensing.md` for how to interpret the license fields.
+While building or reviewing UI, consult the rules database for MUST / SHOULD /
+NEVER guidance: `list_rules({ category?, severity?, tag?, query? })` and
+`get_rule({ id })`, or read the digest at `rules/dist/rules.md`. Most rules
+carry the reason they exist — quote it, not just the rule. When reviewing,
+cite every `MUST` and `NEVER` the code violates.
