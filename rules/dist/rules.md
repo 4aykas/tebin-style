@@ -22,6 +22,7 @@
 - **[NEVER]** Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
 - **[SHOULD]** The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
 - **[MUST]** Keep clear space around the logo at least the height of the "B" in the wordmark on all sides.
+- **[NEVER]** Never re-create the wordmark by typing TEBIN in a font. The letterforms are drawn outlines, not type. Insert the supplied asset: SVG on the web, and PNG in Word, Excel, PowerPoint or anything else that cannot embed SVG. — _An agent handed only the repository link repeatedly styled the name as text instead of fetching the logo, which produces letterforms that are not the logo at all. The other brand rules govern placing the logo and quietly assume you already have the file; none of them forbids drawing it yourself, so a careful agent could follow every rule and still ship the wrong mark._
 - **[SHOULD]** On colored or photographic backgrounds where the white logo lacks contrast, place the logo inside a white rectangle (e.g. sponsorship contexts).
 - **[NEVER]** Never apply disproportional transforms to the logo or rescale its elements independently.
 - **[NEVER]** Never add shadows or other effects to the logo.

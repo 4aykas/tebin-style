@@ -5,6 +5,10 @@ printed TEBIN material. Its full reference is
 [DESIGN.md](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/DESIGN.md);
 every logo link in this guide is also there.
 
+**Before anything else: the logo is a file.** Its letters are drawn outlines,
+not a font. Typing “TEBIN” in Arial or Roboto gives you different letterforms,
+not the logo, however close the face looks. Every step below inserts a picture.
+
 ## Word
 
 - **Logo:** insert the

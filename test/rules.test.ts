@@ -34,6 +34,7 @@ describe('brand logo rules', () => {
     expect(ids).toEqual([
       'brand-corner-mark-decorative',
       'brand-font-roboto-arial',
+      'brand-logo-never-typeset',
       'brand-logo-no-color-on-dark',
       'brand-logo-no-distort',
       'brand-logo-no-recolor',
@@ -54,6 +55,7 @@ describe('brand logo rules', () => {
     expect(getRule('brand-logo-no-recolor').severity).toBe('NEVER');
     expect(getRule('brand-logo-white-rectangle-on-busy').severity).toBe('SHOULD');
     expect(getRule('brand-font-roboto-arial').severity).toBe('SHOULD');
+    expect(getRule('brand-logo-never-typeset').severity).toBe('NEVER');
   });
 });
 
@@ -76,10 +78,10 @@ describe('post-audit rules (2026-07-29)', () => {
     }
   });
 
-  it('has 62 rules with unique ids', () => {
+  it('has 63 rules with unique ids', () => {
     const rules = loadRules();
-    expect(rules).toHaveLength(62);
-    expect(new Set(rules.map((r) => r.id)).size).toBe(62);
+    expect(rules).toHaveLength(63);
+    expect(new Set(rules.map((r) => r.id)).size).toBe(63);
   });
 
   it('opens a typography category of seven', () => {

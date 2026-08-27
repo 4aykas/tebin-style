@@ -53,3 +53,10 @@ describe('the skill routes status colours correctly', () => {
     expect(skill).toContain('An error is not the signal red');
   });
 });
+
+describe('the skill forbids drawing the logo instead of fetching it', () => {
+  it('says the wordmark is a file, not text', () => {
+    expect(skill).toContain('never set the wordmark as text');
+    expect(skill).toContain('drawn');
+  });
+});
