@@ -1074,6 +1074,34 @@ Do not answer these by choosing a plausible value — record them and ask.
 
 ---
 
+---
+
+## Execution notes (2026-08-27, all seven tasks landed)
+
+Four things differed from the plan as written. Recorded so the document
+matches what shipped.
+
+1. **Task 1's own test contradicted itself.** The case named "says the identity
+   red is still the one for fills and large text" asserted the description
+   contained `'small text'`. Fixed to assert `'fills'` and `'large text'`,
+   which is what the name and the description both say.
+2. **`colors-csv.test.ts` had a correlational assertion.** It proved the CSV
+   excluded the translucent scale with `not.toContain('on-dark')` — a substring
+   the new opaque `color.brand-on-dark` legitimately contains. Rewritten to
+   assert on the token's group prefix, which is the actual invariant, plus a
+   positive check that `color.brand-on-dark` is present.
+3. **Task 6 produced two adjacent sections called Type and Typography.** The
+   plan said the type section would take the spec's name but the code added a
+   second heading. Merged: `typeSection` emits `## Typography` and
+   `typeScaleSection` emits `### Scale` beneath it.
+4. **Two pre-existing rule tests pin counts.** Adding
+   `typography-heading-balance` moved them 61 → 62 and typography 6 → 7.
+
+Final gates: `pnpm build` clean, all themes valid, **179/179 tests**,
+`pnpm check` reports **no drift**.
+
+Versions: `tebin` 1.2.0, `tebin-classic` 1.1.0, `slate` 1.1.0, package 1.1.0.
+
 ## Tranche 2 — a separate plan, written after this one lands
 
 Not placeholders: each has a decided shape, and each needs the tokens this
