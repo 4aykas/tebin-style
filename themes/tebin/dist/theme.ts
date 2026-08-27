@@ -120,6 +120,55 @@ export const tebin = {
     "container-wide": "1400px",
     "container-reading": "760px"
   },
+  "components": {
+    "button-primary": {
+      "backgroundColor": "#292929",
+      "textColor": "#FCFBF8",
+      "rounded": "4px",
+      "padding": "14px",
+      "height": "40px"
+    },
+    "button-primary-hover": {
+      "backgroundColor": "#242424"
+    },
+    "button-commit": {
+      "backgroundColor": "#DA291C",
+      "textColor": "#FCFBF8",
+      "rounded": "4px",
+      "padding": "14px",
+      "height": "40px"
+    },
+    "button-commit-hover": {
+      "backgroundColor": "#B82217"
+    },
+    "button-quiet": {
+      "backgroundColor": "#FCFBF8",
+      "textColor": "#292929",
+      "borderColor": "#ECECEC",
+      "rounded": "4px",
+      "padding": "14px",
+      "height": "40px"
+    },
+    "button-danger": {
+      "backgroundColor": "#FCFBF8",
+      "textColor": "#C7251A",
+      "borderColor": "#ECECEC",
+      "rounded": "4px",
+      "padding": "14px",
+      "height": "40px"
+    },
+    "cta": {
+      "backgroundColor": "#FCFBF8",
+      "textColor": "#292929",
+      "borderColor": "#292929",
+      "rounded": "0px",
+      "padding": "14px 28px"
+    },
+    "cta-hover": {
+      "backgroundColor": "#292929",
+      "textColor": "#FCFBF8"
+    }
+  },
   "radius": {
     "panel": "2px",
     "control": "4px",

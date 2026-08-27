@@ -68,9 +68,46 @@ spacing:
   container-default: 1200px
   container-wide: 1400px
   container-reading: 760px
-omitted:
-  - section: "components"
-    reason: "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+components:
+  button-primary:
+    backgroundColor: "{colors.on-surface}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.control}"
+    padding: 14px
+    height: 40px
+  button-primary-hover:
+    backgroundColor: "#242424"
+  button-commit:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.control}"
+    padding: 14px
+    height: 40px
+  button-commit-hover:
+    backgroundColor: "#B82217"
+  button-quiet:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface}"
+    borderColor: "{colors.outline}"
+    rounded: "{rounded.control}"
+    padding: 14px
+    height: 40px
+  button-danger:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.error-on-light}"
+    borderColor: "{colors.outline}"
+    rounded: "{rounded.control}"
+    padding: 14px
+    height: 40px
+  cta:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface}"
+    borderColor: "{colors.on-surface}"
+    rounded: 0px
+    padding: 14px 28px
+  cta-hover:
+    backgroundColor: "{colors.on-surface}"
+    textColor: "{colors.surface}"
 ---
 # TEBIN — design
 
@@ -86,7 +123,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.4.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.5.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette
@@ -179,6 +216,30 @@ Weights: heading 700.
 | `spacing.section-feature` | 112px | `clamp(72px, 9vw, 112px)` |
 
 Container widths: `container-default` 1200px, `container-wide` 1400px, `container-reading` 760px.
+
+## Components
+
+| Component | Background | Text | Border | Shape | Padding | Height |
+| --- | --- | --- | --- | --- | --- | --- |
+| `button-primary` | `role.on-surface` | `role.surface` | — | `radius.control` | `14px` | `40px` |
+| `button-primary-hover` | `color.charcoal` | — | — | — | — | — |
+| `button-commit` | `role.primary` | `role.surface` | — | `radius.control` | `14px` | `40px` |
+| `button-commit-hover` | `color.brand-dark` | — | — | — | — | — |
+| `button-quiet` | `role.surface` | `role.on-surface` | `role.outline` | `radius.control` | `14px` | `40px` |
+| `button-danger` | `role.surface` | `role.error-on-light` | `role.outline` | `radius.control` | `14px` | `40px` |
+| `cta` | `role.surface` | `role.on-surface` | `role.on-surface` | `0px` | `14px 28px` | — |
+| `cta-hover` | `role.on-surface` | `role.surface` | — | — | — | — |
+
+A variant states only what it changes; everything else comes from the component it names.
+
+- **`button-primary.backgroundColor`** — The everyday action is ink, not red. Most screens carry one of these and no red at all.
+- **`button-primary.padding`** — Horizontal. The vertical size comes from height.
+- **`button-primary.height`** — Expand the hit area to 44px on touch if the visual stays this size.
+- **`button-commit.backgroundColor`** — Red is the colour of commitment — submitting, publishing, sending. Never a casual action.
+- **`button-quiet.borderColor`** — Beyond the DESIGN.md property set, which names no border. A quiet button is its border, so the token stays.
+- **`cta.borderColor`** — A 2px rule. The editorial CTA is a bordered word, not a filled button.
+- **`cta.rounded`** — Square on purpose. The site's CTA takes no radius.
+- **`cta.padding`** — Two values: this component sets its own vertical padding rather than a height.
 
 ## Assets
 

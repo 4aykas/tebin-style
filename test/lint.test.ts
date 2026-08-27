@@ -92,3 +92,49 @@ describe('lintTheme', () => {
     expect(checked.length).toBeGreaterThan(4);
   });
 });
+
+describe('lintTheme on components', () => {
+  const THEME = { ...base, surfaces: { light: '#FFFFFF' } };
+
+  it('errors when a label cannot be read on its own button', () => {
+    const dir = fixture('badbutton', THEME, {
+      color: { paper: { $type: 'color', $value: '#FFFFFF' }, mid: { $type: 'color', $value: '#999999' } },
+      role: { surface: { $type: 'color', $value: '{color.paper}' } },
+      components: {
+        'button-primary': {
+          backgroundColor: { $type: 'color', $value: '{color.mid}' },
+          textColor: { $type: 'color', $value: '{color.paper}' },
+        },
+      },
+    });
+    const f = lintTheme(dir).findings.find((x) => x.path === 'components.button-primary');
+    expect(f?.severity).toBe('error');
+    expect(f?.message).toContain('label');
+  });
+
+  it('lets a variant inherit the half it does not override', () => {
+    const dir = fixture('variant', THEME, {
+      color: { paper: { $type: 'color', $value: '#FFFFFF' }, ink: { $type: 'color', $value: '#111111' }, mid: { $type: 'color', $value: '#999999' } },
+      role: { surface: { $type: 'color', $value: '{color.paper}' } },
+      components: {
+        'button-primary': {
+          backgroundColor: { $type: 'color', $value: '{color.ink}' },
+          textColor: { $type: 'color', $value: '{color.paper}' },
+        },
+        'button-primary-hover': { backgroundColor: { $type: 'color', $value: '{color.mid}' } },
+      },
+    });
+    const f = lintTheme(dir).findings.find((x) => x.path === 'components.button-primary-hover');
+    // The hover state states no textColor; it takes the base one, and that pair
+    // is what a reader actually sees.
+    expect(f?.ratio).toBeDefined();
+    expect(f?.severity).toBe('error');
+  });
+
+  it('checks every component the tebin theme ships', () => {
+    const r = lintTheme(join(root, 'themes', 'tebin'));
+    const checked = r.findings.filter((f) => f.path.startsWith('components.') && f.ratio !== undefined);
+    expect(checked.length).toBe(8);
+    expect(r.summary.errors).toBe(0);
+  });
+});

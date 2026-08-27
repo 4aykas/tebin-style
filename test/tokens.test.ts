@@ -255,3 +255,33 @@ describe('label sizes', () => {
     expect(tokens.type['label-sm'].$description).toContain('612');
   });
 });
+
+describe('component tokens', () => {
+  const { components } = load('tebin');
+
+  it('separates the app button from the editorial CTA', () => {
+    expect(components['button-primary']).toBeDefined();
+    expect(components.cta).toBeDefined();
+  });
+
+  it('records that the everyday action is ink, and red means commitment', () => {
+    expect(components['button-primary'].backgroundColor.$value).toBe('{role.on-surface}');
+    expect(components['button-primary'].backgroundColor.$description).toContain('not red');
+    expect(components['button-commit'].backgroundColor.$value).toBe('{role.primary}');
+    expect(components['button-commit'].backgroundColor.$description).toContain('commitment');
+  });
+
+  it('keeps the CTA square, because the site\'s CTA takes no radius', () => {
+    expect(components.cta.rounded.$value).toBe('0px');
+    expect(components['button-primary'].rounded.$value).toBe('{radius.control}');
+  });
+
+  it('states every component colour as a reference, never a literal', () => {
+    for (const [name, parts] of Object.entries(components as Record<string, Record<string, { $type: string; $value: string }>>)) {
+      for (const [prop, leaf] of Object.entries(parts)) {
+        if (leaf.$type !== 'color') continue;
+        expect(leaf.$value, `${name}.${prop}`).toMatch(/^\{/);
+      }
+    }
+  });
+});

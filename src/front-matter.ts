@@ -84,6 +84,31 @@ export function buildFrontMatter(themeDir: string): string {
     ...Object.entries(layout).map(([k, l]) => [k, String(l.$value)] as [string, string]),
   ]);
 
+  // components — the spec permits references here, so keep ours where the
+  // target has a home in the emitted document and resolve the rest to values.
+  // role.* becomes colors.*, radius.* becomes rounded.*; anything else (a raw
+  // palette colour) has no section to point at and is written out.
+  const components = (tokens.components ?? {}) as Record<string, Record<string, Leaf>>;
+  const componentEntries = Object.entries(components);
+  if (componentEntries.length) {
+    out += 'components:\n';
+    for (const [name, parts] of componentEntries) {
+      out += `  ${name}:\n`;
+      for (const [prop, leaf] of Object.entries(parts)) {
+        const raw = leaf.$value;
+        let emitted: string;
+        const ref = typeof raw === 'string' ? /^\{([^}]+)\}$/.exec(raw) : null;
+        if (ref?.[1].startsWith('role.')) emitted = quote(`{colors.${ref[1].slice(5)}}`);
+        else if (ref?.[1].startsWith('radius.')) emitted = quote(`{rounded.${ref[1].slice(7)}}`);
+        else {
+          const value = String(resolve(tokens, raw));
+          emitted = leaf.$type === 'color' ? quote(value) : value;
+        }
+        out += `    ${prop}: ${emitted}\n`;
+      }
+    }
+  }
+
   const omitted = theme.omitted ?? [];
   if (omitted.length) {
     out += 'omitted:\n';

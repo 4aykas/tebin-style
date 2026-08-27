@@ -372,6 +372,148 @@
       "$value": "760px"
     }
   },
+  "components": {
+    "button-primary": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "14px"
+      },
+      "height": {
+        "$type": "dimension",
+        "$value": "40px"
+      }
+    },
+    "button-primary-hover": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{color.charcoal}"
+      }
+    },
+    "button-commit": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.primary}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "14px"
+      },
+      "height": {
+        "$type": "dimension",
+        "$value": "40px"
+      }
+    },
+    "button-commit-hover": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{color.brand-dark}"
+      }
+    },
+    "button-quiet": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.outline}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "14px"
+      },
+      "height": {
+        "$type": "dimension",
+        "$value": "40px"
+      }
+    },
+    "button-danger": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.error-on-light}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.outline}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "14px"
+      },
+      "height": {
+        "$type": "dimension",
+        "$value": "40px"
+      }
+    },
+    "cta": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "0px"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "14px 28px"
+      }
+    },
+    "cta-hover": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      }
+    }
+  },
   "radius": {
     "panel": {
       "$type": "dimension",

@@ -73,6 +73,16 @@
   --layout-container-default: 1200px; /** Default content width. */
   --layout-container-wide: 1400px; /** Wide content width. */
   --layout-container-reading: 760px; /** Measure for long-form running text. */
+  --components-button-primary-padding: 14px; /** Horizontal. The vertical size comes from height. */
+  --components-button-primary-height: 40px; /** Expand the hit area to 44px on touch if the visual stays this size. */
+  --components-button-commit-padding: 14px;
+  --components-button-commit-height: 40px;
+  --components-button-quiet-padding: 14px;
+  --components-button-quiet-height: 40px;
+  --components-button-danger-padding: 14px;
+  --components-button-danger-height: 40px;
+  --components-cta-rounded: 0px; /** Square on purpose. The site's CTA takes no radius. */
+  --components-cta-padding: 14px 28px; /** Two values: this component sets its own vertical padding rather than a height. */
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
@@ -90,4 +100,25 @@
   --role-warning-on-dark: var(--color-warning-on-dark); /** Warning text on a dark surface. */
   --role-success-on-light: var(--color-success-on-light); /** Success text on a light surface. */
   --role-success-on-dark: var(--color-success-on-dark); /** Success text on a dark surface. */
+  --components-button-primary-rounded: var(--radius-control);
+  --components-button-primary-hover-background-color: var(--color-charcoal);
+  --components-button-commit-rounded: var(--radius-control);
+  --components-button-commit-hover-background-color: var(--color-brand-dark);
+  --components-button-quiet-rounded: var(--radius-control);
+  --components-button-danger-rounded: var(--radius-control);
+  --components-button-primary-background-color: var(--role-on-surface); /** The everyday action is ink, not red. Most screens carry one of these and no red at all. */
+  --components-button-primary-text-color: var(--role-surface);
+  --components-button-commit-background-color: var(--role-primary); /** Red is the colour of commitment — submitting, publishing, sending. Never a casual action. */
+  --components-button-commit-text-color: var(--role-surface);
+  --components-button-quiet-background-color: var(--role-surface);
+  --components-button-quiet-text-color: var(--role-on-surface);
+  --components-button-quiet-border-color: var(--role-outline); /** Beyond the DESIGN.md property set, which names no border. A quiet button is its border, so the token stays. */
+  --components-button-danger-background-color: var(--role-surface);
+  --components-button-danger-text-color: var(--role-error-on-light);
+  --components-button-danger-border-color: var(--role-outline);
+  --components-cta-background-color: var(--role-surface);
+  --components-cta-text-color: var(--role-on-surface);
+  --components-cta-border-color: var(--role-on-surface); /** A 2px rule. The editorial CTA is a bordered word, not a filled button. */
+  --components-cta-hover-background-color: var(--role-on-surface);
+  --components-cta-hover-text-color: var(--role-surface);
 }

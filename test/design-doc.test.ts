@@ -136,3 +136,26 @@ describe('the document carries machine-readable tokens', () => {
     expect(tebin).toContain('primary: "#DA291C"');
   });
 });
+
+describe('components reach the document', () => {
+  const tebin = buildDesignDoc(join(root, 'themes', 'tebin'));
+
+  it('lists each component and what it points at', () => {
+    expect(tebin).toContain('## Components');
+    expect(tebin).toContain('`button-primary`');
+    expect(tebin).toContain('`cta`');
+  });
+
+  it('carries the reason red is reserved, not just the value', () => {
+    expect(tebin).toContain('commitment');
+    expect(tebin).toContain('not red');
+  });
+
+  it('says how a variant inherits', () => {
+    expect(tebin).toContain('A variant states only what it changes');
+  });
+
+  it('omits the section for a theme with no components', () => {
+    expect(buildDesignDoc(join(root, 'themes', 'slate'))).not.toContain('## Components');
+  });
+});
