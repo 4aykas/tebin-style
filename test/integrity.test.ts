@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mkdtempSync, mkdirSync, writeFileSync, cpSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, cpSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -45,5 +45,38 @@ describe('validateThemeDir', () => {
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
+  });
+});
+
+describe('the manifest declares what the lint needs', () => {
+  const themeDir = (id: string) => join(here, '..', 'themes', id);
+  const manifest = (id: string) =>
+    JSON.parse(readFileSync(join(themeDir(id), 'theme.json'), 'utf8'));
+
+  for (const id of ['tebin', 'tebin-classic', 'slate']) {
+    it(`${id} names the binding light surface`, () => {
+      expect(manifest(id).surfaces?.light, id).toMatch(/^#[0-9a-fA-F]{6}$/);
+    });
+  }
+
+  it('tebin names a dark surface too, because it has dark bands', () => {
+    expect(manifest('tebin').surfaces.dark).toBe('#242830');
+  });
+
+  it('every theme declares why it has no component tokens', () => {
+    for (const id of ['tebin', 'tebin-classic', 'slate']) {
+      const sections = (manifest(id).omitted ?? []).map((o: { section: string }) => o.section);
+      expect(sections, id).toContain('components');
+    }
+  });
+
+  it('rejects an omission with no reason — a bare skip explains nothing', async () => {
+    const { validateThemeMetadata } = await import('../src/validate.js');
+    const bad = {
+      id: 'x', name: 'X', version: '1.0.0',
+      license: { tokens: 'MIT', assets: 'X' },
+      omitted: [{ section: 'components' }],
+    };
+    expect(validateThemeMetadata(bad).valid).toBe(false);
   });
 });
