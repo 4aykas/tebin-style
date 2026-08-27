@@ -1,49 +1,68 @@
 # tebin-style
 
-> Brand kits for AI agents and humans: W3C DTCG design tokens, logos as SVG
-> **and pre-rendered PNG** (for Word/Excel/PowerPoint and any tool that cannot
-> embed SVG), plus machine-readable design rules. All URLs below are direct,
-> permanent raw links — fetch them as-is, no release download needed.
+> Brand kits for AI agents and people: W3C DTCG design tokens, logos as SVG
+> **and pre-rendered PNG** (for Word, Excel, PowerPoint and any tool that
+> cannot embed SVG), plus machine-readable design rules. Every URL below is a
+> direct, permanent raw link. Fetch it as is — no release download needed.
 
 ## Logos (PNG — use these for documents and Office files)
 
-- [TEBIN Classic logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-1024.png): two-color wordmark on transparent
+- [TEBIN Classic logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-1024.png): two-colour wordmark, transparent
 - [TEBIN Classic logo white, on red 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png): for red backgrounds
 - [TEBIN Classic logo white, on charcoal 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png): for dark backgrounds
-- [TEBIN Classic corner mark 512 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-512.png): standalone mark
-- [TEBIN (web theme) logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-1024.png): modern web variant
+- [TEBIN Classic corner mark 512 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-512.png): the mark on its own
+- [TEBIN (web theme) logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-1024.png): web variant
 
-Other sizes (128–2048 px) follow the same URL pattern: `logo-full-512.png`,
-`logo-full-2048.png`, `corner-mark-128.png`, `corner-mark-256.png`, etc.
+Other sizes follow the same pattern, 128 to 2048 px: `logo-full-512.png`,
+`logo-full-2048.png`, `corner-mark-128.png`, `corner-mark-256.png`.
 
 ## Logos (SVG)
 
-- [TEBIN Classic logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full.svg): vector, light backgrounds
-- [TEBIN Classic logo white SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg): vector, dark/red backgrounds
-- [TEBIN (web theme) logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg): vector
+- [TEBIN Classic logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full.svg): light backgrounds
+- [TEBIN Classic logo white SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg): dark or red backgrounds
+- [TEBIN (web theme) logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg)
 
 ## Themes
 
-Three themes ship in this repo:
+Three themes ship here.
 
-- **tebin-classic** — the 2017 print-era corporate identity (Pantone red + grey, Roboto/Arial). Logos above; tokens at `themes/tebin-classic/dist/`.
-- **tebin** — the modern web theme (red on charcoal, translucent scales). Logos above; tokens at `themes/tebin/dist/`.
-- **slate** — a neutral SaaS/web starter theme. **Design tokens only, no logo assets.** Tokens at `themes/slate/dist/`, guide: [slate DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/slate/DESIGN.md).
+- **tebin-classic** — the 2017 print-era identity: Pantone red and grey, Roboto
+  with an Arial fallback. Use it for documents and anything printed. Tokens at
+  `themes/tebin-classic/dist/`.
+- **tebin** — the web theme: red on charcoal, translucent scales, plus the type
+  and spacing scales used on tebin.pro. Tokens at `themes/tebin/dist/`.
+- **slate** — a neutral starter for projects that are not TEBIN.
+  **Tokens only, no logo assets.** MIT. Tokens at `themes/slate/dist/`.
 
-Each theme's `dist/` has `tokens.css`, `tailwind.css`, `tokens.dtcg.json`, `theme.ts`, `colors.csv`.
+Each `dist/` holds `tokens.css`, `tailwind.css`, `tokens.dtcg.json`,
+`theme.ts` and `colors.csv`.
+
+Tokens are grouped as `color`, `role`, `font`, `radius` and — on `tebin` —
+`type`, `lineHeight`, `fontWeight`, `spacing` and `layout`. A **role** points
+at a palette colour instead of copying it, so `role.surface` resolves through
+`color.paper`.
+
+**Red text takes a different red.** `#DA291C` clears 4.5:1 on neither a dark
+nor a light surface, and no red does. Small red text uses `brand-on-dark`
+(`#EA6359`) or `brand-on-light` (`#C7251A`).
 
 ## Machine-readable indexes
 
-- [Full asset index](https://raw.githubusercontent.com/4aykas/tebin-style/main/registry/index.json): every theme, every asset (SVG + all PNG sizes/variants) with direct rawUrl fields
-- [Design rules digest](https://raw.githubusercontent.com/4aykas/tebin-style/main/rules/dist/rules.md): MUST/SHOULD/NEVER usage rules
-- [Colour table (CSV)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/dist/colors.csv): RGB values for Word/Excel
+- [Full asset index](https://raw.githubusercontent.com/4aykas/tebin-style/main/registry/index.json): every theme and asset, SVG and all PNG sizes, with direct `rawUrl` fields
+- [Design rules](https://raw.githubusercontent.com/4aykas/tebin-style/main/rules/dist/rules.md): 62 MUST / SHOULD / NEVER rules, most with the reason they exist
+- [Colour table (CSV)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/dist/colors.csv): RGB for Word and Excel
 
 ## Design guides
 
-- [TEBIN Classic DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/DESIGN.md): full palette, type, logo usage, links to every asset size
-- [TEBIN DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/DESIGN.md): the modern web theme
+One self-contained page per theme: palette with RGB and print values, roles,
+type, spacing, assets and rules. Every link inside is absolute, so the file
+still works when pasted into a chat.
+
+- [TEBIN Classic DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/DESIGN.md)
+- [TEBIN DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/DESIGN.md)
+- [Slate DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/slate/DESIGN.md)
 
 ## Licence
 
 Tokens: MIT. Logos and brand assets: © TEBIN, all rights reserved — do not
-reuse for other brands.
+reuse them for another brand.

@@ -2,7 +2,9 @@
 
 1. Create `themes/<id>/` where `<id>` is kebab-case and unique.
 2. Add `tokens.json` in DTCG format (`$type` / `$value`). Start from an existing
-   theme's `tokens.json` for structure.
+   theme's `tokens.json` for structure. A `$value` may reference another token
+   as `{color.brand}`; see [`schema/README.md`](./schema/README.md) for the two
+   `$extensions` blocks, print values and fluid ranges.
 3. Add `theme.json` with `id` (== folder name), `name`, `version` (semver),
    `license`, and an `assets` manifest. Validate against
    `schema/theme.schema.json`.

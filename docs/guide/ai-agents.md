@@ -65,6 +65,6 @@ without an `assetId` to see them all.
 
 Paste the theme's `DESIGN.md` into the chat — for example
 [tebin-classic/DESIGN.md](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/DESIGN.md).
-It is generated to be self-contained: palette with RGB and print values, type,
-assets, and the brand rules, with every link absolute, so the file keeps
-working wherever it lands.
+It is generated to be self-contained: palette with RGB and print values,
+semantic roles, the type and spacing scales, assets, and the brand rules.
+Every link inside is absolute, so the file keeps working wherever it lands.

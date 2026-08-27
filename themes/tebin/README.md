@@ -32,6 +32,41 @@ band. The steps below those are for decoration, not for type — see
 `--color-paper` (`#FCFBF8`) is the base page surface. Pure `#fff` is not used:
 it reads flat beside the cream band and the dark sections.
 
+## Roles
+
+A role names a colour by its job. It points at a palette token, so repointing
+the colour moves every role that uses it.
+
+| Role | Points at | For |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | logo, fills, borders, large text |
+| `role.primary-on-dark` | `color.brand-on-dark` | small red text on dark |
+| `role.primary-on-light` | `color.brand-on-light` | small red text on light |
+| `role.surface` | `color.paper` | the page |
+| `role.surface-inverse` | `color.charcoal` | the dark bands |
+| `role.on-surface` | `color.ink` | text on the page |
+| `role.on-surface-muted` | `color.muted` | secondary text |
+| `role.outline` | `color.rule` | hairlines and dividers |
+
+The fill red and the text red are different tokens on purpose. `#DA291C`
+clears 4.5:1 on neither surface family, and no red does — the luminance
+window is empty for any hue.
+
+## Type and spacing
+
+`type.h1` … `type.h5` and `type.body` carry the heading scale, with
+`lineHeight.heading` (1.35), `lineHeight.body` (1.7) and
+`fontWeight.heading` (700).
+
+`spacing.gutter` and `spacing.section-compact` / `-standard` / `-feature`
+carry the vertical rhythm. `layout.container-default` (1200px), `-wide`
+(1400px) and `-reading` (760px) carry the content widths.
+
+Every heading level and every spacing step is fluid. The token's `$value` is
+the **ceiling**; the real range lives in `$extensions["pro.tebin.fluid"]` and
+the CSS build composes `clamp()` from it. Sizes and ranges:
+[DESIGN.md](./DESIGN.md).
+
 ## Assets
 
 Logos and favicons live in [`assets/`](./assets). License: © TEBIN — all rights

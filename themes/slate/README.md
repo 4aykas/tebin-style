@@ -12,3 +12,9 @@ Canonical source: [`tokens.json`](./tokens.json) (DTCG). Generated outputs in
 ## Assets
 
 None. This theme ships design tokens only.
+
+## Roles
+
+`role.primary`, `role.surface`, `role.on-surface`, `role.on-surface-muted` and
+`role.outline` point at palette colours rather than copying them. Repoint a
+colour and every role that names it follows.
