@@ -61,10 +61,6 @@
     "on-surface": {
       "$type": "color",
       "$value": "{color.ink}"
-    },
-    "on-surface-muted": {
-      "$type": "color",
-      "$value": "{color.grey}"
     }
   },
   "font": {

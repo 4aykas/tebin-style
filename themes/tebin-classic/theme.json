@@ -34,6 +34,10 @@
       "reason": "Document theme: table rules come from Word's own table styles, and the 2017 brand book names no hairline colour."
     },
     {
+      "section": "role.on-surface-muted",
+      "reason": "The brand book's grey #898D8D is 3.36:1 on white — below the 4.5:1 floor for small text. It is a colour to paint with, not one to read; the book prices no darker grey, so this theme has no secondary text colour."
+    },
+    {
       "section": "role.status",
       "reason": "A printed page has no error, warning or success state."
     },

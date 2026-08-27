@@ -41,7 +41,6 @@ A role is a pointer, not a copy — change the colour it names and every role us
 | `role.primary` | `color.brand` | Identity red. Fills and large text. |
 | `role.surface` | `color.topbar` | The white page a document prints on. |
 | `role.on-surface` | `color.ink` | Body text on the page. |
-| `role.on-surface-muted` | `color.grey` | Secondary text on the page. |
 
 ## Typography
 

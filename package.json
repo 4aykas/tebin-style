@@ -31,6 +31,7 @@
   "scripts": {
     "build": "tsx scripts/build.ts && tsx scripts/build-assets.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
     "validate": "tsx scripts/validate.ts",
+    "lint:themes": "tsx scripts/lint.ts",
     "check": "tsx scripts/check.ts",
     "test": "vitest run",
     "start:mcp": "tsx mcp/server.ts"

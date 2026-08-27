@@ -16,8 +16,7 @@ export const tebin_classic = {
   "role": {
     "primary": "#DA291C",
     "surface": "#FFFFFF",
-    "on-surface": "#1A1A1A",
-    "on-surface-muted": "#898D8D"
+    "on-surface": "#1A1A1A"
   },
   "font": {
     "sans": [
