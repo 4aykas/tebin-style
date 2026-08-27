@@ -46,6 +46,8 @@ Every step below depends on how you are reading. Pick one, once:
    and **PNG for documents and Office files** — Word, Excel, PowerPoint and
    libraries like openpyxl or python-docx cannot embed SVG. Ask the user
    whether to copy the file into the project or hand them the `rawUrl`.
+   **Insert the file; never set the wordmark as text.** Its letters are drawn
+   outlines, not a font, so typing the name produces different letterforms.
    `references/licensing.md` governs what may be copied at all.
 6. **Report.** Name the theme and version applied, the token block and asset
    files added, and the `license.assets` string verbatim for anything copied.

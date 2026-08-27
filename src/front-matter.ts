@@ -1,21 +1,18 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { referencePath, resolveToken, type TokenTree } from './tokens.js';
 
 interface Leaf { $type?: string; $value?: unknown; $extensions?: Record<string, unknown> }
-type Tree = Record<string, unknown>;
+type Tree = TokenTree;
 
-/** Follows `{a.b}`; returns the literal when the path leads nowhere. */
-function resolve(tokens: Tree, value: unknown): unknown {
-  if (typeof value !== 'string') return value;
-  const ref = /^\{([^}]+)\}$/.exec(value);
-  if (!ref) return value;
-  let node: unknown = tokens;
-  for (const seg of ref[1].split('.')) {
-    if (typeof node !== 'object' || node === null) return value;
-    node = (node as Tree)[seg];
-  }
-  const leaf = node as Leaf | undefined;
-  return leaf?.$value === undefined ? value : resolve(tokens, leaf.$value);
+/**
+ * A value for the document: the literal a reference points at, or the
+ * reference text itself when it leads nowhere. The format is a snapshot, so a
+ * dangling reference is better printed than silently blanked — the lint is
+ * where it gets reported.
+ */
+function forDocument(tokens: TokenTree, value: unknown): unknown {
+  return resolveToken(tokens, value) ?? value;
 }
 
 const quote = (s: string) => `"${s.replace(/"/g, '\\"')}"`;
@@ -46,7 +43,7 @@ export function buildFrontMatter(themeDir: string): string {
 
   // colors — semantic roles, resolved. The spec wants values, not our aliases.
   const roles = (tokens.role ?? {}) as Record<string, Leaf>;
-  out += group('colors', Object.entries(roles).map(([k, leaf]) => [k, quote(String(resolve(tokens, leaf.$value)))]));
+  out += group('colors', Object.entries(roles).map(([k, leaf]) => [k, quote(String(forDocument(tokens, leaf.$value)))]));
 
   // typography — one entry per level, ceiling as fontSize
   const type = (tokens.type ?? {}) as Record<string, Leaf>;
@@ -97,11 +94,11 @@ export function buildFrontMatter(themeDir: string): string {
       for (const [prop, leaf] of Object.entries(parts)) {
         const raw = leaf.$value;
         let emitted: string;
-        const ref = typeof raw === 'string' ? /^\{([^}]+)\}$/.exec(raw) : null;
-        if (ref?.[1].startsWith('role.')) emitted = quote(`{colors.${ref[1].slice(5)}}`);
-        else if (ref?.[1].startsWith('radius.')) emitted = quote(`{rounded.${ref[1].slice(7)}}`);
+        const ref = referencePath(raw);
+        if (ref?.startsWith('role.')) emitted = quote(`{colors.${ref.slice(5)}}`);
+        else if (ref?.startsWith('radius.')) emitted = quote(`{rounded.${ref.slice(7)}}`);
         else {
-          const value = String(resolve(tokens, raw));
+          const value = String(forDocument(tokens, raw));
           emitted = leaf.$type === 'color' ? quote(value) : value;
         }
         out += `    ${prop}: ${emitted}\n`;

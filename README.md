@@ -28,6 +28,10 @@ serves the file.
 Pick 512 px for email and small web use, 1024 px for documents and slides,
 2048 px for print.
 
+**Insert the file; never type the name.** The wordmark is drawn outlines, not a
+font, so setting “TEBIN” in Roboto produces different letterforms. In Word,
+Excel and PowerPoint, download a PNG above and insert it as a picture.
+
 The white logo ships on a red tile and on a charcoal tile, never on
 transparency. A white logo on transparency looks like an empty file in every
 preview. The tiles already carry the correct clear space.

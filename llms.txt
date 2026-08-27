@@ -5,6 +5,11 @@
 > cannot embed SVG), plus machine-readable design rules. Every URL below is a
 > direct, permanent raw link. Fetch it as is — no release download needed.
 
+> **The wordmark is a file, never text.** Its letters are drawn outlines, not a
+> font, so typing “TEBIN” in Roboto or any other face does not reproduce the
+> logo — it produces different letterforms. Download one of the PNGs below and
+> insert it as an image. For Word, Excel and PowerPoint that is the whole job.
+
 ## Logos (PNG — use these for documents and Office files)
 
 - [TEBIN Classic logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-1024.png): two-colour wordmark, transparent

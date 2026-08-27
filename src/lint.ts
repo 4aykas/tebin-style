@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { contrastRatio, AA_NORMAL } from './contrast.js';
 import { hexToRgb } from './colors-csv.js';
+import { resolveString, type TokenTree } from './tokens.js';
 
 export interface Finding {
   severity: 'error' | 'warning' | 'info';
@@ -17,24 +18,7 @@ export interface LintResult {
 }
 
 interface Leaf { $type?: string; $value?: unknown }
-type Tree = Record<string, unknown>;
-
-/** Follows `{a.b}` through the token tree. Returns null when it leads nowhere. */
-function resolve(tokens: Tree, value: unknown, seen = new Set<string>()): string | null {
-  if (typeof value !== 'string') return null;
-  const ref = /^\{([^}]+)\}$/.exec(value);
-  if (!ref) return value;
-  if (seen.has(ref[1])) return null; // a reference cycle resolves to nothing
-  seen.add(ref[1]);
-  let node: unknown = tokens;
-  for (const seg of ref[1].split('.')) {
-    if (typeof node !== 'object' || node === null) return null;
-    node = (node as Tree)[seg];
-  }
-  const leaf = node as Leaf | undefined;
-  if (!leaf || leaf.$value === undefined) return null;
-  return resolve(tokens, leaf.$value, seen);
-}
+type Tree = TokenTree;
 
 /**
  * Which surface a role is measured against, from its name alone.
@@ -77,11 +61,11 @@ export function lintTheme(themeDir: string): LintResult {
   }
 
   const roles = (tokens.role ?? {}) as Record<string, Leaf>;
-  const surfaceValue = resolve(tokens, roles.surface?.$value);
+  const surfaceValue = resolveString(tokens, roles.surface?.$value);
 
   for (const [name, leaf] of Object.entries(roles)) {
     const path = `role.${name}`;
-    const value = resolve(tokens, leaf.$value);
+    const value = resolveString(tokens, leaf.$value);
     if (value === null) {
       push({ severity: 'warning', path,
              message: `${JSON.stringify(leaf.$value)} does not resolve to a value` });
@@ -127,7 +111,7 @@ export function lintTheme(themeDir: string): LintResult {
     const base = name.replace(/-(hover|active|pressed|focus)$/, '');
     const inherited = base === name ? undefined : components[base];
     const pick = (prop: string) =>
-      resolve(tokens, parts[prop]?.$value ?? inherited?.[prop]?.$value);
+      resolveString(tokens, parts[prop]?.$value ?? inherited?.[prop]?.$value);
 
     const fg = pick('textColor');
     const bg = pick('backgroundColor');

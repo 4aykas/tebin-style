@@ -4,6 +4,7 @@ import { collectColorRows, NO_PRINT_VALUE } from './colors-csv.js';
 import { readManifest } from './raster.js';
 import { filterRules, type Rule } from './rules.js';
 import { buildFrontMatter } from './front-matter.js';
+import { referencePath } from './tokens.js';
 
 export const BLOB_BASE = 'https://github.com/4aykas/tebin-style/blob/main';
 export const RAW_BASE = 'https://raw.githubusercontent.com/4aykas/tebin-style/main';
@@ -91,7 +92,7 @@ function roleSection(themeDir: string): string {
     '\n## Roles\n\nA role is a pointer, not a copy — change the colour it names and every role using it follows.\n\n';
   out += '| Role | Points at | Use for |\n| --- | --- | --- |\n';
   for (const [name, leaf] of roles) {
-    const target = (leaf.$value ?? '').replace(/^\{|\}$/g, '');
+    const target = referencePath(leaf.$value) ?? String(leaf.$value ?? '');
     out += `| \`role.${name}\` | \`${target}\` | ${leaf.$description ?? '—'} |\n`;
   }
   return out;
@@ -162,7 +163,7 @@ function componentSection(themeDir: string): string {
   for (const [name, parts] of entries) {
     const cell = (p: string) => {
       const v = parts[p]?.$value;
-      return v ? `\`${v.replace(/^\{|\}$/g, '')}\`` : '—';
+      return v ? `\`${referencePath(v) ?? v}\`` : '—';
     };
     out += `| \`${name}\` | ${cell('backgroundColor')} | ${cell('textColor')} | ${cell('borderColor')} | ${cell('rounded')} | ${cell('padding')} | ${cell('height')} |\n`;
     for (const [prop, leaf] of Object.entries(parts)) {

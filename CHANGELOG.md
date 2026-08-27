@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.6.0 — 2026-08-27
+
+### Added
+- **`brand-logo-never-typeset` (NEVER)** — never re-create the wordmark by
+  typing TEBIN in a font. Reported from the field: handed only the repository
+  link and asked to brand a spreadsheet, an agent gets the colours right and
+  then sets the name as styled text instead of fetching the logo.
+
+  The repository was at fault, not the agent. Nine brand rules governed how to
+  *place* the logo and every one of them assumed you already had the file;
+  none forbade drawing it yourself. An agent could follow all nine and still
+  ship the wrong mark.
+
+  It is not only a policy breach. `logo-full.svg` is seven `<path>` elements
+  and no font reference at all — the letters are drawn outlines, so typing the
+  name produces different letterforms however close the face looks.
+
+  The rule now leads `llms.txt`, which is what a machine reads first, and
+  repeats in the README beside the download table, at the top of the Office
+  guide, and in the agent skill's asset step.
+
+### Changed
+- **One home for token references.** `resolveToken`, `resolveString` and
+  `referencePath` move to `src/tokens.ts`. Three modules had been answering
+  the question separately and disagreeing at the edges: the lint caught
+  reference cycles, the front matter passed a dangling reference through as if
+  it were a value, and the generated document stripped the braces with a
+  regex. The differences that matter now sit at the call sites, where they are
+  visible, instead of inside three near-identical functions.
+
+  Found by the codebase knowledge graph, which put two functions named
+  `resolve` in two different clusters — something a grep for `resolve` would
+  have shown as two ordinary hits.
+
+  The refactor is byte-for-byte behaviour-preserving: `pnpm check` reports no
+  drift without a rebuild.
+
 ## 1.5.1 — 2026-08-27
 
 Three consistency gaps a code review found after 1.5.0, all of them the same
