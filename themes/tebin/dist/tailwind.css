@@ -9,6 +9,8 @@
   --color-topbar: #f9f9f9;
   --color-subtle: #c1c1c1;
   --color-rule: #ececec;
+  --color-brick: #a43f39;
+  --color-brick-on-dark: #d07c77;
   --color-warning-on-light: #8a5300;
   --color-warning-on-dark: #f0b429;
   --color-success-on-light: #1f6f43;
@@ -56,8 +58,8 @@
   --role-on-surface: #292929;
   --role-on-surface-muted: #666666;
   --role-outline: #ececec;
-  --role-error-on-light: #c7251a;
-  --role-error-on-dark: #ea6359;
+  --role-error-on-light: #a43f39;
+  --role-error-on-dark: #d07c77;
   --role-warning-on-light: #8a5300;
   --role-warning-on-dark: #f0b429;
   --role-success-on-light: #1f6f43;
@@ -102,7 +104,7 @@
   --components-button-quiet-padding: 14px;
   --components-button-quiet-height: 40px;
   --components-button-danger-background-color: #fcfbf8;
-  --components-button-danger-text-color: #c7251a;
+  --components-button-danger-text-color: #a43f39;
   --components-button-danger-border-color: #ececec;
   --components-button-danger-rounded: 4px;
   --components-button-danger-padding: 14px;
