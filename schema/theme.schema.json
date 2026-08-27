@@ -29,6 +29,27 @@
     "author": { "type": "string" },
     "createdAt": { "type": "string" },
     "updatedAt": { "type": "string" },
+    "surfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["light"],
+      "properties": {
+        "light": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "dark":  { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+      }
+    },
+    "omitted": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["section", "reason"],
+        "properties": {
+          "section": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
     "assets": {
       "type": "array",
       "items": {

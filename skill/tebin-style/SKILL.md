@@ -65,6 +65,13 @@ On `tebin`, `type.*` and `spacing.*` values are **ceilings**: the token's
 `$value` is the top of a fluid range, and the CSS output carries the real
 `clamp()`. Size display type against the locale with the longest words.
 
+## Check before you claim it works
+
+`lint_theme({ id })` measures contrast for every role a naming rule can pair
+with a surface, and names what it could not reach. Run it after changing a
+colour. `diff_themes({ a, b })` shows what moved between two themes and flags
+a regression, which means only one thing: contrast errors went up.
+
 ## Design rules
 
 While building or reviewing UI, consult the rules database for MUST / SHOULD /

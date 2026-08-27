@@ -26,10 +26,15 @@ describe('registry read layer', () => {
     expect(JSON.parse(readFormat('tebin', 'dtcg').content).color.brand.$value).toBe('#DA291C');
   });
 
-  it('maps all four formats to filenames', () => {
+  it('maps every format to a filename', () => {
     expect(FORMAT_FILES).toEqual({
       css: 'tokens.css', tailwind: 'tailwind.css', dtcg: 'tokens.dtcg.json', ts: 'theme.ts',
+      'design-md': 'DESIGN.md',
     });
+  });
+
+  it('reads design-md from the theme root, where it is generated', () => {
+    expect(readFormat('tebin', 'design-md').content.startsWith('---')).toBe(true);
   });
 
   it('reads an SVG asset as utf8 text and a png as base64', () => {

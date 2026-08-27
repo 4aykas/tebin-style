@@ -12,14 +12,18 @@ export class NotFoundError extends Error {
   }
 }
 
-export type Format = 'css' | 'tailwind' | 'dtcg' | 'ts';
+export type Format = 'css' | 'tailwind' | 'dtcg' | 'ts' | 'design-md';
 
 export const FORMAT_FILES: Record<Format, string> = {
   css: 'tokens.css',
   tailwind: 'tailwind.css',
   dtcg: 'tokens.dtcg.json',
   ts: 'theme.ts',
+  'design-md': 'DESIGN.md',
 };
+
+/** DESIGN.md is generated beside the source, not into dist/. */
+const ROOT_LEVEL_FORMATS = new Set<Format>(['design-md']);
 
 export interface ThemeManifest {
   id: string;
@@ -44,7 +48,9 @@ export function loadThemeManifest(id: string): ThemeManifest {
 export function readFormat(id: string, format: Format): { filename: string; content: string } {
   const filename = FORMAT_FILES[format];
   if (!filename) throw new NotFoundError(`unknown format "${format}"`);
-  const p = join(REPO_ROOT, 'themes', id, 'dist', filename);
+  const p = ROOT_LEVEL_FORMATS.has(format)
+    ? join(REPO_ROOT, 'themes', id, filename)
+    : join(REPO_ROOT, 'themes', id, 'dist', filename);
   if (!existsSync(p)) throw new NotFoundError(`format "${format}" for theme "${id}" not found`);
   return { filename, content: readFileSync(p, 'utf8') };
 }

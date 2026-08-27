@@ -4,17 +4,76 @@
   "name": "TEBIN Classic",
   "description": "Faithful reproduction of the 2017 TEBIN print brand book: Pantone red + grey, Roboto / Arial, corporate-print identity.",
   "version": "1.1.0",
-  "industry": ["engineering", "industrial", "b2b"],
-  "mood": ["classic", "corporate", "print"],
-  "source": { "url": "TEBIN Branding Principles & Style Guide (2017, Rev. A)", "extractedBy": "manual" },
-  "license": { "tokens": "MIT", "assets": "© TEBIN — all rights reserved" },
+  "industry": [
+    "engineering",
+    "industrial",
+    "b2b"
+  ],
+  "mood": [
+    "classic",
+    "corporate",
+    "print"
+  ],
+  "source": {
+    "url": "TEBIN Branding Principles & Style Guide (2017, Rev. A)",
+    "extractedBy": "manual"
+  },
+  "license": {
+    "tokens": "MIT",
+    "assets": "© TEBIN — all rights reserved"
+  },
   "author": "TEBIN",
   "createdAt": "2026-06-25",
   "updatedAt": "2026-08-27",
+  "surfaces": {
+    "light": "#FFFFFF"
+  },
+  "omitted": [
+    {
+      "section": "role.outline",
+      "reason": "Document theme: table rules come from Word's own table styles, and the 2017 brand book names no hairline colour."
+    },
+    {
+      "section": "role.on-surface-muted",
+      "reason": "The brand book's grey #898D8D is 3.36:1 on white — below the 4.5:1 floor for small text. It is a colour to paint with, not one to read; the book prices no darker grey, so this theme has no secondary text colour."
+    },
+    {
+      "section": "role.status",
+      "reason": "A printed page has no error, warning or success state."
+    },
+    {
+      "section": "components",
+      "reason": "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+    }
+  ],
   "assets": [
-    { "id": "logo-full", "type": "logo", "variant": "full", "format": "svg", "path": "assets/logo/logo-full.svg" },
-    { "id": "logo-full-white", "type": "logo", "variant": "white", "format": "svg", "path": "assets/logo/logo-full-white.svg" },
-    { "id": "corner-mark", "type": "pattern", "variant": "solid", "format": "svg", "path": "assets/misc/corner-mark.svg" },
-    { "id": "corner-mark-white", "type": "pattern", "variant": "white", "format": "svg", "path": "assets/misc/corner-mark-white.svg" }
+    {
+      "id": "logo-full",
+      "type": "logo",
+      "variant": "full",
+      "format": "svg",
+      "path": "assets/logo/logo-full.svg"
+    },
+    {
+      "id": "logo-full-white",
+      "type": "logo",
+      "variant": "white",
+      "format": "svg",
+      "path": "assets/logo/logo-full-white.svg"
+    },
+    {
+      "id": "corner-mark",
+      "type": "pattern",
+      "variant": "solid",
+      "format": "svg",
+      "path": "assets/misc/corner-mark.svg"
+    },
+    {
+      "id": "corner-mark-white",
+      "type": "pattern",
+      "variant": "white",
+      "format": "svg",
+      "path": "assets/misc/corner-mark-white.svg"
+    }
   ]
 }

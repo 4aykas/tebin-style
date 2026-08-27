@@ -5,6 +5,10 @@ import {
   type Format,
 } from '../src/registry.js';
 import { filterRules, getRule as getRuleById, type Rule } from '../src/rules.js';
+import { lintTheme, type LintResult } from '../src/lint.js';
+import { diffThemes, type DiffResult } from '../src/diff.js';
+import { join } from 'node:path';
+import { REPO_ROOT } from '../src/registry.js';
 
 const FORMATS = Object.keys(FORMAT_FILES) as Format[];
 
@@ -63,6 +67,20 @@ export function getRuleTool(input: { id: string }): Rule {
   return getRuleById(input.id);
 }
 
+/** Resolves a theme id to its directory, refusing an unknown id by name. */
+function themeDir(id: string): string {
+  loadThemeManifest(id); // throws NotFoundError
+  return join(REPO_ROOT, 'themes', id);
+}
+
+export function lintThemeTool(input: { id: string }): LintResult {
+  return lintTheme(themeDir(input.id));
+}
+
+export function diffThemesTool(input: { a: string; b: string }): DiffResult {
+  return diffThemes(themeDir(input.a), themeDir(input.b));
+}
+
 export interface ToolDef {
   name: string;
   description: string;
@@ -83,7 +101,7 @@ export const toolDefinitions: ToolDef[] = [
   },
   {
     name: 'get_theme',
-    description: "Get a theme's design tokens in a chosen format (css, tailwind, dtcg, ts; default css).",
+    description: "Get a theme's design tokens in a chosen format (css, tailwind, dtcg, ts, design-md; default css). design-md returns the whole self-contained DESIGN.md, front matter included.",
     inputSchema: {
       id: z.string(),
       format: z.enum(FORMATS as [Format, ...Format[]]).optional(),
@@ -109,6 +127,20 @@ export const toolDefinitions: ToolDef[] = [
       query: z.string().optional(),
     },
     handler: listRules,
+  },
+  {
+    name: 'lint_theme',
+    description:
+      'Check a theme for contrast failures and broken token references. Returns findings with the measured ratio and the surface it was measured against; reports what it could not check rather than skipping it.',
+    inputSchema: { id: z.string() },
+    handler: lintThemeTool,
+  },
+  {
+    name: 'diff_themes',
+    description:
+      'Compare two themes token by token: added, removed and modified per group, plus a lint summary for each side and a regression flag, which is set only when contrast errors increase.',
+    inputSchema: { a: z.string(), b: z.string() },
+    handler: diffThemesTool,
   },
   {
     name: 'get_rule',

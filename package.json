@@ -1,6 +1,6 @@
 {
   "name": "tebin-style",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "private": false,
   "type": "module",
   "description": "A registry of reusable themes (brand kits) for AI coding agents: DTCG design tokens, brand assets, and metadata.",
@@ -31,6 +31,7 @@
   "scripts": {
     "build": "tsx scripts/build.ts && tsx scripts/build-assets.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
     "validate": "tsx scripts/validate.ts",
+    "lint:themes": "tsx scripts/lint.ts",
     "check": "tsx scripts/check.ts",
     "test": "vitest run",
     "start:mcp": "tsx mcp/server.ts"
