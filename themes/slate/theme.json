@@ -3,7 +3,7 @@
   "id": "slate",
   "name": "Slate",
   "description": "Neutral, modern SaaS palette: cool grays with a blue accent, Inter + JetBrains Mono.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "industry": ["saas", "web", "general"],
   "mood": ["minimal", "calm", "modern"],
   "source": { "extractedBy": "manual" },

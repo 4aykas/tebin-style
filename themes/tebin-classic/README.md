@@ -33,6 +33,7 @@ logo usage (safezone, backgrounds, do-nots).
 `role.primary`, `role.surface`, `role.on-surface` and `role.on-surface-muted`
 point at palette colours rather than copying them.
 
-This theme has no `role.outline`: nothing in the 2017 brand book is named as a
-hairline colour, and picking one of the greys would be inventing a rule the
-book does not state.
+This theme has no `role.outline`, and no status roles either. It is the theme
+for documents and print: table rules come from Word's own table styles, and a
+printed page has no error or success state. The 2017 brand book names no
+hairline colour because a hairline colour is not something it needs to name.

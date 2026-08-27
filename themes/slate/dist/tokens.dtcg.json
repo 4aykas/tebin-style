@@ -20,6 +20,18 @@
       "$type": "color",
       "$value": "#FFFFFF"
     },
+    "error": {
+      "$type": "color",
+      "$value": "#C7251A"
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "#8A5300"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "#1F6F43"
+    },
     "rule": {
       "$type": "color",
       "$value": "#E2E8F0"
@@ -45,6 +57,18 @@
     "outline": {
       "$type": "color",
       "$value": "{color.rule}"
+    },
+    "error": {
+      "$type": "color",
+      "$value": "{color.error}"
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "{color.warning}"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "{color.success}"
     }
   },
   "font": {

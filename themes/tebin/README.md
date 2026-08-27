@@ -47,10 +47,17 @@ the colour moves every role that uses it.
 | `role.on-surface` | `color.ink` | text on the page |
 | `role.on-surface-muted` | `color.muted` | secondary text |
 | `role.outline` | `color.rule` | hairlines and dividers |
+| `role.error-on-light` / `-on-dark` | `color.brand-on-*` | error text |
+| `role.warning-on-light` / `-on-dark` | `color.warning-on-*` | warning text |
+| `role.success-on-light` / `-on-dark` | `color.success-on-*` | success text |
 
 The fill red and the text red are different tokens on purpose. `#DA291C`
 clears 4.5:1 on neither surface family, and no red does — the luminance
 window is empty for any hue.
+
+Error reuses those same reds rather than adding a fourth one. A second red
+would ask the reader to tell two reds apart, and `content-not-color-only`
+already requires an icon and a label beside any status.
 
 ## Type and spacing
 

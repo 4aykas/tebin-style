@@ -40,6 +40,22 @@
       "$type": "color",
       "$value": "#ECECEC"
     },
+    "warning-on-light": {
+      "$type": "color",
+      "$value": "#8A5300"
+    },
+    "warning-on-dark": {
+      "$type": "color",
+      "$value": "#F0B429"
+    },
+    "success-on-light": {
+      "$type": "color",
+      "$value": "#1F6F43"
+    },
+    "success-on-dark": {
+      "$type": "color",
+      "$value": "#5FCF8E"
+    },
     "paper": {
       "$type": "color",
       "$value": "#FCFBF8"
@@ -225,6 +241,30 @@
     "outline": {
       "$type": "color",
       "$value": "{color.rule}"
+    },
+    "error-on-light": {
+      "$type": "color",
+      "$value": "{color.brand-on-light}"
+    },
+    "error-on-dark": {
+      "$type": "color",
+      "$value": "{color.brand-on-dark}"
+    },
+    "warning-on-light": {
+      "$type": "color",
+      "$value": "{color.warning-on-light}"
+    },
+    "warning-on-dark": {
+      "$type": "color",
+      "$value": "{color.warning-on-dark}"
+    },
+    "success-on-light": {
+      "$type": "color",
+      "$value": "{color.success-on-light}"
+    },
+    "success-on-dark": {
+      "$type": "color",
+      "$value": "{color.success-on-dark}"
     }
   },
   "font": {

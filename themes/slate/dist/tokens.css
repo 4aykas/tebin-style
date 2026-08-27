@@ -8,6 +8,9 @@
   --color-muted: #64748b;
   --color-topbar: #f8fafc;
   --color-surface: #ffffff;
+  --color-error: #c7251a; /** Error text. 5.66:1 on #FFFFFF. */
+  --color-warning: #8a5300; /** Warning text. 6.33:1 on #FFFFFF. */
+  --color-success: #1f6f43; /** Success text. 6.15:1 on #FFFFFF. */
   --color-rule: #e2e8f0;
   --font-sans: Inter, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -19,4 +22,7 @@
   --role-on-surface: var(--color-ink); /** Primary text on the base surface. */
   --role-on-surface-muted: var(--color-muted); /** Secondary text on the base surface. */
   --role-outline: var(--color-rule); /** Hairlines and dividers. */
+  --role-error: var(--color-error); /** Error text. */
+  --role-warning: var(--color-warning); /** Warning text. */
+  --role-success: var(--color-success); /** Success text. */
 }

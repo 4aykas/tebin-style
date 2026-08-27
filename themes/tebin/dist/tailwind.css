@@ -9,6 +9,10 @@
   --color-topbar: #f9f9f9;
   --color-subtle: #c1c1c1;
   --color-rule: #ececec;
+  --color-warning-on-light: #8a5300;
+  --color-warning-on-dark: #f0b429;
+  --color-success-on-light: #1f6f43;
+  --color-success-on-dark: #5fcf8e;
   --color-paper: #fcfbf8;
   --on-dark-1: rgba(255, 255, 255, 0.9);
   --on-dark-2: rgba(255, 255, 255, 0.82);
@@ -52,6 +56,12 @@
   --role-on-surface: #292929;
   --role-on-surface-muted: #666666;
   --role-outline: #ececec;
+  --role-error-on-light: #c7251a;
+  --role-error-on-dark: #ea6359;
+  --role-warning-on-light: #8a5300;
+  --role-warning-on-dark: #f0b429;
+  --role-success-on-light: #1f6f43;
+  --role-success-on-dark: #5fcf8e;
   --font-sans: Roboto, Helvetica, Arial, sans-serif;
   --font-condensed: 'Roboto Condensed', Roboto, sans-serif;
   --font-weight-heading: 700;

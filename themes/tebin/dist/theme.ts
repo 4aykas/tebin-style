@@ -10,6 +10,10 @@ export const tebin = {
     "topbar": "#F9F9F9",
     "subtle": "#C1C1C1",
     "rule": "#ECECEC",
+    "warning-on-light": "#8A5300",
+    "warning-on-dark": "#F0B429",
+    "success-on-light": "#1F6F43",
+    "success-on-dark": "#5FCF8E",
     "paper": "#FCFBF8"
   },
   "on-dark": {
@@ -66,7 +70,13 @@ export const tebin = {
     "surface-inverse": "#242424",
     "on-surface": "#292929",
     "on-surface-muted": "#666666",
-    "outline": "#ECECEC"
+    "outline": "#ECECEC",
+    "error-on-light": "#C7251A",
+    "error-on-dark": "#EA6359",
+    "warning-on-light": "#8A5300",
+    "warning-on-dark": "#F0B429",
+    "success-on-light": "#1F6F43",
+    "success-on-dark": "#5FCF8E"
   },
   "font": {
     "sans": [

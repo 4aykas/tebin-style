@@ -1056,9 +1056,9 @@ git add rules/rules.json rules/dist themes/*/theme.json themes/*/dist themes/*/D
 git commit -m "Point the heading-scale rule at the tokens and release 1.1.0"
 ```
 
-## Open questions this tranche deliberately leaves to the owner
+## Open questions — settled 2026-08-27
 
-Do not answer these by choosing a plausible value — record them and ask.
+Two are closed. `type.label` is measured but still needs one decision.
 
 - **`tebin-classic` has no hairline colour.** `grey-light` (`#B3B4B6`) and
   `grey-lighter` (`#CDCDCE`) are brand-book palette entries, not a stated line
@@ -1101,6 +1101,38 @@ Final gates: `pnpm build` clean, all themes valid, **179/179 tests**,
 `pnpm check` reports **no drift**.
 
 Versions: `tebin` 1.2.0, `tebin-classic` 1.1.0, `slate` 1.1.0, package 1.1.0.
+
+## `type.label` — measured 2026-08-27, decision still open
+
+Parsed every CSS rule block in `tebin/src` that sets `text-transform:
+uppercase`: **1324 blocks**. They are two populations, not one.
+
+| Population | Blocks | What it is |
+| --- | --- | --- |
+| Fixed `px` ≤ 14 | 612 | labels, eyebrows, metadata |
+| `clamp(…)` | 451 | headings that happen to be uppercase — already `type.h*`, tracking 0 |
+| unset or other | 261 | inherits |
+
+**Sizes cluster; tracking does not.**
+
+Three sizes cover 72% of the label population: 9px (160), 10px (146), 11px
+(132). The tail is 8px (41), 12px (35), 13px (33), 14px (22), plus 41 blocks
+on half-pixel values (9.5, 10.5, 11.5, 13.5, 8.5) that read as accidents.
+
+Tracking, after normalising `.16em` and `0.16em` to one value, has 20 distinct
+values with no winner: 0.16em (102), 0.2em (82), 0.18em (55), 0.15em (50),
+0.14em (49), 0.1em (42), 0.28em (40), and on down. The most common value holds
+17% of the population.
+
+So the size axis is a real scale and the tracking axis is not — tracking looks
+chosen per role (nav, eyebrow, metadata), not per size. Introducing
+`type.label-sm/md/lg` at 9/10/11px is supported by the measurement.
+Tokenising a tracking value is not, and needs the owner to decide whether
+tracking follows size or follows role.
+
+Notation scatter inflated the apparent disorder: `.16em` and `0.16em` are the
+same value written two ways, and merging them moved 0.16em from fourth place
+to first.
 
 ## Tranche 2 — a separate plan, written after this one lands
 

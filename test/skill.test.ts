@@ -18,3 +18,31 @@ describe('SKILL.md', () => {
     expect(skill.toLowerCase()).toContain('discover');
   });
 });
+
+describe('SKILL.md carries no stale instruction', () => {
+  const description = skill.match(/^---\n([\s\S]*?)\n---/)![1];
+
+  it('names the real repository owner, not a placeholder', () => {
+    expect(skill).not.toContain('OWNER');
+    expect(skill).toContain('raw.githubusercontent.com/4aykas/tebin-style');
+  });
+
+  it('promises only token groups that exist', () => {
+    expect(description).not.toContain('shadow');
+    expect(description).toContain('spacing');
+  });
+
+  it('sends the agent to the self-contained design document', () => {
+    expect(skill).toContain('DESIGN.md');
+  });
+
+  it('teaches the accessible red, so small text does not get the fill colour', () => {
+    expect(skill).toContain('role.primary-on-dark');
+    expect(skill).toContain('4.5:1');
+  });
+
+  it('does not duplicate the format table that references/formats.md owns', () => {
+    expect(skill).toContain('references/formats.md');
+    expect(skill).not.toContain('| `tokens.css` |');
+  });
+});

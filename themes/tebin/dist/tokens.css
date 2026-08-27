@@ -13,6 +13,10 @@
   --color-topbar: #f9f9f9;
   --color-subtle: #c1c1c1;
   --color-rule: #ececec;
+  --color-warning-on-light: #8a5300; /** Warning text on light surfaces. 5.45:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours. */
+  --color-warning-on-dark: #f0b429; /** Warning text on dark surfaces. 7.93:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours. */
+  --color-success-on-light: #1f6f43; /** Success text on light surfaces. 5.30:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours. */
+  --color-success-on-dark: #5fcf8e; /** Success text on dark surfaces. 7.60:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours. */
   --color-paper: #fcfbf8; /** Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections. */
   --on-dark-1: rgba(255, 255, 255, 0.9); /** Primary text on dark surfaces. */
   --on-dark-2: rgba(255, 255, 255, 0.82);
@@ -77,4 +81,10 @@
   --role-on-surface: var(--color-ink); /** Primary text on the base surface. */
   --role-on-surface-muted: var(--color-muted); /** Secondary text on the base surface. */
   --role-outline: var(--color-rule); /** Hairlines and dividers on light surfaces. */
+  --role-error-on-light: var(--color-brand-on-light); /** Error text on a light surface. Deliberately the brand red: a second red would ask the reader to tell two reds apart, and status is never signalled by colour alone. */
+  --role-error-on-dark: var(--color-brand-on-dark); /** Error text on a dark surface. See error-on-light. */
+  --role-warning-on-light: var(--color-warning-on-light); /** Warning text on a light surface. */
+  --role-warning-on-dark: var(--color-warning-on-dark); /** Warning text on a dark surface. */
+  --role-success-on-light: var(--color-success-on-light); /** Success text on a light surface. */
+  --role-success-on-dark: var(--color-success-on-dark); /** Success text on a dark surface. */
 }

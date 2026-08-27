@@ -30,6 +30,23 @@ server stays the product.
   CSS build composes `clamp()` from it while `$value` carries the ceiling as a
   plain `px` dimension, which is what keeps a fluid scale expressible in a
   format whose `Dimension` admits only px/em/rem.
+- Status roles. `tebin` gets `error`, `warning` and `success` in both surface
+  variants; `slate` gets one variant each, because it has one surface family.
+  `warning` and `success` are new colours chosen by the theme author and
+  measured against the binding surfaces — `#EFEEE9`, the darkest light surface
+  in use, and `#242830`, the lightest dark one. All six clear 4.5:1. The 2017
+  brand book prices no status colours, and each token's description says so.
+  **Error reuses the brand reds rather than adding a fourth red**: a second red
+  would ask the reader to tell two reds apart, and `content-not-color-only`
+  already requires an icon and a label beside any status.
+  `tebin-classic` gets none — it is the theme for documents and print, where
+  table rules come from Word's table styles and a page has no error state. For
+  the same reason it has no `role.outline`.
+- A rewritten agent skill. `skill/tebin-style/SKILL.md` had an unfilled `OWNER`
+  placeholder that would 404, a description promising shadow tokens no theme
+  has, and no mention of `DESIGN.md`. It now leads with how to reach the
+  registry, points at `DESIGN.md` first, and teaches roles and the two-red
+  rule. Five tests guard those defects.
 - `typography-heading-balance`, a rule naming `text-wrap: balance` as the
   supported way to shape a heading. Two `NEVER` rules already removed every
   manual way to do it without naming one that works. Rules DB: 61 → 62.
@@ -45,8 +62,8 @@ server stays the product.
   table; the font-stack section takes the spec's heading name, `## Typography`.
 - `typography-heading-scale` now names `type.h1 … type.h5` instead of pointing
   at a "global type scale" the design system did not contain.
-- Theme versions: `tebin` 1.1.0 → 1.2.0, `tebin-classic` and `slate` 1.0.0 →
-  1.1.0.
+- Theme versions: `tebin` 1.1.0 → 1.3.0, `slate` 1.0.0 → 1.2.0,
+  `tebin-classic` 1.0.0 → 1.1.0.
 
 ### Not included
 - Component tokens. The spec calls its own component section "actively
