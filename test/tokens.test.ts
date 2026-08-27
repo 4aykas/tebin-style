@@ -81,3 +81,33 @@ describe('semantic roles', () => {
     expect(rows.some((r) => r.token.startsWith('role.'))).toBe(false);
   });
 });
+
+describe('the fluid extension contract', () => {
+  it('rejects a triple that is missing a bound', async () => {
+    const { validateTokens } = await import('../src/validate.js');
+    const bad = {
+      type: {
+        h1: {
+          $type: 'dimension',
+          $value: '38px',
+          $extensions: { 'pro.tebin.fluid': { min: '28px', max: '38px' } },
+        },
+      },
+    };
+    expect(validateTokens(bad).valid).toBe(false);
+  });
+
+  it('accepts a complete triple', async () => {
+    const { validateTokens } = await import('../src/validate.js');
+    const good = {
+      type: {
+        h1: {
+          $type: 'dimension',
+          $value: '38px',
+          $extensions: { 'pro.tebin.fluid': { min: '28px', pref: '4.5vw', max: '38px' } },
+        },
+      },
+    };
+    expect(validateTokens(good).valid).toBe(true);
+  });
+});

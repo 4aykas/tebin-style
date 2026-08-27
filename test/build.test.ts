@@ -79,3 +79,47 @@ describe('aliases', () => {
     expect(readAlias('theme.ts')).toContain('"primary": "#DA291C"');
   });
 });
+
+describe('fluid dimensions', () => {
+  let fluidDir: string;
+
+  beforeAll(async () => {
+    fluidDir = mkdtempSync(join(tmpdir(), 'ts-fluid-'));
+    mkdirSync(join(fluidDir, 'fluid'), { recursive: true });
+    writeFileSync(
+      join(fluidDir, 'fluid', 'tokens.json'),
+      JSON.stringify({
+        type: {
+          h1: {
+            $type: 'dimension',
+            $value: '38px',
+            $extensions: { 'pro.tebin.fluid': { min: '28px', pref: '4.5vw', max: '38px' } },
+          },
+        },
+        radius: { card: { $type: 'dimension', $value: '8px' } },
+      }),
+    );
+    await buildTheme(join(fluidDir, 'fluid'));
+  });
+
+  afterAll(() => rmSync(fluidDir, { recursive: true, force: true }));
+
+  const readFluid = (f: string) => readFileSync(join(fluidDir, 'fluid', 'dist', f), 'utf8');
+
+  it('composes clamp() in CSS', () => {
+    expect(readFluid('tokens.css')).toContain('--type-h1: clamp(28px, 4.5vw, 38px);');
+  });
+
+  it('composes clamp() in the Tailwind theme too', () => {
+    expect(readFluid('tailwind.css')).toContain('--type-h1: clamp(28px, 4.5vw, 38px);');
+  });
+
+  it('leaves a plain dimension alone', () => {
+    expect(readFluid('tokens.css')).toContain('--radius-card: 8px;');
+  });
+
+  it('exports the ceiling, not the clamp, where the spec expects a Dimension', () => {
+    expect(JSON.parse(readFluid('tokens.dtcg.json')).type.h1.$value).toBe('38px');
+    expect(readFluid('theme.ts')).toContain('"h1": "38px"');
+  });
+});
