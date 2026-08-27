@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.5.0 — 2026-08-27
+
+The error colour was never missing. It was called something else.
+
+### Changed
+- `role.error-on-light` now points at **`color.brick` (`#A43F39`)** instead of
+  the brand red. Brick is the 2017 brand book's secondary red, priced there in
+  CMYK (`24/85/81/57`), and `tebin-expenses` has shipped it as `--color-alert`
+  all along, commented *"errors — the red family, softened"*. Nothing was
+  invented; the value was found.
+- `role.error-on-dark` points at **`color.brick-on-dark` (`#D07C77`)**, derived
+  by the method that produced `brand-on-dark`: hold the hue (3.4°) and the
+  saturation (48%), lift the lightness until it clears the floor. It is marked
+  a theme-author value, because the book prices no dark variant and brick's
+  only production user ships no dark theme.
+- `components.button-danger` therefore reads brick. Its label went from 5.47:1
+  to **6.06:1** — the brand-book red is the better contrast as well as the
+  better meaning.
+
+### On the earlier decision this reverses
+1.4.0 pointed error at the brand reds, arguing a second red would ask the
+reader to tell two reds apart. Two things undid that:
+
+- **Brick is not a second red anyone has to learn.** It is already in the brand
+  book and already on screen in a TEBIN app.
+- **The measurement that seemed to support the old reasoning was the wrong
+  instrument.** A WCAG ratio between two colours measures a lightness
+  difference, so it reads ~1.1 for brick against the signal red — and also ~1.1
+  for *green* against the signal red. It says nothing about whether two hues are
+  distinguishable. Brick separates from the signal red by saturation, 48%
+  against 77%.
+
 ## 1.4.0 — 2026-08-27
 
 Component tokens, after the reason for deferring them turned out to be wrong.

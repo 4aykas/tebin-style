@@ -1,6 +1,6 @@
 {
   "name": "tebin-style",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": false,
   "type": "module",
   "description": "A registry of reusable themes (brand kits) for AI coding agents: DTCG design tokens, brand assets, and metadata.",

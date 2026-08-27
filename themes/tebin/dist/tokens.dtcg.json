@@ -40,6 +40,14 @@
       "$type": "color",
       "$value": "#ECECEC"
     },
+    "brick": {
+      "$type": "color",
+      "$value": "#A43F39"
+    },
+    "brick-on-dark": {
+      "$type": "color",
+      "$value": "#D07C77"
+    },
     "warning-on-light": {
       "$type": "color",
       "$value": "#8A5300"
@@ -244,11 +252,11 @@
     },
     "error-on-light": {
       "$type": "color",
-      "$value": "{color.brand-on-light}"
+      "$value": "{color.brick}"
     },
     "error-on-dark": {
       "$type": "color",
-      "$value": "{color.brand-on-dark}"
+      "$value": "{color.brick-on-dark}"
     },
     "warning-on-light": {
       "$type": "color",

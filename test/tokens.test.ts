@@ -195,12 +195,26 @@ describe('status roles', () => {
     }
   });
 
-  it('reuses the brand reds for error rather than adding a second red', () => {
+  it('uses the error red the brand book already prices, not the signal red', () => {
     const { role, color } = load('tebin');
-    expect(role['error-on-light'].$value).toBe('{color.brand-on-light}');
-    expect(role['error-on-dark'].$value).toBe('{color.brand-on-dark}');
-    const reds = Object.keys(color).filter((k) => k.startsWith('error'));
-    expect(reds).toEqual([]);
+    expect(role['error-on-light'].$value).toBe('{color.brick}');
+    expect(role['error-on-dark'].$value).toBe('{color.brick-on-dark}');
+    expect(color.brick.$value).toBe('#A43F39');
+  });
+
+  it('keeps the printed CMYK for brick, because it comes from the book', () => {
+    expect(load('tebin').color.brick.$extensions['pro.tebin.print'].cmyk).toBe('24/85/81/57');
+  });
+
+  it('says where the dark twin came from, since the book prices none', () => {
+    const d = load('tebin').color['brick-on-dark'].$description;
+    expect(d).toContain('Derived from brick');
+    expect(d).toContain("Theme author's value");
+  });
+
+  it('invents no error colour outside the two surface variants', () => {
+    const { color } = load('tebin');
+    expect(Object.keys(color).filter((k) => k.startsWith('error'))).toEqual([]);
   });
 
   it('slate carries one variant per status, because it has one surface family', () => {
