@@ -1,3 +1,77 @@
+---
+version: alpha
+name: "TEBIN"
+description: "Industrial design-and-engineering brand: condensed type, signal red on charcoal."
+colors:
+  primary: "#DA291C"
+  primary-on-dark: "#EA6359"
+  primary-on-light: "#C7251A"
+  surface: "#FCFBF8"
+  surface-inverse: "#242424"
+  on-surface: "#292929"
+  on-surface-muted: "#666666"
+  outline: "#ECECEC"
+  error-on-light: "#C7251A"
+  error-on-dark: "#EA6359"
+  warning-on-light: "#8A5300"
+  warning-on-dark: "#F0B429"
+  success-on-light: "#1F6F43"
+  success-on-dark: "#5FCF8E"
+typography:
+  h1:
+    fontFamily: "Roboto Condensed"
+    fontSize: 38px
+    fontWeight: 700
+    lineHeight: 1.35
+  h2:
+    fontFamily: "Roboto Condensed"
+    fontSize: 34px
+    fontWeight: 700
+    lineHeight: 1.35
+  h3:
+    fontFamily: "Roboto Condensed"
+    fontSize: 28px
+    fontWeight: 700
+    lineHeight: 1.35
+  h4:
+    fontFamily: "Roboto Condensed"
+    fontSize: 24px
+    fontWeight: 700
+    lineHeight: 1.35
+  h5:
+    fontFamily: "Roboto Condensed"
+    fontSize: 20px
+    fontWeight: 700
+    lineHeight: 1.35
+  body:
+    fontFamily: "Roboto"
+    fontSize: 16px
+    lineHeight: 1.7
+  label-sm:
+    fontFamily: "Roboto"
+    fontSize: 9px
+  label-md:
+    fontFamily: "Roboto"
+    fontSize: 10px
+  label-lg:
+    fontFamily: "Roboto"
+    fontSize: 11px
+rounded:
+  panel: 2px
+  control: 4px
+  card: 8px
+spacing:
+  gutter: 48px
+  section-compact: 64px
+  section-standard: 88px
+  section-feature: 112px
+  container-default: 1200px
+  container-wide: 1400px
+  container-reading: 760px
+omitted:
+  - section: "components"
+    reason: "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+---
 # TEBIN — design
 
 > Generated from `tokens.json`, `theme.json` and `rules/rules.json` — do not edit by hand.

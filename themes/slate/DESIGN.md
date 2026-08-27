@@ -1,3 +1,26 @@
+---
+version: alpha
+name: "Slate"
+description: "Neutral, modern SaaS palette: cool grays with a blue accent, Inter + JetBrains Mono."
+colors:
+  primary: "#2563EB"
+  surface: "#FFFFFF"
+  on-surface: "#0F172A"
+  on-surface-muted: "#64748B"
+  outline: "#E2E8F0"
+  error: "#C7251A"
+  warning: "#8A5300"
+  success: "#1F6F43"
+rounded:
+  sm: 4px
+  md: 8px
+  lg: 12px
+omitted:
+  - section: "assets"
+    reason: "Token-only theme; no brand assets exist."
+  - section: "components"
+    reason: "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+---
 # Slate — design
 
 > Generated from `tokens.json`, `theme.json` and `rules/rules.json` — do not edit by hand.

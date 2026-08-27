@@ -1,3 +1,21 @@
+---
+version: alpha
+name: "TEBIN Classic"
+description: "Faithful reproduction of the 2017 TEBIN print brand book: Pantone red + grey, Roboto / Arial, corporate-print identity."
+colors:
+  primary: "#DA291C"
+  surface: "#FFFFFF"
+  on-surface: "#1A1A1A"
+omitted:
+  - section: "role.outline"
+    reason: "Document theme: table rules come from Word's own table styles, and the 2017 brand book names no hairline colour."
+  - section: "role.on-surface-muted"
+    reason: "The brand book's grey #898D8D is 3.36:1 on white — below the 4.5:1 floor for small text. It is a colour to paint with, not one to read; the book prices no darker grey, so this theme has no secondary text colour."
+  - section: "role.status"
+    reason: "A printed page has no error, warning or success state."
+  - section: "components"
+    reason: "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+---
 # TEBIN Classic — design
 
 > Generated from `tokens.json`, `theme.json` and `rules/rules.json` — do not edit by hand.

@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { collectColorRows, NO_PRINT_VALUE } from './colors-csv.js';
 import { readManifest } from './raster.js';
 import { filterRules, type Rule } from './rules.js';
+import { buildFrontMatter } from './front-matter.js';
 
 export const BLOB_BASE = 'https://github.com/4aykas/tebin-style/blob/main';
 export const RAW_BASE = 'https://raw.githubusercontent.com/4aykas/tebin-style/main';
@@ -190,7 +191,8 @@ export function buildDesignDoc(themeDir: string): string {
   const introPath = join(themeDir, 'design.intro.md');
   const intro = existsSync(introPath) ? readFileSync(introPath, 'utf8').trim() : '';
 
-  let out = `# ${theme.name} — design\n\n`;
+  let out = buildFrontMatter(themeDir);
+  out += `# ${theme.name} — design\n\n`;
   out += `> Generated from \`tokens.json\`, \`theme.json\` and \`rules/rules.json\` — do not edit by hand.\n\n`;
   if (intro) out += `${intro}\n`;
   out += `\n**Version** ${theme.version}. **Tokens** ${theme.license.tokens}. **Assets** ${theme.license.assets}.\n`;

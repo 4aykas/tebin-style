@@ -121,3 +121,18 @@ describe('the asset table names the real format', () => {
     expect(row).toContain('[SVG]');
   });
 });
+
+describe('the document carries machine-readable tokens', () => {
+  const tebin = buildDesignDoc(join(root, 'themes', 'tebin'));
+
+  it('opens with front matter, then the human document', () => {
+    expect(tebin.startsWith('---\n')).toBe(true);
+    expect(tebin).toContain('\n# TEBIN — design');
+    expect(tebin.indexOf('---')).toBeLessThan(tebin.indexOf('# TEBIN'));
+  });
+
+  it('an agent given only this file can read the palette without prose', () => {
+    expect(tebin).toContain('colors:');
+    expect(tebin).toContain('primary: "#DA291C"');
+  });
+});
