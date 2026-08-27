@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.7.0 — 2026-08-27
+
+### Added
+- **`llms.txt` now carries the vector source inline** — the wordmark and the
+  corner mark, in both colourways, quoted verbatim in fenced `svg` blocks.
+
+  Field report, one release after `brand-logo-never-typeset` shipped: the rule
+  worked. Handed the repository link and asked to brand a spreadsheet, the
+  agent correctly refused to redraw the logo — and then could not proceed,
+  because its host has no network and rejects a raw link
+  (`url_not_accessible`). The rule turned a silent wrong answer into an honest
+  stop, which is better, but the agent was still stuck.
+
+  Inlining the source removes the fetch. The four marks are 2.8 KB together, so
+  an agent that can write SVG now has the real geometry rather than its
+  impression of it, and the ban on drawing stops being a dead end.
+
+  A test asserts each block is byte-identical to the file it quotes — verified
+  by changing one hex digit and watching it fail. A copy that can drift from
+  its original is worse than a link.
+
+  This does not help Word, Excel or PowerPoint, which cannot embed SVG at all.
+  There a person still has to hand over a PNG, and the guides say so.
+- A fourth access mode in the agent skill: **no network at all**. It listed
+  MCP, a local clone and a raw fetch, and assumed one of them would work.
+
 ## 1.6.0 — 2026-08-27
 
 ### Added
