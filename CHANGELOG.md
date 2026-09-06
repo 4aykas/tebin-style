@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.8.0 — 2026-09-06
+
+### Added
+- **`font.mono` on `tebin`** — `JetBrains Mono, Courier New, monospace`. An
+  audit of tebin.pro against this registry found a third type voice the
+  registry did not know about: 58 rule blocks set a monospace face for tags,
+  kickers, specification lists and the Tier-classification figure, nearly all
+  at 9–12px uppercase. A consumer building from the theme could not reproduce
+  those surfaces, and a reviewer reading the theme would call them off-brand.
+
+  Recorded as it ships, with a description that says what it costs: no webfont
+  loads, so the face visitors actually see is Courier New — the thinnest and
+  worst-rendering of the site's three voices at that size. Whether the mono
+  voice stays is the owner's call; the token makes the question visible instead
+  of leaving the answer implicit in 58 stylesheets.
+
+### Noted, not changed
+- The same audit found `color.charcoal` (`#242424`, `role.surface-inverse`)
+  is not painted anywhere on tebin.pro. The dark bands use `#0a0a0a`, `#111318`,
+  `#1C202A` and `#242830` — the last being the declared binding surface. The
+  token describes a surface the site does not have. Changing a value is outside
+  this repository's own constraint (nothing renamed, no value changed without
+  the owner), so this is a recorded contradiction awaiting a decision, not a fix.
+- Theme version `tebin` 1.6.0 → 1.7.0.
+
 ## 1.7.0 — 2026-08-27
 
 ### Added

@@ -123,7 +123,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.6.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.7.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette
@@ -179,6 +179,7 @@ A role is a pointer, not a copy — change the colour it names and every role us
 
 - **sans** — Roboto, Helvetica, Arial, sans-serif — tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win.
 - **condensed** — Roboto Condensed, Roboto, sans-serif — Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it.
+- **mono** — JetBrains Mono, Courier New, monospace — The third voice on tebin.pro: tags, kickers, specification lists and figure captions — 58 rule blocks as of 2026-09-06, usually 9–12px uppercase with wide tracking. Recorded, not designed: the site loads no webfont, so almost every visitor reads this as Courier New, a thin face that is the weakest-rendering of the three at that size. Whether the mono voice stays is an open owner decision; until then a consumer of this theme should know it exists.
 - **Weights** — heading 700
 
 In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.

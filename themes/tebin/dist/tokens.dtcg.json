@@ -292,6 +292,14 @@
         "Roboto",
         "sans-serif"
       ]
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "JetBrains Mono",
+        "Courier New",
+        "monospace"
+      ]
     }
   },
   "fontWeight": {

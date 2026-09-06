@@ -3,7 +3,7 @@
   "id": "tebin",
   "name": "TEBIN",
   "description": "Industrial design-and-engineering brand: condensed type, signal red on charcoal.",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "industry": [
     "engineering",
     "industrial",
@@ -24,7 +24,7 @@
   },
   "author": "TEBIN",
   "createdAt": "2026-06-22",
-  "updatedAt": "2026-08-27",
+  "updatedAt": "2026-09-06",
   "surfaces": {
     "light": "#EFEEE9",
     "dark": "#242830"

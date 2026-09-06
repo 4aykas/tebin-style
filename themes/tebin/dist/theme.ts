@@ -91,6 +91,11 @@ export const tebin = {
       "Roboto Condensed",
       "Roboto",
       "sans-serif"
+    ],
+    "mono": [
+      "JetBrains Mono",
+      "Courier New",
+      "monospace"
     ]
   },
   "fontWeight": {
