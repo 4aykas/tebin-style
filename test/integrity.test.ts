@@ -9,6 +9,18 @@ const here = dirname(fileURLToPath(import.meta.url));
 const goodDir = join(here, 'fixtures', 'themes', 'good');
 
 describe('validateThemeDir', () => {
+  it.each(['null', '{broken json'])('reports invalid metadata without throwing: %s', (metadata) => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-integrity-'));
+    const dir = join(tmp, 'good');
+    cpSync(goodDir, dir, { recursive: true });
+    try {
+      writeFileSync(join(dir, 'theme.json'), metadata);
+      const result = validateThemeDir(dir);
+      expect(result.valid).toBe(false);
+      expect(result.errors.join(' ')).toContain('theme.json');
+    } finally { rmSync(tmp, { recursive: true, force: true }); }
+  });
+
   it('accepts a valid theme directory', () => {
     const r = validateThemeDir(goodDir);
     expect(r.valid).toBe(true);

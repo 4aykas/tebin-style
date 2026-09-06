@@ -8,7 +8,7 @@ interface Leaf {
   $value?: unknown;
   value?: unknown;
   path: string[];
-  original: { $value?: unknown; $type?: string; value?: unknown };
+  original: { $value?: unknown; $type?: string; value?: unknown; $description?: string; $extensions?: Record<string, unknown> };
 }
 
 interface FluidTriple {
@@ -53,6 +53,24 @@ export function registerFormats(): void {
   if (registered) return;
   registered = true;
 
+  const sizeTransform = StyleDictionary.hooks.transforms['size/rem'];
+  StyleDictionary.registerTransform({
+    ...sizeTransform,
+    name: 'tebin/size',
+    type: 'value',
+    transform: (token, platform, options) => {
+      const value = options.usesDtcg ? token.$value : token.value;
+      // The repository's dimension subset includes CSS padding shorthands.
+      // SD 5 treats an entire string as one dimension and corrupts its units.
+      if (typeof value === 'string') {
+        const parts = value.trim().split(/\s+/);
+        if (parts.length >= 2 && parts.length <= 4 &&
+            parts.every((part) => /^-?(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|%)$/.test(part))) return value;
+      }
+      return sizeTransform.transform(token, platform, options);
+    },
+  });
+
   StyleDictionary.registerTransform({
     name: 'tebin/fluid-clamp',
     type: 'value',
@@ -72,14 +90,21 @@ export function registerFormats(): void {
 
   StyleDictionary.registerTransformGroup({
     name: 'css-tebin',
-    transforms: [...StyleDictionary.hooks.transformGroups.css, 'tebin/fluid-clamp'],
+    transforms: [...StyleDictionary.hooks.transformGroups.css.map((name) => name === 'size/rem' ? 'tebin/size' : name), 'tebin/fluid-clamp'],
   });
 
   StyleDictionary.registerFormat({
     name: 'css/tailwind-theme',
     format: ({ dictionary }) =>
       `@theme {\n${(dictionary.allTokens as unknown as Leaf[])
-        .map((t) => `  --${t.name}: ${outValue(t)};`)
+        .flatMap((t) => {
+          // Keep existing variables and add Tailwind's utility namespaces.
+          const names = new Set([t.name]);
+          if (rawType(t) === 'color' && t.path[0] !== 'color') names.add(`color-${t.name}`);
+          if (t.path[0] === 'type') names.add(t.name.replace(/^type-/, 'text-'));
+          if (t.path[0] === 'lineHeight') names.add(`leading-${t.path.slice(1).join('-')}`);
+          return [...names].map((name) => `  --${name}: ${outValue(t)};`);
+        })
         .join('\n')}\n}\n`,
   });
 
@@ -89,6 +114,8 @@ export function registerFormats(): void {
       const tree = nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => ({
         $type: rawType(t),
         $value: rawValue(t),
+        ...(t.original.$description !== undefined ? { $description: t.original.$description } : {}),
+        ...(t.original.$extensions !== undefined ? { $extensions: t.original.$extensions } : {}),
       }));
       return JSON.stringify(tree, null, 2) + '\n';
     },
@@ -132,12 +159,12 @@ export async function buildTheme(themeDir: string): Promise<void> {
         files: [{ destination: 'tailwind.css', format: 'css/tailwind-theme' }],
       },
       dtcg: {
-        transforms: [],
+        transforms: ['name/kebab'],
         buildPath,
         files: [{ destination: 'tokens.dtcg.json', format: 'json/dtcg' }],
       },
       ts: {
-        transforms: [],
+        transforms: ['name/kebab'],
         buildPath,
         files: [{ destination: 'theme.ts', format: 'javascript/theme-ts', options: { themeName } }],
       },

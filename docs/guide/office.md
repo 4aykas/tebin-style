@@ -13,10 +13,11 @@ not the logo, however close the face looks. Every step below inserts a picture.
 
 - **Logo:** insert the
   [1024 px PNG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-1024.png?raw=1)
-  (2048 px if the document will be printed). Insert → Pictures → This Device.
+  (choose print size using the [print guide](./print.md)). Insert → Pictures → This Device.
 - **Font: Arial, not Roboto.** This is the 2017 brand book's own instruction —
   "in the Microsoft Office documents use the Arial font" — and Arial is
-  installed everywhere, so the document renders the same on every machine.
+  widely available in Office. Verify font availability and the exported PDF
+  on the recipient's platform; font substitution can change the layout.
 - **Brand red for a heading or accent:** Font Color → More Colors → Custom, and
   type **Red 218, Green 41, Blue 28**.
 - Keep clear space around the logo of at least the height of its "B" — do not
@@ -28,8 +29,9 @@ not the logo, however close the face looks. Every step below inserts a picture.
   [colors.csv](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/dist/colors.csv?raw=1)
   — every colour with its RGB in its own columns; use the `r`, `g`, `b` values
   in Fill Color → More Colors → Custom.
-- Keep the logo **on the drawing layer, not in a cell** (Insert → Pictures →
-  Place over Cells), so sorting and filtering cannot move it.
+- Put a decorative logo **over cells** (Insert → Pictures → Place over Cells).
+  Set its object properties to **Don't move or size with cells** and place it
+  outside the sortable table; the drawing layer alone does not prevent movement.
 - Charts: brand red for the series that matters, greys for the rest. The
   secondary palette (maroon, salmon, yellow, teal…) is for category coding —
   never for the logo.

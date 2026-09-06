@@ -16,7 +16,8 @@ export function buildRulesMarkdown(rules: Rule[]): string {
     out += `\n## ${category}\n\n`;
     for (const rule of byCategory.get(category)!) {
       const rationale = rule.rationale ? ` — _${rule.rationale}_` : '';
-      out += `- **[${rule.severity}]** ${rule.statement}${rationale}\n`;
+      const scope = [...(rule.themes ?? []), ...(rule.media ?? [])];
+      out += `- **[${rule.severity}]**${scope.length ? ` (${scope.join(', ')})` : ''} ${rule.statement}${rationale}\n`;
     }
   }
   return out;

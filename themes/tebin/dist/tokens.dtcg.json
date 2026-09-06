@@ -10,11 +10,13 @@
     },
     "brand-on-dark": {
       "$type": "color",
-      "$value": "#EA6359"
+      "$value": "#EA6359",
+      "$description": "Small red TEXT on dark surfaces only. 4.5:1 on #242830, the lightest dark surface in use, and more on every darker one. The identity red #DA291C stays the colour for the logo, fills, borders and large text, which need only 3:1."
     },
     "brand-on-light": {
       "$type": "color",
-      "$value": "#C7251A"
+      "$value": "#C7251A",
+      "$description": "Small red TEXT on light surfaces only. 4.87:1 on #EFEEE9 and 5.32:1 on #F8F8F4. No single red clears 4.5:1 on both surface families: the luminance window is empty for any hue, so this is two tokens by arithmetic, not by preference."
     },
     "charcoal": {
       "$type": "color",
@@ -42,37 +44,50 @@
     },
     "brick": {
       "$type": "color",
-      "$value": "#A43F39"
+      "$value": "#A43F39",
+      "$description": "Error text on light surfaces. 5.40:1 on #EFEEE9. The 2017 brand book's secondary red, and already the alert colour in tebin-expenses, where it is commented “errors — the red family, softened”. It reads against the signal red by saturation — 48% against 77% — not by lightness.",
+      "$extensions": {
+        "pro.tebin.print": {
+          "cmyk": "24/85/81/57"
+        }
+      }
     },
     "brick-on-dark": {
       "$type": "color",
-      "$value": "#D07C77"
+      "$value": "#D07C77",
+      "$description": "Error text on dark surfaces. 4.81:1 on #242830. Derived from brick by the method that produced brand-on-dark: hold the hue (3.4 degrees) and the saturation (48%), lift the lightness until it clears the floor. Theme author's value — the brand book prices no dark-surface variant, and tebin-expenses, brick's only production user, ships no dark theme."
     },
     "warning-on-light": {
       "$type": "color",
-      "$value": "#8A5300"
+      "$value": "#8A5300",
+      "$description": "Warning text on light surfaces. 5.45:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours."
     },
     "warning-on-dark": {
       "$type": "color",
-      "$value": "#F0B429"
+      "$value": "#F0B429",
+      "$description": "Warning text on dark surfaces. 7.93:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours."
     },
     "success-on-light": {
       "$type": "color",
-      "$value": "#1F6F43"
+      "$value": "#1F6F43",
+      "$description": "Success text on light surfaces. 5.30:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours."
     },
     "success-on-dark": {
       "$type": "color",
-      "$value": "#5FCF8E"
+      "$value": "#5FCF8E",
+      "$description": "Success text on dark surfaces. 7.60:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours."
     },
     "paper": {
       "$type": "color",
-      "$value": "#FCFBF8"
+      "$value": "#FCFBF8",
+      "$description": "Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections."
     }
   },
   "on-dark": {
     "1": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.90)"
+      "$value": "rgba(255,255,255,0.90)",
+      "$description": "Primary text on dark surfaces."
     },
     "2": {
       "$type": "color",
@@ -88,33 +103,40 @@
     },
     "5": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.52)"
+      "$value": "rgba(255,255,255,0.52)",
+      "$description": "Labels and secondary text. Lowest step that clears 4.5:1 on every dark band in use."
     },
     "6": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.48)"
+      "$value": "rgba(255,255,255,0.48)",
+      "$description": "Body copy. 0.45 lands at 4.3:1 on #111318, just under the floor."
     },
     "7": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.38)"
+      "$value": "rgba(255,255,255,0.38)",
+      "$description": "Decorative only — below the contrast floor for text."
     },
     "8": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.32)"
+      "$value": "rgba(255,255,255,0.32)",
+      "$description": "Decorative only."
     },
     "9": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.26)"
+      "$value": "rgba(255,255,255,0.26)",
+      "$description": "Decorative only."
     },
     "10": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.20)"
+      "$value": "rgba(255,255,255,0.20)",
+      "$description": "Decorative only."
     }
   },
   "on-light": {
     "1": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.82)"
+      "$value": "rgba(0,0,0,0.82)",
+      "$description": "Primary text on light surfaces."
     },
     "2": {
       "$type": "color",
@@ -122,29 +144,35 @@
     },
     "3": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.62)"
+      "$value": "rgba(0,0,0,0.62)",
+      "$description": "Lowest step that clears 4.5:1 on the cream band."
     },
     "4": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.52)"
+      "$value": "rgba(0,0,0,0.52)",
+      "$description": "Decorative only — 3.9:1 on cream."
     },
     "5": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.45)"
+      "$value": "rgba(0,0,0,0.45)",
+      "$description": "Decorative only."
     },
     "6": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.38)"
+      "$value": "rgba(0,0,0,0.38)",
+      "$description": "Decorative only."
     },
     "7": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.30)"
+      "$value": "rgba(0,0,0,0.30)",
+      "$description": "Decorative only."
     }
   },
   "rule-dark": {
     "1": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.13)"
+      "$value": "rgba(255,255,255,0.13)",
+      "$description": "Hairlines on dark surfaces, strongest to faintest."
     },
     "2": {
       "$type": "color",
@@ -162,7 +190,8 @@
   "rule-light": {
     "1": {
       "$type": "color",
-      "$value": "rgba(0,0,0,0.20)"
+      "$value": "rgba(0,0,0,0.20)",
+      "$description": "Hairlines on light surfaces."
     },
     "2": {
       "$type": "color",
@@ -176,7 +205,8 @@
   "surface-dark": {
     "1": {
       "$type": "color",
-      "$value": "rgba(255,255,255,0.05)"
+      "$value": "rgba(255,255,255,0.05)",
+      "$description": "Raised panels on dark surfaces. Elevation comes from lightness, never shadow."
     },
     "2": {
       "$type": "color",
@@ -190,7 +220,8 @@
   "brand": {
     "a1": {
       "$type": "color",
-      "$value": "rgba(218,41,28,0.88)"
+      "$value": "rgba(218,41,28,0.88)",
+      "$description": "Brand red at reduced opacity, strongest to faintest."
     },
     "a2": {
       "$type": "color",
@@ -220,59 +251,73 @@
   "role": {
     "primary": {
       "$type": "color",
-      "$value": "{color.brand}"
+      "$value": "{color.brand}",
+      "$description": "Identity red. Logo, fills, borders and large text. Not small text — use the on-dark or on-light variant there."
     },
     "primary-on-dark": {
       "$type": "color",
-      "$value": "{color.brand-on-dark}"
+      "$value": "{color.brand-on-dark}",
+      "$description": "Small red text on a dark surface."
     },
     "primary-on-light": {
       "$type": "color",
-      "$value": "{color.brand-on-light}"
+      "$value": "{color.brand-on-light}",
+      "$description": "Small red text on a light surface."
     },
     "surface": {
       "$type": "color",
-      "$value": "{color.paper}"
+      "$value": "{color.paper}",
+      "$description": "The base page surface."
     },
     "surface-inverse": {
       "$type": "color",
-      "$value": "{color.charcoal}"
+      "$value": "{color.charcoal}",
+      "$description": "The dark bands."
     },
     "on-surface": {
       "$type": "color",
-      "$value": "{color.ink}"
+      "$value": "{color.ink}",
+      "$description": "Primary text on the base surface."
     },
     "on-surface-muted": {
       "$type": "color",
-      "$value": "{color.muted}"
+      "$value": "{color.muted}",
+      "$description": "Secondary text on the base surface."
     },
     "outline": {
       "$type": "color",
-      "$value": "{color.rule}"
+      "$value": "{color.rule}",
+      "$description": "Hairlines and dividers on light surfaces."
     },
     "error-on-light": {
       "$type": "color",
-      "$value": "{color.brick}"
+      "$value": "{color.brick}",
+      "$description": "Error text on a light surface. Brick, not the signal red — the brand book has an error red and tebin-expenses already ships it."
     },
     "error-on-dark": {
       "$type": "color",
-      "$value": "{color.brick-on-dark}"
+      "$value": "{color.brick-on-dark}",
+      "$description": "Error text on a dark surface."
     },
     "warning-on-light": {
       "$type": "color",
-      "$value": "{color.warning-on-light}"
+      "$value": "{color.warning-on-light}",
+      "$description": "Warning text on a light surface."
     },
     "warning-on-dark": {
       "$type": "color",
-      "$value": "{color.warning-on-dark}"
+      "$value": "{color.warning-on-dark}",
+      "$description": "Warning text on a dark surface."
     },
     "success-on-light": {
       "$type": "color",
-      "$value": "{color.success-on-light}"
+      "$value": "{color.success-on-light}",
+      "$description": "Success text on a light surface."
     },
     "success-on-dark": {
       "$type": "color",
-      "$value": "{color.success-on-dark}"
+      "$value": "{color.success-on-dark}",
+      "$description": "Success text on a dark surface."
     }
   },
   "font": {
@@ -283,7 +328,8 @@
         "Helvetica",
         "Arial",
         "sans-serif"
-      ]
+      ],
+      "$description": "tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win."
     },
     "condensed": {
       "$type": "fontFamily",
@@ -291,7 +337,8 @@
         "Roboto Condensed",
         "Roboto",
         "sans-serif"
-      ]
+      ],
+      "$description": "Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it."
     },
     "mono": {
       "$type": "fontFamily",
@@ -299,7 +346,8 @@
         "JetBrains Mono",
         "Courier New",
         "monospace"
-      ]
+      ],
+      "$description": "The third voice on tebin.pro: tags, kickers, specification lists and figure captions — 58 rule blocks as of 2026-09-06, usually 9–12px uppercase with wide tracking. Recorded, not designed: the site loads no webfont, so almost every visitor reads this as Courier New, a thin face that is the weakest-rendering of the three at that size. Whether the mono voice stays is an open owner decision; until then a consumer of this theme should know it exists."
     }
   },
   "fontWeight": {
@@ -321,78 +369,158 @@
   "type": {
     "h1": {
       "$type": "dimension",
-      "$value": "38px"
+      "$value": "38px",
+      "$description": "Set in the condensed face at weight 700, leading 1.35. The value is the ceiling of a fluid range, not a fixed size: display type is sized against the locale with the longest words, because a vw size that fitted English overlapped the next column by 343px in German.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "28px",
+          "pref": "4.5vw",
+          "max": "38px"
+        }
+      }
     },
     "h2": {
       "$type": "dimension",
-      "$value": "34px"
+      "$value": "34px",
+      "$description": "Ceiling of a fluid range sized against the longest-word locale. See h1.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "24px",
+          "pref": "3.8vw",
+          "max": "34px"
+        }
+      }
     },
     "h3": {
       "$type": "dimension",
-      "$value": "28px"
+      "$value": "28px",
+      "$description": "Ceiling of a fluid range sized against the longest-word locale. See h1.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "20px",
+          "pref": "3vw",
+          "max": "28px"
+        }
+      }
     },
     "h4": {
       "$type": "dimension",
-      "$value": "24px"
+      "$value": "24px",
+      "$description": "Ceiling of a fluid range sized against the longest-word locale. See h1.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "18px",
+          "pref": "2.4vw",
+          "max": "24px"
+        }
+      }
     },
     "h5": {
       "$type": "dimension",
-      "$value": "20px"
+      "$value": "20px",
+      "$description": "Ceiling of a fluid range sized against the longest-word locale. See h1.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "16px",
+          "pref": "2vw",
+          "max": "20px"
+        }
+      }
     },
     "body": {
       "$type": "dimension",
-      "$value": "16px"
+      "$value": "16px",
+      "$description": "Body copy is a fixed size with leading 1.7. Running text is not display type and does not scale with the viewport."
     },
     "label-sm": {
       "$type": "dimension",
-      "$value": "9px"
+      "$value": "9px",
+      "$description": "Small uppercase label. Fixed: a label this size does not scale. Measured 2026-08-27 over the 612 uppercase rule blocks on tebin.pro that set a fixed size — 9, 10 and 11px cover 72% of them. Tracking is deliberately not a token: the same measurement found 20 tracking values with no winner, so tracking is chosen per role, not per size."
     },
     "label-md": {
       "$type": "dimension",
-      "$value": "10px"
+      "$value": "10px",
+      "$description": "Default uppercase label. Fixed. See label-sm for the measurement and for why tracking is not tokenised."
     },
     "label-lg": {
       "$type": "dimension",
-      "$value": "11px"
+      "$value": "11px",
+      "$description": "Large uppercase label. Fixed. See label-sm for the measurement and for why tracking is not tokenised."
     }
   },
   "spacing": {
     "gutter": {
       "$type": "dimension",
-      "$value": "48px"
+      "$value": "48px",
+      "$description": "Page gutter. Ceiling of a fluid range.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "20px",
+          "pref": "4vw",
+          "max": "48px"
+        }
+      }
     },
     "section-compact": {
       "$type": "dimension",
-      "$value": "64px"
+      "$value": "64px",
+      "$description": "Vertical rhythm between tight sections. Ceiling of a fluid range.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "40px",
+          "pref": "5.5vw",
+          "max": "64px"
+        }
+      }
     },
     "section-standard": {
       "$type": "dimension",
-      "$value": "88px"
+      "$value": "88px",
+      "$description": "The default band spacing. Ceiling of a fluid range.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "56px",
+          "pref": "7vw",
+          "max": "88px"
+        }
+      }
     },
     "section-feature": {
       "$type": "dimension",
-      "$value": "112px"
+      "$value": "112px",
+      "$description": "Around a feature band. Ceiling of a fluid range.",
+      "$extensions": {
+        "pro.tebin.fluid": {
+          "min": "72px",
+          "pref": "9vw",
+          "max": "112px"
+        }
+      }
     }
   },
   "layout": {
     "container-default": {
       "$type": "dimension",
-      "$value": "1200px"
+      "$value": "1200px",
+      "$description": "Default content width."
     },
     "container-wide": {
       "$type": "dimension",
-      "$value": "1400px"
+      "$value": "1400px",
+      "$description": "Wide content width."
     },
     "container-reading": {
       "$type": "dimension",
-      "$value": "760px"
+      "$value": "760px",
+      "$description": "Measure for long-form running text."
     }
   },
   "components": {
     "button-primary": {
       "backgroundColor": {
         "$type": "color",
-        "$value": "{role.on-surface}"
+        "$value": "{role.on-surface}",
+        "$description": "The everyday action is ink, not red. Most screens carry one of these and no red at all."
       },
       "textColor": {
         "$type": "color",
@@ -404,11 +532,13 @@
       },
       "padding": {
         "$type": "dimension",
-        "$value": "14px"
+        "$value": "14px",
+        "$description": "Horizontal. The vertical size comes from height."
       },
       "height": {
         "$type": "dimension",
-        "$value": "40px"
+        "$value": "40px",
+        "$description": "Expand the hit area to 44px on touch if the visual stays this size."
       }
     },
     "button-primary-hover": {
@@ -420,7 +550,8 @@
     "button-commit": {
       "backgroundColor": {
         "$type": "color",
-        "$value": "{role.primary}"
+        "$value": "{role.primary}",
+        "$description": "Red is the colour of commitment — submitting, publishing, sending. Never a casual action."
       },
       "textColor": {
         "$type": "color",
@@ -456,7 +587,8 @@
       },
       "borderColor": {
         "$type": "color",
-        "$value": "{role.outline}"
+        "$value": "{role.outline}",
+        "$description": "Beyond the DESIGN.md property set, which names no border. A quiet button is its border, so the token stays."
       },
       "rounded": {
         "$type": "dimension",
@@ -508,15 +640,18 @@
       },
       "borderColor": {
         "$type": "color",
-        "$value": "{role.on-surface}"
+        "$value": "{role.on-surface}",
+        "$description": "A 2px rule. The editorial CTA is a bordered word, not a filled button."
       },
       "rounded": {
         "$type": "dimension",
-        "$value": "0px"
+        "$value": "0px",
+        "$description": "Square on purpose. The site's CTA takes no radius."
       },
       "padding": {
         "$type": "dimension",
-        "$value": "14px 28px"
+        "$value": "14px 28px",
+        "$description": "Two values: this component sets its own vertical padding rather than a height."
       }
     },
     "cta-hover": {

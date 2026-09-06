@@ -8,6 +8,18 @@ describe('validateRulesData', () => {
   it('accepts the seeded rules', () => {
     expect(validateRulesData(loadRules()).valid).toBe(true);
   });
+  it('rejects duplicate ids through the shared validation API', () => {
+    const rule = loadRules()[0];
+    expect(validateRulesData([rule, rule]).errors).toContain(`duplicate rule id: ${rule.id}`);
+  });
+  it('rejects an empty or unknown medium scope', () => {
+    expect(validateRulesData([{ ...loadRules()[0], media: [] }]).valid).toBe(false);
+    expect(validateRulesData([{ ...loadRules()[0], media: ['vr'] }]).valid).toBe(false);
+  });
+  it('rejects a misspelled theme scope when the registry ids are supplied', () => {
+    expect(validateRulesData([{ ...loadRules()[0], themes: ['tebn'] }], ['tebin']).errors.join(' '))
+      .toContain('unknown theme tebn');
+  });
   it('rejects a rule with an invalid severity', () => {
     expect(validateRulesData([{ id: 'x-y', category: 'misc', severity: 'MAYBE', statement: 'x' }]).valid).toBe(false);
   });

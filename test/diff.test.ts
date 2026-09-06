@@ -25,6 +25,25 @@ const ok = {
 };
 
 describe('diffThemes', () => {
+  it('detects changed fluid ranges, print references and types even with the same value', () => {
+    const a = make('metadata-a', { ...ok,
+      type: { h1: { $type: 'dimension', $value: '38px', $extensions: { 'pro.tebin.fluid': { min: '28px', pref: '4vw', max: '38px' } } } },
+      extra: { x: { $type: 'number', $value: 1 }, red: { $type: 'color', $value: '#DA291C', $extensions: { 'pro.tebin.print': { pantone: '485 C' } } } },
+    });
+    const b = make('metadata-b', { ...ok,
+      type: { h1: { $type: 'dimension', $value: '38px', $extensions: { 'pro.tebin.fluid': { min: '20px', pref: '4vw', max: '38px' } } } },
+      extra: { x: { $type: 'fontWeight', $value: 1 }, red: { $type: 'color', $value: '#DA291C', $extensions: { 'pro.tebin.print': { pantone: '485 U' } } } },
+    });
+    const diff = diffThemes(a, b);
+    expect(diff.tokens.type.modified).toEqual(['type.h1']);
+    expect(diff.tokens.extra.modified).toEqual(['extra.red', 'extra.x']);
+  });
+
+  it('ignores object order and prose-only changes', () => {
+    const a = make('order-a', { ...ok, x: { a: { $type: 'shadow', $value: { color: '#000000', blur: '2px' }, $description: 'Before' } } });
+    const b = make('order-b', { ...ok, x: { a: { $value: { blur: '2px', color: '#000000' }, $type: 'shadow', $description: 'After' } } });
+    expect(diffThemes(a, b).tokens).toEqual({});
+  });
   it('reports nothing when a theme is compared with itself', () => {
     const a = make('same-a', ok);
     const b = join(tmp, 'same-b');

@@ -1,5 +1,50 @@
 # Changelog
 
+## Unreleased — design library audit
+
+### Second audit pass
+- Upgrade Style Dictionary to 5.5.2, Vitest to 3.2.7 and the MCP SDK to 1.30.0;
+  refresh transitive dependencies. Registry audit on 2026-09-06: 32 reported
+  advisories before the update, zero after it. Preserve CSS padding shorthands
+  explicitly across the Style Dictionary major upgrade.
+- Add rule scopes (`themes`, `media`) and MCP filters (`theme`, `medium`).
+  Slate no longer inherits TEBIN logo rules; Classic no longer inherits Modern
+  typography rules. Clarify which logo belongs on a white backing rectangle.
+- Validate CMYK bounds, fluid-range consistency, duplicate ids and asset paths;
+  report malformed metadata without aborting validation.
+- Preserve per-asset licence overrides in the index, generated PNG entries and MCP.
+- Configure Linux and Windows CI verification and brand-pack creation.
+
+### Fixed
+- Preserve descriptions and print/fluid extensions in DTCG exports; compare
+  token types and extensions as well as values in theme diffs.
+- Generate Tailwind utility namespaces for semantic colours, type and leading,
+  while retaining the existing custom properties.
+- Compare full-precision contrast ratios and check references outside roles.
+  The lint command now fails on warnings as documented.
+- Track PNG background and clear-space settings, detect missing palette PNGs,
+  and remove obsolete generated PNGs when their source assets are removed.
+- Reject invalid theme ids and asset paths; resolve filesystem boundaries.
+- Type-check the MCP server, declare Node types, and require Node 22+ to match pnpm 11.
+
+### Improved
+- Add shared ChatGPT, Gemini and Claude chat instructions, explicit Gemini CLI
+  MCP setup, and a repeatable cross-client acceptance task; include the new guide
+  in the brand pack. Clarify offline artwork and local versus hosted MCP access.
+- MCP reports the package version, advertises read-only tools, searches theme
+  descriptions/tags and exposes `colors-csv`, surfaces and documented omissions.
+- **MCP PNG response change:** `get_asset` now returns an image content block
+  plus metadata instead of a base64 string inside JSON text. Direct `getAsset`
+  helper calls still return base64. SVG and other binary responses are unchanged.
+- One `pnpm verify` command runs CI/release checks. Tests exercise real MCP
+  stdio connections and actual Tailwind utility compilation.
+- Public README centres Modern and Classic; guides distinguish print assets
+  from press-ready output and document direct Node MCP startup.
+- Brand ZIPs include the TypeScript export, README and user guides; the Windows
+  pack fallback handles paths through environment variables.
+
+See the [audit and remaining design work](docs/audits/2026-09-06-design-system.md).
+
 ## 1.8.0 — 2026-09-06
 
 ### Added

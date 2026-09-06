@@ -30,6 +30,7 @@ describe('registry read layer', () => {
     expect(FORMAT_FILES).toEqual({
       css: 'tokens.css', tailwind: 'tailwind.css', dtcg: 'tokens.dtcg.json', ts: 'theme.ts',
       'design-md': 'DESIGN.md',
+      'colors-csv': 'colors.csv',
     });
   });
 
@@ -48,5 +49,26 @@ describe('registry read layer', () => {
 
   it('throws NotFoundError for a missing asset file', () => {
     expect(() => readAssetFile('themes/tebin/assets/nope.svg')).toThrow(NotFoundError);
+  });
+
+  it('rejects path-like theme ids and inherited format keys', () => {
+    for (const id of ['../tebin', '..\\tebin', '/tebin', 'C:\\tebin', 'tebin/../tebin']) {
+      expect(() => loadThemeManifest(id)).toThrow(NotFoundError);
+      expect(() => readFormat(id, 'css')).toThrow(NotFoundError);
+    }
+    expect(() => readFormat('tebin', 'constructor' as any)).toThrow(NotFoundError);
+  });
+
+  it('does not read outside the asset directory', () => {
+    for (const path of ['package.json', '../package.json', 'themes/tebin/assets/../tokens.json',
+      'themes/tebin/assets/..\\tokens.json', 'C:\\private.svg']) {
+      expect(() => readAssetFile(path)).toThrow(NotFoundError);
+    }
+  });
+
+  it('serves the spreadsheet palette', () => {
+    const csv = readFormat('tebin-classic', 'colors-csv');
+    expect(csv.filename).toBe('colors.csv');
+    expect(csv.content).toContain('485 C');
   });
 });

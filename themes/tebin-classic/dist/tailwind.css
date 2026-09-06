@@ -12,8 +12,11 @@
   --color-grey-light: #b3b4b6;
   --color-grey-lighter: #cdcdce;
   --role-primary: #da291c;
+  --color-role-primary: #da291c;
   --role-surface: #ffffff;
+  --color-role-surface: #ffffff;
   --role-on-surface: #1a1a1a;
+  --color-role-on-surface: #1a1a1a;
   --font-sans: Roboto, Arial, Helvetica, sans-serif;
   --font-document: Arial, Helvetica, sans-serif;
   --font-weight-regular: 400;

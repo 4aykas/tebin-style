@@ -75,6 +75,36 @@ describe('diffAssets', () => {
     }
   });
 
+  it('reports changed tile colours even when the source SVG and filenames stay the same', () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-assets-'));
+    const work = join(tmp, 'tebin-classic');
+    cpSync(classic, work, { recursive: true });
+    try {
+      const p = join(work, 'tokens.json');
+      const tokens = JSON.parse(readFileSync(p, 'utf8'));
+      tokens.color.brand.$value = '#AA0000';
+      writeFileSync(p, JSON.stringify(tokens));
+      expect(diffAssets(work).join(' ')).toContain('render settings changed');
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it('reports obsolete raster outputs after all vector assets are removed', () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-assets-'));
+    const work = join(tmp, 'tebin-classic');
+    cpSync(classic, work, { recursive: true });
+    try {
+      const p = join(work, 'theme.json');
+      const theme = JSON.parse(readFileSync(p, 'utf8'));
+      theme.assets = [];
+      writeFileSync(p, JSON.stringify(theme));
+      expect(diffAssets(work).join(' ')).toContain('no longer plans');
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
   it('reports a manifest that no longer matches the ladder', () => {
     const tmp = mkdtempSync(join(tmpdir(), 'ts-assets-'));
     const work = join(tmp, 'tebin-classic');

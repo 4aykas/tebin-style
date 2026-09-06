@@ -11,7 +11,9 @@ Three JSON Schemas (2020-12) guard this repository.
 - `source`: `{ url, extractedBy: "manual" | "auto" }`.
 - `assets[]`: `{ id, type, format, path, variant?, license? }`.
   `type` is one of `logo | favicon | font | icon | pattern | image`.
-  `path` must exist on disk — `pnpm validate` checks it.
+  Asset ids must be unique within the theme. `path` uses forward slashes under
+  `assets/`, must name a file inside the theme, and must match `format`.
+  An asset-specific `license` overrides the theme default and follows generated PNGs.
 
 ## `tokens.schema.json` — validates `tokens.json`
 
@@ -34,6 +36,7 @@ Two `$extensions` blocks are defined. Both are optional.
 ```
 
 CMYK is slash-separated because the book's own `0.95.100.0` reads as a decimal.
+Each component must be between 0 and 100 inclusive.
 Never convert a print value from RGB — where the book prints none, the
 generated docs say so in words.
 
@@ -44,15 +47,25 @@ holds its ceiling:
 "$extensions": { "pro.tebin.fluid": { "min": "28px", "pref": "4.5vw", "max": "38px" } }
 ```
 
-All three keys are required. `min` and `max` must be `px`, `rem` or `em`.
+All three keys are required. `min` and `max` must be valid numeric dimensions
+using the same unit (`px`, `rem` or `em`), with `min <= max`. The resolved
+token value must equal `max`; only dimension tokens may carry this extension.
+Only colour tokens may carry print extensions. Null token values are rejected.
 
 ## `rules.schema.json` — validates `rules/rules.json`
 
 An array of rules. Each needs `id` (unique, kebab-case), `category`,
 `severity` (`MUST` | `SHOULD` | `NEVER`) and `statement`. Optional:
-`rationale`, `tags`, `source`.
+`rationale`, `tags`, `source`, `themes`, `media`.
+
+`themes` limits a rule to theme ids; `media` limits it to `web`, `document`
+and/or `print`. Omitted scope fields mean unrestricted. Supplied arrays must
+be nonempty and unique. `pnpm validate` checks theme ids against the repository.
+The digest displays scope, and generated theme guides exclude other themes' rules.
 
 ## Beyond JSON Schema
 
-`src/validate.ts` also checks that a theme's `id` equals its folder name, that
-ids are unique across the registry, and that every asset path exists.
+`src/validate.ts` checks folder/id agreement, asset and rule id uniqueness,
+file boundaries and fluid-range consistency. The CLI validates rule scopes
+against the theme folders. Malformed theme JSON is reported as a validation
+failure instead of crashing the directory scan.

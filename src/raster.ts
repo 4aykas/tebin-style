@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, realpathSync, existsSync } from 'node:fs';
+import { join, relative, isAbsolute } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
+import { resolveString } from './tokens.js';
 
 export const LADDER = {
   logo: [512, 1024, 2048],
@@ -17,6 +18,8 @@ export interface RasterOutput {
   variant: string;
   path: string;
   sha256: string;
+  background: string | null;
+  clearSpaceRatio: number;
 }
 
 export interface RasterManifest {
@@ -41,7 +44,8 @@ function themeColors(themeDir: string): Record<string, string> {
   };
   const out: Record<string, string> = {};
   for (const [name, leaf] of Object.entries(tokens.color ?? {})) {
-    if (typeof leaf.$value === 'string') out[name] = leaf.$value;
+    const color = resolveString(tokens, leaf.$value);
+    if (color !== null) out[name] = color;
   }
   return out;
 }
@@ -125,7 +129,8 @@ export function plannedOutputs(themeDir: string): Array<{
 
 export async function buildRaster(themeDir: string): Promise<RasterManifest> {
   const planned = plannedOutputs(themeDir);
-  if (planned.length === 0) return { outputs: [] };
+  const previous = readManifest(themeDir);
+  if (planned.length === 0 && !previous) return { outputs: [] };
   mkdirSync(join(themeDir, 'assets', 'png'), { recursive: true });
   const outputs: RasterOutput[] = [];
 
@@ -151,11 +156,34 @@ export async function buildRaster(themeDir: string): Promise<RasterManifest> {
       variant: item.variant,
       path: item.path,
       sha256: sha256OfFile(outAbs),
+      background: item.background,
+      clearSpaceRatio: item.background ? CLEAR_SPACE_RATIO : 0,
     });
   }
 
+  // Remove only outputs owned by the previous manifest, never arbitrary assets.
+  const currentPaths = new Set(planned.map((item) => item.path));
+  for (const old of previous?.outputs ?? []) {
+    if (currentPaths.has(old.path)) continue;
+    if (!/^assets\/png\/[a-z0-9_-]+\.png$/.test(old.path)) {
+      throw new Error(`refusing to remove unexpected generated path: ${old.path}`);
+    }
+    const target = join(themeDir, old.path);
+    if (existsSync(target)) {
+      const rel = relative(realpathSync(themeDir), realpathSync(target));
+      if (rel.startsWith('..') || isAbsolute(rel)) throw new Error('generated path escapes theme');
+      rmSync(target);
+    }
+  }
+
   const manifest: RasterManifest = { outputs };
-  writeFileSync(join(themeDir, 'assets', 'png', 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+  const manifestPath = join(themeDir, 'assets', 'png', 'manifest.json');
+  const content = JSON.stringify(manifest, null, 2) + '\n';
+  // Avoid reopening an unchanged manifest for writing. Cloud-sync clients can
+  // lock it during a build even though none of its inputs have changed.
+  if (!existsSync(manifestPath) || readFileSync(manifestPath, 'utf8') !== content) {
+    writeFileSync(manifestPath, content);
+  }
   return manifest;
 }
 

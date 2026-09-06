@@ -20,6 +20,32 @@ function fixture(name: string, theme: unknown, tokens: unknown): string {
 const base = { id: 'x', name: 'X', version: '1.0.0', license: { tokens: 'MIT', assets: 'X' } };
 
 describe('lintTheme', () => {
+  it('fails a ratio just below 4.5 for both roles and component labels', () => {
+    const dir = fixture('rounding', { ...base, surfaces: { light: '#FFFFFF' } }, {
+      role: { surface: { $value: '#FFFFFF' }, 'on-surface': { $value: '#6e7978' } },
+      components: { button: { textColor: { $value: '#6e7978' }, backgroundColor: { $value: '#FFFFFF' } } },
+    });
+    const result = lintTheme(dir);
+    expect(result.summary.errors).toBe(2);
+    for (const finding of result.findings.filter((f) => f.severity === 'error')) {
+      expect(finding.ratio).toBeGreaterThan(4.495);
+      expect(finding.ratio).toBeLessThan(4.5);
+    }
+  });
+
+  it('reports broken and cyclic references outside roles, including composite values', () => {
+    const dir = fixture('all-references', { ...base, surfaces: { light: '#FFFFFF' } }, {
+      role: { surface: { $value: '#FFFFFF' } },
+      spacing: { a: { $value: '{spacing.b}' }, b: { $value: '{spacing.a}' } },
+      components: { button: { textColor: { $value: '{color.missing}' } } },
+      shadow: { card: { $value: { color: '{color.missing}' } } },
+    });
+    const warnings = lintTheme(dir).findings.filter((f) => f.severity === 'warning');
+    expect(warnings.map((f) => f.path)).toEqual([
+      'spacing.a', 'spacing.b', 'components.button.textColor', 'shadow.card.color',
+    ]);
+  });
+
   it('warns on a reference that resolves to nothing', () => {
     const dir = fixture('broken', { ...base, surfaces: { light: '#FFFFFF' } }, {
       color: { paper: { $type: 'color', $value: '#FFFFFF' } },

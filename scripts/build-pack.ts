@@ -1,11 +1,11 @@
-import { readdirSync, existsSync, mkdirSync, cpSync, rmSync } from 'node:fs';
+import { readdirSync, existsSync, mkdirSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, relative } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const DIST_IN_PACK = ['tokens.css', 'tailwind.css', 'tokens.dtcg.json', 'colors.csv'];
+const DIST_IN_PACK = ['tokens.css', 'tailwind.css', 'tokens.dtcg.json', 'theme.ts', 'colors.csv'];
 
 /** Repo-relative paths that belong in the downloadable brand pack. */
 export function packFileList(themesRoot: string): string[] {
@@ -36,7 +36,10 @@ export function packFileList(themesRoot: string): string[] {
     walk(join(dir, 'preview'));
   }
 
-  files.push('rules/dist/rules.md', 'LICENSE');
+  files.push('rules/dist/rules.md', 'LICENSE', 'README.md');
+  for (const file of readdirSync(join(root, 'docs', 'guide'))) {
+    if (file.endsWith('.md')) files.push(`docs/guide/${file}`);
+  }
   return files.filter((f) => !f.endsWith('manifest.json')).sort();
 }
 
@@ -51,15 +54,16 @@ if (process.argv[2] === '--write') {
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
     // No zip CLI (Windows dev machine): stage the tree, then Compress-Archive it.
-    const staging = join(root, '.tmp', 'brand-pack-staging');
-    rmSync(staging, { recursive: true, force: true });
-    for (const f of files) cpSync(join(root, f), join(staging, f));
-    execFileSync('powershell.exe', [
-      '-NoProfile',
-      '-Command',
-      `Compress-Archive -Path '${staging}\\*' -DestinationPath '${out}' -Force`,
-    ]);
-    rmSync(staging, { recursive: true, force: true });
+    const staging = mkdtempSync(join(root, '.tmp', 'brand-pack-'));
+    try {
+      for (const f of files) cpSync(join(root, f), join(staging, f));
+      execFileSync('powershell.exe', [
+        '-NoProfile', '-Command',
+        'Compress-Archive -Path (Join-Path $env:TEBIN_PACK_STAGING "*") -DestinationPath $env:TEBIN_PACK_OUTPUT -Force',
+      ], { env: { ...process.env, TEBIN_PACK_STAGING: staging, TEBIN_PACK_OUTPUT: out } });
+    } finally {
+      rmSync(staging, { recursive: true, force: true });
+    }
   }
   console.log(`packed ${files.length} files into ${out}`);
 }

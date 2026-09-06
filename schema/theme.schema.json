@@ -56,7 +56,7 @@
         "type": "object",
         "required": ["id", "type", "format", "path"],
         "properties": {
-          "id": { "type": "string" },
+          "id": { "type": "string", "pattern": "^[a-z0-9]+([-_][a-z0-9]+)*$" },
           "type": { "type": "string", "enum": ["logo", "favicon", "font", "icon", "pattern", "image"] },
           "variant": { "type": "string" },
           "format": { "type": "string" },

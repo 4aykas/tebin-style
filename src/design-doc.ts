@@ -198,15 +198,16 @@ function assetSection(themeDir: string, theme: ThemeManifest): string {
   return out;
 }
 
-function rulesSection(): string {
+function rulesSection(themeId: string): string {
   let out = '\n## Rules\n';
   for (const category of DOC_CATEGORIES) {
-    const rules: Rule[] = filterRules({ category });
+    const rules: Rule[] = filterRules({ category, theme: themeId });
     if (!rules.length) continue;
     out += `\n### ${category}\n\n`;
     for (const rule of rules) {
       const rationale = rule.rationale ? ` — _${rule.rationale}_` : '';
-      out += `- **[${rule.severity}]** ${rule.statement}${rationale}\n`;
+      const scope = rule.media ? ` (${rule.media.join(', ')})` : '';
+      out += `- **[${rule.severity}]**${scope} ${rule.statement}${rationale}\n`;
     }
   }
   return out;
@@ -233,7 +234,7 @@ export function buildDesignDoc(themeDir: string): string {
   out += spacingSection(themeDir);
   out += componentSection(themeDir);
   out += assetSection(themeDir, theme);
-  out += rulesSection();
+  out += rulesSection(theme.id);
   out += `\n## Using this elsewhere\n\n`;
   out += `- Word, Excel, PowerPoint, Google Docs — [the Office guide](${BLOB_BASE}/docs/guide/office.md).\n`;
   out += `- A coding agent — [the agent guide](${BLOB_BASE}/docs/guide/ai-agents.md).\n`;

@@ -25,15 +25,18 @@ Every step below depends on how you are reading. Pick one, once:
 - **No network at all** — some hosts refuse a raw link outright. Read
   `llms.txt`: it inlines the vector source of the wordmark and the corner mark,
   in both colourways, so no fetch is needed. Still never draw the mark
-  yourself. For Word, Excel or PowerPoint, which cannot embed SVG, ask the user
-  to hand over a PNG.
+  yourself. If the document tool cannot embed SVG, render the supplied vector
+  to PNG with an available renderer, or use an attached PNG. Ask for a file
+  only when neither route is available. Some Office versions support SVG;
+  common document-generation libraries require PNG.
 
 ## Apply a theme
 
 1. **Discover.** Read `registry/index.json`. Filter by `industry`, `mood` or
    name. For a vague request ("something industrial"), offer 2–3 candidates
-   with their preview colours and let the user pick. Done when one theme id is
-   settled.
+   with their preview colours if a choice is needed. An explicit TEBIN request
+   normally means `tebin` for modern web/app work and `tebin-classic` for
+   corporate documents and print. Preserve a theme the user already chose.
 2. **Read its `DESIGN.md`.** `themes/<id>/DESIGN.md` is generated to be
    self-contained: palette with RGB and print values, semantic roles, the type
    and spacing scales, every asset, and the brand rules. Read it before
@@ -48,9 +51,10 @@ Every step below depends on how you are reading. Pick one, once:
 5. **Apply the assets.** `registry/index.json` is a superset of
    `theme.json.assets`: it also carries every pre-rendered PNG, with ids like
    `logo-full@1024` and `corner-mark-white@512-on-brand`. Use SVG for the web
-   and **PNG for documents and Office files** — Word, Excel, PowerPoint and
-   libraries like openpyxl or python-docx cannot embed SVG. Ask the user
-   whether to copy the file into the project or hand them the `rawUrl`.
+   and **PNG for broad document compatibility**, especially with libraries
+   like openpyxl or python-docx. Use SVG when the target supports it. Copy assets into
+   the requested deliverable when that is part of the task; use `rawUrl` for
+   downloading. Follow any explicit preference about local files versus links.
    **Insert the file; never set the wordmark as text.** Its letters are drawn
    outlines, not a font, so typing the name produces different letterforms.
    `references/licensing.md` governs what may be copied at all.
@@ -65,8 +69,11 @@ repointing a colour moves everything that names it.
 
 Roles separate fills from text. `role.primary` paints the logo, fills, borders
 and large text. **Small red text takes `role.primary-on-dark` or
-`role.primary-on-light`** — one red cannot clear 4.5:1 on both a dark and a
-light surface, because the luminance window is empty for any hue.
+`role.primary-on-light`** where the theme defines them. Those variants serve
+the modern theme's `#242830` dark and `#EFEEE9` light surfaces. Classic uses
+`role.primary` on white (about 4.87:1); do not invent missing modern roles in
+Classic. Always measure against the actual background; normal text needs
+at least 4.5:1 without rounding up.
 
 **An error is not the signal red.** Error, warning and success text take
 `role.error-*`, `role.warning-*` and `role.success-*`. Reaching for
@@ -87,7 +94,10 @@ a regression, which means only one thing: contrast errors went up.
 ## Design rules
 
 While building or reviewing UI, consult the rules database for MUST / SHOULD /
-NEVER guidance: `list_rules({ category?, severity?, tag?, query? })` and
+NEVER guidance: `list_rules({ theme?, medium?, category?, severity?, tag?, query? })` and
 `get_rule({ id })`, or read the digest at `rules/dist/rules.md`. Most rules
 carry the reason they exist — quote it, not just the rule. When reviewing,
-cite every `MUST` and `NEVER` the code violates.
+cite applicable `MUST` and `NEVER` rules the code violates. Pass the chosen
+theme and medium (`web`, `document`, or `print`) so Modern website policy does
+not leak into Classic documents or an unrelated brand. Unfiltered results are
+the full catalogue, not a checklist to apply wholesale.

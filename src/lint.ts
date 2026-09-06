@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { contrastRatio, AA_NORMAL } from './contrast.js';
 import { hexToRgb } from './colors-csv.js';
-import { resolveString, type TokenTree } from './tokens.js';
+import { referencePath, resolveToken, resolveString, type TokenTree } from './tokens.js';
 
 export interface Finding {
   severity: 'error' | 'warning' | 'info';
@@ -52,6 +52,25 @@ export function lintTheme(themeDir: string): LintResult {
     omitted?: Array<{ section: string; reason: string }>;
   };
   const tokens = JSON.parse(readFileSync(tokensPath, 'utf8')) as Tree;
+  const broken = new Set<string>();
+  const checkValue = (value: unknown, path: string): void => {
+    if (referencePath(value) !== null && resolveToken(tokens, value) === null) {
+      broken.add(path);
+      push({ severity: 'warning', path, message: `${JSON.stringify(value)} does not resolve to a value` });
+    } else if (value && typeof value === 'object') {
+      for (const [key, child] of Object.entries(value)) checkValue(child, `${path}.${key}`);
+    }
+  };
+  const checkReferences = (tree: Tree, prefix = ''): void => {
+    for (const [key, child] of Object.entries(tree)) {
+      if (key.startsWith('$') || !child || typeof child !== 'object') continue;
+      const path = prefix ? `${prefix}.${key}` : key;
+      const leaf = child as Leaf;
+      if ('$value' in leaf) checkValue(leaf.$value, path);
+      else checkReferences(child as Tree, path);
+    }
+  };
+  checkReferences(tokens);
   const omitted = new Set((theme.omitted ?? []).map((o) => o.section));
 
   const surfaces = theme.surfaces;
@@ -65,6 +84,7 @@ export function lintTheme(themeDir: string): LintResult {
 
   for (const [name, leaf] of Object.entries(roles)) {
     const path = `role.${name}`;
+    if (name.startsWith('$') || broken.has(path)) continue;
     const value = resolveString(tokens, leaf.$value);
     if (value === null) {
       push({ severity: 'warning', path,
@@ -92,11 +112,11 @@ export function lintTheme(themeDir: string): LintResult {
       continue;
     }
 
-    const ratio = Math.round(contrastRatio(value, against) * 100) / 100;
+    const ratio = contrastRatio(value, against);
     push({
       severity: ratio >= AA_NORMAL ? 'info' : 'error',
       path,
-      message: `${value} on ${against} is ${ratio}:1`,
+      message: `${value} on ${against} is ${ratio.toFixed(4)}:1`,
       ratio,
       required: AA_NORMAL,
     });
@@ -124,11 +144,11 @@ export function lintTheme(themeDir: string): LintResult {
       push({ severity: 'info', path, message: 'not checked: not an opaque colour' });
       continue;
     }
-    const ratio = Math.round(contrastRatio(fg, bg) * 100) / 100;
+    const ratio = contrastRatio(fg, bg);
     push({
       severity: ratio >= AA_NORMAL ? 'info' : 'error',
       path,
-      message: `label ${fg} on ${bg} is ${ratio}:1`,
+      message: `label ${fg} on ${bg} is ${ratio.toFixed(4)}:1`,
       ratio,
       required: AA_NORMAL,
     });

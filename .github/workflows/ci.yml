@@ -5,7 +5,11 @@ on:
   pull_request:
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -14,6 +18,5 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm validate
-      - run: pnpm check
-      - run: pnpm test
+      - run: pnpm verify
+      - run: pnpm pack:brand

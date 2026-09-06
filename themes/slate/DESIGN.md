@@ -76,38 +76,12 @@ In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's
 
 ## Rules
 
-### brand
-
-- **[MUST]** On dark or saturated brand-color (e.g. corporate red) backgrounds, use the all-white monochrome logo — the corner mark and every letter white. — _The two-color logo loses the grey "IN" and puts red on red._
-- **[NEVER]** Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
-- **[SHOULD]** The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
-- **[MUST]** Keep clear space around the logo at least the height of the "B" in the wordmark on all sides.
-- **[NEVER]** Never re-create the wordmark by typing TEBIN in a font. The letterforms are drawn outlines, not type. Insert the supplied asset: SVG on the web, and PNG in Word, Excel, PowerPoint or anything else that cannot embed SVG. — _An agent handed only the repository link repeatedly styled the name as text instead of fetching the logo, which produces letterforms that are not the logo at all. The other brand rules govern placing the logo and quietly assume you already have the file; none of them forbids drawing it yourself, so a careful agent could follow every rule and still ship the wrong mark._
-- **[SHOULD]** On colored or photographic backgrounds where the white logo lacks contrast, place the logo inside a white rectangle (e.g. sponsorship contexts).
-- **[NEVER]** Never apply disproportional transforms to the logo or rescale its elements independently.
-- **[NEVER]** Never add shadows or other effects to the logo.
-- **[NEVER]** Never recolor the logo outside the approved palette (red, grey, all-white, all-black).
-- **[SHOULD]** Set brand text in Roboto; fall back to Arial where Roboto is unavailable (e.g. MS Office documents).
-
-### typography
-
-- **[NEVER]** A heading never breaks a word — not mid-letter and not with a hyphen. Do not put hyphens: auto, overflow-wrap: anywhere or &shy; on display type; resize the type or rewrite the line. — _Settled by the owner on 2026-07-29, reversing a sweep of 177 wrap rules made the day before; &shy; is not an escape hatch because the HTML minifier strips it._
-- **[SHOULD]** Body copy carries overflow-wrap: anywhere and hyphens: auto so long technical strings cannot overflow their column. — _The pair is right for running text and wrong for display type — the distinction is the rule._
-- **[MUST]** Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
-- **[NEVER]** Never set a negative letter-spacing; tracking is zero or positive.
-- **[NEVER]** Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
-- **[SHOULD]** Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
-- **[SHOULD]** Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._
-
 ### theming
 
-- **[MUST]** Set color-scheme: dark on <html> for dark themes.
-- **[MUST]** Give native <select> an explicit background-color and color (Windows fix).
-- **[MUST]** Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
-- **[MUST]** Take translucent colours from the scale — on-dark, on-light, rule-dark, rule-light, surface-dark, brand-a — rather than inventing an alpha per use. — _Forty-odd different white alphas read as looseness even when no single value looks wrong._
-- **[NEVER]** Never use #fff as a page or panel surface; use --color-paper. — _Pure white reads flat and synthetic beside the cream band and the dark sections._
-- **[SHOULD]** On dark surfaces express elevation with a lighter surface step, not a shadow. — _A shadow on a dark ground reads as a coloured halo rather than as depth._
-- **[SHOULD]** Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
+- **[MUST]** (web) Set color-scheme: dark on <html> for dark themes.
+- **[MUST]** (web) Give native <select> an explicit background-color and color (Windows fix).
+- **[MUST]** (web) Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
+- **[SHOULD]** (web) Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
 
 ## Using this elsewhere
 

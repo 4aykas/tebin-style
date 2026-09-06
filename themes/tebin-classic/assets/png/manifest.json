@@ -8,7 +8,9 @@
       "height": 130,
       "variant": "transparent",
       "path": "assets/png/corner-mark-128.png",
-      "sha256": "b9f17532d4ede8f1991e21e1b9f9211cd171af10ec569ff65a7791d3e21d896c"
+      "sha256": "b9f17532d4ede8f1991e21e1b9f9211cd171af10ec569ff65a7791d3e21d896c",
+      "background": null,
+      "clearSpaceRatio": 0
     },
     {
       "assetId": "corner-mark",
@@ -18,7 +20,9 @@
       "height": 260,
       "variant": "transparent",
       "path": "assets/png/corner-mark-256.png",
-      "sha256": "e3d99c86d2425b3bcebc608916de2e41a3a94a40a114d187ccb148e3602aae71"
+      "sha256": "e3d99c86d2425b3bcebc608916de2e41a3a94a40a114d187ccb148e3602aae71",
+      "background": null,
+      "clearSpaceRatio": 0
     },
     {
       "assetId": "corner-mark",
@@ -28,7 +32,9 @@
       "height": 520,
       "variant": "transparent",
       "path": "assets/png/corner-mark-512.png",
-      "sha256": "4655a3400397abe1d31567a6cf9e2bfd9d4c8f20dcea9c217f3e4c23d4a59234"
+      "sha256": "4655a3400397abe1d31567a6cf9e2bfd9d4c8f20dcea9c217f3e4c23d4a59234",
+      "background": null,
+      "clearSpaceRatio": 0
     },
     {
       "assetId": "corner-mark-white",
@@ -38,7 +44,9 @@
       "height": 129,
       "variant": "on-brand",
       "path": "assets/png/corner-mark-white-128-on-brand.png",
-      "sha256": "1faf360774265b170bc356f5a1b81033f60ac845a0a5dee08a23c8fc2321eb9d"
+      "sha256": "1faf360774265b170bc356f5a1b81033f60ac845a0a5dee08a23c8fc2321eb9d",
+      "background": "#DA291C",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "corner-mark-white",
@@ -48,7 +56,9 @@
       "height": 129,
       "variant": "on-charcoal",
       "path": "assets/png/corner-mark-white-128-on-charcoal.png",
-      "sha256": "37ef41e581b04aaa09f80dbdf7ac67e9d90590272fbd52c0f113c720e219faf2"
+      "sha256": "37ef41e581b04aaa09f80dbdf7ac67e9d90590272fbd52c0f113c720e219faf2",
+      "background": "#1A1A1A",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "corner-mark-white",
@@ -58,7 +68,9 @@
       "height": 258,
       "variant": "on-brand",
       "path": "assets/png/corner-mark-white-256-on-brand.png",
-      "sha256": "91b1a1c12f58a842e9ed57c9745489298d8cbf9ab070c7cc8443504227a5b2c4"
+      "sha256": "91b1a1c12f58a842e9ed57c9745489298d8cbf9ab070c7cc8443504227a5b2c4",
+      "background": "#DA291C",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "corner-mark-white",
@@ -68,7 +80,9 @@
       "height": 258,
       "variant": "on-charcoal",
       "path": "assets/png/corner-mark-white-256-on-charcoal.png",
-      "sha256": "15e776063dfbc89321f682b9b201c63030ad1c34f6e883bdd0e6c991601b2fdc"
+      "sha256": "15e776063dfbc89321f682b9b201c63030ad1c34f6e883bdd0e6c991601b2fdc",
+      "background": "#1A1A1A",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "corner-mark-white",
@@ -78,7 +92,9 @@
       "height": 515,
       "variant": "on-brand",
       "path": "assets/png/corner-mark-white-512-on-brand.png",
-      "sha256": "ce90f0c6d2696722f956d73396a23a78bd5e23be0830a9f818e49de14171e829"
+      "sha256": "ce90f0c6d2696722f956d73396a23a78bd5e23be0830a9f818e49de14171e829",
+      "background": "#DA291C",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "corner-mark-white",
@@ -88,7 +104,9 @@
       "height": 515,
       "variant": "on-charcoal",
       "path": "assets/png/corner-mark-white-512-on-charcoal.png",
-      "sha256": "b6baca0013ec20b581672b6f7382bf28d09b508c88753c7f53a163f6b9dd327e"
+      "sha256": "b6baca0013ec20b581672b6f7382bf28d09b508c88753c7f53a163f6b9dd327e",
+      "background": "#1A1A1A",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "logo-full",
@@ -98,7 +116,9 @@
       "height": 319,
       "variant": "transparent",
       "path": "assets/png/logo-full-1024.png",
-      "sha256": "77f3552df17ca53ae579fc23f9f19fef9764d79ccb50a0548d6392c6f3ccde42"
+      "sha256": "77f3552df17ca53ae579fc23f9f19fef9764d79ccb50a0548d6392c6f3ccde42",
+      "background": null,
+      "clearSpaceRatio": 0
     },
     {
       "assetId": "logo-full",
@@ -108,7 +128,9 @@
       "height": 638,
       "variant": "transparent",
       "path": "assets/png/logo-full-2048.png",
-      "sha256": "274f43f5f5c70b125d3582b399c5c42eb6248dff7c365b20e12e2a4018a969d6"
+      "sha256": "274f43f5f5c70b125d3582b399c5c42eb6248dff7c365b20e12e2a4018a969d6",
+      "background": null,
+      "clearSpaceRatio": 0
     },
     {
       "assetId": "logo-full",
@@ -118,7 +140,9 @@
       "height": 160,
       "variant": "transparent",
       "path": "assets/png/logo-full-512.png",
-      "sha256": "ba4d0ea8658b42718430ba6d0bfa60ef7dc952d0b75507c83efc5b88c507af93"
+      "sha256": "ba4d0ea8658b42718430ba6d0bfa60ef7dc952d0b75507c83efc5b88c507af93",
+      "background": null,
+      "clearSpaceRatio": 0
     },
     {
       "assetId": "logo-full-white",
@@ -128,7 +152,9 @@
       "height": 533,
       "variant": "on-brand",
       "path": "assets/png/logo-full-white-1024-on-brand.png",
-      "sha256": "f41b777712b7051e0b0d7893d6f18d55b30d99a785ca2962f94443aa017cb4f4"
+      "sha256": "f41b777712b7051e0b0d7893d6f18d55b30d99a785ca2962f94443aa017cb4f4",
+      "background": "#DA291C",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "logo-full-white",
@@ -138,7 +164,9 @@
       "height": 533,
       "variant": "on-charcoal",
       "path": "assets/png/logo-full-white-1024-on-charcoal.png",
-      "sha256": "6ce040a8ac0f6c33f28086c7df5b75b32078ed749618fd7111a15b5c44580c32"
+      "sha256": "6ce040a8ac0f6c33f28086c7df5b75b32078ed749618fd7111a15b5c44580c32",
+      "background": "#1A1A1A",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "logo-full-white",
@@ -148,7 +176,9 @@
       "height": 1067,
       "variant": "on-brand",
       "path": "assets/png/logo-full-white-2048-on-brand.png",
-      "sha256": "0f3b2d841e1df3870d0e78090d57c111e1e3b75cff00a81bbc8404686da85a0d"
+      "sha256": "0f3b2d841e1df3870d0e78090d57c111e1e3b75cff00a81bbc8404686da85a0d",
+      "background": "#DA291C",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "logo-full-white",
@@ -158,7 +188,9 @@
       "height": 1067,
       "variant": "on-charcoal",
       "path": "assets/png/logo-full-white-2048-on-charcoal.png",
-      "sha256": "4651452103aca366d94b61401ffbf7bebdb4c5d2006c579874bc70197264f0e1"
+      "sha256": "4651452103aca366d94b61401ffbf7bebdb4c5d2006c579874bc70197264f0e1",
+      "background": "#1A1A1A",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "logo-full-white",
@@ -168,7 +200,9 @@
       "height": 267,
       "variant": "on-brand",
       "path": "assets/png/logo-full-white-512-on-brand.png",
-      "sha256": "014827bb8000cd75429831cb3784422b6d5ee32f8dda2f9ec151932430a7e617"
+      "sha256": "014827bb8000cd75429831cb3784422b6d5ee32f8dda2f9ec151932430a7e617",
+      "background": "#DA291C",
+      "clearSpaceRatio": 0.7
     },
     {
       "assetId": "logo-full-white",
@@ -178,7 +212,9 @@
       "height": 267,
       "variant": "on-charcoal",
       "path": "assets/png/logo-full-white-512-on-charcoal.png",
-      "sha256": "f25d1276a8d5658d9eaa85cd4524fc093571ceff44a0c4c30a251f2a033f5641"
+      "sha256": "f25d1276a8d5658d9eaa85cd4524fc093571ceff44a0c4c30a251f2a033f5641",
+      "background": "#1A1A1A",
+      "clearSpaceRatio": 0.7
     }
   ]
 }

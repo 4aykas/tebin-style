@@ -12,6 +12,14 @@ export interface Rule {
   rationale?: string;
   tags?: string[];
   source?: string;
+  themes?: string[];
+  media?: Medium[];
+}
+
+export type Medium = 'web' | 'document' | 'print';
+export interface RuleFilters {
+  category?: string; severity?: string; tag?: string; query?: string;
+  theme?: string; medium?: Medium;
 }
 
 export function loadRules(): Rule[] {
@@ -26,15 +34,18 @@ export function getRule(id: string): Rule {
   return rule;
 }
 
-export function filterRules(input: { category?: string; severity?: string; tag?: string; query?: string }): Rule[] {
-  const { category, severity, tag, query } = input;
+export function filterRules(input: RuleFilters): Rule[] {
+  const { category, severity, tag, query, theme, medium } = input;
   let rules = loadRules();
+  if (theme) rules = rules.filter((r) => !r.themes || r.themes.includes(theme));
+  if (medium) rules = rules.filter((r) => !r.media || r.media.includes(medium));
   if (category) rules = rules.filter((r) => r.category.toLowerCase() === category.toLowerCase());
   if (severity) rules = rules.filter((r) => r.severity.toLowerCase() === severity.toLowerCase());
   if (tag) rules = rules.filter((r) => (r.tags ?? []).some((t) => t.toLowerCase() === tag.toLowerCase()));
   if (query) {
-    const q = query.toLowerCase();
-    rules = rules.filter((r) => r.id.toLowerCase().includes(q) || r.statement.toLowerCase().includes(q));
+    const q = query.trim().toLowerCase();
+    rules = rules.filter((r) => [r.id, r.statement, r.rationale ?? '', ...(r.tags ?? [])]
+      .some((value) => value.toLowerCase().includes(q)));
   }
   return rules;
 }

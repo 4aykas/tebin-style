@@ -4,7 +4,7 @@ import {
   loadIndex, loadThemeManifest, readFormat, readAssetFile, FORMAT_FILES, NotFoundError,
   type Format,
 } from '../src/registry.js';
-import { filterRules, getRule as getRuleById, type Rule } from '../src/rules.js';
+import { filterRules, getRule as getRuleById, type Rule, type RuleFilters } from '../src/rules.js';
 import { lintTheme, type LintResult } from '../src/lint.js';
 import { diffThemes, type DiffResult } from '../src/diff.js';
 import { join } from 'node:path';
@@ -20,20 +20,22 @@ export function listThemes(input: { industry?: string; mood?: string; query?: st
   if (industry) themes = themes.filter((t) => t.industry.some((v) => v.toLowerCase() === industry.toLowerCase()));
   if (mood) themes = themes.filter((t) => t.mood.some((v) => v.toLowerCase() === mood.toLowerCase()));
   if (query) {
-    const q = query.toLowerCase();
-    themes = themes.filter((t) => t.id.toLowerCase().includes(q) || t.name.toLowerCase().includes(q));
+    const q = query.trim().toLowerCase();
+    themes = themes.filter((t) => [t.id, t.name, t.description ?? '', ...t.industry, ...t.mood]
+      .some((value) => value.toLowerCase().includes(q)));
   }
   return { count: themes.length, themes };
 }
 
 export function getTheme(input: { id: string; format?: Format }) {
   const format: Format = input.format ?? 'css';
-  if (!FORMAT_FILES[format]) throw new NotFoundError(`unknown format "${format}"`);
+  if (!Object.hasOwn(FORMAT_FILES, format)) throw new NotFoundError(`unknown format "${format}"`);
   const manifest = loadThemeManifest(input.id); // throws NotFoundError for unknown id
   const { filename, content } = readFormat(input.id, format);
   return {
     id: manifest.id, name: manifest.name, version: manifest.version,
-    format, filename, license: manifest.license, content,
+    format, filename, license: manifest.license, description: manifest.description,
+    surfaces: manifest.surfaces, omitted: manifest.omitted ?? [], content,
   };
 }
 
@@ -42,7 +44,7 @@ export function getAsset(input: { id: string; assetId?: string }) {
   if (!entry) throw new NotFoundError(`theme "${input.id}" not found`);
 
   if (!input.assetId) {
-    return { id: entry.id, assets: entry.assets };
+    return { id: entry.id, license: loadThemeManifest(input.id).license.assets, assets: entry.assets };
   }
 
   const asset = entry.assets.find((a) => a.id === input.assetId);
@@ -52,13 +54,15 @@ export function getAsset(input: { id: string; assetId?: string }) {
   return {
     id: entry.id, assetId: asset.id, type: asset.type,
     format: file.format, path: asset.path, rawUrl: asset.rawUrl,
+    license: asset.license ?? loadThemeManifest(input.id).license.assets,
     encoding: file.encoding, content: file.content,
   };
 }
 
-export function listRules(input: { category?: string; severity?: string; tag?: string; query?: string }): {
+export function listRules(input: RuleFilters): {
   count: number; rules: Rule[];
 } {
+  if (input.theme) loadThemeManifest(input.theme);
   const rules = filterRules(input);
   return { count: rules.length, rules };
 }
@@ -91,7 +95,7 @@ export interface ToolDef {
 export const toolDefinitions: ToolDef[] = [
   {
     name: 'list_themes',
-    description: 'List available themes, optionally filtered by industry, mood, or a name/id query.',
+    description: 'List available themes with descriptions, formats and assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.',
     inputSchema: {
       industry: z.string().optional(),
       mood: z.string().optional(),
@@ -101,7 +105,7 @@ export const toolDefinitions: ToolDef[] = [
   },
   {
     name: 'get_theme',
-    description: "Get a theme's design tokens in a chosen format (css, tailwind, dtcg, ts, design-md; default css). design-md returns the whole self-contained DESIGN.md, front matter included.",
+    description: "Get a theme in css, tailwind, dtcg, ts, design-md or colors-csv (default css), with licensing, surfaces and documented omissions. Start with design-md for the complete design guide; colors-csv includes RGB and print references.",
     inputSchema: {
       id: z.string(),
       format: z.enum(FORMATS as [Format, ...Format[]]).optional(),
@@ -119,9 +123,11 @@ export const toolDefinitions: ToolDef[] = [
   },
   {
     name: 'list_rules',
-    description: 'List design rules (UI/UX/accessibility guidelines), filtered by category, severity, tag, or query.',
+    description: 'List design rules for a theme and medium (web, document, print), plus optional category, severity, tag or text filters. Omitted scope filters return the full catalogue; use scope to avoid applying website policies to print or another brand.',
     inputSchema: {
       category: z.string().optional(),
+      theme: z.string().optional(),
+      medium: z.enum(['web', 'document', 'print']).optional(),
       severity: z.enum(['MUST', 'SHOULD', 'NEVER']).optional(),
       tag: z.string().optional(),
       query: z.string().optional(),

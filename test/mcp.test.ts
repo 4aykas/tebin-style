@@ -15,6 +15,12 @@ describe('list_themes', () => {
   it('filters by query against id/name', () => {
     expect(listThemes({ query: 'teb' }).themes.some((t) => t.id === 'tebin')).toBe(true);
   });
+  it('finds themes by intended use and exposes all formats', () => {
+    const classic = listThemes({ query: ' print ' }).themes.find((t) => t.id === 'tebin-classic');
+    expect(classic?.description).toContain('2017');
+    expect(classic?.formats['colors-csv']).toContain('colors.csv');
+    expect(classic?.formats['design-md']).toContain('DESIGN.md');
+  });
 });
 
 describe('get_theme', () => {
@@ -63,6 +69,12 @@ describe('get_asset', () => {
 });
 
 describe('list_rules / get_rule', () => {
+  it('supports theme and medium scope and rejects unknown themes', () => {
+    const rules = listRules({ theme: 'tebin-classic', medium: 'document' });
+    expect(rules.count).toBeGreaterThan(0);
+    expect(rules.rules.every((r) => r.category === 'brand')).toBe(true);
+    expect(() => listRules({ theme: 'unknown' })).toThrow(NotFoundError);
+  });
   it('lists rules filtered by category', () => {
     const r = listRules({ category: 'forms' });
     expect(r.count).toBe(r.rules.length);

@@ -3,7 +3,12 @@
 > Brand kits for AI agents and people: W3C DTCG design tokens, logos as SVG
 > **and pre-rendered PNG** (for Word, Excel, PowerPoint and any tool that
 > cannot embed SVG), plus machine-readable design rules. Every URL below is a
-> direct, permanent raw link. Fetch it as is — no release download needed.
+> direct raw link tracking main. Pin a commit for reproducible inputs.
+
+For ChatGPT, Gemini and Claude, use the shared setup and prompt:
+[Chat setup](https://github.com/4aykas/tebin-style/blob/main/docs/guide/chat-setup.md).
+Choose one theme and supply its DESIGN.md plus actual assets. This file embeds
+Classic vectors only; use the Modern assets for a Modern deliverable.
 
 > **The wordmark is a file, never text.** Its letters are drawn outlines, not a
 > font, so typing “TEBIN” in Roboto or any other face does not reproduce the
@@ -38,8 +43,9 @@ Copy a block verbatim. Do not restyle it, do not change a fill, do not swap the
 `viewBox`. To place the mark on a dark or red ground, take the white file below
 rather than recolouring the two-colour one.
 
-**This does not help Word, Excel or PowerPoint**, which cannot embed SVG at
-all. There, a human has to hand over one of the PNGs listed above.
+Some document-generation tools cannot embed SVG even when the destination
+Office application supports it. In that workflow, supply one of the PNGs above
+or render the original SVG with a suitable tool; do not redraw the logo.
 
 ### `themes/tebin-classic/assets/logo/logo-full.svg`
 

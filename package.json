@@ -26,26 +26,31 @@
   ],
   "packageManager": "pnpm@11.0.9",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
-    "build": "tsx scripts/build.ts && tsx scripts/build-assets.ts && tsx scripts/build-index.ts && tsx scripts/build-rules.ts",
-    "validate": "tsx scripts/validate.ts",
-    "lint:themes": "tsx scripts/lint.ts",
-    "check": "tsx scripts/check.ts",
-    "test": "vitest run",
-    "start:mcp": "tsx mcp/server.ts"
+    "build": "node --import tsx scripts/build.ts && node --import tsx scripts/build-assets.ts && node --import tsx scripts/build-index.ts && node --import tsx scripts/build-rules.ts",
+    "validate": "node --import tsx scripts/validate.ts",
+    "lint:themes": "node --import tsx scripts/lint.ts",
+    "check": "node --import tsx scripts/check.ts",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
+    "test": "node node_modules/vitest/vitest.mjs run",
+    "start:mcp": "node --import tsx mcp/server.ts",
+    "pack:brand": "node --import tsx scripts/build-pack.ts --write",
+    "verify": "pnpm typecheck && pnpm validate && pnpm lint:themes && pnpm check && pnpm test"
   },
   "devDependencies": {
-    "ajv": "^8.17.1",
+    "@types/node": "^22.20.1",
+    "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "style-dictionary": "^4.3.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
-    "vitest": "^2.1.8"
+    "style-dictionary": "^5.5.2",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
     "@resvg/resvg-js": "^2.6.2",
     "zod": "^3.25.76"
   }

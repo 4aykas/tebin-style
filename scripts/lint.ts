@@ -5,11 +5,13 @@ import { REPO_ROOT } from '../src/registry.js';
 
 const themesDir = join(REPO_ROOT, 'themes');
 let errors = 0;
+let warnings = 0;
 
 for (const id of readdirSync(themesDir)) {
   const result = lintTheme(join(themesDir, id));
   const { errors: e, warnings: w, infos: i } = result.summary;
   errors += e;
+  warnings += w;
   console.log(`${e === 0 ? '✓' : '✗'} ${id} — ${e} error(s), ${w} warning(s), ${i} checked or noted`);
   for (const f of result.findings) {
     if (f.severity === 'info' && f.ratio !== undefined) continue; // a pass needs no line
@@ -17,8 +19,8 @@ for (const id of readdirSync(themesDir)) {
   }
 }
 
-if (errors > 0) {
-  console.error(`\n${errors} contrast error(s).`);
+if (errors > 0 || warnings > 0) {
+  console.error(`\n${errors} contrast error(s), ${warnings} unresolved reference or coverage warning(s).`);
   process.exit(1);
 }
 console.log('\nNo contrast errors.');

@@ -20,9 +20,12 @@ describe('packFileList', () => {
       expect(own.some((f) => f.endsWith('dist/colors.csv')), id).toBe(true);
       expect(own.some((f) => f.endsWith('dist/tokens.css')), id).toBe(true);
       expect(own.some((f) => f.endsWith('dist/tokens.dtcg.json')), id).toBe(true);
+      expect(own.some((f) => f.endsWith('dist/theme.ts')), id).toBe(true);
     }
     expect(files.some((f) => f.endsWith('.png'))).toBe(true);
     expect(files.some((f) => f.endsWith('.svg'))).toBe(true);
+    expect(files).toContain('README.md');
+    expect(files).toContain('docs/guide/office.md');
   });
 
   it('excludes source and build files', () => {

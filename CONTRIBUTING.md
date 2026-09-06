@@ -12,10 +12,10 @@
    Only contribute assets you have the rights to. Set `license.assets` honestly.
 5. Run:
    ```bash
-   pnpm validate && pnpm build && pnpm check && pnpm test
+   pnpm build && pnpm verify
    ```
 6. Commit the source files **and** the generated `dist/*` and updated
-   `registry/index.json`. Open a PR. CI runs the same four commands.
+   `registry/index.json`. Open a PR. CI runs `pnpm verify` on the committed outputs before a rebuild can hide drift.
 
 Do not hand-edit `dist/*` or `registry/index.json`.
 
@@ -24,5 +24,5 @@ Do not hand-edit `dist/*` or `registry/index.json`.
 1. Add an object to `rules/rules.json` with a unique kebab-case `id`, a
    `category`, a `severity` (`MUST` | `SHOULD` | `NEVER`), and a `statement`
    (optional `rationale`, `tags`, `source`).
-2. Run `pnpm validate && pnpm build && pnpm check && pnpm test`.
+2. Run `pnpm build && pnpm verify`.
 3. Commit `rules/rules.json` and the regenerated `rules/dist/rules.md`.

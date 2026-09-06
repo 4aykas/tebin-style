@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { mkdtempSync, cpSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { mkdtempSync, cpSync, rmSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildRaster, plannedOutputs, padSvg, LADDER, CLEAR_SPACE_RATIO } from '../src/raster.js';
+import { diffAssets } from '../src/check.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const classic = join(root, 'themes', 'tebin-classic');
@@ -54,6 +55,43 @@ describe('padSvg', () => {
 });
 
 describe('buildRaster', () => {
+  it('removes obsolete generated PNGs but preserves unlisted files', async () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-raster-'));
+    const work = join(tmp, 'tebin-classic');
+    cpSync(classic, work, { recursive: true });
+    try {
+      const themePath = join(work, 'theme.json');
+      const theme = JSON.parse(readFileSync(themePath, 'utf8'));
+      theme.assets = [];
+      writeFileSync(themePath, JSON.stringify(theme));
+      const personal = join(work, 'assets', 'png', 'personal.png');
+      writeFileSync(personal, 'unlisted file');
+      expect((await buildRaster(work)).outputs).toEqual([]);
+      expect(diffAssets(work)).toEqual([]);
+      expect(existsSync(join(work, 'assets', 'png', 'logo-full-1024.png'))).toBe(false);
+      expect(readFileSync(personal, 'utf8')).toBe('unlisted file');
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  it('refuses to delete paths outside the generated asset directory', async () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-raster-'));
+    const work = join(tmp, 'tebin-classic');
+    cpSync(classic, work, { recursive: true });
+    try {
+      const themePath = join(work, 'theme.json');
+      const theme = JSON.parse(readFileSync(themePath, 'utf8'));
+      theme.assets = [];
+      writeFileSync(themePath, JSON.stringify(theme));
+      writeFileSync(join(work, 'assets', 'png', 'manifest.json'), JSON.stringify({ outputs: [{ path: '../../keep.txt' }] }));
+      await expect(buildRaster(work)).rejects.toThrow('refusing to remove');
+      expect(existsSync(themePath)).toBe(true);
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
   it('writes every planned file and a manifest that describes them', async () => {
     const tmp = mkdtempSync(join(tmpdir(), 'ts-raster-'));
     const work = join(tmp, 'tebin-classic');

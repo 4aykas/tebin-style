@@ -22,15 +22,18 @@
     },
     "error": {
       "$type": "color",
-      "$value": "#C7251A"
+      "$value": "#C7251A",
+      "$description": "Error text. 5.66:1 on #FFFFFF."
     },
     "warning": {
       "$type": "color",
-      "$value": "#8A5300"
+      "$value": "#8A5300",
+      "$description": "Warning text. 6.33:1 on #FFFFFF."
     },
     "success": {
       "$type": "color",
-      "$value": "#1F6F43"
+      "$value": "#1F6F43",
+      "$description": "Success text. 6.15:1 on #FFFFFF."
     },
     "rule": {
       "$type": "color",
@@ -40,35 +43,43 @@
   "role": {
     "primary": {
       "$type": "color",
-      "$value": "{color.brand}"
+      "$value": "{color.brand}",
+      "$description": "Accent. Fills, borders and large text."
     },
     "surface": {
       "$type": "color",
-      "$value": "{color.surface}"
+      "$value": "{color.surface}",
+      "$description": "The base page surface."
     },
     "on-surface": {
       "$type": "color",
-      "$value": "{color.ink}"
+      "$value": "{color.ink}",
+      "$description": "Primary text on the base surface."
     },
     "on-surface-muted": {
       "$type": "color",
-      "$value": "{color.muted}"
+      "$value": "{color.muted}",
+      "$description": "Secondary text on the base surface."
     },
     "outline": {
       "$type": "color",
-      "$value": "{color.rule}"
+      "$value": "{color.rule}",
+      "$description": "Hairlines and dividers."
     },
     "error": {
       "$type": "color",
-      "$value": "{color.error}"
+      "$value": "{color.error}",
+      "$description": "Error text."
     },
     "warning": {
       "$type": "color",
-      "$value": "{color.warning}"
+      "$value": "{color.warning}",
+      "$description": "Warning text."
     },
     "success": {
       "$type": "color",
-      "$value": "{color.success}"
+      "$value": "{color.success}",
+      "$description": "Success text."
     }
   },
   "font": {

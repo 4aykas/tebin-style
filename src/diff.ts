@@ -15,7 +15,17 @@ export interface DiffResult {
 }
 
 type Tree = Record<string, unknown>;
-interface Leaf { $type?: string; $value?: unknown }
+interface Leaf { $type?: string; $value?: unknown; $extensions?: unknown }
+
+/** Object key order is not a design change; array order is. */
+function canonical(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, child]) => [key, canonical(child)]));
+  }
+  return value;
+}
 
 /** `group.name` → serialised value, for every leaf in the tree. */
 function flatten(tree: Tree, prefix: string[] = [], out = new Map<string, string>()): Map<string, string> {
@@ -23,7 +33,9 @@ function flatten(tree: Tree, prefix: string[] = [], out = new Map<string, string
     if (key.startsWith('$') || typeof value !== 'object' || value === null) continue;
     const leaf = value as Leaf;
     const path = [...prefix, key];
-    if (leaf.$value !== undefined) out.set(path.join('.'), JSON.stringify(leaf.$value));
+    if (leaf.$value !== undefined) out.set(path.join('.'), JSON.stringify(canonical({
+      $type: leaf.$type, $value: leaf.$value, $extensions: leaf.$extensions,
+    })));
     else flatten(value as Tree, path, out);
   }
   return out;

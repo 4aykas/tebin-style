@@ -38,9 +38,9 @@ describe('buildDesignDoc', () => {
     }
   });
 
-  it('carries every brand, typography and theming rule', () => {
+  it('carries the brand, typography and theming rules applicable to this theme', () => {
     for (const category of DOC_CATEGORIES) {
-      for (const rule of filterRules({ category })) {
+      for (const rule of filterRules({ category, theme: 'tebin-classic' })) {
         expect(doc, rule.id).toContain(rule.statement);
       }
     }
@@ -74,6 +74,15 @@ describe('every theme', () => {
 });
 
 describe('the new token groups reach the document', () => {
+  it('keeps TEBIN brand instructions out of Slate and Modern typography out of Classic', () => {
+    const slate = buildDesignDoc(join(root, 'themes', 'slate'));
+    expect(slate).not.toContain('### brand');
+    expect(slate).not.toContain('typing TEBIN');
+    const classic = buildDesignDoc(join(root, 'themes', 'tebin-classic'));
+    expect(classic).not.toContain('### typography');
+    expect(classic).not.toContain('Never use #fff');
+    expect(classic).toContain('height of the "B"');
+  });
   const tebin = buildDesignDoc(join(root, 'themes', 'tebin'));
 
   it('lists the roles and what each points at', () => {

@@ -8,11 +8,12 @@ export interface ThemeEntry {
   id: string;
   name: string;
   version: string;
+  description?: string;
   industry: string[];
   mood: string[];
   preview: Record<string, string>;
   formats: Record<string, string>;
-  assets: Array<{ id: string; type: string; path: string; rawUrl?: string }>;
+  assets: Array<{ id: string; type: string; path: string; rawUrl?: string; license?: string }>;
 }
 
 export interface RegistryIndex {
@@ -43,10 +44,11 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
     }
 
     const base = `themes/${entry.name}`;
-    const assets = (theme.assets ?? []).map((a: { id: string; type: string; path: string }) => ({
+    const assets = (theme.assets ?? []).map((a: { id: string; type: string; path: string; license?: string }) => ({
       id: a.id,
       type: a.type,
       path: `${base}/${a.path}`,
+      license: a.license ?? theme.license.assets,
       ...(opts.rawBaseUrl ? { rawUrl: `${opts.rawBaseUrl}/${base}/${a.path}` } : {}),
     }));
 
@@ -59,6 +61,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
         id: `${o.assetId}@${o.width}${suffix}`,
         type: sourceAsset?.type ?? 'raster',
         path: `${base}/${o.path}`,
+        license: sourceAsset?.license ?? theme.license.assets,
         ...(opts.rawBaseUrl ? { rawUrl: `${opts.rawBaseUrl}/${base}/${o.path}` } : {}),
       };
     });
@@ -67,6 +70,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
       id: theme.id,
       name: theme.name,
       version: theme.version,
+      description: theme.description,
       industry: theme.industry ?? [],
       mood: theme.mood ?? [],
       preview,
@@ -75,6 +79,8 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
         tailwind: `${base}/dist/tailwind.css`,
         dtcg: `${base}/dist/tokens.dtcg.json`,
         ts: `${base}/dist/theme.ts`,
+        'design-md': `${base}/DESIGN.md`,
+        'colors-csv': `${base}/dist/colors.csv`,
       },
       assets: [...assets, ...rasterAssets],
     });

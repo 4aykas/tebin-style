@@ -18,6 +18,14 @@ const goodTokens = {
 };
 
 describe('validateThemeMetadata', () => {
+  it('rejects duplicate ids, traversal paths and mismatched formats before a build', () => {
+    const asset = goodTheme.assets[0];
+    expect(validateThemeMetadata({ ...goodTheme, assets: [asset, asset] }).errors.join(' ')).toContain('duplicate asset id');
+    for (const path of ['../logo.svg', 'assets/../logo.svg', 'assets\\logo.svg', '/tmp/logo.svg']) {
+      expect(validateThemeMetadata({ ...goodTheme, assets: [{ ...asset, path }] }).valid, path).toBe(false);
+    }
+    expect(validateThemeMetadata({ ...goodTheme, assets: [{ ...asset, format: 'png' }] }).valid).toBe(false);
+  });
   it('accepts a well-formed theme', () => {
     expect(validateThemeMetadata(goodTheme).valid).toBe(true);
   });
@@ -35,6 +43,33 @@ describe('validateThemeMetadata', () => {
 });
 
 describe('validateTokens', () => {
+  it.each(['101/0/0/0', '0/999/0/0', '-1/0/0/0'])('rejects out-of-range CMYK %s', (cmyk) => {
+    expect(validateTokens({ color: { brand: { $type: 'color', $value: '#DA291C',
+      $extensions: { 'pro.tebin.print': { cmyk } } } } }).valid).toBe(false);
+  });
+
+  it('rejects null values', () => {
+    expect(validateTokens({ color: { brand: { $type: 'color', $value: null } } }).valid).toBe(false);
+  });
+
+  it.each([
+    { min: '..px', pref: '4vw', max: '38px' },
+    { min: '40px', pref: '4vw', max: '38px' },
+    { min: '1rem', pref: '4vw', max: '38px' },
+    { min: '28px', pref: '4vw', max: '40px' },
+  ])('rejects invalid or inconsistent fluid range %j', (fluid) => {
+    expect(validateTokens({ type: { h1: { $type: 'dimension', $value: '38px',
+      $extensions: { 'pro.tebin.fluid': fluid } } } }).valid).toBe(false);
+  });
+
+  it('accepts a fluid ceiling reference and rejects extensions on the wrong token type', () => {
+    const tokens = { size: { max: { $type: 'dimension', $value: '38px' },
+      title: { $type: 'dimension', $value: '{size.max}',
+        $extensions: { 'pro.tebin.fluid': { min: '28px', pref: '4vw', max: '38px' } } } } };
+    expect(validateTokens(tokens).valid).toBe(true);
+    expect(validateTokens({ x: { $type: 'number', $value: 1,
+      $extensions: { 'pro.tebin.print': { cmyk: '0/0/0/0' } } } }).valid).toBe(false);
+  });
   it('accepts well-formed DTCG tokens', () => {
     expect(validateTokens(goodTokens).valid).toBe(true);
   });

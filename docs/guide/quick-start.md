@@ -12,12 +12,12 @@ and click the size you need:
 |---|---|
 | Email signature, small web use | **512 px** |
 | A Word document or a slide | **1024 px** |
-| Anything that will be printed | **2048 px** |
+| Print | **SVG** in a vector workflow; size PNGs for the final physical placement |
 
-The white logo comes **on a red tile and on a charcoal tile**, never on
-transparency — a white logo on a transparent background looks like an empty
-file in every preview. The tiles already carry the correct clear space, so you
-can place them as they are.
+The white PNG logo comes **on a red tile and on a charcoal tile** so it remains
+visible in previews. The tiles carry clear space; the white SVG remains
+transparent for custom dark backgrounds. For print resolution and colour
+handling, see the [print guide](./print.md).
 
 ## 2. Get the colours
 

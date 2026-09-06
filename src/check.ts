@@ -5,7 +5,7 @@ import { buildTheme } from './build.js';
 import { buildColorsCsv } from './colors-csv.js';
 import { buildDesignDoc } from './design-doc.js';
 import { buildPaletteSvg } from './palette-preview.js';
-import { plannedOutputs, readManifest, sha256OfFile } from './raster.js';
+import { plannedOutputs, readManifest, sha256OfFile, CLEAR_SPACE_RATIO } from './raster.js';
 import { REPO_ROOT } from './registry.js';
 import { loadRules } from './rules.js';
 import { buildRulesMarkdown } from './rules-build.js';
@@ -27,9 +27,8 @@ export function diffRules(): string[] {
  */
 export function diffAssets(themeDir: string): string[] {
   const planned = plannedOutputs(themeDir);
-  if (planned.length === 0) return [];
-
   const manifest = readManifest(themeDir);
+  if (planned.length === 0 && !manifest?.outputs.length) return [];
   if (!manifest) return ['assets/png/manifest.json is missing'];
 
   const drift: string[] = [];
@@ -37,6 +36,14 @@ export function diffAssets(themeDir: string): string[] {
 
   for (const item of planned) {
     if (!byPath.has(item.path)) drift.push(`assets/png/manifest.json does not list ${item.path}`);
+    else {
+      const previous = byPath.get(item.path)!;
+      if (previous.source !== item.source || previous.assetId !== item.assetId || previous.width !== item.width ||
+          previous.variant !== item.variant || previous.background !== item.background ||
+          previous.clearSpaceRatio !== (item.background ? CLEAR_SPACE_RATIO : 0)) {
+        drift.push(`${item.path} render settings changed — run pnpm build`);
+      }
+    }
   }
   for (const out of manifest.outputs) {
     if (!planned.some((p) => p.path === out.path)) {
@@ -82,6 +89,7 @@ export async function diffTheme(themeDir: string): Promise<string[]> {
     const committedSvgPath = join(themeDir, 'preview', 'palette.svg');
     const committedSvg = existsSync(committedSvgPath) ? readFileSync(committedSvgPath, 'utf8') : null;
     if (committedSvg !== buildPaletteSvg(themeDir)) drift.push('preview/palette.svg');
+    if (!existsSync(join(themeDir, 'preview', 'palette.png'))) drift.push('preview/palette.png is missing');
     // buildDesignDoc reads rules through REPO_ROOT, so it takes themeDir, not the temp copy.
     // It needs theme.json, which test fixtures may not have.
     if (existsSync(join(themeDir, 'theme.json'))) {

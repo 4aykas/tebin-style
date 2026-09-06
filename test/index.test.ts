@@ -2,11 +2,28 @@ import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildIndex } from '../src/index-builder.js';
+import { mkdtempSync, cpSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const themesRoot = join(here, 'fixtures', 'themes');
 
 describe('buildIndex', () => {
+  it('preserves asset licence overrides, including their generated PNGs', () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-licence-'));
+    try {
+      const themeDir = join(tmp, 'tebin-classic');
+      cpSync(join(here, '..', 'themes', 'tebin-classic'), themeDir, { recursive: true });
+      const path = join(themeDir, 'theme.json');
+      const theme = JSON.parse(readFileSync(path, 'utf8'));
+      theme.assets[0].license = 'Test override';
+      writeFileSync(path, JSON.stringify(theme));
+      const assets = buildIndex(tmp).themes[0].assets;
+      expect(assets.find((a) => a.id === 'logo-full')?.license).toBe('Test override');
+      expect(assets.find((a) => a.id === 'logo-full@1024')?.license).toBe('Test override');
+      expect(assets.find((a) => a.id === 'logo-full-white')?.license).toBe(theme.license.assets);
+    } finally { rmSync(tmp, { recursive: true, force: true }); }
+  });
   it('lists themes with formats, preview and assets', () => {
     const idx = buildIndex(themesRoot, { rawBaseUrl: 'https://example/raw' });
     const good = idx.themes.find((t) => t.id === 'good')!;

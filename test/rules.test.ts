@@ -3,6 +3,19 @@ import { loadRules, getRule, filterRules } from '../src/rules.js';
 import { NotFoundError } from '../src/registry.js';
 
 describe('rules read layer', () => {
+  it('isolates TEBIN brand rules and web policies by theme and medium', () => {
+    expect(filterRules({ theme: 'slate', category: 'brand' })).toEqual([]);
+    expect(filterRules({ theme: 'tebin-classic', category: 'typography' })).toEqual([]);
+    const print = filterRules({ theme: 'tebin-classic', medium: 'print' });
+    expect(print.some((r) => r.id === 'brand-logo-safezone')).toBe(true);
+    expect(print.some((r) => r.id === 'forms-loading-button')).toBe(false);
+    expect(print.some((r) => r.id === 'theming-paper-not-white')).toBe(false);
+    expect(filterRules({ theme: 'tebin', medium: 'web' }).some((r) => r.id === 'theming-paper-not-white')).toBe(true);
+  });
+
+  it('searches rationale and trims user input', () => {
+    expect(filterRules({ query: '  layout shift  ' }).some((r) => r.id === 'forms-loading-button')).toBe(true);
+  });
   it('loads seeded rules', () => {
     const rules = loadRules();
     expect(rules.length).toBeGreaterThan(10);

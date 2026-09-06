@@ -15,11 +15,9 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm validate
       # check runs before packing, so a release can never ship a stale tree.
-      - run: pnpm check
-      - run: pnpm test
-      - run: pnpm tsx scripts/build-pack.ts --write
+      - run: pnpm verify
+      - run: pnpm pack:brand
       # npm publication was dropped 2026-07-30: the registry is internal-use,
       # partners get the ZIP from the GitHub Release. Restore the publish step
       # (plus id-token permission, registry-url and an NPM_TOKEN secret) if a

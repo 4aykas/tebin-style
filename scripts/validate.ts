@@ -30,23 +30,22 @@ if (existsSync(themesRoot)) {
 
 const rulesPath = join(root, 'rules', 'rules.json');
 if (existsSync(rulesPath)) {
-  const rules = JSON.parse(readFileSync(rulesPath, 'utf8'));
-  const res = validateRulesData(rules);
-  const ids = new Set<string>();
-  let dup = false;
-  if (Array.isArray(rules)) {
-    for (const r of rules) {
-      if (ids.has(r.id)) { dup = true; console.error(`✗ duplicate rule id: ${r.id}`); }
-      ids.add(r.id);
+  try {
+    const rules = JSON.parse(readFileSync(rulesPath, 'utf8'));
+    const res = validateRulesData(rules, [...seen]);
+    if (res.valid) console.log('✓ rules');
+    else {
+      failed = true;
+      console.error('✗ rules');
+      for (const e of res.errors) console.error(`    ${e}`);
     }
-  }
-  if (res.valid && !dup) {
-    console.log('✓ rules');
-  } else {
+  } catch (error) {
     failed = true;
-    console.error('✗ rules');
-    for (const e of res.errors) console.error(`    ${e}`);
+    console.error(`✗ rules/rules.json: ${error instanceof Error ? error.message : String(error)}`);
   }
+} else {
+  failed = true;
+  console.error('✗ rules/rules.json is missing');
 }
 
 if (failed) process.exit(1);
