@@ -1,15 +1,6 @@
 # tebin-style
 
-## Agent skills
+The conventions for this repository live in [`AGENTS.md`](./AGENTS.md) — one
+file, every agent, so the two cannot drift apart.
 
-### Issue tracker
-
-Issues live in this repo's GitHub Issues (`4aykas/tebin-style`), driven via the `gh` CLI. See `docs/agents/issue-tracker.md`.
-
-### Triage labels
-
-The five canonical triage roles use their default label strings (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root (created lazily by `/domain-modeling`). See `docs/agents/domain.md`.
+**Read `AGENTS.md` now**, before anything else in this repository.
