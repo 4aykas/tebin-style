@@ -37,6 +37,16 @@ export function packFileList(themesRoot: string): string[] {
   }
 
   files.push('rules/dist/rules.md', 'LICENSE', 'README.md');
+  const examples = join(root, 'examples');
+  const addExamples = (dir: string): void => {
+    if (!existsSync(dir)) return;
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const file = join(dir, entry.name);
+      if (entry.isDirectory()) addExamples(file);
+      else if (/\.(md|html|docx|pptx)$/.test(entry.name)) files.push(rel(file));
+    }
+  };
+  addExamples(examples);
   for (const file of readdirSync(join(root, 'docs', 'guide'))) {
     if (file.endsWith('.md')) files.push(`docs/guide/${file}`);
   }

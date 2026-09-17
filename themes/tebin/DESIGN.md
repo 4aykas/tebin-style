@@ -123,7 +123,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.7.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.7.1. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette

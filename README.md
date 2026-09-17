@@ -80,6 +80,10 @@ the theme checker reports untested combinations as well as failures.
 
 ## What is in this repository?
 
+Try the [reference candidates](examples/README.md): an editable Classic report,
+presentation layouts and a working Modern form. They demonstrate application
+of the themes and are awaiting brand-owner approval.
+
 **Design source:** each theme has editable tokens, asset metadata and an
 introduction. A build produces CSS, Tailwind v4, TypeScript, DTCG-style JSON,
 colour CSV, PNGs and a self-contained `DESIGN.md`.

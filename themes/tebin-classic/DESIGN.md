@@ -28,7 +28,7 @@ certificate, a slide deck, a business card.
 The grey is specified twice in the book — Pantone 423 C and "Black 60%" — two
 routes to the same ink; the tokens carry the Pantone name.
 
-**Version** 1.1.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.1.1. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** TEBIN Branding Principles & Style Guide (2017, Rev. A).
 
 ## Palette

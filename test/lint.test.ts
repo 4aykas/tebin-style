@@ -20,6 +20,20 @@ function fixture(name: string, theme: unknown, tokens: unknown): string {
 const base = { id: 'x', name: 'X', version: '1.0.0', license: { tokens: 'MIT', assets: 'X' } };
 
 describe('lintTheme', () => {
+  it('checks declared pairs without relying on role names and counts uncovered findings', () => {
+    const dir = fixture('explicit-pairs', { ...base, surfaces: { light: '#FFFFFF' },
+      contrastPairs: {
+        'brand-on-page': { foreground: '{color.brand}', background: '#FFFFFF' },
+        'grey-on-page': { foreground: '#CCCCCC', background: '#FFFFFF' },
+        missing: { foreground: '{color.missing}', background: '#FFFFFF' },
+      },
+    }, { color: { brand: { $value: '#DA291C' } }, role: { primary: { $value: '{color.brand}' } } });
+    const result = lintTheme(dir);
+    expect(result.findings.find(f => f.path === 'contrastPairs.brand-on-page')?.severity).toBe('info');
+    expect(result.findings.find(f => f.path === 'contrastPairs.grey-on-page')?.severity).toBe('error');
+    expect(result.findings.find(f => f.path === 'contrastPairs.missing')?.severity).toBe('warning');
+    expect(result.coverage).toEqual({ checked: 2, unchecked: 2 });
+  });
   it('fails a ratio just below 4.5 for both roles and component labels', () => {
     const dir = fixture('rounding', { ...base, surfaces: { light: '#FFFFFF' } }, {
       role: { surface: { $value: '#FFFFFF' }, 'on-surface': { $value: '#6e7978' } },

@@ -3,7 +3,10 @@
   "id": "tebin-classic",
   "name": "TEBIN Classic",
   "description": "Faithful reproduction of the 2017 TEBIN print brand book: Pantone red + grey, Roboto / Arial, corporate-print identity.",
-  "version": "1.1.0",
+  "version": "1.1.1",
+  "contrastPairs": {
+    "brand-on-page": { "foreground": "{color.brand}", "background": "{role.surface}" }
+  },
   "industry": [
     "engineering",
     "industrial",

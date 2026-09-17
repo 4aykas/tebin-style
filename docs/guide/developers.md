@@ -1,5 +1,20 @@
 # Developer guide
 
+## Explicit contrast checks
+
+Theme metadata can declare `contrastPairs`, a map of named pairs containing
+`foreground` and `background`. Each value is an opaque hex colour or a token
+reference such as `{color.brand}`. These additional checks use the normal-text
+4.5:1 threshold; they do not replace the existing role/component checks.
+Unresolved or translucent pairs produce warnings rather than assumed passes.
+
+`lint_theme` returns `coverage.checked` (findings with a measured ratio) and
+`coverage.unchecked` (all other findings, including unresolved references).
+These are diagnostic counts, not a percentage of all possible UI states.
+The Classic and Modern manifests include examples; MCP `get_theme` returns
+the same declarations.
+
+
 ## Setup
 
 You need **Node 22+** and **pnpm 11** (the exact pnpm version is pinned in `package.json`). The skill and the MCP server read generated

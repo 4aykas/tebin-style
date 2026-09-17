@@ -38,6 +38,18 @@
         "dark":  { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
       }
     },
+    "contrastPairs": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "required": ["foreground", "background"],
+        "properties": {
+          "foreground": { "type": "string", "minLength": 1 },
+          "background": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
     "omitted": {
       "type": "array",
       "items": {

@@ -15,6 +15,7 @@ export interface Finding {
 export interface LintResult {
   findings: Finding[];
   summary: { errors: number; warnings: number; infos: number };
+  coverage: { checked: number; unchecked: number };
 }
 
 interface Leaf { $type?: string; $value?: unknown }
@@ -44,10 +45,11 @@ export function lintTheme(themeDir: string): LintResult {
   const tokensPath = join(themeDir, 'tokens.json');
   if (!existsSync(themePath) || !existsSync(tokensPath)) {
     return { findings: [{ severity: 'warning', path: '.', message: 'not a theme directory' }],
-             summary: { errors: 0, warnings: 1, infos: 0 } };
+             summary: { errors: 0, warnings: 1, infos: 0 }, coverage: { checked: 0, unchecked: 1 } };
   }
 
   const theme = JSON.parse(readFileSync(themePath, 'utf8')) as {
+    contrastPairs?: Record<string, { foreground: string; background: string }>;
     surfaces?: { light?: string; dark?: string };
     omitted?: Array<{ section: string; reason: string }>;
   };
@@ -122,6 +124,19 @@ export function lintTheme(themeDir: string): LintResult {
     });
   }
 
+  for (const [name, pair] of Object.entries(theme.contrastPairs ?? {})) {
+    const path = `contrastPairs.${name}`;
+    const foreground = resolveString(tokens, pair.foreground);
+    const background = resolveString(tokens, pair.background);
+    if (!foreground || !background || !hexToRgb(foreground) || !hexToRgb(background)) {
+      push({ severity: 'warning', path, message: 'not checked: explicit pair must resolve to two opaque hex colours' });
+      continue;
+    }
+    const ratio = contrastRatio(foreground, background);
+    push({ severity: ratio >= AA_NORMAL ? 'info' : 'error', path,
+      message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`, ratio, required: AA_NORMAL });
+  }
+
   // A component states both of its colours, so it is the one pair that needs no
   // naming convention to find. A variant that overrides only one of them
   // inherits the other from its base — 'button-primary-hover' from
@@ -160,6 +175,10 @@ export function lintTheme(themeDir: string): LintResult {
 
   return {
     findings,
+    coverage: {
+      checked: findings.filter(f => f.ratio !== undefined).length,
+      unchecked: findings.filter(f => f.ratio === undefined).length,
+    },
     summary: {
       errors: findings.filter((f) => f.severity === 'error').length,
       warnings: findings.filter((f) => f.severity === 'warning').length,

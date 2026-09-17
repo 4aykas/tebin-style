@@ -26,6 +26,10 @@ describe('packFileList', () => {
     expect(files.some((f) => f.endsWith('.svg'))).toBe(true);
     expect(files).toContain('README.md');
     expect(files).toContain('docs/guide/office.md');
+    expect(files).toContain('examples/README.md');
+    expect(files).toContain('examples/classic/project-report.docx');
+    expect(files).toContain('examples/classic/presentation-layouts.pptx');
+    expect(files).toContain('examples/modern/project-form.html');
   });
 
   it('excludes source and build files', () => {

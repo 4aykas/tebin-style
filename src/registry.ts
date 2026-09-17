@@ -51,6 +51,7 @@ export interface ThemeManifest {
   version: string;
   description?: string;
   surfaces?: { light?: string; dark?: string };
+  contrastPairs?: Record<string, { foreground: string; background: string }>;
   omitted?: Array<{ section: string; reason: string }>;
   license: { tokens: string; assets: string };
   assets: Array<{ id: string; type: string; format: string; path: string }>;

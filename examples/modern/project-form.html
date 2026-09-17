@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project brief — TEBIN Modern reference</title>
+<link rel="stylesheet" href="../../themes/tebin/dist/tokens.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:var(--color-paper);color:var(--color-ink);font:16px/1.6 var(--font-sans)}
+main{max-width:760px;margin:0 auto;padding:48px 28px 80px}.logo{display:block;width:180px;height:auto;margin:0 0 48px}
+h1{font-size:var(--type-h1);line-height:1.2;margin:0 0 16px}p{max-width:60ch}label,legend{font-weight:700}label{display:block;margin-top:24px}
+input,textarea,select,button{font:inherit}input,textarea,select{display:block;width:100%;padding:12px;margin-top:8px;border:1px solid var(--color-muted);border-radius:0;background:var(--color-paper);color:var(--color-ink)}
+textarea{min-height:130px;resize:vertical}button{padding:12px 24px;min-height:48px;border:2px solid transparent;cursor:pointer;background:var(--color-ink);color:white}
+button[type=submit]{background:var(--color-brand)}button:hover{filter:brightness(.9)}button:disabled{background:var(--color-rule);color:var(--color-muted);cursor:not-allowed;filter:none}
+:focus-visible{outline:3px solid var(--color-ink);outline-offset:4px}.actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:32px}
+.note{font-size:14px;color:var(--color-muted)}.error{color:var(--color-brick);font-weight:700}[aria-invalid=true]{border:2px solid var(--color-brick)}[hidden]{display:none}
+#status{margin-top:24px;font-weight:700}footer{margin-top:56px;border-top:1px solid var(--color-muted);padding-top:16px}
+</style>
+<main>
+<img class="logo" src="../../themes/tebin/assets/logo/logo-full.svg" alt="TEBIN">
+<h1>Prepare a project brief</h1>
+<p>Describe the project and its next decision. This reference demonstrates readable labels, keyboard focus and validation. It does not send or save data.</p>
+<form id="brief" novalidate>
+<div id="errors" class="error" role="alert" hidden>Check the highlighted fields before continuing.</div>
+<label for="name">Project name</label>
+<input id="name" name="name" required autocomplete="off" aria-describedby="name-error">
+<p id="name-error" class="error" hidden>Enter a project name.</p>
+<label for="email">Contact email</label>
+<input id="email" name="email" type="email" required autocomplete="email" aria-describedby="email-error">
+<p id="email-error" class="error" hidden>Enter a valid contact email.</p>
+<label for="stage">Project stage</label>
+<select id="stage" name="stage"><option>Concept</option><option>Design coordination</option><option>Delivery</option></select>
+<label for="description">What needs to be decided?</label>
+<textarea id="description" name="description" aria-describedby="description-help"></textarea>
+<p id="description-help" class="note">Summarise the scope and the decision needed. Use illustrative details in this demo.</p>
+<div class="actions"><button type="button" id="review">Review locally</button><button type="submit">Confirm brief</button><button disabled type="button">Send unavailable</button></div>
+<p id="status" role="status" aria-live="polite"></p>
+</form>
+<footer class="note">Reference candidate · TEBIN Modern · Red marks commitment; ink marks a routine action. This proposal does not alter the live website.</footer>
+</main>
+<script>
+const form=document.querySelector('#brief');
+const status=document.querySelector('#status');
+document.querySelector('#review').addEventListener('click',()=>{status.textContent='Review the fields above. Nothing has been saved or sent.';});
+form.addEventListener('submit',event=>{
+ event.preventDefault();let first=null;
+ for(const id of ['name','email']){
+  const input=document.getElementById(id);const valid=input.validity.valid && input.value.trim().length>0;
+  input.setAttribute('aria-invalid',String(!valid));document.getElementById(id+'-error').hidden=valid;
+  if(!valid&&!first)first=input;
+ }
+ document.querySelector('#errors').hidden=!first;
+ status.textContent=first?'':'Brief confirmed in this demo. Nothing has been saved or sent.';
+ if(first)first.focus();
+});
+</script>
+</html>

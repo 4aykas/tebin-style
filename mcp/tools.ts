@@ -36,6 +36,7 @@ export function getTheme(input: { id: string; format?: Format }) {
     id: manifest.id, name: manifest.name, version: manifest.version,
     format, filename, license: manifest.license, description: manifest.description,
     surfaces: manifest.surfaces, omitted: manifest.omitted ?? [], content,
+    contrastPairs: manifest.contrastPairs ?? {},
   };
 }
 

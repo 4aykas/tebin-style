@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.10.0 — 2026-09-17
+
+- Add explicit opaque foreground/background `contrastPairs` to theme metadata,
+  expose them through MCP, and report measured/unmeasured finding counts.
+- Add reviewed reference candidates: a Classic report, three presentation
+  layouts and a Modern form with validation and keyboard states. Brand approval
+  and live cross-model evaluation are still pending; see examples/README.md.
+- Include reference files and their guidance in the downloadable brand pack.
+
 ## 1.9.0 — 2026-09-17
 
 - Detect introduced and worsened lint errors individually in `diff_themes`,
