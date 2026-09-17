@@ -10,6 +10,9 @@ export interface DiffResult {
     before: LintResult['summary'];
     after: LintResult['summary'];
     delta: { errors: number; warnings: number };
+    introduced: LintResult['findings'];
+    resolved: LintResult['findings'];
+    worsened: Array<{ before: LintResult['findings'][number]; after: LintResult['findings'][number] }>;
   };
   regression: boolean;
 }
@@ -62,22 +65,44 @@ export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
     g.added.sort(); g.removed.sort(); g.modified.sort();
   }
 
-  const lintBefore = lintTheme(beforeDir).summary;
-  const lintAfter = lintTheme(afterDir).summary;
+  const beforeLint = lintTheme(beforeDir);
+  const afterLint = lintTheme(afterDir);
+  const lintBefore = beforeLint.summary;
+  const lintAfter = afterLint.summary;
+  // Contrast text contains changing colours/ratios; identify that check by path.
+  // Other diagnostics retain their message so distinct failures are not merged.
+  const key = (f: LintResult['findings'][number]) => JSON.stringify([
+    f.path, f.ratio !== undefined ? 'contrast' : f.message,
+  ]);
+  const failures = (lint: LintResult) => new Map(lint.findings
+    .filter(f => f.severity !== 'info').map(f => [key(f), f]));
+  const previous = failures(beforeLint);
+  const current = failures(afterLint);
+  const introduced = [...current].filter(([id]) => !previous.has(id)).map(([, f]) => f);
+  const resolved = [...previous].filter(([id]) => !current.has(id)).map(([, f]) => f);
+  const worsened: DiffResult['findings']['worsened'] = [];
+  for (const [id, after] of current) {
+    const before = previous.get(id);
+    if (before && ((before.severity === 'warning' && after.severity === 'error') ||
+      (before.ratio !== undefined && after.ratio !== undefined &&
+        after.ratio / (after.required ?? 1) < before.ratio / (before.required ?? 1)))) {
+      worsened.push({ before, after });
+    }
+  }
 
   return {
     tokens,
     findings: {
       before: lintBefore,
       after: lintAfter,
+      introduced, resolved, worsened,
       delta: {
         errors: lintAfter.errors - lintBefore.errors,
         warnings: lintAfter.warnings - lintBefore.warnings,
       },
     },
-    // Narrow on purpose. A removed token may be the whole point of the change,
-    // and a changed value usually is. Only new contrast errors are a regression,
-    // because a broad definition that fires on every edit gets ignored.
-    regression: lintAfter.errors > lintBefore.errors,
+    // Token removals and warnings are visible separately, not compatibility claims.
+    regression: introduced.some(f => f.severity === 'error') ||
+      worsened.some(f => f.after.severity === 'error'),
   };
 }

@@ -25,6 +25,36 @@ const ok = {
 };
 
 describe('diffThemes', () => {
+  const withRoles = (first: string, second: string) => ({ ...ok, role: {
+    ...ok.role, 'on-surface': { $type: 'color', $value: first },
+    'on-surface-muted': { $type: 'color', $value: second },
+  } });
+
+  it('detects a replacement failure even when error totals are unchanged', () => {
+    const d = diffThemes(make('swap-a', withRoles('#CCCCCC', '#111111')),
+      make('swap-b', withRoles('#111111', '#CCCCCC')));
+    expect(d.findings.delta.errors).toBe(0);
+    expect(d.regression).toBe(true);
+    expect(d.findings.introduced.map(f => f.path)).toEqual(['role.on-surface-muted']);
+    expect(d.findings.resolved.map(f => f.path)).toEqual(['role.on-surface']);
+  });
+
+  it('detects worsening existing contrast and ignores an improvement that still fails', () => {
+    const a = make('worse-a', withRoles('#AAAAAA', '#111111'));
+    const b = make('worse-b', withRoles('#CCCCCC', '#111111'));
+    expect(diffThemes(a, b).findings.worsened).toHaveLength(1);
+    expect(diffThemes(a, b).regression).toBe(true);
+    expect(diffThemes(b, a).regression).toBe(false);
+    expect(diffThemes(a, a).findings.introduced).toEqual([]);
+  });
+
+  it('exposes new broken references separately from contrast regressions', () => {
+    const d = diffThemes(make('ref-a', ok), make('ref-b', { ...ok,
+      spacing: { bad: { $type: 'dimension', $value: '{spacing.missing}' } },
+    }));
+    expect(d.findings.introduced.some(f => f.path === 'spacing.bad')).toBe(true);
+    expect(d.regression).toBe(false);
+  });
   it('detects changed fluid ranges, print references and types even with the same value', () => {
     const a = make('metadata-a', { ...ok,
       type: { h1: { $type: 'dimension', $value: '38px', $extensions: { 'pro.tebin.fluid': { min: '28px', pref: '4vw', max: '38px' } } } },

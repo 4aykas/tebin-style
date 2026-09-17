@@ -82,9 +82,9 @@ platforms. The ZIP command is also exercised locally on Windows.
 A clean lint result is not a full accessibility certificate. Translucent
 colours still require compositing on a known background; arbitrary component
 states, keyboard behaviour and document layout require target-level checks.
-`diff_themes.regression` retains its narrow meaning: the total contrast-error
-count increased. It does not certify compatibility or catch every replacement
-of one failure with a different failure.
+At the September 6 baseline, `diff_themes.regression` only compared error totals.
+Version 1.9.0 replaces that limitation with individual introduced and worsened
+errors, exposing resolved findings too. It still does not certify compatibility.
 
 ## Next design work, in order
 

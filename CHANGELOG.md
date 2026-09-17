@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased — design library audit
+## 1.9.0 — 2026-09-17
+
+- Detect introduced and worsened lint errors individually in `diff_themes`,
+  including replacement failures with unchanged totals. Expose introduced,
+  resolved and worsened findings while retaining existing summary fields.
+- Align the package/MCP release version and reject mismatched release tags.
+  Theme versions remain independent from the tooling release version.
 
 ### Second audit pass
 - Upgrade Style Dictionary to 5.5.2, Vitest to 3.2.7 and the MCP SDK to 1.30.0;

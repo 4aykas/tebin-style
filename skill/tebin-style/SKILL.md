@@ -89,7 +89,9 @@ On `tebin`, `type.*` and `spacing.*` values are **ceilings**: the token's
 `lint_theme({ id })` measures contrast for every role a naming rule can pair
 with a surface, and names what it could not reach. Run it after changing a
 colour. `diff_themes({ a, b })` shows what moved between two themes and flags
-a regression, which means only one thing: contrast errors went up.
+a regression when an individual lint error is introduced or worsens, even if
+the total stays unchanged. Inspect introduced, resolved and worsened findings;
+the flag does not establish compatibility or coverage of untested states.
 
 ## Design rules
 

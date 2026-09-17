@@ -144,7 +144,7 @@ export const toolDefinitions: ToolDef[] = [
   {
     name: 'diff_themes',
     description:
-      'Compare two themes token by token: added, removed and modified per group, plus a lint summary for each side and a regression flag, which is set only when contrast errors increase.',
+      'Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved or worsened findings. Regression means an introduced or worsened lint error, even when error totals are unchanged; it is not a compatibility guarantee.',
     inputSchema: { a: z.string(), b: z.string() },
     handler: diffThemesTool,
   },

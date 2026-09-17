@@ -100,6 +100,11 @@ open a web page or start an HTTP server.
 | `lint_theme` | `{ id }` | contrast failures and broken references, with the ratio and the surface used |
 | `diff_themes` | `{ a, b }` | token diff by group, plus a regression flag |
 
+Since 1.9.0, comparison results include `findings.introduced`, `resolved` and
+`worsened`. The regression flag detects individual new or worsening errors,
+including a new failure hidden by fixing another one. Warnings and removed
+tokens remain visible separately; this is not a compatibility guarantee.
+
 All seven tools advertise read-only, local-data behaviour. `get_theme` includes
 licensing, declared surfaces and documented omissions. Theme search also covers
 descriptions and tags, so `query: "print"` finds Classic. `colors-csv` exposes

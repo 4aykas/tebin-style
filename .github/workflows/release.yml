@@ -15,6 +15,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Check release tag and changelog
+        run: node scripts/check-release.mjs
       # check runs before packing, so a release can never ship a stale tree.
       - run: pnpm verify
       - run: pnpm pack:brand
