@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tebin",
+  "description": "TEBIN design library for AI agents",
+  "owner": {
+    "name": "TEBIN"
+  },
+  "plugins": [
+    {
+      "name": "tebin-style",
+      "description": "TEBIN brand themes, assets and design rules",
+      "source": "./",
+      "category": "design"
+    }
+  ]
+}
