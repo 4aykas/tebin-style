@@ -14,10 +14,11 @@
    ```bash
    pnpm build && pnpm verify
    ```
-6. Commit the source files **and** the generated `dist/*` and updated
-   `registry/index.json`. Open a PR. CI runs `pnpm verify` on the committed outputs before a rebuild can hide drift.
+6. Commit the source files **and** every generated output (`dist/`,
+   `DESIGN.md`, `assets/png/`, `preview/`, `registry/index.json`). Open a PR. CI runs `pnpm verify` on the committed outputs before a rebuild can hide drift.
 
-Do not hand-edit `dist/*` or `registry/index.json`.
+Do not hand-edit generated files. [`AGENTS.md`](./AGENTS.md#generated-files)
+lists them all.
 
 ## Contributing a design rule
 
