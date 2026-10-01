@@ -21499,13 +21499,16 @@ function readFormat(id, format) {
   if (!existsSync(p)) throw new NotFoundError(`format "${format}" for theme "${id}" not found`);
   return { filename, content: readFileSync(p, "utf8") };
 }
+function assetFormat(repoRelPath) {
+  return extname(repoRelPath).replace(".", "").toLowerCase();
+}
 function readAssetFile(repoRelPath) {
   const match = /^themes\/([^/]+)\/assets\/(.+)$/.exec(repoRelPath);
   const [, id, rest] = match ?? [];
   if (!id || !rest) throw new NotFoundError("asset path must be inside a theme assets directory");
   const p = containedFile(containedFile(themePath(id), "assets"), rest);
   if (!existsSync(p)) throw new NotFoundError(`asset file not found: ${repoRelPath}`);
-  const ext = extname(repoRelPath).replace(".", "").toLowerCase();
+  const ext = assetFormat(repoRelPath);
   const isText = ext === "svg";
   return {
     format: ext,
@@ -21870,6 +21873,8 @@ function getTheme(input) {
     contrastPairs: manifest.contrastPairs ?? {}
   };
 }
+var MAX_INLINE_BYTES = 2e5;
+var INLINE_FORMATS = /* @__PURE__ */ new Set(["svg", "png"]);
 function getAsset(input) {
   const entry = loadIndex().themes.find((t) => t.id === input.id);
   if (!entry) throw new NotFoundError(`theme "${input.id}" not found`);
@@ -21878,17 +21883,21 @@ function getAsset(input) {
   }
   const asset = entry.assets.find((a) => a.id === input.assetId);
   if (!asset) throw new NotFoundError(`asset "${input.assetId}" not found in theme "${input.id}"`);
-  const file = readAssetFile(asset.path);
+  const format = assetFormat(asset.path);
+  const readable = INLINE_FORMATS.has(format);
+  const file = readable && asset.bytes <= MAX_INLINE_BYTES ? readAssetFile(asset.path) : void 0;
   return {
     id: entry.id,
     assetId: asset.id,
     type: asset.type,
-    format: file.format,
+    format,
     path: asset.path,
     rawUrl: asset.rawUrl,
+    bytes: asset.bytes,
     license: asset.license ?? loadThemeManifest(input.id).license.assets,
-    encoding: file.encoding,
-    content: file.content
+    encoding: file?.encoding,
+    content: file?.content,
+    note: file ? void 0 : `${readable ? `Larger than ${MAX_INLINE_BYTES} bytes` : `${format.toUpperCase()} is not sent inline`}; download it from rawUrl.`
   };
 }
 function listRules(input) {
@@ -21931,7 +21940,7 @@ var toolDefinitions = [
   },
   {
     name: "get_asset",
-    description: "List a theme's brand assets, or fetch one asset (SVG as text, binary as base64) by assetId.",
+    description: "List a theme's brand assets with sizes, or fetch one by assetId: SVG as text, PNG up to 200 KB as an image, anything else as a link.",
     inputSchema: {
       id: external_exports.string(),
       assetId: external_exports.string().optional()
@@ -21975,6 +21984,23 @@ var toolDefinitions = [
 
 // mcp/server.ts
 import { join as join6 } from "node:path";
+var MIME_TYPES = { svg: "image/svg+xml", png: "image/png", ico: "image/x-icon" };
+function assetBlocks(asset) {
+  const { content, ...metadata } = asset;
+  const text = { type: "text", text: JSON.stringify(metadata, null, 2) };
+  if (content === void 0) {
+    if (!asset.rawUrl) return [text];
+    return [text, {
+      type: "resource_link",
+      uri: asset.rawUrl,
+      name: asset.assetId,
+      mimeType: MIME_TYPES[asset.format],
+      size: asset.bytes
+    }];
+  }
+  if (asset.format === "png") return [text, { type: "image", data: content, mimeType: "image/png" }];
+  return [{ type: "text", text: JSON.stringify(asset, null, 2) }];
+}
 function createServer() {
   const { version: version2 } = JSON.parse(readFileSync5(join6(REPO_ROOT, "package.json"), "utf8"));
   const server = new McpServer({ name: "tebin-style", version: version2 });
@@ -21989,12 +22015,8 @@ function createServer() {
       async (args) => {
         try {
           const result = await def.handler(args);
-          if (def.name === "get_asset" && result && typeof result === "object" && "format" in result && result.format === "png" && "content" in result && typeof result.content === "string") {
-            const { content, ...metadata } = result;
-            return { content: [
-              { type: "text", text: JSON.stringify(metadata, null, 2) },
-              { type: "image", data: content, mimeType: "image/png" }
-            ] };
+          if (def.name === "get_asset" && result && typeof result === "object" && "assetId" in result) {
+            return { content: assetBlocks(result) };
           }
           return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
         } catch (err) {

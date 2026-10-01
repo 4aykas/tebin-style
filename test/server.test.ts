@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { createServer } from '../mcp/server.js';
-import { toolDefinitions } from '../mcp/tools.js';
+import { toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
+import { loadIndex } from '../src/registry.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -44,6 +45,31 @@ describe('mcp server', () => {
       expect(invalid.isError).toBe(true);
       const missing = await client.callTool({ name: 'get_asset', arguments: { id: 'tebin', assetId: 'missing' } });
       expect(missing.isError).toBe(true);
+    } finally {
+      await client.close();
+      await server.close();
+    }
+  });
+
+  it('keeps every get_asset response under the inline cap, linking larger files', async () => {
+    const server = createServer();
+    const client = new Client({ name: 'test', version: '1.0.0' });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    try {
+      await server.connect(serverTransport);
+      await client.connect(clientTransport);
+      for (const theme of loadIndex().themes) {
+        for (const asset of theme.assets) {
+          const { content } = await client.callTool({ name: 'get_asset', arguments: { id: theme.id, assetId: asset.id } });
+          const blocks = content as Array<{ type: string; text?: string; data?: string; uri?: string }>;
+          const bytes = blocks.reduce((sum, b) => sum +
+            (b.type === 'image' ? Buffer.from(b.data ?? '', 'base64').length : Buffer.byteLength(b.text ?? '')), 0);
+          expect(bytes, `${theme.id}/${asset.id}`).toBeLessThanOrEqual(MAX_INLINE_BYTES);
+          if (asset.bytes > MAX_INLINE_BYTES) {
+            expect(blocks).toContainEqual(expect.objectContaining({ type: 'resource_link', uri: asset.rawUrl, size: asset.bytes }));
+          }
+        }
+      }
     } finally {
       await client.close();
       await server.close();

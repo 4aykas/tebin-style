@@ -91,7 +91,7 @@ open a web page or start an HTTP server.
 |------|-------|---------|
 | `list_themes` | `{ industry?, mood?, query? }` | matching theme summaries; assets come from `get_asset` |
 | `get_theme` | `{ id, format? }` | tokens in `css` \| `tailwind` \| `dtcg` \| `ts` \| `design-md` \| `colors-csv` |
-| `get_asset` | `{ id, assetId? }` | asset list with licence, or one asset (SVG text / native PNG image / other binary base64) |
+| `get_asset` | `{ id, assetId? }` | asset list with licence and size, or one asset (SVG text / native PNG image / link) |
 | `list_rules` | `{ theme?, medium?, category?, severity?, tag?, query? }` | rules matching the theme, medium and other filters |
 | `get_rule` | `{ id }` | a single design rule |
 | `lint_theme` | `{ id }` | contrast failures and broken references, with the ratio and the surface used |
@@ -116,9 +116,11 @@ uncovered, not as a pass.
 
 `get_asset` also serves the generated PNGs, by ids of the form
 `logo-full@1024` and `logo-full-white@1024-on-brand` — list a theme's assets
-without an `assetId` to see them all. PNG responses use an MCP image block;
-its accompanying text has metadata and a download URL, not a second copy of
-the base64 image. SVGs remain text for direct embedding.
+without an `assetId` to see them all, with each file's size in `bytes`. PNG
+responses use an MCP image block; its accompanying text has metadata and a
+download URL, not a second copy of the base64 image. SVGs remain text for
+direct embedding. Files over 200 KB, and binaries such as ICO, come back as
+metadata and a `resource_link` to `rawUrl` instead of inline data.
 
 ### A useful first request
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { ThemeEntry } from '../src/index-builder.js';
 import {
-  loadIndex, loadThemeManifest, readFormat, readAssetFile, FORMAT_FILES, NotFoundError,
+  loadIndex, loadThemeManifest, readFormat, readAssetFile, assetFormat, FORMAT_FILES, NotFoundError,
   type Format,
 } from '../src/registry.js';
 import { filterRules, getRule as getRuleById, type Rule, type RuleFilters } from '../src/rules.js';
@@ -41,6 +41,11 @@ export function getTheme(input: { id: string; format?: Format }) {
   };
 }
 
+/** Largest asset, in raw bytes, that get_asset returns inline; larger ones come back as a link. */
+export const MAX_INLINE_BYTES = 200_000;
+/** Formats a model can read inline: SVG as text, PNG as an image block. Others come back as a link. */
+const INLINE_FORMATS = new Set(['svg', 'png']);
+
 export function getAsset(input: { id: string; assetId?: string }) {
   const entry = loadIndex().themes.find((t) => t.id === input.id);
   if (!entry) throw new NotFoundError(`theme "${input.id}" not found`);
@@ -52,12 +57,16 @@ export function getAsset(input: { id: string; assetId?: string }) {
   const asset = entry.assets.find((a) => a.id === input.assetId);
   if (!asset) throw new NotFoundError(`asset "${input.assetId}" not found in theme "${input.id}"`);
 
-  const file = readAssetFile(asset.path);
+  const format = assetFormat(asset.path);
+  const readable = INLINE_FORMATS.has(format);
+  const file = readable && asset.bytes <= MAX_INLINE_BYTES ? readAssetFile(asset.path) : undefined;
   return {
     id: entry.id, assetId: asset.id, type: asset.type,
-    format: file.format, path: asset.path, rawUrl: asset.rawUrl,
+    format, path: asset.path, rawUrl: asset.rawUrl, bytes: asset.bytes,
     license: asset.license ?? loadThemeManifest(input.id).license.assets,
-    encoding: file.encoding, content: file.content,
+    encoding: file?.encoding, content: file?.content,
+    note: file ? undefined
+      : `${readable ? `Larger than ${MAX_INLINE_BYTES} bytes` : `${format.toUpperCase()} is not sent inline`}; download it from rawUrl.`,
   };
 }
 
@@ -116,7 +125,7 @@ export const toolDefinitions: ToolDef[] = [
   },
   {
     name: 'get_asset',
-    description: "List a theme's brand assets, or fetch one asset (SVG as text, binary as base64) by assetId.",
+    description: "List a theme's brand assets with sizes, or fetch one by assetId: SVG as text, PNG up to 200 KB as an image, anything else as a link.",
     inputSchema: {
       id: z.string(),
       assetId: z.string().optional(),

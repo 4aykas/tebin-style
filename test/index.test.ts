@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildIndex, keepGeneratedAt } from '../src/index-builder.js';
-import { mkdtempSync, cpSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, cpSync, readFileSync, writeFileSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -51,6 +51,12 @@ describe('buildIndex raster entries', () => {
     expect(png.path).toBe('themes/tebin-classic/assets/png/logo-full-1024.png');
     expect(png.rawUrl).toBe('https://example.test/themes/tebin-classic/assets/png/logo-full-1024.png');
     expect(png.type).toBe('logo');
+  });
+
+  it('records each asset size in bytes, so an agent can choose before fetching', () => {
+    for (const a of classic.assets) {
+      expect(a.bytes, a.id).toBe(statSync(join(here, '..', a.path)).size);
+    }
   });
 
   it('names a background variant in its id', () => {

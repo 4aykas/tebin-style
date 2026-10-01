@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17",
+  "generatedAt": "2026-10-01",
   "count": 3,
   "themes": [
     {
@@ -65,6 +65,7 @@
           "id": "logo-full",
           "type": "logo",
           "path": "themes/tebin/assets/logo/logo-full.svg",
+          "bytes": 1222,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg"
         },
@@ -72,6 +73,7 @@
           "id": "logo-full-white",
           "type": "logo",
           "path": "themes/tebin/assets/logo/logo-full-white.svg",
+          "bytes": 1167,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full-white.svg"
         },
@@ -79,6 +81,7 @@
           "id": "favicon-svg",
           "type": "favicon",
           "path": "themes/tebin/assets/favicon/favicon.svg",
+          "bytes": 197,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/favicon/favicon.svg"
         },
@@ -86,6 +89,7 @@
           "id": "favicon-png",
           "type": "favicon",
           "path": "themes/tebin/assets/favicon/favicon.png",
+          "bytes": 243,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/favicon/favicon.png"
         },
@@ -93,6 +97,7 @@
           "id": "favicon-ico",
           "type": "favicon",
           "path": "themes/tebin/assets/favicon/favicon.ico",
+          "bytes": 4286,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/favicon/favicon.ico"
         },
@@ -100,6 +105,7 @@
           "id": "corner-outline",
           "type": "pattern",
           "path": "themes/tebin/assets/misc/corner_outline.svg",
+          "bytes": 470,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/corner_outline.svg"
         },
@@ -107,6 +113,7 @@
           "id": "corner-mark",
           "type": "pattern",
           "path": "themes/tebin/assets/misc/corner-mark.svg",
+          "bytes": 244,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/corner-mark.svg"
         },
@@ -114,6 +121,7 @@
           "id": "corner-mark-white",
           "type": "pattern",
           "path": "themes/tebin/assets/misc/corner-mark-white.svg",
+          "bytes": 238,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/corner-mark-white.svg"
         },
@@ -121,6 +129,7 @@
           "id": "fxptebin",
           "type": "image",
           "path": "themes/tebin/assets/misc/fxptebin.png",
+          "bytes": 2213905,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/misc/fxptebin.png"
         },
@@ -128,6 +137,7 @@
           "id": "corner-mark@128",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-128.png",
+          "bytes": 417,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-128.png"
         },
@@ -135,6 +145,7 @@
           "id": "corner-mark@256",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-256.png",
+          "bytes": 1129,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-256.png"
         },
@@ -142,6 +153,7 @@
           "id": "corner-mark@512",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-512.png",
+          "bytes": 2764,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-512.png"
         },
@@ -149,6 +161,7 @@
           "id": "corner-mark-white@128-on-brand",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-white-128-on-brand.png",
+          "bytes": 572,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-white-128-on-brand.png"
         },
@@ -156,6 +169,7 @@
           "id": "corner-mark-white@128-on-charcoal",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-white-128-on-charcoal.png",
+          "bytes": 554,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-white-128-on-charcoal.png"
         },
@@ -163,6 +177,7 @@
           "id": "corner-mark-white@256-on-brand",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-white-256-on-brand.png",
+          "bytes": 1286,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-white-256-on-brand.png"
         },
@@ -170,6 +185,7 @@
           "id": "corner-mark-white@256-on-charcoal",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-white-256-on-charcoal.png",
+          "bytes": 1297,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-white-256-on-charcoal.png"
         },
@@ -177,6 +193,7 @@
           "id": "corner-mark-white@512-on-brand",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-white-512-on-brand.png",
+          "bytes": 3332,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-white-512-on-brand.png"
         },
@@ -184,6 +201,7 @@
           "id": "corner-mark-white@512-on-charcoal",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-mark-white-512-on-charcoal.png",
+          "bytes": 3363,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-mark-white-512-on-charcoal.png"
         },
@@ -191,6 +209,7 @@
           "id": "corner-outline@128",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-outline-128.png",
+          "bytes": 542,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-outline-128.png"
         },
@@ -198,6 +217,7 @@
           "id": "corner-outline@256",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-outline-256.png",
+          "bytes": 1607,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-outline-256.png"
         },
@@ -205,6 +225,7 @@
           "id": "corner-outline@512",
           "type": "pattern",
           "path": "themes/tebin/assets/png/corner-outline-512.png",
+          "bytes": 2954,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/corner-outline-512.png"
         },
@@ -212,6 +233,7 @@
           "id": "favicon-svg@128",
           "type": "favicon",
           "path": "themes/tebin/assets/png/favicon-svg-128.png",
+          "bytes": 487,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/favicon-svg-128.png"
         },
@@ -219,6 +241,7 @@
           "id": "favicon-svg@256",
           "type": "favicon",
           "path": "themes/tebin/assets/png/favicon-svg-256.png",
+          "bytes": 1230,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/favicon-svg-256.png"
         },
@@ -226,6 +249,7 @@
           "id": "favicon-svg@512",
           "type": "favicon",
           "path": "themes/tebin/assets/png/favicon-svg-512.png",
+          "bytes": 3326,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/favicon-svg-512.png"
         },
@@ -233,6 +257,7 @@
           "id": "logo-full@1024",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-1024.png",
+          "bytes": 13496,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-1024.png"
         },
@@ -240,6 +265,7 @@
           "id": "logo-full@2048",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-2048.png",
+          "bytes": 31905,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-2048.png"
         },
@@ -247,6 +273,7 @@
           "id": "logo-full@512",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-512.png",
+          "bytes": 5863,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-512.png"
         },
@@ -254,6 +281,7 @@
           "id": "logo-full-white@1024-on-brand",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-white-1024-on-brand.png",
+          "bytes": 11042,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-white-1024-on-brand.png"
         },
@@ -261,6 +289,7 @@
           "id": "logo-full-white@1024-on-charcoal",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-white-1024-on-charcoal.png",
+          "bytes": 10705,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-white-1024-on-charcoal.png"
         },
@@ -268,6 +297,7 @@
           "id": "logo-full-white@2048-on-brand",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-white-2048-on-brand.png",
+          "bytes": 28739,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-white-2048-on-brand.png"
         },
@@ -275,6 +305,7 @@
           "id": "logo-full-white@2048-on-charcoal",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-white-2048-on-charcoal.png",
+          "bytes": 28185,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-white-2048-on-charcoal.png"
         },
@@ -282,6 +313,7 @@
           "id": "logo-full-white@512-on-brand",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-white-512-on-brand.png",
+          "bytes": 5300,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-white-512-on-brand.png"
         },
@@ -289,6 +321,7 @@
           "id": "logo-full-white@512-on-charcoal",
           "type": "logo",
           "path": "themes/tebin/assets/png/logo-full-white-512-on-charcoal.png",
+          "bytes": 5134,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-white-512-on-charcoal.png"
         }
@@ -327,6 +360,7 @@
           "id": "logo-full",
           "type": "logo",
           "path": "themes/tebin-classic/assets/logo/logo-full.svg",
+          "bytes": 1194,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full.svg"
         },
@@ -334,6 +368,7 @@
           "id": "logo-full-white",
           "type": "logo",
           "path": "themes/tebin-classic/assets/logo/logo-full-white.svg",
+          "bytes": 1167,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg"
         },
@@ -341,6 +376,7 @@
           "id": "corner-mark",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/misc/corner-mark.svg",
+          "bytes": 244,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/misc/corner-mark.svg"
         },
@@ -348,6 +384,7 @@
           "id": "corner-mark-white",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/misc/corner-mark-white.svg",
+          "bytes": 238,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/misc/corner-mark-white.svg"
         },
@@ -355,6 +392,7 @@
           "id": "corner-mark@128",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-128.png",
+          "bytes": 423,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-128.png"
         },
@@ -362,6 +400,7 @@
           "id": "corner-mark@256",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-256.png",
+          "bytes": 1129,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-256.png"
         },
@@ -369,6 +408,7 @@
           "id": "corner-mark@512",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-512.png",
+          "bytes": 2763,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-512.png"
         },
@@ -376,6 +416,7 @@
           "id": "corner-mark-white@128-on-brand",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-white-128-on-brand.png",
+          "bytes": 572,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-white-128-on-brand.png"
         },
@@ -383,6 +424,7 @@
           "id": "corner-mark-white@128-on-charcoal",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-white-128-on-charcoal.png",
+          "bytes": 552,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-white-128-on-charcoal.png"
         },
@@ -390,6 +432,7 @@
           "id": "corner-mark-white@256-on-brand",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-white-256-on-brand.png",
+          "bytes": 1286,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-white-256-on-brand.png"
         },
@@ -397,6 +440,7 @@
           "id": "corner-mark-white@256-on-charcoal",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-white-256-on-charcoal.png",
+          "bytes": 1261,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-white-256-on-charcoal.png"
         },
@@ -404,6 +448,7 @@
           "id": "corner-mark-white@512-on-brand",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-white-512-on-brand.png",
+          "bytes": 3332,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-white-512-on-brand.png"
         },
@@ -411,6 +456,7 @@
           "id": "corner-mark-white@512-on-charcoal",
           "type": "pattern",
           "path": "themes/tebin-classic/assets/png/corner-mark-white-512-on-charcoal.png",
+          "bytes": 3300,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-white-512-on-charcoal.png"
         },
@@ -418,6 +464,7 @@
           "id": "logo-full@1024",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-1024.png",
+          "bytes": 13595,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-1024.png"
         },
@@ -425,6 +472,7 @@
           "id": "logo-full@2048",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-2048.png",
+          "bytes": 32075,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-2048.png"
         },
@@ -432,6 +480,7 @@
           "id": "logo-full@512",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-512.png",
+          "bytes": 6219,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-512.png"
         },
@@ -439,6 +488,7 @@
           "id": "logo-full-white@1024-on-brand",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png",
+          "bytes": 11042,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png"
         },
@@ -446,6 +496,7 @@
           "id": "logo-full-white@1024-on-charcoal",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png",
+          "bytes": 12878,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png"
         },
@@ -453,6 +504,7 @@
           "id": "logo-full-white@2048-on-brand",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-white-2048-on-brand.png",
+          "bytes": 28739,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-brand.png"
         },
@@ -460,6 +512,7 @@
           "id": "logo-full-white@2048-on-charcoal",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-white-2048-on-charcoal.png",
+          "bytes": 30794,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-charcoal.png"
         },
@@ -467,6 +520,7 @@
           "id": "logo-full-white@512-on-brand",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-white-512-on-brand.png",
+          "bytes": 5300,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-512-on-brand.png"
         },
@@ -474,6 +528,7 @@
           "id": "logo-full-white@512-on-charcoal",
           "type": "logo",
           "path": "themes/tebin-classic/assets/png/logo-full-white-512-on-charcoal.png",
+          "bytes": 6080,
           "license": "© TEBIN — all rights reserved",
           "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-512-on-charcoal.png"
         }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { listThemes, getTheme, getAsset, listRules, getRuleTool, toolDefinitions } from '../mcp/tools.js';
+import { listThemes, getTheme, getAsset, listRules, getRuleTool, toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
 import { NotFoundError } from '../src/registry.js';
 
 describe('list_themes', () => {
@@ -57,6 +57,17 @@ describe('get_asset', () => {
   it('returns binary content as base64', () => {
     const r = getAsset({ id: 'tebin', assetId: 'favicon-png' }) as { encoding: string };
     expect(r.encoding).toBe('base64');
+  });
+  it('links an image over the inline cap instead of embedding it', () => {
+    const r = getAsset({ id: 'tebin', assetId: 'fxptebin' });
+    expect(r.bytes).toBeGreaterThan(MAX_INLINE_BYTES);
+    expect(r.content).toBeUndefined();
+    expect(r.rawUrl).toContain('themes/tebin/assets/misc/');
+  });
+  it('links binaries a model cannot read, such as ICO', () => {
+    const r = getAsset({ id: 'tebin', assetId: 'favicon-ico' });
+    expect(r.format).toBe('ico');
+    expect(r.content).toBeUndefined();
   });
   it('throws for an unknown asset', () => {
     expect(() => getAsset({ id: 'tebin', assetId: 'nope' })).toThrow(NotFoundError);

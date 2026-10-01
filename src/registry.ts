@@ -87,13 +87,18 @@ export function readFormat(id: string, format: Format): { filename: string; cont
   return { filename, content: readFileSync(p, 'utf8') };
 }
 
+/** An asset's format is its lower-case file extension: `svg`, `png`, `ico`. */
+export function assetFormat(repoRelPath: string): string {
+  return extname(repoRelPath).replace('.', '').toLowerCase();
+}
+
 export function readAssetFile(repoRelPath: string): { format: string; encoding: 'utf8' | 'base64'; content: string } {
   const match = /^themes\/([^/]+)\/assets\/(.+)$/.exec(repoRelPath);
   const [, id, rest] = match ?? [];
   if (!id || !rest) throw new NotFoundError('asset path must be inside a theme assets directory');
   const p = containedFile(containedFile(themePath(id), 'assets'), rest);
   if (!existsSync(p)) throw new NotFoundError(`asset file not found: ${repoRelPath}`);
-  const ext = extname(repoRelPath).replace('.', '').toLowerCase();
+  const ext = assetFormat(repoRelPath);
   const isText = ext === 'svg';
   return {
     format: ext,
