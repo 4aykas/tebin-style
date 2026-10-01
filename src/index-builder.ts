@@ -26,7 +26,8 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
   const themes: ThemeEntry[] = [];
   if (!existsSync(themesRoot)) return { generatedAt: today(), count: 0, themes };
 
-  const dirs = readdirSync(themesRoot, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+  // Codepoint order, not localeCompare: the result must not depend on ICU.
+  const dirs = readdirSync(themesRoot, { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   for (const entry of dirs) {
     if (!entry.isDirectory()) continue;
     const dir = join(themesRoot, entry.name);
@@ -86,6 +87,16 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
     });
   }
   return { generatedAt: today(), count: themes.length, themes };
+}
+
+/**
+ * Keep the committed `generatedAt` when the rest of the index is unchanged,
+ * so `pnpm build` on a new day leaves the tree clean.
+ */
+export function keepGeneratedAt(fresh: RegistryIndex, committed: RegistryIndex | undefined): RegistryIndex {
+  if (!committed) return fresh;
+  const body = (idx: RegistryIndex) => JSON.stringify({ ...idx, generatedAt: '' });
+  return body(fresh) === body(committed) ? { ...fresh, generatedAt: committed.generatedAt } : fresh;
 }
 
 function today(): string {

@@ -9,7 +9,8 @@ describe('validateRulesData', () => {
     expect(validateRulesData(loadRules()).valid).toBe(true);
   });
   it('rejects duplicate ids through the shared validation API', () => {
-    const rule = loadRules()[0];
+    const [rule] = loadRules();
+    if (!rule) throw new Error('no seeded rules');
     expect(validateRulesData([rule, rule]).errors).toContain(`duplicate rule id: ${rule.id}`);
   });
   it('rejects an empty or unknown medium scope', () => {

@@ -65,8 +65,8 @@ describe('diffThemes', () => {
       extra: { x: { $type: 'fontWeight', $value: 1 }, red: { $type: 'color', $value: '#DA291C', $extensions: { 'pro.tebin.print': { pantone: '485 U' } } } },
     });
     const diff = diffThemes(a, b);
-    expect(diff.tokens.type.modified).toEqual(['type.h1']);
-    expect(diff.tokens.extra.modified).toEqual(['extra.red', 'extra.x']);
+    expect(diff.tokens.type?.modified).toEqual(['type.h1']);
+    expect(diff.tokens.extra?.modified).toEqual(['extra.red', 'extra.x']);
   });
 
   it('ignores object order and prose-only changes', () => {
@@ -90,10 +90,10 @@ describe('diffThemes', () => {
       role: { surface: { $type: 'color', $value: '{color.paper}' } },
     });
     const d = diffThemes(a, b);
-    expect(d.tokens.color.added).toEqual(['color.accent']);
-    expect(d.tokens.color.modified).toEqual(['color.paper']);
-    expect(d.tokens.color.removed).toEqual(['color.ink']);
-    expect(d.tokens.role.removed).toEqual(['role.on-surface']);
+    expect(d.tokens.color?.added).toEqual(['color.accent']);
+    expect(d.tokens.color?.modified).toEqual(['color.paper']);
+    expect(d.tokens.color?.removed).toEqual(['color.ink']);
+    expect(d.tokens.role?.removed).toEqual(['role.on-surface']);
   });
 
   it('calls a new contrast error a regression', () => {
@@ -114,7 +114,7 @@ describe('diffThemes', () => {
       role: { surface: { $type: 'color', $value: '{color.paper}' } },
     });
     const d = diffThemes(a, b);
-    expect(d.tokens.role.removed).toEqual(['role.on-surface']);
+    expect(d.tokens.role?.removed).toEqual(['role.on-surface']);
     expect(d.regression).toBe(false);
   });
 

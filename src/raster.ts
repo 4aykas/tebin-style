@@ -84,8 +84,9 @@ export const CLEAR_SPACE_RATIO = 0.7;
  */
 export function padSvg(svg: string): string {
   const m = /viewBox\s*=\s*"([\d.\s+-]+)"/.exec(svg);
-  if (!m) return svg;
-  const [x, y, w, h] = m[1].trim().split(/\s+/).map(Number);
+  if (!m?.[1]) return svg;
+  // A missing number defaults to NaN, which the finiteness check rejects.
+  const [x = NaN, y = NaN, w = NaN, h = NaN] = m[1].trim().split(/\s+/).map(Number);
   if ([x, y, w, h].some((n) => !Number.isFinite(n)) || w <= 0 || h <= 0) return svg;
   const pad = h * CLEAR_SPACE_RATIO;
   return (
@@ -124,7 +125,8 @@ export function plannedOutputs(themeDir: string): Array<{
       }
     }
   }
-  return planned.sort((a, b) => a.path.localeCompare(b.path));
+  // Codepoint order, not localeCompare: the result must not depend on ICU.
+  return planned.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
 }
 
 export async function buildRaster(themeDir: string): Promise<RasterManifest> {

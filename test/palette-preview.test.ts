@@ -39,11 +39,11 @@ describe('swatch labels clear the floor the repo enforces', () => {
 
     for (const id of ['tebin', 'tebin-classic', 'slate']) {
       const svg = buildPaletteSvg(join(repo, 'themes', id));
-      const swatches = [...svg.matchAll(/<rect[^>]*fill="(#[0-9A-Fa-f]{6})"/g)].map((m) => m[1]);
-      const labels = [...svg.matchAll(/font-size="13"[^>]*fill="(#[0-9A-Fa-f]{6})"/g)].map((m) => m[1]);
+      const swatches = [...svg.matchAll(/<rect[^>]*fill="(#[0-9A-Fa-f]{6})"/g)].map(([, hex = '']) => hex);
+      const labels = [...svg.matchAll(/font-size="13"[^>]*fill="(#[0-9A-Fa-f]{6})"/g)].map(([, hex = '']) => hex);
       expect(labels.length, id).toBe(swatches.length);
       swatches.forEach((bg, i) => {
-        expect(contrastRatio(labels[i], bg), `${id} swatch ${bg} label ${labels[i]}`).toBeGreaterThanOrEqual(4.5);
+        expect(contrastRatio(labels[i] ?? '', bg), `${id} swatch ${bg} label ${labels[i]}`).toBeGreaterThanOrEqual(4.5);
       });
     }
   });

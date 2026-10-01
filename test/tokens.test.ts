@@ -134,7 +134,7 @@ describe('typography scale', () => {
 
   it('descends monotonically', () => {
     const sizes = ['h1', 'h2', 'h3', 'h4', 'h5'].map((l) => parseFloat(tokens.type[l].$value));
-    for (let i = 1; i < sizes.length; i++) expect(sizes[i]).toBeLessThan(sizes[i - 1]);
+    for (let i = 1; i < sizes.length; i++) expect(sizes[i]).toBeLessThan(sizes[i - 1] ?? NaN);
   });
 
   it('carries body copy as a fixed size — it is not display type', () => {
@@ -173,7 +173,7 @@ describe('spacing and layout', () => {
   it('grows monotonically from compact to feature', () => {
     const steps = ['section-compact', 'section-standard', 'section-feature']
       .map((s) => parseFloat(tokens.spacing[s].$value));
-    for (let i = 1; i < steps.length; i++) expect(steps[i]).toBeGreaterThan(steps[i - 1]);
+    for (let i = 1; i < steps.length; i++) expect(steps[i]).toBeGreaterThan(steps[i - 1] ?? NaN);
   });
 
   it('carries the three container widths as fixed maxima', () => {

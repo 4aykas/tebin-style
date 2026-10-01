@@ -11,8 +11,8 @@ const index = JSON.parse(readFileSync(join(root, 'registry', 'index.json'), 'utf
 /** Every link that points inside this repository must resolve to a real file. */
 function repoTargets(markdown: string, fileDir: string): string[] {
   const targets: string[] = [];
-  for (const [, link] of markdown.matchAll(/\]\(([^)\s]+)/g)) {
-    const clean = link.split('#')[0].replace(/\?raw=1$/, '');
+  for (const [, link = ''] of markdown.matchAll(/\]\(([^)\s]+)/g)) {
+    const clean = link.replace(/#.*$/, '').replace(/\?raw=1$/, '');
     if (!clean) continue;
     if (clean.startsWith(`${BLOB_BASE}/`)) targets.push(join(root, clean.slice(BLOB_BASE.length + 1)));
     else if (clean.startsWith(`${RAW_BASE}/`)) targets.push(join(root, clean.slice(RAW_BASE.length + 1)));
@@ -40,7 +40,7 @@ describe('documentation links', () => {
 
   // src="..." images in the README (the hero logo) must exist too.
   it('README image sources exist', () => {
-    for (const [, src] of readme.matchAll(/src="([^"]+)"/g)) {
+    for (const [, src = ''] of readme.matchAll(/src="([^"]+)"/g)) {
       expect(existsSync(join(root, src)), src).toBe(true);
     }
   });
@@ -92,7 +92,7 @@ describe('llms.txt carries the real vector source', () => {
 
   /** Every "### `path`" heading followed by an ```svg fence. */
   const blocks = [...llms.matchAll(/### `([^`]+)`[\s\S]*?```svg\n([\s\S]*?)\n```/g)]
-    .map((m) => ({ path: m[1], body: m[2] }));
+    .map(([, path = '', body = '']) => ({ path, body }));
 
   it('inlines the four marks an offline agent needs', () => {
     expect(blocks.map((b) => b.path)).toEqual([

@@ -44,7 +44,7 @@ function flatten(tree: Tree, prefix: string[] = [], out = new Map<string, string
   return out;
 }
 
-const groupOf = (path: string) => path.split('.')[0];
+const groupOf = (path: string) => path.split('.')[0] ?? path;
 
 export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
   const before = flatten(JSON.parse(readFileSync(join(beforeDir, 'tokens.json'), 'utf8')));

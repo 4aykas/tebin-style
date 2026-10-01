@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { buildIndex } from '../src/index-builder.js';
+import { buildIndex, keepGeneratedAt } from '../src/index-builder.js';
 import { mkdtempSync, cpSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
@@ -18,7 +18,7 @@ describe('buildIndex', () => {
       const theme = JSON.parse(readFileSync(path, 'utf8'));
       theme.assets[0].license = 'Test override';
       writeFileSync(path, JSON.stringify(theme));
-      const assets = buildIndex(tmp).themes[0].assets;
+      const assets = buildIndex(tmp).themes[0]?.assets ?? [];
       expect(assets.find((a) => a.id === 'logo-full')?.license).toBe('Test override');
       expect(assets.find((a) => a.id === 'logo-full@1024')?.license).toBe('Test override');
       expect(assets.find((a) => a.id === 'logo-full-white')?.license).toBe(theme.license.assets);
@@ -31,7 +31,7 @@ describe('buildIndex', () => {
     expect(good.version).toBe('1.0.0');
     expect(good.formats.css).toBe('themes/good/dist/tokens.css');
     expect(good.preview.brand).toBe('#DA291C');
-    expect(good.assets[0].rawUrl).toContain('themes/good/assets/logo.svg');
+    expect(good.assets[0]?.rawUrl).toContain('themes/good/assets/logo.svg');
     expect(idx.count).toBe(idx.themes.length);
   });
 });
@@ -42,8 +42,8 @@ describe('buildIndex raster entries', () => {
   const classic = index.themes.find((t) => t.id === 'tebin-classic')!;
 
   it('keeps the hand-authored SVG assets first', () => {
-    expect(classic.assets[0].id).toBe('logo-full');
-    expect(classic.assets[0].path).toBe('themes/tebin-classic/assets/logo/logo-full.svg');
+    expect(classic.assets[0]?.id).toBe('logo-full');
+    expect(classic.assets[0]?.path).toBe('themes/tebin-classic/assets/logo/logo-full.svg');
   });
 
   it('adds a raster entry per PNG', () => {
@@ -60,5 +60,23 @@ describe('buildIndex raster entries', () => {
   it('leaves a theme with no raster pack unchanged', () => {
     const slate = index.themes.find((t) => t.id === 'slate')!;
     expect(slate.assets.every((a) => !a.id.includes('@'))).toBe(true);
+  });
+});
+
+describe('keepGeneratedAt', () => {
+  const fresh = buildIndex(themesRoot, { rawBaseUrl: 'https://example/raw' });
+  const committed = { ...fresh, generatedAt: '2000-01-01' };
+
+  it('keeps the committed date when nothing else changed', () => {
+    expect(keepGeneratedAt(fresh, committed).generatedAt).toBe('2000-01-01');
+  });
+
+  it('takes the new date when the index content changed', () => {
+    const changed = { ...committed, count: committed.count + 1 };
+    expect(keepGeneratedAt(fresh, changed).generatedAt).toBe(fresh.generatedAt);
+  });
+
+  it('takes the new date when there is no committed index', () => {
+    expect(keepGeneratedAt(fresh, undefined).generatedAt).toBe(fresh.generatedAt);
   });
 });
