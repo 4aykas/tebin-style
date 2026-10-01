@@ -4,6 +4,7 @@
   "author": {
     "name": "TEBIN"
   },
+  "homepage": "https://github.com/4aykas/tebin-style",
   "mcpServers": {
     "tebin-style": {
       "command": "node",

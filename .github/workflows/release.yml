@@ -5,7 +5,6 @@ on:
 permissions: {}
 concurrency:
   group: release
-  cancel-in-progress: false
 jobs:
   # Verifies and packs with a read-only token. Nothing here can write to the repo.
   build:
@@ -29,7 +28,7 @@ jobs:
       - name: Check release tag and changelog
         run: node scripts/check-release.mjs
       - run: pnpm install --frozen-lockfile
-      # check runs before packing, so a release can never ship a stale tree.
+      # verify runs before packing, so a release never ships a stale tree.
       - run: pnpm verify
       - run: pnpm pack:brand
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -59,10 +58,6 @@ jobs:
       - name: Write SHA-256 checksums
         working-directory: release-assets
         run: for f in *.zip; do sha256sum "$f" > "$f.sha256"; done
-      # npm publication was dropped 2026-07-30: the registry is internal-use,
-      # partners get the ZIP from the GitHub Release. Restore the publish step
-      # (plus registry-url and an NPM_TOKEN secret) if a package ever becomes
-      # wanted.
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           files: release-assets/*
