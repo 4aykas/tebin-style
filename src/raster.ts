@@ -152,7 +152,9 @@ export async function buildRaster(themeDir: string): Promise<RasterManifest> {
     // A coloured tile gets clear space per the brand rule; a transparent PNG
     // stays tight so it can be placed against the target's own spacing.
     const svg = item.background ? padSvg(raw) : raw;
+    // Logos are outlined paths. Without system fonts a render cannot differ between machines.
     const resvg = new Resvg(svg, {
+      font: { loadSystemFonts: false },
       fitTo: { mode: 'width', value: item.width },
       ...(item.background ? { background: item.background } : {}),
     });

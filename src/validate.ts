@@ -94,6 +94,23 @@ export function validateRulesData(obj: unknown, knownThemes?: readonly string[])
   return { valid: result.errors.length === 0, errors: result.errors };
 }
 
+/**
+ * SVG content that loads files or runs code when rendered or embedded. Theme
+ * SVGs arrive through PRs and resvg renders them into published PNGs; it
+ * resolves an absolute <image> href from the local disk.
+ */
+const SVG_HAZARDS: Array<[RegExp, string]> = [
+  [/<(?:\w+:)?image\b/i, '<image>'],
+  [/<(?:\w+:)?script\b/i, '<script>'],
+  [/<(?:\w+:)?foreignObject\b/i, '<foreignObject>'],
+  [/<!(?:DOCTYPE|ENTITY)\b/i, 'a DOCTYPE or ENTITY declaration'],
+  [/\bhref\s*=\s*["'](?!#)/i, 'an href that is not a #fragment'],
+];
+
+export function svgHazards(svg: string): string[] {
+  return SVG_HAZARDS.filter(([pattern]) => pattern.test(svg)).map(([, what]) => what);
+}
+
 export function validateThemeDir(dir: string): ValidationResult {
   const errors: string[] = [];
 
@@ -131,6 +148,10 @@ export function validateThemeDir(dir: string): ValidationResult {
         const rel = relative(realpathSync(dir), realpathSync(target));
         if (rel.startsWith('..') || isAbsolute(rel) || !statSync(target).isFile()) {
           errors.push(`theme.json: asset "${a.id ?? '?'}" must be a file inside its theme`);
+        } else if (extname(a.path).toLowerCase() === '.svg') {
+          for (const what of svgHazards(readFileSync(target, 'utf8'))) {
+            errors.push(`${a.path}: asset "${a.id ?? '?'}" must not contain ${what}`);
+          }
         }
       }
     }

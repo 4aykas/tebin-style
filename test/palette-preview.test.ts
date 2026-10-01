@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdtempSync, cpSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { Resvg } from '@resvg/resvg-js';
 import { buildPaletteSvg } from '../src/palette-preview.js';
 import { collectColorRows } from '../src/colors-csv.js';
 
@@ -45,6 +47,25 @@ describe('swatch labels clear the floor the repo enforces', () => {
       swatches.forEach((bg, i) => {
         expect(contrastRatio(labels[i] ?? '', bg), `${id} swatch ${bg} label ${labels[i]}`).toBeGreaterThanOrEqual(4.5);
       });
+    }
+  });
+});
+
+describe('token names in the palette SVG', () => {
+  it('are XML-escaped, so any name yields a well-formed SVG', () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-palette-'));
+    const work = join(tmp, 'slate');
+    cpSync(join(root, 'themes', 'slate'), work, { recursive: true });
+    try {
+      const tokensPath = join(work, 'tokens.json');
+      const tokens = JSON.parse(readFileSync(tokensPath, 'utf8'));
+      tokens.color['a&b<c>"d'] = { $type: 'color', $value: '#123456' };
+      writeFileSync(tokensPath, JSON.stringify(tokens));
+      const svg = buildPaletteSvg(work);
+      expect(svg).toContain('a&amp;b&lt;c&gt;&quot;d');
+      expect(() => new Resvg(svg).render()).not.toThrow();
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
     }
   });
 });

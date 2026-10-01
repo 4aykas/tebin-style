@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, cpSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildDesignDoc, DOC_CATEGORIES } from '../src/design-doc.js';
@@ -166,5 +167,25 @@ describe('components reach the document', () => {
 
   it('omits the section for a theme with no components', () => {
     expect(buildDesignDoc(join(root, 'themes', 'slate'))).not.toContain('## Components');
+  });
+});
+
+describe('table cells', () => {
+  it('escape a pipe, so a description cannot split its row', () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-doc-'));
+    const work = join(tmp, 'tebin');
+    cpSync(join(root, 'themes', 'tebin'), work, { recursive: true });
+    try {
+      const tokensPath = join(work, 'tokens.json');
+      const tokens = JSON.parse(readFileSync(tokensPath, 'utf8'));
+      tokens.color.brand.$description = 'Links | buttons';
+      tokens.role.primary.$description = 'Fills | borders';
+      writeFileSync(tokensPath, JSON.stringify(tokens));
+      const doc = buildDesignDoc(work);
+      expect(doc).toContain('Links \\| buttons');
+      expect(doc).toContain('Fills \\| borders');
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
   });
 });
