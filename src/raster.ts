@@ -77,22 +77,32 @@ function widthsFor(asset: ThemeAsset): readonly number[] {
  */
 export const CLEAR_SPACE_RATIO = 0.7;
 
+/** The root <svg> start tag; quoted values may contain ">". */
+const ROOT_TAG = /<svg\b(?:[^>"']|"[^"]*"|'[^']*')*>/;
+/** Root attributes the tile sets itself; the rest (namespaces, fill, style) move inside. */
+const TILE_ATTRS = new Set(['viewBox', 'width', 'height', 'x', 'y']);
+
 /**
  * Wraps an SVG in a padded tile so a background variant honours the brand's
  * clear-space rule. Without this the letters touch the tile's edges — exactly
- * what a Word user would then paste into a document.
+ * what a Word user would then paste into a document. Throws when the SVG has
+ * no usable viewBox: a tile without clear space must not ship as if it had it.
  */
 export function padSvg(svg: string): string {
-  const m = /viewBox\s*=\s*"([\d.\s+-]+)"/.exec(svg);
-  if (!m?.[1]) return svg;
+  const root = ROOT_TAG.exec(svg);
+  const attrs = [...(root?.[0].matchAll(/([\w:.-]+)\s*=\s*("[^"]*"|'[^']*')/g) ?? [])];
+  const viewBox = attrs.find(([, name]) => name === 'viewBox')?.[2]?.slice(1, -1) ?? '';
   // A missing number defaults to NaN, which the finiteness check rejects.
-  const [x = NaN, y = NaN, w = NaN, h = NaN] = m[1].trim().split(/\s+/).map(Number);
-  if ([x, y, w, h].some((n) => !Number.isFinite(n)) || w <= 0 || h <= 0) return svg;
+  const [x = NaN, y = NaN, w = NaN, h = NaN] = viewBox.trim().split(/[\s,]+/).map(Number);
+  if (!root || [x, y, w, h].some((n) => !Number.isFinite(n)) || w <= 0 || h <= 0) {
+    throw new Error('cannot pad an SVG without a valid viewBox');
+  }
+  const kept = attrs.filter(([, name = '']) => !TILE_ATTRS.has(name)).map(([attr]) => ` ${attr}`).join('');
   const pad = h * CLEAR_SPACE_RATIO;
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w + 2 * pad} ${h + 2 * pad}">` +
-    `<svg x="${pad}" y="${pad}" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}">` +
-    svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '') +
+    `<svg${kept} x="${pad}" y="${pad}" width="${w}" height="${h}" viewBox="${x} ${y} ${w} ${h}">` +
+    svg.slice(root.index + root[0].length).replace(/<\/svg>\s*$/, '') +
     `</svg></svg>`
   );
 }
