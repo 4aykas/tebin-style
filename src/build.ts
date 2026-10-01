@@ -51,9 +51,13 @@ let registered = false;
 
 export function registerFormats(): void {
   if (registered) return;
-  registered = true;
 
   const sizeTransform = StyleDictionary.hooks.transforms['size/rem'];
+  const cssTransforms = StyleDictionary.hooks.transformGroups.css;
+  if (!sizeTransform || !cssTransforms) {
+    throw new Error('style-dictionary lacks the size/rem transform or the css transform group');
+  }
+  registered = true;
   StyleDictionary.registerTransform({
     ...sizeTransform,
     name: 'tebin/size',
@@ -84,13 +88,14 @@ export function registerFormats(): void {
       const ext =
         (token as { $extensions?: Record<string, FluidTriple> }).$extensions?.['pro.tebin.fluid'] ??
         (token.original as { $extensions: Record<string, FluidTriple> }).$extensions['pro.tebin.fluid'];
+      if (!ext) throw new Error(`${token.name}: missing pro.tebin.fluid extension`);
       return `clamp(${ext.min}, ${ext.pref}, ${ext.max})`;
     },
   });
 
   StyleDictionary.registerTransformGroup({
     name: 'css-tebin',
-    transforms: [...StyleDictionary.hooks.transformGroups.css.map((name) => name === 'size/rem' ? 'tebin/size' : name), 'tebin/fluid-clamp'],
+    transforms: [...cssTransforms.map((name) => name === 'size/rem' ? 'tebin/size' : name), 'tebin/fluid-clamp'],
   });
 
   StyleDictionary.registerFormat({

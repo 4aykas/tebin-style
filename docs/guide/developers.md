@@ -17,8 +17,8 @@ the same declarations.
 
 ## Setup
 
-You need **Node 22+** and **pnpm 11** (the exact pnpm version is pinned in `package.json`). The skill and the MCP server read generated
-files, so build once after cloning.
+You need **Node 22+** and **pnpm 11** (the exact pnpm version is pinned in `package.json`). Generated files, the MCP
+server bundle included, are committed; run `pnpm build` after you change a source.
 
 ```bash
 git clone https://github.com/4aykas/tebin-style.git
@@ -165,7 +165,7 @@ pnpm build      # generate everything listed above
 pnpm check      # fail if a generated file drifts from its source
 pnpm lint:themes # fail on a contrast error or a broken token reference
 pnpm test       # run the test suite, including an actual MCP connection
-pnpm pack:brand # build .tmp/tebin-brand-pack.zip from generated files
+pnpm pack:brand # build .tmp/tebin-brand-pack.zip and .tmp/tebin-style-skill.zip
 pnpm audit     # check current dependency advisories (requires the registry)
 ```
 

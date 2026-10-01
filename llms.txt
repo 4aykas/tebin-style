@@ -2,11 +2,9 @@
 
 > Brand kits for AI agents and people: W3C DTCG design tokens, logos as SVG
 > **and pre-rendered PNG** (for Word, Excel, PowerPoint and any tool that
-> cannot embed SVG), plus machine-readable design rules. Every URL below is a
-> direct raw link tracking main. Pin a commit for reproducible inputs.
+> cannot embed SVG), plus machine-readable design rules. Every repository URL
+> below is a raw link tracking main. Pin a commit for reproducible inputs.
 
-For ChatGPT, Gemini and Claude, use the shared setup and prompt:
-[Chat setup](https://github.com/4aykas/tebin-style/blob/main/docs/guide/chat-setup.md).
 Choose one theme and supply its DESIGN.md plus actual assets. This file embeds
 Classic vectors only; use the Modern assets for a Modern deliverable.
 
@@ -34,10 +32,8 @@ Other sizes follow the same pattern, 128 to 2048 px: `logo-full-512.png`,
 
 ## Vector source, inline
 
-**If you cannot fetch URLs, use these.** Some hosts run without network access
-and refuse a raw link outright. That is not a reason to draw the mark yourself
-— `brand-logo-never-typeset` forbids it, and the letterforms are outlines you
-cannot reproduce by typing. The real source is below, so no fetch is needed.
+**If you cannot fetch URLs, use these.** Never draw the mark
+(`brand-logo-never-typeset`); copy the source below.
 
 Copy a block verbatim. Do not restyle it, do not change a fill, do not swap the
 `viewBox`. To place the mark on a dark or red ground, take the white file below
@@ -140,14 +136,16 @@ Tokens are grouped as `color`, `role`, `font`, `radius` and — on `tebin` —
 at a palette colour instead of copying it, so `role.surface` resolves through
 `color.paper`.
 
-**Red text takes a different red.** `#DA291C` clears 4.5:1 on neither a dark
-nor a light surface, and no red does. Small red text uses `brand-on-dark`
-(`#EA6359`) or `brand-on-light` (`#C7251A`).
+**Small red text may need a different red.** `#DA291C` reaches 4.87:1 on
+white, so Classic's white page takes it as is. It falls to 4.19:1 on Modern's
+cream `#EFEEE9` and 3.04:1 on its dark panel `#242830`. No single red clears
+4.5:1 on both surface families, so `tebin` adds `role.primary-on-light`
+(`#C7251A`) and `role.primary-on-dark` (`#EA6359`) for small text.
 
 ## Machine-readable indexes
 
 - [Full asset index](https://raw.githubusercontent.com/4aykas/tebin-style/main/registry/index.json): every theme and asset, SVG and all PNG sizes, with direct `rawUrl` fields
-- [Design rules](https://raw.githubusercontent.com/4aykas/tebin-style/main/rules/dist/rules.md): 62 MUST / SHOULD / NEVER rules, most with the reason they exist
+- [Design rules](https://raw.githubusercontent.com/4aykas/tebin-style/main/rules/dist/rules.md): the MUST / SHOULD / NEVER rules, most with the reason they exist
 - [Colour table (CSV)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/dist/colors.csv): RGB for Word and Excel
 
 ## Design guides
@@ -160,7 +158,23 @@ still works when pasted into a chat.
 - [TEBIN DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/DESIGN.md)
 - [Slate DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/slate/DESIGN.md)
 
+## Agent integration
+
+- Claude Code plugin, with the skill and the MCP server:
+  `/plugin marketplace add 4aykas/tebin-style`, then
+  `/plugin install tebin-style@tebin`
+- [Skill](https://raw.githubusercontent.com/4aykas/tebin-style/main/skills/tebin-style/SKILL.md): `npx skills add 4aykas/tebin-style` for Codex, Cursor and other agents
+- MCP server `tebin-style`: `node mcp/dist/server.mjs` from a clone, Node 22+. Seven read-only tools: `list_themes`, `get_theme`, `get_asset`, `list_rules`, `get_rule`, `lint_theme`, `diff_themes`
+- [AI agent guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/ai-agents.md): setup for Claude Code, Codex, Cursor, Gemini CLI and other MCP clients
+- [Chat setup](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/chat-setup.md): files and starter instructions for ChatGPT, Gemini and Claude chats
+
 ## Licence
 
 Tokens: MIT. Logos and brand assets: © TEBIN, all rights reserved — do not
 reuse them for another brand.
+
+## Optional
+
+- [Office guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/office.md): Word, Excel, PowerPoint and Google Docs
+- [Print guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/print.md): preparing artwork for print
+- [Developer guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/developers.md): build, validate and test the registry

@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, cpSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { validateThemeMetadata, validateTokens } from '../src/validate.js';
+import { validateThemeMetadata, validateTokens, validateThemeDir, svgHazards } from '../src/validate.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -150,6 +151,55 @@ describe('tebin-classic print values', () => {
         expect(['pantone', 'cmyk'], `${name}.${key}`).toContain(key);
         expect(print[key], `${name}.${key} must not be empty`).toBeTruthy();
       }
+    }
+  });
+});
+
+describe('svgHazards', () => {
+  const wrap = (body: string): string => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">${body}</svg>`;
+
+  it.each([
+    ['an image', '<image href="logo.png"/>'],
+    ['a script', '<script>alert(1)</script>'],
+    ['foreign content', '<foreignObject><div/></foreignObject>'],
+    ['an http href', '<use href="https://example.com/a.svg#x"/>'],
+    ['a file href', '<use xlink:href="file:///etc/passwd"/>'],
+    ['an absolute path href', "<use href='/abs/path.svg#x'/>"],
+  ])('flags %s', (_, body) => {
+    expect(svgHazards(wrap(body))).not.toEqual([]);
+  });
+
+  it('flags a DOCTYPE or ENTITY declaration', () => {
+    expect(svgHazards(`<!DOCTYPE svg [<!ENTITY x SYSTEM "file:///etc/passwd">]>${wrap('')}`)).not.toEqual([]);
+  });
+
+  it('allows a #fragment reference', () => {
+    expect(svgHazards(wrap('<defs><rect id="r"/></defs><use xlink:href="#r"/><use href="#r"/>'))).toEqual([]);
+  });
+
+  it('passes every shipped theme SVG', () => {
+    for (const id of ['tebin', 'tebin-classic', 'slate']) {
+      const theme = JSON.parse(readFileSync(join(root, 'themes', id, 'theme.json'), 'utf8'));
+      for (const asset of theme.assets ?? []) {
+        if (asset.format !== 'svg') continue;
+        expect(svgHazards(readFileSync(join(root, 'themes', id, asset.path), 'utf8')), asset.path).toEqual([]);
+      }
+    }
+  });
+});
+
+describe('validateThemeDir', () => {
+  it('rejects a theme SVG that would load a local file when rendered', () => {
+    const tmp = mkdtempSync(join(tmpdir(), 'ts-validate-'));
+    const work = join(tmp, 'tebin-classic');
+    cpSync(join(root, 'themes', 'tebin-classic'), work, { recursive: true });
+    try {
+      expect(validateThemeDir(work).valid).toBe(true);
+      writeFileSync(join(work, 'assets', 'logo', 'logo-full.svg'),
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><image href="/abs/path.png"/></svg>');
+      expect(validateThemeDir(work).errors.join(' ')).toContain('logo-full');
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
     }
   });
 });

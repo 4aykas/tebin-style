@@ -3,7 +3,17 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, relative, isAbsolute, win32 } from 'node:path';
 import type { RegistryIndex } from './index-builder.js';
 
-export const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+/** The nearest folder above this module with a package.json: works from src/ and from the mcp/dist/ bundle. */
+function findRoot(dir: string): string {
+  while (!existsSync(join(dir, 'package.json'))) {
+    const parent = dirname(dir);
+    if (parent === dir) throw new Error('tebin-style: no package.json above the server');
+    dir = parent;
+  }
+  return dir;
+}
+
+export const REPO_ROOT = findRoot(dirname(fileURLToPath(import.meta.url)));
 
 export class NotFoundError extends Error {
   constructor(message: string) {
@@ -77,12 +87,18 @@ export function readFormat(id: string, format: Format): { filename: string; cont
   return { filename, content: readFileSync(p, 'utf8') };
 }
 
+/** An asset's format is its lower-case file extension: `svg`, `png`, `ico`. */
+export function assetFormat(repoRelPath: string): string {
+  return extname(repoRelPath).replace('.', '').toLowerCase();
+}
+
 export function readAssetFile(repoRelPath: string): { format: string; encoding: 'utf8' | 'base64'; content: string } {
   const match = /^themes\/([^/]+)\/assets\/(.+)$/.exec(repoRelPath);
-  if (!match) throw new NotFoundError('asset path must be inside a theme assets directory');
-  const p = containedFile(containedFile(themePath(match[1]), 'assets'), match[2]);
+  const [, id, rest] = match ?? [];
+  if (!id || !rest) throw new NotFoundError('asset path must be inside a theme assets directory');
+  const p = containedFile(containedFile(themePath(id), 'assets'), rest);
   if (!existsSync(p)) throw new NotFoundError(`asset file not found: ${repoRelPath}`);
-  const ext = extname(repoRelPath).replace('.', '').toLowerCase();
+  const ext = assetFormat(repoRelPath);
   const isText = ext === 'svg';
   return {
     format: ext,

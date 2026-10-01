@@ -1,0 +1,14 @@
+{
+  "name": "tebin-style",
+  "description": "TEBIN brand themes, assets and design rules: a skill plus a read-only MCP server",
+  "author": {
+    "name": "TEBIN"
+  },
+  "homepage": "https://github.com/4aykas/tebin-style",
+  "mcpServers": {
+    "tebin-style": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/dist/server.mjs"]
+    }
+  }
+}

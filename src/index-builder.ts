@@ -1,6 +1,6 @@
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { readManifest } from './raster.js';
+import { readManifest, byCodepoint } from './raster.js';
 
 export const PREVIEW_KEYS = ['brand', 'ink', 'topbar'];
 
@@ -13,7 +13,8 @@ export interface ThemeEntry {
   mood: string[];
   preview: Record<string, string>;
   formats: Record<string, string>;
-  assets: Array<{ id: string; type: string; path: string; rawUrl?: string; license?: string }>;
+  /** `bytes` is the file size, so an agent can decide before fetching. */
+  assets: Array<{ id: string; type: string; path: string; bytes: number; rawUrl?: string; license?: string }>;
 }
 
 export interface RegistryIndex {
@@ -26,7 +27,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
   const themes: ThemeEntry[] = [];
   if (!existsSync(themesRoot)) return { generatedAt: today(), count: 0, themes };
 
-  const dirs = readdirSync(themesRoot, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+  const dirs = readdirSync(themesRoot, { withFileTypes: true }).sort((a, b) => byCodepoint(a.name, b.name));
   for (const entry of dirs) {
     if (!entry.isDirectory()) continue;
     const dir = join(themesRoot, entry.name);
@@ -48,6 +49,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
       id: a.id,
       type: a.type,
       path: `${base}/${a.path}`,
+      bytes: statSync(join(dir, a.path)).size,
       license: a.license ?? theme.license.assets,
       ...(opts.rawBaseUrl ? { rawUrl: `${opts.rawBaseUrl}/${base}/${a.path}` } : {}),
     }));
@@ -61,6 +63,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
         id: `${o.assetId}@${o.width}${suffix}`,
         type: sourceAsset?.type ?? 'raster',
         path: `${base}/${o.path}`,
+        bytes: statSync(join(dir, o.path)).size,
         license: sourceAsset?.license ?? theme.license.assets,
         ...(opts.rawBaseUrl ? { rawUrl: `${opts.rawBaseUrl}/${base}/${o.path}` } : {}),
       };
@@ -86,6 +89,16 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
     });
   }
   return { generatedAt: today(), count: themes.length, themes };
+}
+
+/**
+ * Keep the committed `generatedAt` when the rest of the index is unchanged,
+ * so `pnpm build` on a new day leaves the tree clean.
+ */
+export function keepGeneratedAt(fresh: RegistryIndex, committed: RegistryIndex | undefined): RegistryIndex {
+  if (!committed) return fresh;
+  const body = (idx: RegistryIndex) => JSON.stringify({ ...idx, generatedAt: '' });
+  return body(fresh) === body(committed) ? { ...fresh, generatedAt: committed.generatedAt } : fresh;
 }
 
 function today(): string {

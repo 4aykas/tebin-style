@@ -12,8 +12,9 @@ export interface Rgb {
 /** Parses #RGB / #RRGGBB. Returns null for anything else (rgba(), var(), …). */
 export function hexToRgb(hex: string): Rgb | null {
   const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
-  if (!m) return null;
-  const h = m[1].length === 3 ? m[1].replace(/./g, (c) => c + c) : m[1];
+  const digits = m?.[1];
+  if (!digits) return null;
+  const h = digits.length === 3 ? digits.replace(/./g, (c) => c + c) : digits;
   return {
     r: parseInt(h.slice(0, 2), 16),
     g: parseInt(h.slice(2, 4), 16),

@@ -20,69 +20,69 @@ colors:
 typography:
   h1:
     fontFamily: "Roboto Condensed"
-    fontSize: 38px
+    fontSize: "38px"
     fontWeight: 700
     lineHeight: 1.35
   h2:
     fontFamily: "Roboto Condensed"
-    fontSize: 34px
+    fontSize: "34px"
     fontWeight: 700
     lineHeight: 1.35
   h3:
     fontFamily: "Roboto Condensed"
-    fontSize: 28px
+    fontSize: "28px"
     fontWeight: 700
     lineHeight: 1.35
   h4:
     fontFamily: "Roboto Condensed"
-    fontSize: 24px
+    fontSize: "24px"
     fontWeight: 700
     lineHeight: 1.35
   h5:
     fontFamily: "Roboto Condensed"
-    fontSize: 20px
+    fontSize: "20px"
     fontWeight: 700
     lineHeight: 1.35
   body:
     fontFamily: "Roboto"
-    fontSize: 16px
+    fontSize: "16px"
     lineHeight: 1.7
   label-sm:
     fontFamily: "Roboto"
-    fontSize: 9px
+    fontSize: "9px"
   label-md:
     fontFamily: "Roboto"
-    fontSize: 10px
+    fontSize: "10px"
   label-lg:
     fontFamily: "Roboto"
-    fontSize: 11px
+    fontSize: "11px"
 rounded:
-  panel: 2px
-  control: 4px
-  card: 8px
+  panel: "2px"
+  control: "4px"
+  card: "8px"
 spacing:
-  gutter: 48px
-  section-compact: 64px
-  section-standard: 88px
-  section-feature: 112px
-  container-default: 1200px
-  container-wide: 1400px
-  container-reading: 760px
+  gutter: "48px"
+  section-compact: "64px"
+  section-standard: "88px"
+  section-feature: "112px"
+  container-default: "1200px"
+  container-wide: "1400px"
+  container-reading: "760px"
 components:
   button-primary:
     backgroundColor: "{colors.on-surface}"
     textColor: "{colors.surface}"
     rounded: "{rounded.control}"
-    padding: 14px
-    height: 40px
+    padding: "14px"
+    height: "40px"
   button-primary-hover:
     backgroundColor: "#242424"
   button-commit:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.surface}"
     rounded: "{rounded.control}"
-    padding: 14px
-    height: 40px
+    padding: "14px"
+    height: "40px"
   button-commit-hover:
     backgroundColor: "#B82217"
   button-quiet:
@@ -90,21 +90,21 @@ components:
     textColor: "{colors.on-surface}"
     borderColor: "{colors.outline}"
     rounded: "{rounded.control}"
-    padding: 14px
-    height: 40px
+    padding: "14px"
+    height: "40px"
   button-danger:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.error-on-light}"
     borderColor: "{colors.outline}"
     rounded: "{rounded.control}"
-    padding: 14px
-    height: 40px
+    padding: "14px"
+    height: "40px"
   cta:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.on-surface}"
     borderColor: "{colors.on-surface}"
-    rounded: 0px
-    padding: 14px 28px
+    rounded: "0px"
+    padding: "14px 28px"
   cta-hover:
     backgroundColor: "{colors.on-surface}"
     textColor: "{colors.surface}"

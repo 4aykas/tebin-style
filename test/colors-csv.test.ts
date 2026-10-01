@@ -31,7 +31,7 @@ describe('buildColorsCsv', () => {
 
   it('agrees with the hex on every row', () => {
     for (const line of lines.slice(1)) {
-      const [, hex, r, g, b] = line.split(',');
+      const [, hex = '', r, g, b] = line.split(',');
       expect(hexToRgb(hex)).toEqual({ r: Number(r), g: Number(g), b: Number(b) });
     }
   });
@@ -53,7 +53,7 @@ describe('buildColorsCsv', () => {
     // Assert on the token's group, not on the substring "on-dark": the opaque
     // color.brand-on-dark is a real colour that belongs in the spreadsheet and
     // happens to contain it.
-    const tokens = tebin.trim().split(/\r?\n/).slice(1).map((l) => l.split(',')[0]);
+    const tokens = tebin.trim().split(/\r?\n/).slice(1).map((l) => l.split(',')[0] ?? '');
     for (const group of ['on-dark', 'on-light', 'rule-dark', 'rule-light', 'surface-dark', 'brand']) {
       expect(tokens.some((t) => t.startsWith(`${group}.`)), group).toBe(false);
     }

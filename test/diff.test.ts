@@ -11,10 +11,10 @@ afterAll(() => rmSync(tmp, { recursive: true, force: true }));
 
 const THEME = { id: 'x', name: 'X', version: '1.0.0', license: { tokens: 'MIT', assets: 'X' }, surfaces: { light: '#FFFFFF' } };
 
-function make(name: string, tokens: unknown): string {
+function make(name: string, tokens: unknown, theme: object = THEME): string {
   const dir = join(tmp, name);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, 'theme.json'), JSON.stringify(THEME));
+  writeFileSync(join(dir, 'theme.json'), JSON.stringify(theme));
   writeFileSync(join(dir, 'tokens.json'), JSON.stringify(tokens));
   return dir;
 }
@@ -48,6 +48,23 @@ describe('diffThemes', () => {
     expect(diffThemes(a, a).findings.introduced).toEqual([]);
   });
 
+  it('calls a failing pair that is no longer measured lost coverage, not a fix', () => {
+    const d = diffThemes(make('lost-a', withRoles('#999999', '#111111')),
+      make('lost-b', withRoles('rgba(0,0,0,.2)', '#111111')));
+    expect(d.findings.resolved).toEqual([]);
+    expect(d.findings.unchecked.map(u => u.before.path)).toEqual(['role.on-surface']);
+    expect(d.regression).toBe(true);
+  });
+
+  it('calls deleting the surfaces a regression when a pair measured on them fails', () => {
+    const tokens = { ...ok, role: { ...ok.role, 'text-on-light': { $type: 'color', $value: '#999999' } } };
+    const { surfaces: _, ...bare } = THEME;
+    const d = diffThemes(make('surfaces-a', tokens), make('surfaces-b', tokens, bare));
+    expect(d.findings.delta).toEqual({ errors: -1, warnings: 2 });
+    expect(d.findings.unchecked.map(u => u.after.path)).toEqual(['role.text-on-light']);
+    expect(d.regression).toBe(true);
+  });
+
   it('exposes new broken references separately from contrast regressions', () => {
     const d = diffThemes(make('ref-a', ok), make('ref-b', { ...ok,
       spacing: { bad: { $type: 'dimension', $value: '{spacing.missing}' } },
@@ -65,8 +82,8 @@ describe('diffThemes', () => {
       extra: { x: { $type: 'fontWeight', $value: 1 }, red: { $type: 'color', $value: '#DA291C', $extensions: { 'pro.tebin.print': { pantone: '485 U' } } } },
     });
     const diff = diffThemes(a, b);
-    expect(diff.tokens.type.modified).toEqual(['type.h1']);
-    expect(diff.tokens.extra.modified).toEqual(['extra.red', 'extra.x']);
+    expect(diff.tokens.type?.modified).toEqual(['type.h1']);
+    expect(diff.tokens.extra?.modified).toEqual(['extra.red', 'extra.x']);
   });
 
   it('ignores object order and prose-only changes', () => {
@@ -90,10 +107,10 @@ describe('diffThemes', () => {
       role: { surface: { $type: 'color', $value: '{color.paper}' } },
     });
     const d = diffThemes(a, b);
-    expect(d.tokens.color.added).toEqual(['color.accent']);
-    expect(d.tokens.color.modified).toEqual(['color.paper']);
-    expect(d.tokens.color.removed).toEqual(['color.ink']);
-    expect(d.tokens.role.removed).toEqual(['role.on-surface']);
+    expect(d.tokens.color?.added).toEqual(['color.accent']);
+    expect(d.tokens.color?.modified).toEqual(['color.paper']);
+    expect(d.tokens.color?.removed).toEqual(['color.ink']);
+    expect(d.tokens.role?.removed).toEqual(['role.on-surface']);
   });
 
   it('calls a new contrast error a regression', () => {
@@ -114,7 +131,7 @@ describe('diffThemes', () => {
       role: { surface: { $type: 'color', $value: '{color.paper}' } },
     });
     const d = diffThemes(a, b);
-    expect(d.tokens.role.removed).toEqual(['role.on-surface']);
+    expect(d.tokens.role?.removed).toEqual(['role.on-surface']);
     expect(d.regression).toBe(false);
   });
 

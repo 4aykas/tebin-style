@@ -22,7 +22,7 @@ export interface TokenLeaf {
 export function referencePath(value: unknown): string | null {
   if (typeof value !== 'string') return null;
   const m = /^\{([^}]+)\}$/.exec(value);
-  return m ? m[1] : null;
+  return m?.[1] ?? null;
 }
 
 /**

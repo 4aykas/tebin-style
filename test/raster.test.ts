@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildRaster, plannedOutputs, padSvg, LADDER, CLEAR_SPACE_RATIO } from '../src/raster.js';
 import { diffAssets } from '../src/check.js';
+import { Resvg } from '@resvg/resvg-js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const classic = join(root, 'themes', 'tebin-classic');
@@ -49,8 +50,27 @@ describe('padSvg', () => {
     expect(padSvg(logoSvg)).toContain('M31.26,78.43');
   });
 
-  it('returns an svg with no viewBox unchanged', () => {
-    expect(padSvg('<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>')).toContain('<rect/>');
+  it('keeps root namespaces and presentation attributes, so xlink input still renders', () => {
+    const svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ' +
+      'viewBox="0 0 10 10" fill="#00ff00"><defs><rect id="r" width="10" height="10"/></defs>' +
+      '<use xlink:href="#r"/></svg>';
+    const padded = padSvg(svg);
+    expect(padded).toContain('xmlns:xlink="http://www.w3.org/1999/xlink"');
+    expect(padded).toContain('fill="#00ff00"');
+    const { pixels, width, height } = new Resvg(padded, { fitTo: { mode: 'width', value: 24 } }).render();
+    const centre = (Math.floor(height / 2) * width + Math.floor(width / 2)) * 4;
+    expect([...pixels.subarray(centre, centre + 4)]).toEqual([0, 255, 0, 255]);
+  });
+
+  it('pads a single-quoted viewBox', () => {
+    const padded = padSvg("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><rect/></svg>");
+    expect(padded).toContain(`viewBox="0 0 ${10 + 20 * CLEAR_SPACE_RATIO} ${10 + 20 * CLEAR_SPACE_RATIO}"`);
+  });
+
+  it('refuses a tile it cannot pad instead of skipping the clear space', () => {
+    expect(() => padSvg('<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>')).toThrow(/viewBox/);
+    expect(() => padSvg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 10"/>')).toThrow(/viewBox/);
   });
 });
 

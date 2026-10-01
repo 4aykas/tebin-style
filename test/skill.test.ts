@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const skill = readFileSync(join(here, '..', 'skill', 'tebin-style', 'SKILL.md'), 'utf8');
+const skill = readFileSync(join(here, '..', 'skills', 'tebin-style', 'SKILL.md'), 'utf8');
 
 describe('SKILL.md', () => {
   it('has YAML frontmatter with name and description', () => {
@@ -65,5 +65,35 @@ describe('the skill covers a host with no network', () => {
   it('points an offline agent at the inlined vector source', () => {
     expect(skill).toContain('No network at all');
     expect(skill).toContain('llms.txt');
+  });
+
+  it('warns that llms.txt carries Classic vectors only', () => {
+    const offline = skill.slice(skill.indexOf('No network at all'), skill.indexOf('## Apply a theme'));
+    expect(offline).toContain('Classic');
+    expect(offline).toContain('Modern');
+  });
+});
+
+describe('the skill reaches every MCP tool by its server', () => {
+  it('lists all seven tools and qualifies them with the server name', () => {
+    for (const tool of ['list_themes', 'get_theme', 'get_asset', 'list_rules', 'get_rule', 'lint_theme', 'diff_themes']) {
+      expect(skill).toContain(`\`${tool}\``);
+    }
+    expect(skill).toContain('tebin-style:lint_theme');
+    expect(skill).not.toMatch(/`(?:lint_theme|diff_themes|list_rules|get_rule)\(/);
+  });
+
+  it('gives a fallback when the contrast check cannot run', () => {
+    expect(skill).toContain('pnpm lint:themes');
+    expect(skill).toContain('contrast was not checked');
+  });
+
+  it('has a third-person description with the trigger terms', () => {
+    const description = skill.match(/^---\n([\s\S]*?)\n---/)![1]!;
+    expect(description).toMatch(/^description: >\n\s+Applies /m);
+    for (const term of ['TEBIN', 'brand kit', 'logo', 'Word', 'PowerPoint', 'print', 'DESIGN.md', 'accessibility']) {
+      expect(description).toContain(term);
+    }
+    expect(description.length).toBeLessThan(1024);
   });
 });

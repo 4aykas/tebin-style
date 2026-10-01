@@ -4,11 +4,11 @@ import { hexToRgb } from './colors-csv.js';
 export function relativeLuminance(hex: string): number {
   const rgb = hexToRgb(hex);
   if (!rgb) throw new Error(`not an opaque hex colour: ${hex}`);
-  const [r, g, b] = [rgb.r, rgb.g, rgb.b].map((v) => {
+  const linear = (v: number) => {
     const c = v / 255;
     return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  return 0.2126 * linear(rgb.r) + 0.7152 * linear(rgb.g) + 0.0722 * linear(rgb.b);
 }
 
 /**
@@ -19,8 +19,8 @@ export function relativeLuminance(hex: string): number {
  * checker starts reporting numbers nobody can act on.
  */
 export function contrastRatio(a: string, b: string): number {
-  const [hi, lo] = [relativeLuminance(a), relativeLuminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
+  const [la, lb] = [relativeLuminance(a), relativeLuminance(b)];
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 
 /** WCAG AA for normal-size text. */

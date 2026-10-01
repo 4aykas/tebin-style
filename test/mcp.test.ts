@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { listThemes, getTheme, getAsset, listRules, getRuleTool, toolDefinitions } from '../mcp/tools.js';
+import { listThemes, getTheme, getAsset, listRules, toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
 import { NotFoundError } from '../src/registry.js';
 
 describe('list_themes', () => {
@@ -20,6 +20,11 @@ describe('list_themes', () => {
     expect(classic?.description).toContain('2017');
     expect(classic?.formats['colors-csv']).toContain('colors.csv');
     expect(classic?.formats['design-md']).toContain('DESIGN.md');
+  });
+  it('returns summaries without asset lists, so the response stays small', () => {
+    const r = listThemes({});
+    expect(r.themes.every((t) => !('assets' in t))).toBe(true);
+    expect(JSON.stringify(r, null, 2).length).toBeLessThan(5_000);
   });
 });
 
@@ -53,6 +58,17 @@ describe('get_asset', () => {
     const r = getAsset({ id: 'tebin', assetId: 'favicon-png' }) as { encoding: string };
     expect(r.encoding).toBe('base64');
   });
+  it('links an image over the inline cap instead of embedding it', () => {
+    const r = getAsset({ id: 'tebin', assetId: 'fxptebin' });
+    expect(r.bytes).toBeGreaterThan(MAX_INLINE_BYTES);
+    expect(r.content).toBeUndefined();
+    expect(r.rawUrl).toContain('themes/tebin/assets/misc/');
+  });
+  it('links binaries a model cannot read, such as ICO', () => {
+    const r = getAsset({ id: 'tebin', assetId: 'favicon-ico' });
+    expect(r.format).toBe('ico');
+    expect(r.content).toBeUndefined();
+  });
   it('throws for an unknown asset', () => {
     expect(() => getAsset({ id: 'tebin', assetId: 'nope' })).toThrow(NotFoundError);
   });
@@ -68,7 +84,7 @@ describe('get_asset', () => {
   });
 });
 
-describe('list_rules / get_rule', () => {
+describe('list_rules', () => {
   it('supports theme and medium scope and rejects unknown themes', () => {
     const rules = listRules({ theme: 'tebin-classic', medium: 'document' });
     expect(rules.count).toBeGreaterThan(0);
@@ -79,12 +95,6 @@ describe('list_rules / get_rule', () => {
     const r = listRules({ category: 'forms' });
     expect(r.count).toBe(r.rules.length);
     expect(r.rules.every((x) => x.category === 'forms')).toBe(true);
-  });
-  it('gets a rule by id', () => {
-    expect(getRuleTool({ id: 'forms-loading-button' }).severity).toBe('MUST');
-  });
-  it('throws for an unknown rule', () => {
-    expect(() => getRuleTool({ id: 'nope' })).toThrow(NotFoundError);
   });
 });
 

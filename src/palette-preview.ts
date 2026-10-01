@@ -20,13 +20,18 @@ function labelColor(hex: string): string {
   return contrastRatio('#000000', hex) > contrastRatio('#FFFFFF', hex) ? '#000000' : '#FFFFFF';
 }
 
+/** Token names come from a PR; keep them text, never markup. */
+function escapeXml(text: string): string {
+  return text.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+}
+
 export function buildPaletteSvg(themeDir: string): string {
   const rows = collectColorRows(themeDir);
   const width = rows.length * SWATCH + (rows.length - 1) * GAP;
   const height = SWATCH + LABEL_HEIGHT;
   const parts = rows.map((row, i) => {
     const x = i * (SWATCH + GAP);
-    const name = row.token.replace(/^color\./, '');
+    const name = escapeXml(row.token.replace(/^color\./, ''));
     return (
       `  <rect x="${x}" y="0" width="${SWATCH}" height="${SWATCH}" fill="${row.hex}" />\n` +
       `  <text x="${x + 10}" y="${SWATCH - 14}" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="${labelColor(row.hex)}">${name}</text>\n` +
@@ -41,9 +46,9 @@ export function buildPaletteSvg(themeDir: string): string {
 }
 
 /**
- * Unlike the logos, this SVG carries <text>, so its PNG depends on a font
- * being present at render time. Acceptable for a decorative preview — and one
- * more reason palette.png is never byte-compared.
+ * Unlike the logos, this SVG carries <text>, so it keeps system fonts and its
+ * PNG depends on the fonts present at render time. Acceptable for a decorative
+ * preview — and one more reason palette.png is never byte-compared.
  */
 export async function writePalettePreview(themeDir: string): Promise<void> {
   const svg = buildPaletteSvg(themeDir);

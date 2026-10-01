@@ -30,6 +30,11 @@ function raw(themeId: string, repoRelPath: string): string {
   return `${RAW_BASE}/themes/${themeId}/${repoRelPath}`;
 }
 
+/** Free text in a table cell: a bare "|" would end the cell early. */
+function escapeCell(text: string): string {
+  return text.replaceAll('|', '\\|');
+}
+
 function readTokens(themeDir: string): Record<string, any> {
   return JSON.parse(readFileSync(join(themeDir, 'tokens.json'), 'utf8'));
 }
@@ -40,7 +45,7 @@ function tokenTable(themeDir: string): string {
   out += '| --- | --- | --- | --- | --- | --- |\n';
   for (const row of rows) {
     const rgb = `${row.rgb.r}, ${row.rgb.g}, ${row.rgb.b}`;
-    out += `| \`${row.token}\` | \`${row.hex}\` | ${rgb} | ${row.pantone} | ${row.cmyk} | ${row.purpose || '—'} |\n`;
+    out += `| \`${row.token}\` | \`${row.hex}\` | ${rgb} | ${escapeCell(row.pantone)} | ${row.cmyk} | ${escapeCell(row.purpose) || '—'} |\n`;
   }
   return out;
 }
@@ -93,7 +98,7 @@ function roleSection(themeDir: string): string {
   out += '| Role | Points at | Use for |\n| --- | --- | --- |\n';
   for (const [name, leaf] of roles) {
     const target = referencePath(leaf.$value) ?? String(leaf.$value ?? '');
-    out += `| \`role.${name}\` | \`${target}\` | ${leaf.$description ?? '—'} |\n`;
+    out += `| \`role.${name}\` | \`${target}\` | ${escapeCell(leaf.$description ?? '—')} |\n`;
   }
   return out;
 }

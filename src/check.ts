@@ -9,6 +9,7 @@ import { plannedOutputs, readManifest, sha256OfFile, CLEAR_SPACE_RATIO } from '.
 import { REPO_ROOT } from './registry.js';
 import { loadRules } from './rules.js';
 import { buildRulesMarkdown } from './rules-build.js';
+import { buildMcpBundle, MCP_BUNDLE } from './mcp-bundle.js';
 
 const DIST_FILES = ['tokens.css', 'tailwind.css', 'tokens.dtcg.json', 'theme.ts'];
 
@@ -17,6 +18,11 @@ export function diffRules(): string[] {
   const committed = existsSync(committedPath) ? readFileSync(committedPath, 'utf8') : '';
   const fresh = buildRulesMarkdown(loadRules());
   return committed === fresh ? [] : ['rules/dist/rules.md'];
+}
+
+export async function diffMcpBundle(): Promise<string[]> {
+  const committed = existsSync(MCP_BUNDLE) ? readFileSync(MCP_BUNDLE, 'utf8') : '';
+  return committed === (await buildMcpBundle()) ? [] : ['mcp/dist/server.mjs'];
 }
 
 /**
