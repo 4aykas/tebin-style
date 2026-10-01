@@ -28,30 +28,28 @@ function assetBlocks(asset: Asset): CallToolResult['content'] {
   return [{ type: 'text', text: JSON.stringify(asset, null, 2) }];
 }
 
+/** Routing hints for hosts that search tools rather than list them all. */
+const INSTRUCTIONS = [
+  'TEBIN brand kits and design rules, served from local files.',
+  'Start with get_theme format design-md for the whole design guide: tebin is the modern web identity, tebin-classic the print and document one.',
+  'Scope list_rules by theme and medium. Fetch logos with get_asset; check a theme with lint_theme.',
+].join('\n');
+
 export function createServer(): McpServer {
   const { version } = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8'));
-  const server = new McpServer({ name: 'tebin-style', version });
+  const server = new McpServer(
+    { name: 'tebin-style', title: 'TEBIN Style', version, websiteUrl: 'https://github.com/4aykas/tebin-style' },
+    { instructions: INSTRUCTIONS },
+  );
 
-  for (const def of toolDefinitions) {
-    server.registerTool(
-      def.name,
-      { description: def.description, inputSchema: def.inputSchema,
-        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } },
-      async (args: unknown) => {
-        try {
-          const result = await def.handler(args);
-          if (def.name === 'get_asset' && result && typeof result === 'object' && 'assetId' in result) {
-            return { content: assetBlocks(result as Asset) };
-          }
-          return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
-        } catch (err) {
-          return {
-            content: [{ type: 'text' as const, text: err instanceof Error ? err.message : String(err) }],
-            isError: true,
-          };
-        }
-      },
-    );
+  for (const { name, handler, ...config } of toolDefinitions) {
+    server.registerTool(name, config, async (args: unknown) => {
+      const result = await handler(args);
+      if (name === 'get_asset' && result && typeof result === 'object' && 'assetId' in result) {
+        return { content: assetBlocks(result as Asset) };
+      }
+      return { content: [{ type: 'text' as const, text: JSON.stringify(result, null, 2) }] };
+    });
   }
 
   return server;

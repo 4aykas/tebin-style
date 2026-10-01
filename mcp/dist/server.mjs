@@ -6571,7 +6571,7 @@ var require_discriminator = __commonJS({
       error: error2,
       code(cxt) {
         const { gen, data, schema, parentSchema, it } = cxt;
-        const { oneOf } = parentSchema;
+        const { oneOf: oneOf2 } = parentSchema;
         if (!it.opts.discriminator) {
           throw new Error("discriminator: requires discriminator option");
         }
@@ -6580,7 +6580,7 @@ var require_discriminator = __commonJS({
           throw new Error("discriminator: requires propertyName");
         if (schema.mapping)
           throw new Error("discriminator: mapping is not supported");
-        if (!oneOf)
+        if (!oneOf2)
           throw new Error("discriminator: requires oneOf keyword");
         const valid = gen.let("valid", false);
         const tag = gen.const("tag", (0, codegen_1._)`${data}${(0, codegen_1.getProperty)(tagName)}`);
@@ -6608,8 +6608,8 @@ var require_discriminator = __commonJS({
           const oneOfMapping = {};
           const topRequired = hasRequired(parentSchema);
           let tagRequired = true;
-          for (let i = 0; i < oneOf.length; i++) {
-            let sch = oneOf[i];
+          for (let i = 0; i < oneOf2.length; i++) {
+            let sch = oneOf2[i];
             if ((sch === null || sch === void 0 ? void 0 : sch.$ref) && !(0, util_1.schemaHasRulesButRef)(sch, it.self.RULES)) {
               const ref = sch.$ref;
               sch = compile_1.resolveRef.call(it.self, it.schemaEnv.root, it.baseId, ref);
@@ -21526,16 +21526,17 @@ function loadRules() {
   return JSON.parse(readFileSync2(p, "utf8"));
 }
 function getRule(id) {
-  const rule = loadRules().find((r) => r.id === id);
-  if (!rule) throw new NotFoundError(`rule "${id}" not found`);
+  const rules = loadRules();
+  const rule = rules.find((r) => r.id === id);
+  if (!rule) throw new NotFoundError(`rule "${id}" not found; ids: ${rules.map((r) => r.id).join(", ")}`);
   return rule;
 }
 function filterRules(input) {
-  const { category, severity, tag, query, theme, medium } = input;
+  const { category: category2, severity, tag, query, theme, medium } = input;
   let rules = loadRules();
   if (theme) rules = rules.filter((r) => !r.themes || r.themes.includes(theme));
   if (medium) rules = rules.filter((r) => !r.media || r.media.includes(medium));
-  if (category) rules = rules.filter((r) => r.category.toLowerCase() === category.toLowerCase());
+  if (category2) rules = rules.filter((r) => r.category.toLowerCase() === category2.toLowerCase());
   if (severity) rules = rules.filter((r) => r.severity.toLowerCase() === severity.toLowerCase());
   if (tag) rules = rules.filter((r) => (r.tags ?? []).some((t) => t.toLowerCase() === tag.toLowerCase()));
   if (query) {
@@ -21845,14 +21846,19 @@ import { join as join5 } from "node:path";
 var FORMATS = Object.keys(FORMAT_FILES);
 function listThemes(input) {
   const { industry, mood, query } = input;
-  let themes = loadIndex().themes;
-  if (industry) themes = themes.filter((t) => t.industry.some((v) => v.toLowerCase() === industry.toLowerCase()));
-  if (mood) themes = themes.filter((t) => t.mood.some((v) => v.toLowerCase() === mood.toLowerCase()));
+  const all = loadIndex().themes;
+  let themes2 = all;
+  if (industry) themes2 = themes2.filter((t) => t.industry.some((v) => v.toLowerCase() === industry.toLowerCase()));
+  if (mood) themes2 = themes2.filter((t) => t.mood.some((v) => v.toLowerCase() === mood.toLowerCase()));
   if (query) {
     const q = query.trim().toLowerCase();
-    themes = themes.filter((t) => [t.id, t.name, t.description ?? "", ...t.industry, ...t.mood].some((value) => value.toLowerCase().includes(q)));
+    themes2 = themes2.filter((t) => [t.id, t.name, t.description ?? "", ...t.industry, ...t.mood].some((value) => value.toLowerCase().includes(q)));
   }
-  return { count: themes.length, themes: themes.map(({ assets: _assets, ...summary }) => summary) };
+  return {
+    count: themes2.length,
+    themes: themes2.map(({ assets: _assets, ...summary }) => summary),
+    ...themes2.length ? {} : { hint: `No theme matches these filters; themes: ${all.map((t) => t.id).join(", ")}.` }
+  };
 }
 function getTheme(input) {
   const format = input.format ?? "css";
@@ -21882,7 +21888,10 @@ function getAsset(input) {
     return { id: entry.id, license: loadThemeManifest(input.id).license.assets, assets: entry.assets };
   }
   const asset = entry.assets.find((a) => a.id === input.assetId);
-  if (!asset) throw new NotFoundError(`asset "${input.assetId}" not found in theme "${input.id}"`);
+  if (!asset) {
+    const ids = entry.assets.map((a) => a.id).join(", ") || "none";
+    throw new NotFoundError(`asset "${input.assetId}" not found in theme "${input.id}"; assets: ${ids}`);
+  }
   const format = assetFormat(asset.path);
   const readable = INLINE_FORMATS.has(format);
   const file = readable && asset.bytes <= MAX_INLINE_BYTES ? readAssetFile(asset.path) : void 0;
@@ -21903,7 +21912,11 @@ function getAsset(input) {
 function listRules(input) {
   if (input.theme) loadThemeManifest(input.theme);
   const rules = filterRules(input);
-  return { count: rules.length, rules };
+  return {
+    count: rules.length,
+    rules,
+    ...rules.length ? {} : { hint: "No rule matches these filters; drop tag or query, or list by theme and medium to see the tags in use." }
+  };
 }
 function getRuleTool(input) {
   return getRule(input.id);
@@ -21918,66 +21931,91 @@ function lintThemeTool(input) {
 function diffThemesTool(input) {
   return diffThemes(themeDir(input.a), themeDir(input.b));
 }
+function oneOf(values) {
+  const [first, ...rest] = [...new Set(values)].sort();
+  return first === void 0 ? external_exports.string() : external_exports.enum([first, ...rest]);
+}
+var themes = loadIndex().themes;
+var themeId = oneOf(themes.map((t) => t.id));
+var category = oneOf(loadRules().map((r) => r.category));
+var READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 var toolDefinitions = [
   {
     name: "list_themes",
+    title: "List themes",
     description: "List available themes with descriptions and formats; get_asset lists a theme's assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.",
-    inputSchema: {
-      industry: external_exports.string().optional(),
-      mood: external_exports.string().optional(),
-      query: external_exports.string().optional()
-    },
+    inputSchema: external_exports.strictObject({
+      industry: oneOf(themes.flatMap((t) => t.industry)).optional().describe("Only themes for this industry."),
+      mood: oneOf(themes.flatMap((t) => t.mood)).optional().describe("Only themes with this mood."),
+      query: external_exports.string().optional().describe('Text to find in the id, name, description, industries or moods, such as "print".')
+    }),
+    annotations: READ_ONLY,
     handler: listThemes
   },
   {
     name: "get_theme",
+    title: "Get theme",
     description: "Get a theme in css, tailwind, dtcg, ts, design-md or colors-csv (default css), with licensing, surfaces and documented omissions. Start with design-md for the complete design guide; colors-csv includes RGB and print references.",
-    inputSchema: {
-      id: external_exports.string(),
-      format: external_exports.enum(FORMATS).optional()
-    },
+    inputSchema: external_exports.strictObject({
+      id: themeId.describe("Theme id."),
+      format: external_exports.enum(FORMATS).optional().describe("File to return (default css). design-md is the whole design guide.")
+    }),
+    annotations: READ_ONLY,
     handler: getTheme
   },
   {
     name: "get_asset",
+    title: "Get brand asset",
     description: "List a theme's brand assets with sizes, or fetch one by assetId: SVG as text, PNG up to 200 KB as an image, anything else as a link.",
-    inputSchema: {
-      id: external_exports.string(),
-      assetId: external_exports.string().optional()
-    },
+    inputSchema: external_exports.strictObject({
+      id: themeId.describe("Theme id."),
+      assetId: external_exports.string().optional().describe("Asset id, such as logo-full or logo-full@1024. Omit it to list the theme's assets.")
+    }),
+    annotations: READ_ONLY,
     handler: getAsset
   },
   {
     name: "list_rules",
+    title: "List design rules",
     description: "List design rules for a theme and medium (web, document, print), plus optional category, severity, tag or text filters. Omitted scope filters return the full catalogue; use scope to avoid applying website policies to print or another brand.",
-    inputSchema: {
-      category: external_exports.string().optional(),
-      theme: external_exports.string().optional(),
-      medium: external_exports.enum(["web", "document", "print"]).optional(),
-      severity: external_exports.enum(["MUST", "SHOULD", "NEVER"]).optional(),
-      tag: external_exports.string().optional(),
-      query: external_exports.string().optional()
-    },
+    inputSchema: external_exports.strictObject({
+      theme: themeId.optional().describe("Keep rules for this theme. Rules without a theme scope apply to every theme."),
+      medium: external_exports.enum(["web", "document", "print"]).optional().describe("Keep rules for this medium. Rules without a medium scope apply to every medium."),
+      category: category.optional().describe("Rule category."),
+      severity: external_exports.enum(["MUST", "SHOULD", "NEVER"]).optional().describe("Rule strength."),
+      tag: external_exports.string().optional().describe("Exact tag, such as contrast or focus."),
+      query: external_exports.string().optional().describe("Text to find in the id, statement, rationale or tags.")
+    }),
+    annotations: READ_ONLY,
     handler: listRules
   },
   {
     name: "lint_theme",
+    title: "Lint theme",
     description: "Check a theme for contrast failures and broken token references. Returns findings with the measured ratio and the surface it was measured against; reports what it could not check rather than skipping it.",
-    inputSchema: { id: external_exports.string() },
+    inputSchema: external_exports.strictObject({ id: themeId.describe("Theme id.") }),
+    annotations: READ_ONLY,
     handler: lintThemeTool
   },
   {
     name: "diff_themes",
+    title: "Compare themes",
     description: "Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved or worsened findings. Regression means an introduced or worsened lint error, even when error totals are unchanged; it is not a compatibility guarantee.",
-    inputSchema: { a: external_exports.string(), b: external_exports.string() },
+    inputSchema: external_exports.strictObject({
+      a: themeId.describe("Theme to compare from (before)."),
+      b: themeId.describe("Theme to compare to (after).")
+    }),
+    annotations: READ_ONLY,
     handler: diffThemesTool
   },
   {
     name: "get_rule",
+    title: "Get design rule",
     description: "Get a single design rule by id.",
-    inputSchema: {
-      id: external_exports.string()
-    },
+    inputSchema: external_exports.strictObject({
+      id: external_exports.string().describe("Rule id, such as forms-loading-button. list_rules shows every id.")
+    }),
+    annotations: READ_ONLY,
     handler: getRuleTool
   }
 ];
@@ -22001,32 +22039,25 @@ function assetBlocks(asset) {
   if (asset.format === "png") return [text, { type: "image", data: content, mimeType: "image/png" }];
   return [{ type: "text", text: JSON.stringify(asset, null, 2) }];
 }
+var INSTRUCTIONS = [
+  "TEBIN brand kits and design rules, served from local files.",
+  "Start with get_theme format design-md for the whole design guide: tebin is the modern web identity, tebin-classic the print and document one.",
+  "Scope list_rules by theme and medium. Fetch logos with get_asset; check a theme with lint_theme."
+].join("\n");
 function createServer() {
   const { version: version2 } = JSON.parse(readFileSync5(join6(REPO_ROOT, "package.json"), "utf8"));
-  const server = new McpServer({ name: "tebin-style", version: version2 });
-  for (const def of toolDefinitions) {
-    server.registerTool(
-      def.name,
-      {
-        description: def.description,
-        inputSchema: def.inputSchema,
-        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
-      },
-      async (args) => {
-        try {
-          const result = await def.handler(args);
-          if (def.name === "get_asset" && result && typeof result === "object" && "assetId" in result) {
-            return { content: assetBlocks(result) };
-          }
-          return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-        } catch (err) {
-          return {
-            content: [{ type: "text", text: err instanceof Error ? err.message : String(err) }],
-            isError: true
-          };
-        }
+  const server = new McpServer(
+    { name: "tebin-style", title: "TEBIN Style", version: version2, websiteUrl: "https://github.com/4aykas/tebin-style" },
+    { instructions: INSTRUCTIONS }
+  );
+  for (const { name, handler, ...config2 } of toolDefinitions) {
+    server.registerTool(name, config2, async (args) => {
+      const result = await handler(args);
+      if (name === "get_asset" && result && typeof result === "object" && "assetId" in result) {
+        return { content: assetBlocks(result) };
       }
-    );
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    });
   }
   return server;
 }

@@ -29,8 +29,9 @@ export function loadRules(): Rule[] {
 }
 
 export function getRule(id: string): Rule {
-  const rule = loadRules().find((r) => r.id === id);
-  if (!rule) throw new NotFoundError(`rule "${id}" not found`);
+  const rules = loadRules();
+  const rule = rules.find((r) => r.id === id);
+  if (!rule) throw new NotFoundError(`rule "${id}" not found; ids: ${rules.map((r) => r.id).join(', ')}`);
   return rule;
 }
 

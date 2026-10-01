@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { createServer } from '../mcp/server.js';
 import { toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
 import { loadIndex } from '../src/registry.js';
+import { loadRules } from '../src/rules.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -9,6 +10,24 @@ import { readFileSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+
+/** Runs fn against a fresh server over an in-memory link. */
+async function withClient(fn: (client: Client) => Promise<void>): Promise<void> {
+  const server = createServer();
+  const client = new Client({ name: 'test', version: '1.0.0' });
+  const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  try {
+    await server.connect(serverTransport);
+    await client.connect(clientTransport);
+    await fn(client);
+  } finally {
+    await client.close();
+    await server.close();
+  }
+}
+
+const text = (result: Awaited<ReturnType<Client['callTool']>>) =>
+  (result.content as Array<{ text?: string }>).map((b) => b.text ?? '').join('\n');
 
 describe('mcp server', () => {
   it('constructs without throwing', () => {
@@ -51,6 +70,54 @@ describe('mcp server', () => {
     }
   });
 
+  it('gives every tool a title and every parameter a description, with enums from the data', () => withClient(async (client) => {
+    const { tools } = await client.listTools();
+    expect(tools.map((t) => [t.name, t.title, Object.keys(t.inputSchema.properties ?? {})])).toEqual([
+      ['list_themes', 'List themes', ['industry', 'mood', 'query']],
+      ['get_theme', 'Get theme', ['id', 'format']],
+      ['get_asset', 'Get brand asset', ['id', 'assetId']],
+      ['list_rules', 'List design rules', ['theme', 'medium', 'category', 'severity', 'tag', 'query']],
+      ['lint_theme', 'Lint theme', ['id']],
+      ['diff_themes', 'Compare themes', ['a', 'b']],
+      ['get_rule', 'Get design rule', ['id']],
+    ]);
+    const themeIds = loadIndex().themes.map((t) => t.id).sort();
+    const categories = [...new Set(loadRules().map((r) => r.category))].sort();
+    for (const tool of tools) {
+      expect(tool.description, tool.name).toBeTruthy();
+      expect(tool.inputSchema.additionalProperties, tool.name).toBe(false);
+      const props = tool.inputSchema.properties as Record<string, { description?: string; enum?: string[] }>;
+      for (const [key, prop] of Object.entries(props)) {
+        expect(prop.description, `${tool.name}.${key}`).toBeTruthy();
+        if (['theme', 'a', 'b'].includes(key) || (key === 'id' && tool.name !== 'get_rule')) {
+          expect(prop.enum, `${tool.name}.${key}`).toEqual(themeIds);
+        }
+      }
+    }
+    const listRules = tools.find((t) => t.name === 'list_rules')!.inputSchema.properties as Record<string, { enum?: string[] }>;
+    expect(listRules.category?.enum).toEqual(categories);
+    expect(client.getServerVersion()?.title).toBe('TEBIN Style');
+    expect(client.getInstructions()).toContain('design-md');
+  }));
+
+  it('names the valid values when a value is unknown, in one line', () => withClient(async (client) => {
+    const cases: Array<[string, Record<string, unknown>, string]> = [
+      ['get_theme', { id: 'nope' }, 'tebin-classic'],
+      ['list_rules', { category: 'nonexistent' }, 'typography'],
+      ['get_rule', { id: 'nope' }, 'forms-loading-button'],
+      ['get_asset', { id: 'tebin', assetId: 'nope' }, 'logo-full'],
+      ['list_themes', { bogus: 1 }, 'bogus'],
+    ];
+    for (const [name, args, expected] of cases) {
+      const result = await client.callTool({ name, arguments: args });
+      expect(result.isError, name).toBe(true);
+      expect(text(result), name).toContain(expected);
+      expect(text(result), name).not.toContain('\n');
+    }
+    const empty = await client.callTool({ name: 'list_themes', arguments: { query: 'no such theme' } });
+    expect(text(empty)).toContain('tebin-classic');
+  }));
+
   it('keeps every get_asset response under the inline cap, linking larger files', async () => {
     const server = createServer();
     const client = new Client({ name: 'test', version: '1.0.0' });
@@ -79,7 +146,7 @@ describe('mcp server', () => {
   it('runs the committed bundle with only Node and the data files', async () => {
     // A copy with no node_modules proves the bundle is self-contained.
     const dir = mkdtempSync(join(tmpdir(), 'tebin-mcp-'));
-    for (const path of ['package.json', 'registry', 'mcp/dist/server.mjs']) {
+    for (const path of ['package.json', 'registry', 'rules/rules.json', 'mcp/dist/server.mjs']) {
       cpSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), join(dir, path), { recursive: true });
     }
     const client = new Client({ name: 'stdio-test', version: '1.0.0' });
