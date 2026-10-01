@@ -41,35 +41,25 @@ describe('mcp server', () => {
     ]);
   });
 
-  it('negotiates the package version and returns native PNG content and useful errors', async () => {
-    const server = createServer();
-    const client = new Client({ name: 'test', version: '1.0.0' });
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    try {
-      await server.connect(serverTransport);
-      await client.connect(clientTransport);
-      const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-      expect(client.getServerVersion()?.version).toBe(pkg.version);
-      const { tools } = await client.listTools();
-      expect(tools).toHaveLength(7);
-      expect(tools.every((t) => t.annotations?.readOnlyHint === true && t.annotations.openWorldHint === false)).toBe(true);
-      const png = await client.callTool({ name: 'get_asset', arguments: { id: 'tebin-classic', assetId: 'logo-full@512' } });
-      expect(png.content).toEqual([
-        expect.objectContaining({ type: 'text', text: expect.stringContaining('© TEBIN') }),
-        expect.objectContaining({ type: 'image', mimeType: 'image/png', data: expect.stringMatching(/^iVBOR/) }),
-      ]);
-      const csv = await client.callTool({ name: 'get_theme', arguments: { id: 'tebin-classic', format: 'colors-csv' } });
-      expect(csv.isError).not.toBe(true);
-      expect(JSON.stringify(csv.content)).toContain('485 C');
-      const invalid = await client.callTool({ name: 'get_theme', arguments: { id: '../tebin' } });
-      expect(invalid.isError).toBe(true);
-      const missing = await client.callTool({ name: 'get_asset', arguments: { id: 'tebin', assetId: 'missing' } });
-      expect(missing.isError).toBe(true);
-    } finally {
-      await client.close();
-      await server.close();
-    }
-  });
+  it('negotiates the package version and returns native PNG content and useful errors', () => withClient(async (client) => {
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+    expect(client.getServerVersion()?.version).toBe(pkg.version);
+    const { tools } = await client.listTools();
+    expect(tools).toHaveLength(7);
+    expect(tools.every((t) => t.annotations?.readOnlyHint === true && t.annotations.openWorldHint === false)).toBe(true);
+    const png = await client.callTool({ name: 'get_asset', arguments: { id: 'tebin-classic', assetId: 'logo-full@512' } });
+    expect(png.content).toEqual([
+      expect.objectContaining({ type: 'text', text: expect.stringContaining('© TEBIN') }),
+      expect.objectContaining({ type: 'image', mimeType: 'image/png', data: expect.stringMatching(/^iVBOR/) }),
+    ]);
+    const csv = await client.callTool({ name: 'get_theme', arguments: { id: 'tebin-classic', format: 'colors-csv' } });
+    expect(csv.isError).not.toBe(true);
+    expect(JSON.stringify(csv.content)).toContain('485 C');
+    const invalid = await client.callTool({ name: 'get_theme', arguments: { id: '../tebin' } });
+    expect(invalid.isError).toBe(true);
+    const missing = await client.callTool({ name: 'get_asset', arguments: { id: 'tebin', assetId: 'missing' } });
+    expect(missing.isError).toBe(true);
+  }));
 
   it('gives every tool a title and every parameter a description, with enums from the data', () => withClient(async (client) => {
     const { tools } = await client.listTools();
@@ -150,30 +140,20 @@ describe('mcp server', () => {
     expect(file!.text).toContain('\n# TEBIN — design');
   }));
 
-  it('keeps every get_asset response under the inline cap, linking larger files', async () => {
-    const server = createServer();
-    const client = new Client({ name: 'test', version: '1.0.0' });
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    try {
-      await server.connect(serverTransport);
-      await client.connect(clientTransport);
-      for (const theme of loadIndex().themes) {
-        for (const asset of theme.assets) {
-          const { content } = await client.callTool({ name: 'get_asset', arguments: { id: theme.id, assetId: asset.id } });
-          const blocks = content as Array<{ type: string; text?: string; data?: string; uri?: string }>;
-          const bytes = blocks.reduce((sum, b) => sum +
-            (b.type === 'image' ? Buffer.from(b.data ?? '', 'base64').length : Buffer.byteLength(b.text ?? '')), 0);
-          expect(bytes, `${theme.id}/${asset.id}`).toBeLessThanOrEqual(MAX_INLINE_BYTES);
-          if (asset.bytes > MAX_INLINE_BYTES) {
-            expect(blocks).toContainEqual(expect.objectContaining({ type: 'resource_link', uri: asset.rawUrl, size: asset.bytes }));
-          }
+  it('keeps every get_asset response under the inline cap, linking larger files', () => withClient(async (client) => {
+    for (const theme of loadIndex().themes) {
+      for (const asset of theme.assets) {
+        const { content } = await client.callTool({ name: 'get_asset', arguments: { id: theme.id, assetId: asset.id } });
+        const blocks = content as Array<{ type: string; text?: string; data?: string; uri?: string }>;
+        const bytes = blocks.reduce((sum, b) => sum +
+          (b.type === 'image' ? Buffer.from(b.data ?? '', 'base64').length : Buffer.byteLength(b.text ?? '')), 0);
+        expect(bytes, `${theme.id}/${asset.id}`).toBeLessThanOrEqual(MAX_INLINE_BYTES);
+        if (asset.bytes > MAX_INLINE_BYTES) {
+          expect(blocks).toContainEqual(expect.objectContaining({ type: 'resource_link', uri: asset.rawUrl, size: asset.bytes }));
         }
       }
-    } finally {
-      await client.close();
-      await server.close();
     }
-  });
+  }));
 
   it('runs the committed bundle with only Node and the data files', async () => {
     // A copy with no node_modules proves the bundle is self-contained.

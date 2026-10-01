@@ -2,7 +2,10 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { REPO_ROOT, NotFoundError } from './registry.js';
 
-export type Severity = 'MUST' | 'SHOULD' | 'NEVER';
+export const SEVERITIES = ['MUST', 'SHOULD', 'NEVER'] as const;
+export type Severity = (typeof SEVERITIES)[number];
+export const MEDIA = ['web', 'document', 'print'] as const;
+export type Medium = (typeof MEDIA)[number];
 
 export interface Rule {
   id: string;
@@ -16,7 +19,6 @@ export interface Rule {
   media?: Medium[];
 }
 
-export type Medium = 'web' | 'document' | 'print';
 export interface RuleFilters {
   category?: string; severity?: string; tag?: string; query?: string;
   theme?: string; medium?: Medium;

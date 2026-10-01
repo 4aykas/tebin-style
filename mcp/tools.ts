@@ -2,14 +2,13 @@ import { z } from 'zod';
 import type { CallToolResult, TextContent, ToolAnnotations } from '@modelcontextprotocol/sdk/types.js';
 import type { ThemeEntry } from '../src/index-builder.js';
 import {
-  loadIndex, loadThemeManifest, readFormat, readAssetFile, assetFormat, FORMAT_FILES, NotFoundError,
+  loadIndex, loadThemeManifest, readFormat, readAssetFile, assetFormat, FORMAT_FILES, NotFoundError, REPO_ROOT,
   type Format,
 } from '../src/registry.js';
-import { loadRules, filterRules, getRule as getRuleById, type Rule, type RuleFilters } from '../src/rules.js';
+import { loadRules, filterRules, getRule, SEVERITIES, MEDIA, type Rule, type RuleFilters } from '../src/rules.js';
 import { lintTheme, type LintResult } from '../src/lint.js';
 import { diffThemes, type DiffResult } from '../src/diff.js';
 import { join } from 'node:path';
-import { REPO_ROOT } from '../src/registry.js';
 
 const FORMATS = Object.keys(FORMAT_FILES) as Format[];
 
@@ -66,15 +65,13 @@ export function getAsset(input: { id: string; assetId?: string }) {
   }
 
   const format = assetFormat(asset.path);
-  const readable = INLINE_FORMATS.has(format);
-  const file = readable && asset.bytes <= MAX_INLINE_BYTES ? readAssetFile(asset.path) : undefined;
+  const file = INLINE_FORMATS.has(format) && asset.bytes <= MAX_INLINE_BYTES ? readAssetFile(asset.path) : undefined;
   return {
     id: entry.id, assetId: asset.id, type: asset.type,
     format, path: asset.path, rawUrl: asset.rawUrl, bytes: asset.bytes,
     license: asset.license ?? loadThemeManifest(input.id).license.assets,
     encoding: file?.encoding, content: file?.content,
-    note: file ? undefined
-      : `${readable ? `Larger than ${MAX_INLINE_BYTES} bytes` : `${format.toUpperCase()} is not sent inline`}; download it from rawUrl.`,
+    note: file ? undefined : 'Not sent inline; fetch rawUrl.',
   };
 }
 
@@ -87,10 +84,6 @@ export function listRules(input: RuleFilters): {
     count: rules.length, rules,
     ...(rules.length ? {} : { hint: 'No rule matches these filters; drop tag or query, or list by theme and medium to see the tags in use.' }),
   };
-}
-
-export function getRuleTool(input: { id: string }): Rule {
-  return getRuleById(input.id);
 }
 
 /** Resolves a theme id to its directory, refusing an unknown id by name. */
@@ -119,6 +112,8 @@ function oneOf(values: string[]) {
 const themes = loadIndex().themes;
 const themeId = oneOf(themes.map((t) => t.id));
 const category = oneOf(loadRules().map((r) => r.category));
+const severity = z.enum(SEVERITIES);
+const medium = z.enum(MEDIA);
 
 const json = (value: unknown): TextContent => ({ type: 'text', text: JSON.stringify(value) });
 
@@ -128,20 +123,19 @@ const structured = (value: object): CallToolResult => ({ content: [json(value)],
 const MIME_TYPES: Record<string, string> = { svg: 'image/svg+xml', png: 'image/png', ico: 'image/x-icon' };
 
 /**
- * One asset as MCP content. A PNG comes as an image block and an asset that
- * was not inlined as a resource_link; both carry the metadata as text. SVG
- * stays one JSON text block, ready to embed.
+ * One asset as MCP content: an inline PNG as metadata plus an image block;
+ * SVG, or anything without a rawUrl, as one JSON text block; anything else
+ * as metadata plus a resource_link.
  */
 function assetBlocks(asset: ReturnType<typeof getAsset>): CallToolResult['content'] {
   if (!('assetId' in asset)) return [json(asset)];
   const { content, ...metadata } = asset;
-  if (content === undefined) {
-    if (!asset.rawUrl) return [json(metadata)];
-    return [json(metadata), { type: 'resource_link', uri: asset.rawUrl, name: asset.assetId,
-      mimeType: MIME_TYPES[asset.format], size: asset.bytes }];
+  if (asset.format === 'png' && content !== undefined) {
+    return [json(metadata), { type: 'image', data: content, mimeType: 'image/png' }];
   }
-  if (asset.format === 'png') return [json(metadata), { type: 'image', data: content, mimeType: 'image/png' }];
-  return [json(asset)];
+  if (content !== undefined || !asset.rawUrl) return [json(asset)];
+  return [json(metadata), { type: 'resource_link', uri: asset.rawUrl, name: asset.assetId,
+    mimeType: MIME_TYPES[asset.format], size: asset.bytes }];
 }
 
 /** The theme file as raw text with real newlines, after a short metadata block. */
@@ -169,9 +163,9 @@ const diffOutput = z.object({
   regression: z.boolean(),
 }) satisfies z.ZodType<DiffResult>;
 const rule = z.object({
-  id: z.string(), category: z.string(), severity: z.enum(['MUST', 'SHOULD', 'NEVER']), statement: z.string(),
+  id: z.string(), category: z.string(), severity, statement: z.string(),
   rationale: z.string().optional(), tags: z.array(z.string()).optional(), source: z.string().optional(),
-  themes: z.array(z.string()).optional(), media: z.array(z.enum(['web', 'document', 'print'])).optional(),
+  themes: z.array(z.string()).optional(), media: z.array(medium).optional(),
 }) satisfies z.ZodType<Rule>;
 const rulesOutput = z.object({ count: z.number(), rules: z.array(rule), hint: z.string().optional() });
 const themesOutput = z.object({
@@ -188,21 +182,24 @@ const themesOutput = z.object({
 const READ_ONLY: ToolAnnotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 
 /** One tool: its registerTool config plus a handler that returns MCP content. */
-export interface ToolDef {
+export interface ToolDef<I extends z.AnyZodObject = z.AnyZodObject> {
   name: string;
   title: string;
   description: string;
-  inputSchema: z.AnyZodObject;
+  inputSchema: I;
   outputSchema?: z.AnyZodObject;
   annotations: ToolAnnotations;
-  handler: (args: any) => CallToolResult;
+  handler(args: z.infer<I>): CallToolResult;
 }
 
+/** Lets zod infer each handler's arguments from its inputSchema. */
+const tool = <I extends z.AnyZodObject>(def: ToolDef<I>): ToolDef => def;
+
 export const toolDefinitions: ToolDef[] = [
-  {
+  tool({
     name: 'list_themes',
     title: 'List themes',
-    description: "List available themes with descriptions and formats; get_asset lists a theme's assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.",
+    description: 'List themes with description, industries, moods and formats. Filter by industry or mood, or search text. Assets: get_asset.',
     inputSchema: z.strictObject({
       industry: oneOf(themes.flatMap((t) => t.industry)).optional().describe('Only themes for this industry.'),
       mood: oneOf(themes.flatMap((t) => t.mood)).optional().describe('Only themes with this mood.'),
@@ -211,20 +208,20 @@ export const toolDefinitions: ToolDef[] = [
     outputSchema: themesOutput,
     annotations: READ_ONLY,
     handler: (args) => structured(listThemes(args)),
-  },
-  {
+  }),
+  tool({
     name: 'get_theme',
     title: 'Get theme',
-    description: 'Get a theme in css, tailwind, dtcg, ts, design-md or colors-csv (default css), with licensing, surfaces and documented omissions. Start with design-md for the complete design guide; colors-csv includes RGB and print references.',
+    description: 'Get one theme file with its licence, surfaces and omissions. design-md is the complete design guide: start there.',
     inputSchema: z.strictObject({
       id: themeId.describe('Theme id.'),
       format: z.enum(FORMATS as [Format, ...Format[]]).optional()
-        .describe('File to return (default css). design-md is the whole design guide.'),
+        .describe('File to return (default css).'),
     }),
     annotations: READ_ONLY,
     handler: (args) => ({ content: themeBlocks(getTheme(args)) }),
-  },
-  {
+  }),
+  tool({
     name: 'get_asset',
     title: 'Get brand asset',
     description: "List a theme's brand assets with sizes, or fetch one by assetId: SVG as text, PNG up to 200 KB as an image, anything else as a link.",
@@ -235,25 +232,25 @@ export const toolDefinitions: ToolDef[] = [
     }),
     annotations: READ_ONLY,
     handler: (args) => ({ content: assetBlocks(getAsset(args)) }),
-  },
-  {
+  }),
+  tool({
     name: 'list_rules',
     title: 'List design rules',
-    description: 'List design rules for a theme and medium (web, document, print), plus optional category, severity, tag or text filters. Omitted scope filters return the full catalogue; use scope to avoid applying website policies to print or another brand.',
+    description: "List MUST/SHOULD/NEVER design rules. Pass theme and medium: without them you get every brand's and medium's rules.",
     inputSchema: z.strictObject({
       theme: themeId.optional().describe('Keep rules for this theme. Rules without a theme scope apply to every theme.'),
-      medium: z.enum(['web', 'document', 'print']).optional()
+      medium: medium.optional()
         .describe('Keep rules for this medium. Rules without a medium scope apply to every medium.'),
       category: category.optional().describe('Rule category.'),
-      severity: z.enum(['MUST', 'SHOULD', 'NEVER']).optional().describe('Rule strength.'),
+      severity: severity.optional().describe('Rule strength.'),
       tag: z.string().optional().describe('Exact tag, such as contrast or focus.'),
       query: z.string().optional().describe('Text to find in the id, statement, rationale or tags.'),
     }),
     outputSchema: rulesOutput,
     annotations: READ_ONLY,
     handler: (args) => structured(listRules(args)),
-  },
-  {
+  }),
+  tool({
     name: 'lint_theme',
     title: 'Lint theme',
     description:
@@ -262,12 +259,12 @@ export const toolDefinitions: ToolDef[] = [
     outputSchema: lintOutput,
     annotations: READ_ONLY,
     handler: (args) => structured(lintThemeTool(args)),
-  },
-  {
+  }),
+  tool({
     name: 'diff_themes',
     title: 'Compare themes',
     description:
-      'Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved, worsened or unchecked findings. Regression means an introduced or worsened lint error, or a contrast pair that is still there but no longer measured, even when error totals are unchanged; it is not a compatibility guarantee.',
+      'Compare two themes: tokens added, removed or modified per group, and lint findings introduced, resolved, worsened or unchecked. regression is true when a lint error appears or worsens, or a measured contrast pair loses its check. Not a compatibility guarantee.',
     inputSchema: z.strictObject({
       a: themeId.describe('Theme to compare from (before).'),
       b: themeId.describe('Theme to compare to (after).'),
@@ -275,8 +272,8 @@ export const toolDefinitions: ToolDef[] = [
     outputSchema: diffOutput,
     annotations: READ_ONLY,
     handler: (args) => structured(diffThemesTool(args)),
-  },
-  {
+  }),
+  tool({
     name: 'get_rule',
     title: 'Get design rule',
     description: 'Get a single design rule by id.',
@@ -285,6 +282,6 @@ export const toolDefinitions: ToolDef[] = [
     }),
     outputSchema: rule,
     annotations: READ_ONLY,
-    handler: (args) => structured(getRuleTool(args)),
-  },
+    handler: ({ id }) => structured(getRule(id)),
+  }),
 ];

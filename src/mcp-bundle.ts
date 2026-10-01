@@ -8,10 +8,10 @@ export const MCP_BUNDLE = join(REPO_ROOT, 'mcp', 'dist', 'server.mjs');
 /** One self-contained file: the server needs only Node 22 and the repo's data files. */
 export async function buildMcpBundle(): Promise<string> {
   const { outputFiles } = await build({
-    entryPoints: [join(REPO_ROOT, 'mcp', 'server.ts')],
+    entryPoints: [join(REPO_ROOT, 'mcp', 'stdio.ts')],
     absWorkingDir: REPO_ROOT,
     bundle: true, platform: 'node', format: 'esm', target: 'node22',
-    banner: { js: '// Generated from mcp/server.ts by `pnpm build:mcp` — do not edit.' },
+    banner: { js: '// Generated from mcp/stdio.ts by `pnpm build:mcp` — do not edit.' },
     write: false, logLevel: 'warning',
   });
   // esbuild labels modules by their real path. node_modules may be a link to

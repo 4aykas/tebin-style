@@ -1,7 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { fileURLToPath } from 'node:url';
-import { readFileSync, realpathSync, existsSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { toolDefinitions } from './tools.js';
 import { REPO_ROOT } from '../src/registry.js';
 import { join } from 'node:path';
@@ -22,19 +20,4 @@ export function createServer(): McpServer {
   // The SDK turns a thrown error into an isError result carrying its message.
   for (const { name, handler, ...config } of toolDefinitions) server.registerTool(name, config, handler);
   return server;
-}
-
-async function main(): Promise<void> {
-  const server = createServer();
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error('tebin-style MCP server running on stdio');
-}
-
-if (process.argv[1] && existsSync(process.argv[1]) &&
-    realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
-  main().catch((error) => {
-    console.error('Fatal error in tebin-style MCP server:', error);
-    process.exit(1);
-  });
 }

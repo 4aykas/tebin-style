@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { listThemes, getTheme, getAsset, listRules, getRuleTool, toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
+import { listThemes, getTheme, getAsset, listRules, toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
 import { NotFoundError } from '../src/registry.js';
 
 describe('list_themes', () => {
@@ -84,7 +84,7 @@ describe('get_asset', () => {
   });
 });
 
-describe('list_rules / get_rule', () => {
+describe('list_rules', () => {
   it('supports theme and medium scope and rejects unknown themes', () => {
     const rules = listRules({ theme: 'tebin-classic', medium: 'document' });
     expect(rules.count).toBeGreaterThan(0);
@@ -95,12 +95,6 @@ describe('list_rules / get_rule', () => {
     const r = listRules({ category: 'forms' });
     expect(r.count).toBe(r.rules.length);
     expect(r.rules.every((x) => x.category === 'forms')).toBe(true);
-  });
-  it('gets a rule by id', () => {
-    expect(getRuleTool({ id: 'forms-loading-button' }).severity).toBe('MUST');
-  });
-  it('throws for an unknown rule', () => {
-    expect(() => getRuleTool({ id: 'nope' })).toThrow(NotFoundError);
   });
 });
 
