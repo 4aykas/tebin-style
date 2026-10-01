@@ -108,7 +108,13 @@ descriptions and tags, so `query: "print"` finds Classic. `colors-csv` exposes
 the spreadsheet palette without asking an agent to parse CSS.
 
 `design-md` returns the whole self-contained document, front matter included —
-the same file a host with no MCP can be handed directly.
+the same file a host with no MCP can be handed directly. `get_theme` sends a
+short JSON metadata block, then the file itself as plain text.
+
+Results are compact JSON. `list_themes`, `list_rules`, `get_rule`,
+`lint_theme` and `diff_themes` also declare an `outputSchema` and return the
+same object as `structuredContent`. An unknown theme id, category or key fails
+with a one-line error that names the valid values.
 
 `lint_theme` reports what it could **not** check as well as what failed. A
 finding with no ratio means no pairing rule reached that role; treat it as

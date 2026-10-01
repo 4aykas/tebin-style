@@ -3,6 +3,7 @@ import { createServer } from '../mcp/server.js';
 import { toolDefinitions, MAX_INLINE_BYTES } from '../mcp/tools.js';
 import { loadIndex } from '../src/registry.js';
 import { loadRules } from '../src/rules.js';
+import { Ajv } from 'ajv';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -116,6 +117,37 @@ describe('mcp server', () => {
     }
     const empty = await client.callTool({ name: 'list_themes', arguments: { query: 'no such theme' } });
     expect(text(empty)).toContain('tebin-classic');
+  }));
+
+  it('returns structuredContent that matches each outputSchema, and the same object as compact JSON', () => withClient(async (client) => {
+    const { tools } = await client.listTools();
+    const schemas = new Map(tools.filter((t) => t.outputSchema).map((t) => [t.name, t.outputSchema!]));
+    expect([...schemas.keys()].sort()).toEqual(['diff_themes', 'get_rule', 'lint_theme', 'list_rules', 'list_themes']);
+    const calls: Array<[string, Record<string, unknown>]> = [
+      ['list_themes', {}], ['list_themes', { query: 'no such theme' }],
+      ['list_rules', {}], ['list_rules', { theme: 'tebin-classic', medium: 'document' }], ['list_rules', { tag: 'nope' }],
+      ['get_rule', { id: 'forms-loading-button' }],
+      ...loadIndex().themes.map((t): [string, Record<string, unknown>] => ['lint_theme', { id: t.id }]),
+      ['diff_themes', { a: 'tebin-classic', b: 'tebin' }],
+    ];
+    const ajv = new Ajv({ strict: false });
+    for (const [name, args] of calls) {
+      const result = await client.callTool({ name, arguments: args });
+      const label = `${name} ${JSON.stringify(args)}`;
+      expect(result.isError, label).not.toBe(true);
+      const validate = ajv.compile(schemas.get(name)!);
+      expect(validate(result.structuredContent), `${label}: ${ajv.errorsText(validate.errors)}`).toBe(true);
+      expect(result.content, label).toEqual([{ type: 'text', text: JSON.stringify(result.structuredContent) }]);
+    }
+  }));
+
+  it('serves a theme file as raw text with real newlines after its metadata', () => withClient(async (client) => {
+    const result = await client.callTool({ name: 'get_theme', arguments: { id: 'tebin', format: 'design-md' } });
+    const [metadata, file] = result.content as Array<{ type: string; text: string }>;
+    expect(JSON.parse(metadata!.text)).toMatchObject({ id: 'tebin', format: 'design-md', filename: 'DESIGN.md' });
+    expect(metadata!.text).not.toContain('# TEBIN — design');
+    expect(file).toEqual({ type: 'text', text: readFileSync(new URL('../themes/tebin/DESIGN.md', import.meta.url), 'utf8') });
+    expect(file!.text).toContain('\n# TEBIN — design');
   }));
 
   it('keeps every get_asset response under the inline cap, linking larger files', async () => {

@@ -1474,12 +1474,12 @@ var require_applicability = __commonJS({
     }
     exports.schemaHasRulesForType = schemaHasRulesForType;
     function shouldUseGroup(schema, group) {
-      return group.rules.some((rule) => shouldUseRule(schema, rule));
+      return group.rules.some((rule2) => shouldUseRule(schema, rule2));
     }
     exports.shouldUseGroup = shouldUseGroup;
-    function shouldUseRule(schema, rule) {
+    function shouldUseRule(schema, rule2) {
       var _a;
-      return schema[rule.keyword] !== void 0 || ((_a = rule.definition.implements) === null || _a === void 0 ? void 0 : _a.some((kwd) => schema[kwd] !== void 0));
+      return schema[rule2.keyword] !== void 0 || ((_a = rule2.definition.implements) === null || _a === void 0 ? void 0 : _a.some((kwd) => schema[kwd] !== void 0));
     }
     exports.shouldUseRule = shouldUseRule;
   }
@@ -2531,9 +2531,9 @@ var require_validate = __commonJS({
       if (useDefaults)
         (0, defaults_1.assignDefaults)(it, group.type);
       gen.block(() => {
-        for (const rule of group.rules) {
-          if ((0, applicability_1.shouldUseRule)(schema, rule)) {
-            keywordCode(it, rule.keyword, rule.definition, group.type);
+        for (const rule2 of group.rules) {
+          if ((0, applicability_1.shouldUseRule)(schema, rule2)) {
+            keywordCode(it, rule2.keyword, rule2.definition, group.type);
           }
         }
       });
@@ -2568,9 +2568,9 @@ var require_validate = __commonJS({
     function checkKeywordTypes(it, ts) {
       const rules = it.self.RULES.all;
       for (const keyword in rules) {
-        const rule = rules[keyword];
-        if (typeof rule == "object" && (0, applicability_1.shouldUseRule)(it.schema, rule)) {
-          const { type } = rule.definition;
+        const rule2 = rules[keyword];
+        if (typeof rule2 == "object" && (0, applicability_1.shouldUseRule)(it.schema, rule2)) {
+          const { type } = rule2.definition;
           if (type.length && !type.some((t) => hasApplicableType(ts, t))) {
             strictTypesError(it, `missing type "${type.join(",")}" for keyword "${keyword}"`);
           }
@@ -4600,8 +4600,8 @@ var require_core = __commonJS({
         return this;
       }
       getKeyword(keyword) {
-        const rule = this.RULES.all[keyword];
-        return typeof rule == "object" ? rule.definition : !!rule;
+        const rule2 = this.RULES.all[keyword];
+        return typeof rule2 == "object" ? rule2.definition : !!rule2;
       }
       // Remove keyword
       removeKeyword(keyword) {
@@ -4609,7 +4609,7 @@ var require_core = __commonJS({
         delete RULES.keywords[keyword];
         delete RULES.all[keyword];
         for (const group of RULES.rules) {
-          const i = group.rules.findIndex((rule) => rule.keyword === keyword);
+          const i = group.rules.findIndex((rule2) => rule2.keyword === keyword);
           if (i >= 0)
             group.rules.splice(i, 1);
         }
@@ -4636,10 +4636,10 @@ var require_core = __commonJS({
           for (const seg of segments)
             keywords = keywords[seg];
           for (const key in rules) {
-            const rule = rules[key];
-            if (typeof rule != "object")
+            const rule2 = rules[key];
+            if (typeof rule2 != "object")
               continue;
-            const { $data } = rule.definition;
+            const { $data } = rule2.definition;
             const schema = keywords[key];
             if ($data && schema)
               keywords[key] = schemaOrData(schema);
@@ -4803,7 +4803,7 @@ var require_core = __commonJS({
       RULES.keywords[keyword] = true;
       if (!definition)
         return;
-      const rule = {
+      const rule2 = {
         keyword,
         definition: {
           ...definition,
@@ -4812,18 +4812,18 @@ var require_core = __commonJS({
         }
       };
       if (definition.before)
-        addBeforeRule.call(this, ruleGroup, rule, definition.before);
+        addBeforeRule.call(this, ruleGroup, rule2, definition.before);
       else
-        ruleGroup.rules.push(rule);
-      RULES.all[keyword] = rule;
+        ruleGroup.rules.push(rule2);
+      RULES.all[keyword] = rule2;
       (_a = definition.implements) === null || _a === void 0 ? void 0 : _a.forEach((kwd) => this.addKeyword(kwd));
     }
-    function addBeforeRule(ruleGroup, rule, before) {
+    function addBeforeRule(ruleGroup, rule2, before) {
       const i = ruleGroup.rules.findIndex((_rule) => _rule.keyword === before);
       if (i >= 0) {
-        ruleGroup.rules.splice(i, 0, rule);
+        ruleGroup.rules.splice(i, 0, rule2);
       } else {
-        ruleGroup.rules.push(rule);
+        ruleGroup.rules.push(rule2);
         this.logger.warn(`rule ${before} is not defined`);
       }
     }
@@ -7465,8 +7465,8 @@ var ZodIssueCode = util.arrayToEnum([
   "not_finite"
 ]);
 var quotelessJson = (obj) => {
-  const json = JSON.stringify(obj, null, 2);
-  return json.replace(/"([^"]+)":/g, "$1:");
+  const json2 = JSON.stringify(obj, null, 2);
+  return json2.replace(/"([^"]+)":/g, "$1:");
 };
 var ZodError = class _ZodError extends Error {
   get errors() {
@@ -14328,24 +14328,24 @@ var JSONSchemaGenerator = class {
         const _json = result.schema;
         switch (def.type) {
           case "string": {
-            const json = _json;
-            json.type = "string";
+            const json2 = _json;
+            json2.type = "string";
             const { minimum, maximum, format, patterns, contentEncoding } = schema._zod.bag;
             if (typeof minimum === "number")
-              json.minLength = minimum;
+              json2.minLength = minimum;
             if (typeof maximum === "number")
-              json.maxLength = maximum;
+              json2.maxLength = maximum;
             if (format) {
-              json.format = formatMap[format] ?? format;
-              if (json.format === "")
-                delete json.format;
+              json2.format = formatMap[format] ?? format;
+              if (json2.format === "")
+                delete json2.format;
             }
             if (contentEncoding)
-              json.contentEncoding = contentEncoding;
+              json2.contentEncoding = contentEncoding;
             if (patterns && patterns.size > 0) {
               const regexes = [...patterns];
               if (regexes.length === 1)
-                json.pattern = regexes[0].source;
+                json2.pattern = regexes[0].source;
               else if (regexes.length > 1) {
                 result.schema.allOf = [
                   ...regexes.map((regex) => ({
@@ -14358,41 +14358,41 @@ var JSONSchemaGenerator = class {
             break;
           }
           case "number": {
-            const json = _json;
+            const json2 = _json;
             const { minimum, maximum, format, multipleOf, exclusiveMaximum, exclusiveMinimum } = schema._zod.bag;
             if (typeof format === "string" && format.includes("int"))
-              json.type = "integer";
+              json2.type = "integer";
             else
-              json.type = "number";
+              json2.type = "number";
             if (typeof exclusiveMinimum === "number")
-              json.exclusiveMinimum = exclusiveMinimum;
+              json2.exclusiveMinimum = exclusiveMinimum;
             if (typeof minimum === "number") {
-              json.minimum = minimum;
+              json2.minimum = minimum;
               if (typeof exclusiveMinimum === "number") {
                 if (exclusiveMinimum >= minimum)
-                  delete json.minimum;
+                  delete json2.minimum;
                 else
-                  delete json.exclusiveMinimum;
+                  delete json2.exclusiveMinimum;
               }
             }
             if (typeof exclusiveMaximum === "number")
-              json.exclusiveMaximum = exclusiveMaximum;
+              json2.exclusiveMaximum = exclusiveMaximum;
             if (typeof maximum === "number") {
-              json.maximum = maximum;
+              json2.maximum = maximum;
               if (typeof exclusiveMaximum === "number") {
                 if (exclusiveMaximum <= maximum)
-                  delete json.maximum;
+                  delete json2.maximum;
                 else
-                  delete json.exclusiveMaximum;
+                  delete json2.exclusiveMaximum;
               }
             }
             if (typeof multipleOf === "number")
-              json.multipleOf = multipleOf;
+              json2.multipleOf = multipleOf;
             break;
           }
           case "boolean": {
-            const json = _json;
-            json.type = "boolean";
+            const json2 = _json;
+            json2.type = "boolean";
             break;
           }
           case "bigint": {
@@ -14440,23 +14440,23 @@ var JSONSchemaGenerator = class {
             break;
           }
           case "array": {
-            const json = _json;
+            const json2 = _json;
             const { minimum, maximum } = schema._zod.bag;
             if (typeof minimum === "number")
-              json.minItems = minimum;
+              json2.minItems = minimum;
             if (typeof maximum === "number")
-              json.maxItems = maximum;
-            json.type = "array";
-            json.items = this.process(def.element, { ...params, path: [...params.path, "items"] });
+              json2.maxItems = maximum;
+            json2.type = "array";
+            json2.items = this.process(def.element, { ...params, path: [...params.path, "items"] });
             break;
           }
           case "object": {
-            const json = _json;
-            json.type = "object";
-            json.properties = {};
+            const json2 = _json;
+            json2.type = "object";
+            json2.properties = {};
             const shape = def.shape;
             for (const key in shape) {
-              json.properties[key] = this.process(shape[key], {
+              json2.properties[key] = this.process(shape[key], {
                 ...params,
                 path: [...params.path, "properties", key]
               });
@@ -14471,15 +14471,15 @@ var JSONSchemaGenerator = class {
               }
             }));
             if (requiredKeys.size > 0) {
-              json.required = Array.from(requiredKeys);
+              json2.required = Array.from(requiredKeys);
             }
             if (def.catchall?._zod.def.type === "never") {
-              json.additionalProperties = false;
+              json2.additionalProperties = false;
             } else if (!def.catchall) {
               if (this.io === "output")
-                json.additionalProperties = false;
+                json2.additionalProperties = false;
             } else if (def.catchall) {
-              json.additionalProperties = this.process(def.catchall, {
+              json2.additionalProperties = this.process(def.catchall, {
                 ...params,
                 path: [...params.path, "additionalProperties"]
               });
@@ -14487,15 +14487,15 @@ var JSONSchemaGenerator = class {
             break;
           }
           case "union": {
-            const json = _json;
-            json.anyOf = def.options.map((x, i) => this.process(x, {
+            const json2 = _json;
+            json2.anyOf = def.options.map((x, i) => this.process(x, {
               ...params,
               path: [...params.path, "anyOf", i]
             }));
             break;
           }
           case "intersection": {
-            const json = _json;
+            const json2 = _json;
             const a = this.process(def.left, {
               ...params,
               path: [...params.path, "allOf", 0]
@@ -14509,17 +14509,17 @@ var JSONSchemaGenerator = class {
               ...isSimpleIntersection(a) ? a.allOf : [a],
               ...isSimpleIntersection(b) ? b.allOf : [b]
             ];
-            json.allOf = allOf;
+            json2.allOf = allOf;
             break;
           }
           case "tuple": {
-            const json = _json;
-            json.type = "array";
+            const json2 = _json;
+            json2.type = "array";
             const prefixItems = def.items.map((x, i) => this.process(x, { ...params, path: [...params.path, "prefixItems", i] }));
             if (this.target === "draft-2020-12") {
-              json.prefixItems = prefixItems;
+              json2.prefixItems = prefixItems;
             } else {
-              json.items = prefixItems;
+              json2.items = prefixItems;
             }
             if (def.rest) {
               const rest = this.process(def.rest, {
@@ -14527,29 +14527,29 @@ var JSONSchemaGenerator = class {
                 path: [...params.path, "items"]
               });
               if (this.target === "draft-2020-12") {
-                json.items = rest;
+                json2.items = rest;
               } else {
-                json.additionalItems = rest;
+                json2.additionalItems = rest;
               }
             }
             if (def.rest) {
-              json.items = this.process(def.rest, {
+              json2.items = this.process(def.rest, {
                 ...params,
                 path: [...params.path, "items"]
               });
             }
             const { minimum, maximum } = schema._zod.bag;
             if (typeof minimum === "number")
-              json.minItems = minimum;
+              json2.minItems = minimum;
             if (typeof maximum === "number")
-              json.maxItems = maximum;
+              json2.maxItems = maximum;
             break;
           }
           case "record": {
-            const json = _json;
-            json.type = "object";
-            json.propertyNames = this.process(def.keyType, { ...params, path: [...params.path, "propertyNames"] });
-            json.additionalProperties = this.process(def.valueType, {
+            const json2 = _json;
+            json2.type = "object";
+            json2.propertyNames = this.process(def.keyType, { ...params, path: [...params.path, "propertyNames"] });
+            json2.additionalProperties = this.process(def.valueType, {
               ...params,
               path: [...params.path, "additionalProperties"]
             });
@@ -14568,17 +14568,17 @@ var JSONSchemaGenerator = class {
             break;
           }
           case "enum": {
-            const json = _json;
+            const json2 = _json;
             const values = getEnumValues(def.entries);
             if (values.every((v) => typeof v === "number"))
-              json.type = "number";
+              json2.type = "number";
             if (values.every((v) => typeof v === "string"))
-              json.type = "string";
-            json.enum = values;
+              json2.type = "string";
+            json2.enum = values;
             break;
           }
           case "literal": {
-            const json = _json;
+            const json2 = _json;
             const vals = [];
             for (const val of def.values) {
               if (val === void 0) {
@@ -14599,23 +14599,23 @@ var JSONSchemaGenerator = class {
             if (vals.length === 0) {
             } else if (vals.length === 1) {
               const val = vals[0];
-              json.type = val === null ? "null" : typeof val;
-              json.const = val;
+              json2.type = val === null ? "null" : typeof val;
+              json2.const = val;
             } else {
               if (vals.every((v) => typeof v === "number"))
-                json.type = "number";
+                json2.type = "number";
               if (vals.every((v) => typeof v === "string"))
-                json.type = "string";
+                json2.type = "string";
               if (vals.every((v) => typeof v === "boolean"))
-                json.type = "string";
+                json2.type = "string";
               if (vals.every((v) => v === null))
-                json.type = "null";
-              json.enum = vals;
+                json2.type = "null";
+              json2.enum = vals;
             }
             break;
           }
           case "file": {
-            const json = _json;
+            const json2 = _json;
             const file = {
               type: "string",
               format: "binary",
@@ -14629,15 +14629,15 @@ var JSONSchemaGenerator = class {
             if (mime) {
               if (mime.length === 1) {
                 file.contentMediaType = mime[0];
-                Object.assign(json, file);
+                Object.assign(json2, file);
               } else {
-                json.anyOf = mime.map((m) => {
+                json2.anyOf = mime.map((m) => {
                   const mFile = { ...file, contentMediaType: m };
                   return mFile;
                 });
               }
             } else {
-              Object.assign(json, file);
+              Object.assign(json2, file);
             }
             break;
           }
@@ -14658,8 +14658,8 @@ var JSONSchemaGenerator = class {
             break;
           }
           case "success": {
-            const json = _json;
-            json.type = "boolean";
+            const json2 = _json;
+            json2.type = "boolean";
             break;
           }
           case "default": {
@@ -14694,12 +14694,12 @@ var JSONSchemaGenerator = class {
             break;
           }
           case "template_literal": {
-            const json = _json;
+            const json2 = _json;
             const pattern = schema._zod.pattern;
             if (!pattern)
               throw new Error("Pattern not found in template literal");
-            json.type = "string";
-            json.pattern = pattern.source;
+            json2.type = "string";
+            json2.pattern = pattern.source;
             break;
           }
           case "pipe": {
@@ -21423,8 +21423,8 @@ var StdioServerTransport = class {
   }
   send(message) {
     return new Promise((resolve) => {
-      const json = serializeMessage(message);
-      if (this._stdout.write(json)) {
+      const json2 = serializeMessage(message);
+      if (this._stdout.write(json2)) {
         resolve();
       } else {
         this._stdout.once("drain", resolve);
@@ -21527,9 +21527,9 @@ function loadRules() {
 }
 function getRule(id) {
   const rules = loadRules();
-  const rule = rules.find((r) => r.id === id);
-  if (!rule) throw new NotFoundError(`rule "${id}" not found; ids: ${rules.map((r) => r.id).join(", ")}`);
-  return rule;
+  const rule2 = rules.find((r) => r.id === id);
+  if (!rule2) throw new NotFoundError(`rule "${id}" not found; ids: ${rules.map((r) => r.id).join(", ")}`);
+  return rule2;
 }
 function filterRules(input) {
   const { category: category2, severity, tag, query, theme, medium } = input;
@@ -21856,7 +21856,7 @@ function listThemes(input) {
   }
   return {
     count: themes2.length,
-    themes: themes2.map(({ assets: _assets, ...summary }) => summary),
+    themes: themes2.map(({ assets: _assets, ...summary2 }) => summary2),
     ...themes2.length ? {} : { hint: `No theme matches these filters; themes: ${all.map((t) => t.id).join(", ")}.` }
   };
 }
@@ -21938,6 +21938,79 @@ function oneOf(values) {
 var themes = loadIndex().themes;
 var themeId = oneOf(themes.map((t) => t.id));
 var category = oneOf(loadRules().map((r) => r.category));
+var json = (value) => ({ type: "text", text: JSON.stringify(value) });
+var structured = (value) => ({ content: [json(value)], structuredContent: { ...value } });
+var MIME_TYPES = { svg: "image/svg+xml", png: "image/png", ico: "image/x-icon" };
+function assetBlocks(asset) {
+  if (!("assetId" in asset)) return [json(asset)];
+  const { content, ...metadata } = asset;
+  if (content === void 0) {
+    if (!asset.rawUrl) return [json(metadata)];
+    return [json(metadata), {
+      type: "resource_link",
+      uri: asset.rawUrl,
+      name: asset.assetId,
+      mimeType: MIME_TYPES[asset.format],
+      size: asset.bytes
+    }];
+  }
+  if (asset.format === "png") return [json(metadata), { type: "image", data: content, mimeType: "image/png" }];
+  return [json(asset)];
+}
+function themeBlocks({ content, ...metadata }) {
+  return [json(metadata), { type: "text", text: content }];
+}
+var finding = external_exports.object({
+  severity: external_exports.enum(["error", "warning", "info"]),
+  path: external_exports.string(),
+  message: external_exports.string(),
+  ratio: external_exports.number().optional(),
+  required: external_exports.number().optional()
+});
+var summary = external_exports.object({ errors: external_exports.number(), warnings: external_exports.number(), infos: external_exports.number() });
+var lintOutput = external_exports.object({
+  findings: external_exports.array(finding),
+  summary,
+  coverage: external_exports.object({ checked: external_exports.number(), unchecked: external_exports.number() })
+});
+var diffOutput = external_exports.object({
+  tokens: external_exports.record(external_exports.object({ added: external_exports.array(external_exports.string()), removed: external_exports.array(external_exports.string()), modified: external_exports.array(external_exports.string()) })),
+  findings: external_exports.object({
+    before: summary,
+    after: summary,
+    delta: external_exports.object({ errors: external_exports.number(), warnings: external_exports.number() }),
+    introduced: external_exports.array(finding),
+    resolved: external_exports.array(finding),
+    worsened: external_exports.array(external_exports.object({ before: finding, after: finding }))
+  }),
+  regression: external_exports.boolean()
+});
+var rule = external_exports.object({
+  id: external_exports.string(),
+  category: external_exports.string(),
+  severity: external_exports.enum(["MUST", "SHOULD", "NEVER"]),
+  statement: external_exports.string(),
+  rationale: external_exports.string().optional(),
+  tags: external_exports.array(external_exports.string()).optional(),
+  source: external_exports.string().optional(),
+  themes: external_exports.array(external_exports.string()).optional(),
+  media: external_exports.array(external_exports.enum(["web", "document", "print"])).optional()
+});
+var rulesOutput = external_exports.object({ count: external_exports.number(), rules: external_exports.array(rule), hint: external_exports.string().optional() });
+var themesOutput = external_exports.object({
+  count: external_exports.number(),
+  themes: external_exports.array(external_exports.object({
+    id: external_exports.string(),
+    name: external_exports.string(),
+    version: external_exports.string(),
+    description: external_exports.string().optional(),
+    industry: external_exports.array(external_exports.string()),
+    mood: external_exports.array(external_exports.string()),
+    preview: external_exports.record(external_exports.string()),
+    formats: external_exports.record(external_exports.string())
+  })),
+  hint: external_exports.string().optional()
+});
 var READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 var toolDefinitions = [
   {
@@ -21949,8 +22022,9 @@ var toolDefinitions = [
       mood: oneOf(themes.flatMap((t) => t.mood)).optional().describe("Only themes with this mood."),
       query: external_exports.string().optional().describe('Text to find in the id, name, description, industries or moods, such as "print".')
     }),
+    outputSchema: themesOutput,
     annotations: READ_ONLY,
-    handler: listThemes
+    handler: (args) => structured(listThemes(args))
   },
   {
     name: "get_theme",
@@ -21961,7 +22035,7 @@ var toolDefinitions = [
       format: external_exports.enum(FORMATS).optional().describe("File to return (default css). design-md is the whole design guide.")
     }),
     annotations: READ_ONLY,
-    handler: getTheme
+    handler: (args) => ({ content: themeBlocks(getTheme(args)) })
   },
   {
     name: "get_asset",
@@ -21972,7 +22046,7 @@ var toolDefinitions = [
       assetId: external_exports.string().optional().describe("Asset id, such as logo-full or logo-full@1024. Omit it to list the theme's assets.")
     }),
     annotations: READ_ONLY,
-    handler: getAsset
+    handler: (args) => ({ content: assetBlocks(getAsset(args)) })
   },
   {
     name: "list_rules",
@@ -21986,16 +22060,18 @@ var toolDefinitions = [
       tag: external_exports.string().optional().describe("Exact tag, such as contrast or focus."),
       query: external_exports.string().optional().describe("Text to find in the id, statement, rationale or tags.")
     }),
+    outputSchema: rulesOutput,
     annotations: READ_ONLY,
-    handler: listRules
+    handler: (args) => structured(listRules(args))
   },
   {
     name: "lint_theme",
     title: "Lint theme",
     description: "Check a theme for contrast failures and broken token references. Returns findings with the measured ratio and the surface it was measured against; reports what it could not check rather than skipping it.",
     inputSchema: external_exports.strictObject({ id: themeId.describe("Theme id.") }),
+    outputSchema: lintOutput,
     annotations: READ_ONLY,
-    handler: lintThemeTool
+    handler: (args) => structured(lintThemeTool(args))
   },
   {
     name: "diff_themes",
@@ -22005,8 +22081,9 @@ var toolDefinitions = [
       a: themeId.describe("Theme to compare from (before)."),
       b: themeId.describe("Theme to compare to (after).")
     }),
+    outputSchema: diffOutput,
     annotations: READ_ONLY,
-    handler: diffThemesTool
+    handler: (args) => structured(diffThemesTool(args))
   },
   {
     name: "get_rule",
@@ -22015,30 +22092,14 @@ var toolDefinitions = [
     inputSchema: external_exports.strictObject({
       id: external_exports.string().describe("Rule id, such as forms-loading-button. list_rules shows every id.")
     }),
+    outputSchema: rule,
     annotations: READ_ONLY,
-    handler: getRuleTool
+    handler: (args) => structured(getRuleTool(args))
   }
 ];
 
 // mcp/server.ts
 import { join as join6 } from "node:path";
-var MIME_TYPES = { svg: "image/svg+xml", png: "image/png", ico: "image/x-icon" };
-function assetBlocks(asset) {
-  const { content, ...metadata } = asset;
-  const text = { type: "text", text: JSON.stringify(metadata, null, 2) };
-  if (content === void 0) {
-    if (!asset.rawUrl) return [text];
-    return [text, {
-      type: "resource_link",
-      uri: asset.rawUrl,
-      name: asset.assetId,
-      mimeType: MIME_TYPES[asset.format],
-      size: asset.bytes
-    }];
-  }
-  if (asset.format === "png") return [text, { type: "image", data: content, mimeType: "image/png" }];
-  return [{ type: "text", text: JSON.stringify(asset, null, 2) }];
-}
 var INSTRUCTIONS = [
   "TEBIN brand kits and design rules, served from local files.",
   "Start with get_theme format design-md for the whole design guide: tebin is the modern web identity, tebin-classic the print and document one.",
@@ -22050,15 +22111,7 @@ function createServer() {
     { name: "tebin-style", title: "TEBIN Style", version: version2, websiteUrl: "https://github.com/4aykas/tebin-style" },
     { instructions: INSTRUCTIONS }
   );
-  for (const { name, handler, ...config2 } of toolDefinitions) {
-    server.registerTool(name, config2, async (args) => {
-      const result = await handler(args);
-      if (name === "get_asset" && result && typeof result === "object" && "assetId" in result) {
-        return { content: assetBlocks(result) };
-      }
-      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
-  }
+  for (const { name, handler, ...config2 } of toolDefinitions) server.registerTool(name, config2, handler);
   return server;
 }
 async function main() {

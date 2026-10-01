@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { ToolAnnotations } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult, TextContent, ToolAnnotations } from '@modelcontextprotocol/sdk/types.js';
 import type { ThemeEntry } from '../src/index-builder.js';
 import {
   loadIndex, loadThemeManifest, readFormat, readAssetFile, assetFormat, FORMAT_FILES, NotFoundError,
@@ -120,16 +120,81 @@ const themes = loadIndex().themes;
 const themeId = oneOf(themes.map((t) => t.id));
 const category = oneOf(loadRules().map((r) => r.category));
 
+const json = (value: unknown): TextContent => ({ type: 'text', text: JSON.stringify(value) });
+
+/** Compact JSON for the model, and the same object as structuredContent for clients that read the outputSchema. */
+const structured = (value: object): CallToolResult => ({ content: [json(value)], structuredContent: { ...value } });
+
+const MIME_TYPES: Record<string, string> = { svg: 'image/svg+xml', png: 'image/png', ico: 'image/x-icon' };
+
+/**
+ * One asset as MCP content. A PNG comes as an image block and an asset that
+ * was not inlined as a resource_link; both carry the metadata as text. SVG
+ * stays one JSON text block, ready to embed.
+ */
+function assetBlocks(asset: ReturnType<typeof getAsset>): CallToolResult['content'] {
+  if (!('assetId' in asset)) return [json(asset)];
+  const { content, ...metadata } = asset;
+  if (content === undefined) {
+    if (!asset.rawUrl) return [json(metadata)];
+    return [json(metadata), { type: 'resource_link', uri: asset.rawUrl, name: asset.assetId,
+      mimeType: MIME_TYPES[asset.format], size: asset.bytes }];
+  }
+  if (asset.format === 'png') return [json(metadata), { type: 'image', data: content, mimeType: 'image/png' }];
+  return [json(asset)];
+}
+
+/** The theme file as raw text with real newlines, after a short metadata block. */
+function themeBlocks({ content, ...metadata }: ReturnType<typeof getTheme>): CallToolResult['content'] {
+  return [json(metadata), { type: 'text', text: content }];
+}
+
+// Output schemas. `satisfies` keeps each one in step with the type its tool returns.
+const finding = z.object({
+  severity: z.enum(['error', 'warning', 'info']), path: z.string(), message: z.string(),
+  ratio: z.number().optional(), required: z.number().optional(),
+});
+const summary = z.object({ errors: z.number(), warnings: z.number(), infos: z.number() });
+const lintOutput = z.object({
+  findings: z.array(finding), summary, coverage: z.object({ checked: z.number(), unchecked: z.number() }),
+}) satisfies z.ZodType<LintResult>;
+const diffOutput = z.object({
+  tokens: z.record(z.object({ added: z.array(z.string()), removed: z.array(z.string()), modified: z.array(z.string()) })),
+  findings: z.object({
+    before: summary, after: summary, delta: z.object({ errors: z.number(), warnings: z.number() }),
+    introduced: z.array(finding), resolved: z.array(finding),
+    worsened: z.array(z.object({ before: finding, after: finding })),
+  }),
+  regression: z.boolean(),
+}) satisfies z.ZodType<DiffResult>;
+const rule = z.object({
+  id: z.string(), category: z.string(), severity: z.enum(['MUST', 'SHOULD', 'NEVER']), statement: z.string(),
+  rationale: z.string().optional(), tags: z.array(z.string()).optional(), source: z.string().optional(),
+  themes: z.array(z.string()).optional(), media: z.array(z.enum(['web', 'document', 'print'])).optional(),
+}) satisfies z.ZodType<Rule>;
+const rulesOutput = z.object({ count: z.number(), rules: z.array(rule), hint: z.string().optional() });
+const themesOutput = z.object({
+  count: z.number(),
+  themes: z.array(z.object({
+    id: z.string(), name: z.string(), version: z.string(), description: z.string().optional(),
+    industry: z.array(z.string()), mood: z.array(z.string()),
+    preview: z.record(z.string()), formats: z.record(z.string()),
+  })),
+  hint: z.string().optional(),
+}) satisfies z.ZodType<ReturnType<typeof listThemes>>;
+
 /** Every tool reads local files and changes nothing. */
 const READ_ONLY: ToolAnnotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 
+/** One tool: its registerTool config plus a handler that returns MCP content. */
 export interface ToolDef {
   name: string;
   title: string;
   description: string;
   inputSchema: z.AnyZodObject;
+  outputSchema?: z.AnyZodObject;
   annotations: ToolAnnotations;
-  handler: (args: any) => unknown;
+  handler: (args: any) => CallToolResult;
 }
 
 export const toolDefinitions: ToolDef[] = [
@@ -142,8 +207,9 @@ export const toolDefinitions: ToolDef[] = [
       mood: oneOf(themes.flatMap((t) => t.mood)).optional().describe('Only themes with this mood.'),
       query: z.string().optional().describe('Text to find in the id, name, description, industries or moods, such as "print".'),
     }),
+    outputSchema: themesOutput,
     annotations: READ_ONLY,
-    handler: listThemes,
+    handler: (args) => structured(listThemes(args)),
   },
   {
     name: 'get_theme',
@@ -155,7 +221,7 @@ export const toolDefinitions: ToolDef[] = [
         .describe('File to return (default css). design-md is the whole design guide.'),
     }),
     annotations: READ_ONLY,
-    handler: getTheme,
+    handler: (args) => ({ content: themeBlocks(getTheme(args)) }),
   },
   {
     name: 'get_asset',
@@ -167,7 +233,7 @@ export const toolDefinitions: ToolDef[] = [
         .describe("Asset id, such as logo-full or logo-full@1024. Omit it to list the theme's assets."),
     }),
     annotations: READ_ONLY,
-    handler: getAsset,
+    handler: (args) => ({ content: assetBlocks(getAsset(args)) }),
   },
   {
     name: 'list_rules',
@@ -182,8 +248,9 @@ export const toolDefinitions: ToolDef[] = [
       tag: z.string().optional().describe('Exact tag, such as contrast or focus.'),
       query: z.string().optional().describe('Text to find in the id, statement, rationale or tags.'),
     }),
+    outputSchema: rulesOutput,
     annotations: READ_ONLY,
-    handler: listRules,
+    handler: (args) => structured(listRules(args)),
   },
   {
     name: 'lint_theme',
@@ -191,8 +258,9 @@ export const toolDefinitions: ToolDef[] = [
     description:
       'Check a theme for contrast failures and broken token references. Returns findings with the measured ratio and the surface it was measured against; reports what it could not check rather than skipping it.',
     inputSchema: z.strictObject({ id: themeId.describe('Theme id.') }),
+    outputSchema: lintOutput,
     annotations: READ_ONLY,
-    handler: lintThemeTool,
+    handler: (args) => structured(lintThemeTool(args)),
   },
   {
     name: 'diff_themes',
@@ -203,8 +271,9 @@ export const toolDefinitions: ToolDef[] = [
       a: themeId.describe('Theme to compare from (before).'),
       b: themeId.describe('Theme to compare to (after).'),
     }),
+    outputSchema: diffOutput,
     annotations: READ_ONLY,
-    handler: diffThemesTool,
+    handler: (args) => structured(diffThemesTool(args)),
   },
   {
     name: 'get_rule',
@@ -213,7 +282,8 @@ export const toolDefinitions: ToolDef[] = [
     inputSchema: z.strictObject({
       id: z.string().describe('Rule id, such as forms-loading-button. list_rules shows every id.'),
     }),
+    outputSchema: rule,
     annotations: READ_ONLY,
-    handler: getRuleTool,
+    handler: (args) => structured(getRuleTool(args)),
   },
 ];
