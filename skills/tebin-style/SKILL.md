@@ -14,14 +14,12 @@ The registry is a set of static files. This skill only reads them.
 
 ## Reach the registry first
 
-Every step below depends on how you are reading. Pick one, once:
+Pick one access route:
 
 - **MCP** — prefer the `tebin-style` server when it is connected. Its seven
   read-only tools: `list_themes`, `get_theme` (tokens, or the whole guide with
   `format: "design-md"`), `get_asset`, `list_rules`, `get_rule`, `lint_theme`,
-  `diff_themes`. Below they are written `tebin-style:<tool>`; Claude Code
-  names them `mcp__plugin_tebin-style_tebin-style__<tool>` from the plugin
-  and `mcp__tebin-style__<tool>` from a standalone server.
+  `diff_themes`. Below they are written `tebin-style:<tool>`.
 - **Local clone** — read the files from disk.
 - **Neither** — fetch
   `https://raw.githubusercontent.com/4aykas/tebin-style/main/<path>`, or use the
@@ -38,10 +36,8 @@ Every step below depends on how you are reading. Pick one, once:
    with their preview colours if a choice is needed. An explicit TEBIN request
    normally means `tebin` for modern web/app work and `tebin-classic` for
    corporate documents and print. Preserve a theme the user already chose.
-2. **Read its `DESIGN.md`.** `themes/<id>/DESIGN.md` is generated to be
-   self-contained: palette with RGB and print values, semantic roles, the type
-   and spacing scales, every asset, and the brand rules. Read it before
-   `README.md` or `theme.json` — those add metadata, not guidance.
+2. **Read its `DESIGN.md`.** `themes/<id>/DESIGN.md` is self-contained. Read
+   it before `README.md` or `theme.json`.
 3. **Detect the target and pick one format.** Match how the project already
    styles things: Tailwind v4 → `dist/tailwind.css`; plain CSS →
    `dist/tokens.css`; React, CSS-in-JS or TypeScript → `dist/theme.ts`; Figma
@@ -51,11 +47,10 @@ Every step below depends on how you are reading. Pick one, once:
    existing patterns. Done when the target builds and the tokens resolve.
 5. **Apply the assets.** `registry/index.json` is a superset of
    `theme.json.assets`: it also carries every pre-rendered PNG, with ids like
-   `logo-full@1024` and `corner-mark-white@512-on-brand`. Use SVG for the web
-   and **PNG for broad document compatibility**, especially with libraries
-   like openpyxl or python-docx. Use SVG when the target supports it. Copy assets into
-   the requested deliverable when that is part of the task; use `rawUrl` for
-   downloading. Follow any explicit preference about local files versus links.
+   `logo-full@1024` and `corner-mark-white@512-on-brand`. Use SVG where the
+   target supports it; use PNG for documents, especially via openpyxl or
+   python-docx. Copy assets into the deliverable or link `rawUrl`, as the user
+   prefers.
    **Insert the file; never set the wordmark as text.** Its letters are drawn
    outlines, not a font, so typing the name produces different letterforms.
    `references/licensing.md` governs what may be copied at all.
@@ -93,11 +88,8 @@ rule can pair with a surface, and names what it could not reach. Run it after
 changing a colour; without MCP, run `pnpm lint:themes` in a clone. If neither
 is available, say that contrast was not checked.
 
-`tebin-style:diff_themes({ a, b })` shows what moved between two themes. It
-flags a regression when a lint error is introduced or worsens, or a measured
-pair loses its ratio, even if the total stays unchanged. Inspect introduced,
-resolved, worsened and unchecked findings; the flag does not establish
-compatibility or coverage of untested states.
+`tebin-style:diff_themes({ a, b })` shows what moved and flags regressions.
+Read the findings; the flag is not a compatibility check.
 
 ## Design rules
 
@@ -107,5 +99,4 @@ and `tebin-style:get_rule({ id })`, or read the digest at `rules/dist/rules.md`.
 Most rules carry the reason they exist — quote it, not just the rule. When reviewing,
 cite applicable `MUST` and `NEVER` rules the code violates. Pass the chosen
 theme and medium (`web`, `document`, or `print`) so Modern website policy does
-not leak into Classic documents or an unrelated brand. Unfiltered results are
-the full catalogue, not a checklist to apply wholesale.
+not leak into Classic documents or an unrelated brand.

@@ -32,10 +32,8 @@ Other sizes follow the same pattern, 128 to 2048 px: `logo-full-512.png`,
 
 ## Vector source, inline
 
-**If you cannot fetch URLs, use these.** Some hosts run without network access
-and refuse a raw link outright. That is not a reason to draw the mark yourself
-— `brand-logo-never-typeset` forbids it, and the letterforms are outlines you
-cannot reproduce by typing. The real source is below, so no fetch is needed.
+**If you cannot fetch URLs, use these.** Never draw the mark
+(`brand-logo-never-typeset`); copy the source below.
 
 Copy a block verbatim. Do not restyle it, do not change a fill, do not swap the
 `viewBox`. To place the mark on a dark or red ground, take the white file below

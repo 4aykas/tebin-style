@@ -2,16 +2,19 @@
 
 ## 1.11.0 — 2026-10-02
 
+### Breaking for MCP clients
+- `get_theme` returns a JSON metadata block, then the raw file as a second
+  text block.
+- `list_themes` no longer includes asset lists; `get_asset` has them.
+
 ### MCP server
 - Ship the server as a committed esbuild bundle, `mcp/dist/server.mjs`. It
   runs with Node 22 alone, without a dev install; `pnpm check` fails when it is stale.
-- `list_themes` returns theme summaries only, not every asset list.
 - `get_asset` inlines SVG and PNG up to 200 KB. Larger files and other
   binaries come back as a `resource_link`. The index records each asset's `bytes`.
 - Every tool has a title, described parameters and enums for theme ids,
   industries, moods and categories. Unknown values fail with the valid ones named.
-- Tools return `structuredContent` with an `outputSchema` and compact JSON.
-  `get_theme` sends the file body as raw text.
+- Tools return compact JSON, and `structuredContent` with an `outputSchema`.
 
 ### Plugin and skill
 - The repo is the `tebin` plugin marketplace: `/plugin marketplace add
@@ -24,7 +27,8 @@
 ### Fixed
 - `diff_themes` reports a pair that lost its contrast check as `unchecked`
   and a regression, not as resolved.
-- DESIGN.md front matter is safe YAML: every value is quoted and resolved.
+- DESIGN.md front matter is safe YAML: strings are quoted and escaped; token
+  references are resolved.
 - `padSvg` keeps root attributes and reads a single-quoted `viewBox`.
 - Validation rejects unsafe theme SVGs (`<image>`, `<script>`, external
   `href`, DOCTYPE). Preview and table text is escaped.
@@ -40,7 +44,8 @@
 - The package is private; npm publishing stays dropped.
 - MCP SDK 1.31.0, Style Dictionary 5.5.5, tsx 4.23.15; `yaml` added for tests.
 - `pnpm build` keeps the index `generatedAt` date when nothing else changed.
-- AGENTS.md lists commands, generated files and release rules.
+- Dependabot updates GitHub Actions only. npm updates are manual, because the
+  MCP bundle must be rebuilt; AGENTS.md lists the steps.
 
 ## 1.10.0 — 2026-09-17
 

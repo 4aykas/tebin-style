@@ -68,8 +68,7 @@ args = ["/abs/path/to/tebin-style/mcp/dist/server.mjs"]
 
 Use forward slashes in Windows TOML paths, for example
 `C:/Users/you/tebin-style/mcp/dist/server.mjs`. If the app cannot find Node, set
-`command` to its full executable path. This direct Node launch avoids package
-manager shell wrappers and works independently of the client's working directory.
+`command` to its full executable path.
 See the [official MCP configuration guide](https://developers.openai.com/codex/mcp).
 
 For the skill, see [Skill for other agents](#skill-for-other-agents), or simply
@@ -116,18 +115,12 @@ open a web page or start an HTTP server.
 | `lint_theme` | `{ id }` | contrast failures and broken references, with the ratio and the surface used |
 | `diff_themes` | `{ a, b }` | token diff by group, plus a regression flag |
 
-Since 1.9.0, comparison results include `findings.introduced`, `resolved` and
-`worsened`. The regression flag detects individual new or worsening errors,
-including a new failure hidden by fixing another one. `findings.unchecked`
-lists pairs that were measured before and still exist, but have no ratio now —
-a failing colour made translucent, or surfaces deleted. That lost coverage is a
-regression too, not a fix. Warnings and removed tokens remain visible
-separately; this is not a compatibility guarantee.
+`diff_themes` sets `regression` when a lint error appears or worsens, or a
+measured pair loses its check (`findings.unchecked`).
 
-All seven tools advertise read-only, local-data behaviour. `get_theme` includes
-licensing, declared surfaces and documented omissions. Theme search also covers
-descriptions and tags, so `query: "print"` finds Classic. `colors-csv` exposes
-the spreadsheet palette without asking an agent to parse CSS.
+`get_theme` includes licensing, declared surfaces and documented omissions.
+Theme search also covers descriptions and tags, so `query: "print"` finds
+Classic.
 
 `design-md` returns the whole self-contained document, front matter included —
 the same file a host with no MCP can be handed directly. `get_theme` sends a
@@ -135,20 +128,16 @@ short JSON metadata block, then the file itself as plain text.
 
 Results are compact JSON. `list_themes`, `list_rules`, `get_rule`,
 `lint_theme` and `diff_themes` also declare an `outputSchema` and return the
-same object as `structuredContent`. An unknown theme id, category or key fails
-with a one-line error that names the valid values.
+same object as `structuredContent`. An unknown theme id or category fails
+with an error that names the valid values; each invalid argument gets its own
+line.
 
 `lint_theme` reports what it could **not** check as well as what failed. A
 finding with no ratio means no pairing rule reached that role; treat it as
 uncovered, not as a pass.
 
-`get_asset` also serves the generated PNGs, by ids of the form
-`logo-full@1024` and `logo-full-white@1024-on-brand` — list a theme's assets
-without an `assetId` to see them all, with each file's size in `bytes`. PNG
-responses use an MCP image block; its accompanying text has metadata and a
-download URL, not a second copy of the base64 image. SVGs remain text for
-direct embedding. Files over 200 KB, and binaries such as ICO, come back as
-metadata and a `resource_link` to `rawUrl` instead of inline data.
+PNG ids look like `logo-full@1024` or `logo-full-white@1024-on-brand`. Files
+over 200 KB and ICO come back as a `resource_link`.
 
 ### A useful first request
 
@@ -177,8 +166,6 @@ features. See [OpenAI's connection guide](https://developers.openai.com/plugins/
 
 Paste the theme's `DESIGN.md` into the chat — for example
 [tebin-classic/DESIGN.md](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/DESIGN.md).
-It is generated to be self-contained: palette with RGB and print values,
-semantic roles, the type and spacing scales, assets, and the brand rules.
 Every link inside is absolute. A host still needs network access to fetch the
 linked assets; for an offline session, attach them along with the guide or use
 `llms.txt`, which includes the original vectors. No clone is needed for this route.
