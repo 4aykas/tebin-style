@@ -164,6 +164,7 @@ const diffOutput = z.object({
     before: summary, after: summary, delta: z.object({ errors: z.number(), warnings: z.number() }),
     introduced: z.array(finding), resolved: z.array(finding),
     worsened: z.array(z.object({ before: finding, after: finding })),
+    unchecked: z.array(z.object({ before: finding, after: finding })),
   }),
   regression: z.boolean(),
 }) satisfies z.ZodType<DiffResult>;
@@ -266,7 +267,7 @@ export const toolDefinitions: ToolDef[] = [
     name: 'diff_themes',
     title: 'Compare themes',
     description:
-      'Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved or worsened findings. Regression means an introduced or worsened lint error, even when error totals are unchanged; it is not a compatibility guarantee.',
+      'Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved, worsened or unchecked findings. Regression means an introduced or worsened lint error, or a contrast pair that is still there but no longer measured, even when error totals are unchanged; it is not a compatibility guarantee.',
     inputSchema: z.strictObject({
       a: themeId.describe('Theme to compare from (before).'),
       b: themeId.describe('Theme to compare to (after).'),

@@ -99,8 +99,11 @@ open a web page or start an HTTP server.
 
 Since 1.9.0, comparison results include `findings.introduced`, `resolved` and
 `worsened`. The regression flag detects individual new or worsening errors,
-including a new failure hidden by fixing another one. Warnings and removed
-tokens remain visible separately; this is not a compatibility guarantee.
+including a new failure hidden by fixing another one. `findings.unchecked`
+lists pairs that were measured before and still exist, but have no ratio now —
+a failing colour made translucent, or surfaces deleted. That lost coverage is a
+regression too, not a fix. Warnings and removed tokens remain visible
+separately; this is not a compatibility guarantee.
 
 All seven tools advertise read-only, local-data behaviour. `get_theme` includes
 licensing, declared surfaces and documented omissions. Theme search also covers

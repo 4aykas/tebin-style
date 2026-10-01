@@ -21814,8 +21814,12 @@ function diffThemes(beforeDir, afterDir) {
   const failures = (lint) => new Map(lint.findings.filter((f) => f.severity !== "info").map((f) => [key(f), f]));
   const previous = failures(beforeLint);
   const current = failures(afterLint);
+  const atPath = new Map(afterLint.findings.map((f) => [f.path, f]));
+  const measured = new Set(afterLint.findings.filter((f) => f.ratio !== void 0).map((f) => f.path));
+  const unchecked = beforeLint.findings.filter((f) => f.ratio !== void 0 && !measured.has(f.path) && atPath.has(f.path)).map((before2) => ({ before: before2, after: atPath.get(before2.path) }));
+  const lost = new Set(unchecked.map((u) => u.before.path));
   const introduced = [...current].filter(([id]) => !previous.has(id)).map(([, f]) => f);
-  const resolved = [...previous].filter(([id]) => !current.has(id)).map(([, f]) => f);
+  const resolved = [...previous].filter(([id, f]) => !current.has(id) && !lost.has(f.path)).map(([, f]) => f);
   const worsened = [];
   for (const [id, after2] of current) {
     const before2 = previous.get(id);
@@ -21831,13 +21835,14 @@ function diffThemes(beforeDir, afterDir) {
       introduced,
       resolved,
       worsened,
+      unchecked,
       delta: {
         errors: lintAfter.errors - lintBefore.errors,
         warnings: lintAfter.warnings - lintBefore.warnings
       }
     },
     // Token removals and warnings are visible separately, not compatibility claims.
-    regression: introduced.some((f) => f.severity === "error") || worsened.some((f) => f.after.severity === "error")
+    regression: introduced.some((f) => f.severity === "error") || worsened.some((f) => f.after.severity === "error") || unchecked.length > 0
   };
 }
 
@@ -21981,7 +21986,8 @@ var diffOutput = external_exports.object({
     delta: external_exports.object({ errors: external_exports.number(), warnings: external_exports.number() }),
     introduced: external_exports.array(finding),
     resolved: external_exports.array(finding),
-    worsened: external_exports.array(external_exports.object({ before: finding, after: finding }))
+    worsened: external_exports.array(external_exports.object({ before: finding, after: finding })),
+    unchecked: external_exports.array(external_exports.object({ before: finding, after: finding }))
   }),
   regression: external_exports.boolean()
 });
@@ -22076,7 +22082,7 @@ var toolDefinitions = [
   {
     name: "diff_themes",
     title: "Compare themes",
-    description: "Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved or worsened findings. Regression means an introduced or worsened lint error, even when error totals are unchanged; it is not a compatibility guarantee.",
+    description: "Compare two themes token by token: added, removed and modified per group, lint summaries and introduced, resolved, worsened or unchecked findings. Regression means an introduced or worsened lint error, or a contrast pair that is still there but no longer measured, even when error totals are unchanged; it is not a compatibility guarantee.",
     inputSchema: external_exports.strictObject({
       a: themeId.describe("Theme to compare from (before)."),
       b: themeId.describe("Theme to compare to (after).")

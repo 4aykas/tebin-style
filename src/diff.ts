@@ -13,6 +13,7 @@ export interface DiffResult {
     introduced: LintResult['findings'];
     resolved: LintResult['findings'];
     worsened: Array<{ before: LintResult['findings'][number]; after: LintResult['findings'][number] }>;
+    unchecked: Array<{ before: LintResult['findings'][number]; after: LintResult['findings'][number] }>;
   };
   regression: boolean;
 }
@@ -78,8 +79,16 @@ export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
     .filter(f => f.severity !== 'info').map(f => [key(f), f]));
   const previous = failures(beforeLint);
   const current = failures(afterLint);
+  // A pair that was measured and is still there, but has no ratio now, lost its
+  // check: its old failure may remain. A pair that is gone was removed, not lost.
+  const atPath = new Map(afterLint.findings.map(f => [f.path, f]));
+  const measured = new Set(afterLint.findings.filter(f => f.ratio !== undefined).map(f => f.path));
+  const unchecked = beforeLint.findings
+    .filter(f => f.ratio !== undefined && !measured.has(f.path) && atPath.has(f.path))
+    .map(before => ({ before, after: atPath.get(before.path)! }));
+  const lost = new Set(unchecked.map(u => u.before.path));
   const introduced = [...current].filter(([id]) => !previous.has(id)).map(([, f]) => f);
-  const resolved = [...previous].filter(([id]) => !current.has(id)).map(([, f]) => f);
+  const resolved = [...previous].filter(([id, f]) => !current.has(id) && !lost.has(f.path)).map(([, f]) => f);
   const worsened: DiffResult['findings']['worsened'] = [];
   for (const [id, after] of current) {
     const before = previous.get(id);
@@ -95,7 +104,7 @@ export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
     findings: {
       before: lintBefore,
       after: lintAfter,
-      introduced, resolved, worsened,
+      introduced, resolved, worsened, unchecked,
       delta: {
         errors: lintAfter.errors - lintBefore.errors,
         warnings: lintAfter.warnings - lintBefore.warnings,
@@ -103,6 +112,6 @@ export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
     },
     // Token removals and warnings are visible separately, not compatibility claims.
     regression: introduced.some(f => f.severity === 'error') ||
-      worsened.some(f => f.after.severity === 'error'),
+      worsened.some(f => f.after.severity === 'error') || unchecked.length > 0,
   };
 }
