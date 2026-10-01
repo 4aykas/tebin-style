@@ -14,6 +14,9 @@ Node 22 and pnpm 11 (pinned in `packageManager`). Run `pnpm install` first.
 - `pnpm build:mcp`: rebuild only `mcp/dist/server.mjs`.
 - `pnpm start:mcp`: run the bundled MCP server over stdio.
 
+Dependency updates are manual: `pnpm update`, then `pnpm build`, then
+`pnpm verify`.
+
 ## Layout
 
 - `themes/<id>/`: one theme. Sources are `tokens.json`, `theme.json`,
