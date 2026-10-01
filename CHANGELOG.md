@@ -1,5 +1,47 @@
 # Changelog
 
+## 1.11.0 — 2026-10-02
+
+### MCP server
+- Ship the server as a committed esbuild bundle, `mcp/dist/server.mjs`. It
+  runs with Node 22 alone, without a dev install; `pnpm check` fails when it is stale.
+- `list_themes` returns theme summaries only, not every asset list.
+- `get_asset` inlines SVG and PNG up to 200 KB. Larger files and other
+  binaries come back as a `resource_link`. The index records each asset's `bytes`.
+- Every tool has a title, described parameters and enums for theme ids,
+  industries, moods and categories. Unknown values fail with the valid ones named.
+- Tools return `structuredContent` with an `outputSchema` and compact JSON.
+  `get_theme` sends the file body as raw text.
+
+### Plugin and skill
+- The repo is the `tebin` plugin marketplace: `/plugin marketplace add
+  4aykas/tebin-style`, then `/plugin install tebin-style@tebin`.
+- Move `skill/` to `skills/`. The release attaches the skill as its own ZIP
+  for claude.ai upload. The brand pack now carries `skills/`, `llms.txt` and the index.
+- Fix contradictions in `llms.txt` and SKILL.md: real contrast ratios for
+  `#DA291C`, all seven MCP tools, the Classic-only vector note.
+
+### Fixed
+- `diff_themes` reports a pair that lost its contrast check as `unchecked`
+  and a regression, not as resolved.
+- DESIGN.md front matter is safe YAML: every value is quoted and resolved.
+- `padSvg` keeps root attributes and reads a single-quoted `viewBox`.
+- Validation rejects unsafe theme SVGs (`<image>`, `<script>`, external
+  `href`, DOCTYPE). Preview and table text is escaped.
+
+### Hardening
+- Pin every action by SHA, let Dependabot update them, and run CI with a
+  read-only token.
+- Split the release into a read-only build and a publish job that runs no
+  repo code. The tag must be on `main`; ZIPs get SHA-256 files and provenance.
+- `tsconfig` enables `noUncheckedIndexedAccess`.
+
+### Dependencies and packaging
+- The package is private; npm publishing stays dropped.
+- MCP SDK 1.31.0, Style Dictionary 5.5.5, tsx 4.23.15; `yaml` added for tests.
+- `pnpm build` keeps the index `generatedAt` date when nothing else changed.
+- AGENTS.md lists commands, generated files and release rules.
+
 ## 1.10.0 — 2026-09-17
 
 - Add explicit opaque foreground/background `contrastPairs` to theme metadata,
