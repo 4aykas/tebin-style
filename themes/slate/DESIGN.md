@@ -12,9 +12,9 @@ colors:
   warning: "#8A5300"
   success: "#1F6F43"
 rounded:
-  sm: 4px
-  md: 8px
-  lg: 12px
+  sm: "4px"
+  md: "8px"
+  lg: "12px"
 omitted:
   - section: "assets"
     reason: "Token-only theme; no brand assets exist."
