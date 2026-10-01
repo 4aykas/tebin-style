@@ -20,7 +20,7 @@
     "rules/dist",
     "registry/index.json",
     "schema",
-    "skill",
+    "skills",
     "README.md",
     "LICENSE"
   ],

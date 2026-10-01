@@ -29,7 +29,7 @@ Note the absolute path of the clone — you point your agent at it below
 
 ```bash
 # Skill — copy into your skills dir (all projects, or .claude/skills in one)
-cp -r skill/tebin-style ~/.claude/skills/tebin-style
+cp -r skills/tebin-style ~/.claude/skills/tebin-style
 # MCP server
 claude mcp add tebin-style -- node /abs/path/to/tebin-style/mcp/dist/server.mjs
 ```
@@ -53,7 +53,7 @@ Use forward slashes in Windows TOML paths, for example
 manager shell wrappers and works independently of the client's working directory.
 See the [official MCP configuration guide](https://developers.openai.com/codex/mcp).
 
-The optional skill is in `skill/tebin-style`; install it in the skill directory
+The optional skill is in `skills/tebin-style`; install it in the skill directory
 supported by your client, or simply provide its instructions and the theme guide.
 
 ## Gemini CLI

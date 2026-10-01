@@ -95,7 +95,7 @@ Rules can be filtered by style and medium, so website policies do not become
 instructions for Classic documents or another brand.
 
 **Application guidance:** the [design rules](rules/dist/rules.md), guides and
-reusable [agent skill](skill/tebin-style/SKILL.md) describe how to apply the
+reusable [agent skill](skills/tebin-style/SKILL.md) describe how to apply the
 styles. This is a brand library with selected component tokens, not a complete
 UI component library or a set of finished Word/PowerPoint templates.
 

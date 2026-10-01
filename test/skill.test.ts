@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const skill = readFileSync(join(here, '..', 'skill', 'tebin-style', 'SKILL.md'), 'utf8');
+const skill = readFileSync(join(here, '..', 'skills', 'tebin-style', 'SKILL.md'), 'utf8');
 
 describe('SKILL.md', () => {
   it('has YAML frontmatter with name and description', () => {
