@@ -1,11 +1,11 @@
 ---
 name: tebin-style
 description: >
-  Apply a stored brand theme — design tokens (colour, semantic roles, type,
-  spacing, radii) and brand assets — to a project, or consult the design-rules
-  database while building or reviewing UI. Use when the user names a theme or
-  asks for a brand kit, or when the work needs UI, accessibility or design
-  rules.
+  Applies TEBIN brand themes — design tokens (colour, semantic roles, type,
+  spacing, radii), logos and design rules — to websites, apps, Word, Excel and
+  PowerPoint documents, and print. Use when the user mentions TEBIN, a theme,
+  a brand kit, DESIGN.md or logo placement, or when building or reviewing UI
+  needs design or accessibility rules.
 ---
 
 # tebin-style — applying a theme from the registry
@@ -16,19 +16,20 @@ The registry is a set of static files. This skill only reads them.
 
 Every step below depends on how you are reading. Pick one, once:
 
-- **MCP** — if the `tebin-style` server is registered, call `list_themes`,
-  `get_theme`, `get_asset`, `list_rules`, `get_rule`. Prefer this.
+- **MCP** — prefer the `tebin-style` server when it is connected. Its seven
+  read-only tools: `list_themes`, `get_theme` (tokens, or the whole guide with
+  `format: "design-md"`), `get_asset`, `list_rules`, `get_rule`, `lint_theme`,
+  `diff_themes`. Below they are written `tebin-style:<tool>`; Claude Code
+  names them `mcp__plugin_tebin-style_tebin-style__<tool>` from the plugin
+  and `mcp__tebin-style__<tool>` from a standalone server.
 - **Local clone** — read the files from disk.
 - **Neither** — fetch
   `https://raw.githubusercontent.com/4aykas/tebin-style/main/<path>`, or use the
   `rawUrl` fields already in `registry/index.json`.
-- **No network at all** — some hosts refuse a raw link outright. Read
-  `llms.txt`: it inlines the vector source of the wordmark and the corner mark,
-  in both colourways, so no fetch is needed. Still never draw the mark
-  yourself. If the document tool cannot embed SVG, render the supplied vector
-  to PNG with an available renderer, or use an attached PNG. Ask for a file
-  only when neither route is available. Some Office versions support SVG;
-  common document-generation libraries require PNG.
+- **No network at all** — read `llms.txt` (repository root or brand pack). It
+  inlines only the Classic wordmark and corner mark, in both colourways. For a
+  Modern deliverable, ask for the `tebin` files rather than substitute Classic. Never draw the mark yourself. If the document tool
+  cannot embed SVG, render the vector to PNG or use an attached PNG.
 
 ## Apply a theme
 
@@ -69,11 +70,12 @@ repointing a colour moves everything that names it.
 
 Roles separate fills from text. `role.primary` paints the logo, fills, borders
 and large text. **Small red text takes `role.primary-on-dark` or
-`role.primary-on-light`** where the theme defines them. Those variants serve
-the modern theme's `#242830` dark and `#EFEEE9` light surfaces. Classic uses
-`role.primary` on white (about 4.87:1); do not invent missing modern roles in
-Classic. Always measure against the actual background; normal text needs
-at least 4.5:1 without rounding up.
+`role.primary-on-light`** where the theme defines them. On `tebin` they are
+sized for its hardest surfaces, the cream band `#EFEEE9` and the dark panel
+`#242830` (`theme.json` `surfaces`), so they also pass on `role.surface` and
+`role.surface-inverse`. Classic uses `role.primary` on white (about 4.87:1);
+do not invent missing Modern roles in Classic. Always measure against the
+actual background; normal text needs at least 4.5:1 without rounding up.
 
 **An error is not the signal red.** Error, warning and success text take
 `role.error-*`, `role.warning-*` and `role.success-*`. Reaching for
@@ -86,19 +88,23 @@ On `tebin`, `type.*` and `spacing.*` values are **ceilings**: the token's
 
 ## Check before you claim it works
 
-`lint_theme({ id })` measures contrast for every role a naming rule can pair
-with a surface, and names what it could not reach. Run it after changing a
-colour. `diff_themes({ a, b })` shows what moved between two themes and flags
-a regression when an individual lint error is introduced or worsens, even if
-the total stays unchanged. Inspect introduced, resolved and worsened findings;
-the flag does not establish compatibility or coverage of untested states.
+`tebin-style:lint_theme({ id })` measures contrast for every role a naming
+rule can pair with a surface, and names what it could not reach. Run it after
+changing a colour; without MCP, run `pnpm lint:themes` in a clone. If neither
+is available, say that contrast was not checked.
+
+`tebin-style:diff_themes({ a, b })` shows what moved between two themes. It
+flags a regression when a lint error is introduced or worsens, or a measured
+pair loses its ratio, even if the total stays unchanged. Inspect introduced,
+resolved, worsened and unchecked findings; the flag does not establish
+compatibility or coverage of untested states.
 
 ## Design rules
 
 While building or reviewing UI, consult the rules database for MUST / SHOULD /
-NEVER guidance: `list_rules({ theme?, medium?, category?, severity?, tag?, query? })` and
-`get_rule({ id })`, or read the digest at `rules/dist/rules.md`. Most rules
-carry the reason they exist — quote it, not just the rule. When reviewing,
+NEVER guidance: `tebin-style:list_rules({ theme?, medium?, category?, severity?, tag?, query? })`
+and `tebin-style:get_rule({ id })`, or read the digest at `rules/dist/rules.md`.
+Most rules carry the reason they exist — quote it, not just the rule. When reviewing,
 cite applicable `MUST` and `NEVER` rules the code violates. Pass the chosen
 theme and medium (`web`, `document`, or `print`) so Modern website policy does
 not leak into Classic documents or an unrelated brand. Unfiltered results are

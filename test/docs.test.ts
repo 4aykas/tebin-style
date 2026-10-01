@@ -3,6 +3,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { BLOB_BASE, RAW_BASE } from '../src/design-doc.js';
+import { contrastRatio } from '../src/contrast.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const readme = readFileSync(join(root, 'README.md'), 'utf8');
@@ -24,6 +25,7 @@ function repoTargets(markdown: string, fileDir: string): string[] {
 describe('documentation links', () => {
   const files = [
     join(root, 'README.md'),
+    join(root, 'llms.txt'),
     ...readdirSync(join(root, 'docs', 'guide')).map((f) => join(root, 'docs', 'guide', f)),
     ...['tebin', 'tebin-classic', 'slate'].map((id) => join(root, 'themes', id, 'DESIGN.md')),
     join(root, 'themes', 'tebin', 'README.md'),
@@ -113,5 +115,34 @@ describe('llms.txt carries the real vector source', () => {
   it('says why an offline agent still may not draw the mark itself', () => {
     expect(llms).toContain('brand-logo-never-typeset');
     expect(llms).toContain('cannot embed SVG');
+  });
+
+  it('says the inline vectors are Classic only', () => {
+    expect(llms).toContain('Classic vectors only');
+  });
+});
+
+describe('llms.txt states only what the data says', () => {
+  const llms = readFileSync(join(root, 'llms.txt'), 'utf8');
+
+  // #DA291C passes on white (Classic) but not on Modern's surfaces (#81).
+  it('quotes red contrast ratios that the maths reproduces', () => {
+    for (const [ratio, fg, bg] of [
+      ['4.87', '#DA291C', '#FFFFFF'],
+      ['4.19', '#DA291C', '#EFEEE9'],
+      ['3.04', '#DA291C', '#242830'],
+    ] as const) {
+      expect(contrastRatio(fg, bg).toFixed(2)).toBe(ratio);
+      expect(llms).toContain(`${ratio}:1`);
+    }
+    expect(llms).not.toMatch(/on neither/);
+    expect(llms).toContain('role.primary-on-light');
+  });
+
+  it('gives no rule count that drifts from rules.json', () => {
+    const rules = JSON.parse(readFileSync(join(root, 'rules', 'rules.json'), 'utf8'));
+    for (const [, n = ''] of llms.matchAll(/(\d+) MUST \/ SHOULD \/ NEVER/g)) {
+      expect(Number(n)).toBe(rules.length);
+    }
   });
 });
