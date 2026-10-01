@@ -21575,11 +21575,8 @@ function relativeLuminance(hex) {
   return 0.2126 * linear(rgb.r) + 0.7152 * linear(rgb.g) + 0.0722 * linear(rgb.b);
 }
 function contrastRatio(a, b) {
-  const la = relativeLuminance(a);
-  const lb = relativeLuminance(b);
-  const hi = Math.max(la, lb);
-  const lo = Math.min(la, lb);
-  return (hi + 0.05) / (lo + 0.05);
+  const [la, lb] = [relativeLuminance(a), relativeLuminance(b)];
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 var AA_NORMAL = 4.5;
 

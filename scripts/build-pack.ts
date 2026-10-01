@@ -7,10 +7,19 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const DIST_IN_PACK = ['tokens.css', 'tailwind.css', 'tokens.dtcg.json', 'theme.ts', 'colors.csv'];
 
+const rel = (p: string) => relative(root, p).split('\\').join('/');
+
+/** Repo-relative paths of the files under dir whose name matches re. */
+function filesUnder(dir: string, re: RegExp): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { recursive: true, withFileTypes: true })
+    .filter((item) => !item.isDirectory() && re.test(item.name))
+    .map((item) => rel(join(item.parentPath, item.name)));
+}
+
 /** Repo-relative paths that belong in the downloadable brand pack. */
 export function packFileList(themesRoot: string): string[] {
   const files: string[] = [];
-  const rel = (p: string) => relative(root, p).split('\\').join('/');
 
   for (const entry of readdirSync(themesRoot, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
@@ -24,31 +33,13 @@ export function packFileList(themesRoot: string): string[] {
       if (existsSync(p)) files.push(rel(p));
     }
 
-    const walk = (sub: string): void => {
-      if (!existsSync(sub)) return;
-      for (const item of readdirSync(sub, { withFileTypes: true })) {
-        const p = join(sub, item.name);
-        if (item.isDirectory()) walk(p);
-        else if (/\.(svg|png|ico)$/i.test(item.name)) files.push(rel(p));
-      }
-    };
-    walk(join(dir, 'assets'));
-    walk(join(dir, 'preview'));
+    for (const sub of ['assets', 'preview']) files.push(...filesUnder(join(dir, sub), /\.(svg|png|ico)$/i));
   }
 
   // The agent files travel too, so README links resolve and an offline agent has llms.txt.
   files.push('rules/dist/rules.md', 'LICENSE', 'README.md', 'llms.txt', 'registry/index.json');
   files.push(...skillFileList().map((f) => `skills/${f}`));
-  const examples = join(root, 'examples');
-  const addExamples = (dir: string): void => {
-    if (!existsSync(dir)) return;
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      const file = join(dir, entry.name);
-      if (entry.isDirectory()) addExamples(file);
-      else if (/\.(md|html|docx|pptx)$/.test(entry.name)) files.push(rel(file));
-    }
-  };
-  addExamples(examples);
+  files.push(...filesUnder(join(root, 'examples'), /\.(md|html|docx|pptx)$/));
   for (const file of readdirSync(join(root, 'docs', 'guide'))) {
     if (file.endsWith('.md')) files.push(`docs/guide/${file}`);
   }
@@ -57,16 +48,7 @@ export function packFileList(themesRoot: string): string[] {
 
 /** The skill folder, relative to skills/: the shape claude.ai expects in an uploaded ZIP. */
 export function skillFileList(): string[] {
-  const files: string[] = [];
-  const walk = (dir: string): void => {
-    for (const item of readdirSync(join(root, 'skills', dir), { withFileTypes: true })) {
-      const p = `${dir}/${item.name}`;
-      if (item.isDirectory()) walk(p);
-      else files.push(p);
-    }
-  };
-  walk('tebin-style');
-  return files.sort();
+  return filesUnder(join(root, 'skills', 'tebin-style'), /./).map((f) => f.slice('skills/'.length)).sort();
 }
 
 /** Zip `files`, given relative to `cwd`, into `.tmp/<name>`. */

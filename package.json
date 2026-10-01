@@ -9,21 +9,6 @@
     "type": "git",
     "url": "git+https://github.com/4aykas/tebin-style.git"
   },
-  "files": [
-    "themes/*/tokens.json",
-    "themes/*/theme.json",
-    "themes/*/DESIGN.md",
-    "themes/*/dist/**",
-    "themes/*/assets/**",
-    "themes/*/preview/**",
-    "rules/rules.json",
-    "rules/dist",
-    "registry/index.json",
-    "schema",
-    "skills",
-    "README.md",
-    "LICENSE"
-  ],
   "packageManager": "pnpm@11.0.9",
   "engines": {
     "node": ">=22"

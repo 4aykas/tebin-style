@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { readManifest } from './raster.js';
+import { readManifest, byCodepoint } from './raster.js';
 
 export const PREVIEW_KEYS = ['brand', 'ink', 'topbar'];
 
@@ -27,8 +27,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
   const themes: ThemeEntry[] = [];
   if (!existsSync(themesRoot)) return { generatedAt: today(), count: 0, themes };
 
-  // Codepoint order, not localeCompare: the result must not depend on ICU.
-  const dirs = readdirSync(themesRoot, { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+  const dirs = readdirSync(themesRoot, { withFileTypes: true }).sort((a, b) => byCodepoint(a.name, b.name));
   for (const entry of dirs) {
     if (!entry.isDirectory()) continue;
     const dir = join(themesRoot, entry.name);

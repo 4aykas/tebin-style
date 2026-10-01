@@ -135,9 +135,11 @@ export function plannedOutputs(themeDir: string): Array<{
       }
     }
   }
-  // Codepoint order, not localeCompare: the result must not depend on ICU.
-  return planned.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+  return planned.sort((a, b) => byCodepoint(a.path, b.path));
 }
+
+/** Codepoint order, not localeCompare: sorted output must not depend on ICU. */
+export const byCodepoint = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 
 export async function buildRaster(themeDir: string): Promise<RasterManifest> {
   const planned = plannedOutputs(themeDir);
