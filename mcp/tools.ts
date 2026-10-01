@@ -12,8 +12,9 @@ import { REPO_ROOT } from '../src/registry.js';
 
 const FORMATS = Object.keys(FORMAT_FILES) as Format[];
 
+/** Theme summaries only: asset lists stay with get_asset, which keeps this response small. */
 export function listThemes(input: { industry?: string; mood?: string; query?: string }): {
-  count: number; themes: ThemeEntry[];
+  count: number; themes: Array<Omit<ThemeEntry, 'assets'>>;
 } {
   const { industry, mood, query } = input;
   let themes = loadIndex().themes;
@@ -24,7 +25,7 @@ export function listThemes(input: { industry?: string; mood?: string; query?: st
     themes = themes.filter((t) => [t.id, t.name, t.description ?? '', ...t.industry, ...t.mood]
       .some((value) => value.toLowerCase().includes(q)));
   }
-  return { count: themes.length, themes };
+  return { count: themes.length, themes: themes.map(({ assets: _assets, ...summary }) => summary) };
 }
 
 export function getTheme(input: { id: string; format?: Format }) {
@@ -96,7 +97,7 @@ export interface ToolDef {
 export const toolDefinitions: ToolDef[] = [
   {
     name: 'list_themes',
-    description: 'List available themes with descriptions, formats and assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.',
+    description: "List available themes with descriptions and formats; get_asset lists a theme's assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.",
     inputSchema: {
       industry: z.string().optional(),
       mood: z.string().optional(),

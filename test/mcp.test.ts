@@ -21,6 +21,11 @@ describe('list_themes', () => {
     expect(classic?.formats['colors-csv']).toContain('colors.csv');
     expect(classic?.formats['design-md']).toContain('DESIGN.md');
   });
+  it('returns summaries without asset lists, so the response stays small', () => {
+    const r = listThemes({});
+    expect(r.themes.every((t) => !('assets' in t))).toBe(true);
+    expect(JSON.stringify(r, null, 2).length).toBeLessThan(5_000);
+  });
 });
 
 describe('get_theme', () => {

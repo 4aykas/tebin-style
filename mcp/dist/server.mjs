@@ -21849,7 +21849,7 @@ function listThemes(input) {
     const q = query.trim().toLowerCase();
     themes = themes.filter((t) => [t.id, t.name, t.description ?? "", ...t.industry, ...t.mood].some((value) => value.toLowerCase().includes(q)));
   }
-  return { count: themes.length, themes };
+  return { count: themes.length, themes: themes.map(({ assets: _assets, ...summary }) => summary) };
 }
 function getTheme(input) {
   const format = input.format ?? "css";
@@ -21912,7 +21912,7 @@ function diffThemesTool(input) {
 var toolDefinitions = [
   {
     name: "list_themes",
-    description: "List available themes with descriptions, formats and assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.",
+    description: "List available themes with descriptions and formats; get_asset lists a theme's assets. Search names, descriptions or tags; tebin is modern, tebin-classic is the print/document identity.",
     inputSchema: {
       industry: external_exports.string().optional(),
       mood: external_exports.string().optional(),
