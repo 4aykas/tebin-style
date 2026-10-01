@@ -13,16 +13,13 @@ Choose the route for your application, not just the model name:
 | Claude Code, Codex, Gemini CLI | Local MCP configuration below; the skill is optional |
 
 The design files and MCP tools do not require a particular model provider.
-The local MCP route needs **Node 22+**, **pnpm 11** and a clone.
+The local MCP route needs **Node 22+** and a clone. The server is one
+prebuilt file, `mcp/dist/server.mjs`: no install or build step.
 The document-only route below needs no installation.
-
-For a local setup:
 
 ```bash
 git clone https://github.com/4aykas/tebin-style.git
 cd tebin-style
-pnpm install --frozen-lockfile
-pnpm build
 ```
 
 Note the absolute path of the clone — you point your agent at it below
@@ -34,7 +31,7 @@ Note the absolute path of the clone — you point your agent at it below
 # Skill — copy into your skills dir (all projects, or .claude/skills in one)
 cp -r skill/tebin-style ~/.claude/skills/tebin-style
 # MCP server
-claude mcp add tebin-style -- node /abs/path/to/tebin-style/node_modules/tsx/dist/cli.mjs /abs/path/to/tebin-style/mcp/server.ts
+claude mcp add tebin-style -- node /abs/path/to/tebin-style/mcp/dist/server.mjs
 ```
 
 Then ask: *"use the TEBIN Classic theme in this project."* Verify the server
@@ -47,11 +44,11 @@ Add the MCP server to `~/.codex/config.toml`:
 ```toml
 [mcp_servers.tebin-style]
 command = "node"
-args = ["/abs/path/to/tebin-style/node_modules/tsx/dist/cli.mjs", "/abs/path/to/tebin-style/mcp/server.ts"]
+args = ["/abs/path/to/tebin-style/mcp/dist/server.mjs"]
 ```
 
 Use forward slashes in Windows TOML paths, for example
-`C:/Users/you/tebin-style/mcp/server.ts`. If the app cannot find Node, set
+`C:/Users/you/tebin-style/mcp/dist/server.mjs`. If the app cannot find Node, set
 `command` to its full executable path. This direct Node launch avoids package
 manager shell wrappers and works independently of the client's working directory.
 See the [official MCP configuration guide](https://developers.openai.com/codex/mcp).
@@ -69,13 +66,13 @@ project's `.gemini/settings.json`), preserving your existing settings:
   "mcpServers": {
     "tebin-style": {
       "command": "node",
-      "args": ["/abs/path/to/tebin-style/node_modules/tsx/dist/cli.mjs", "/abs/path/to/tebin-style/mcp/server.ts"]
+      "args": ["/abs/path/to/tebin-style/mcp/dist/server.mjs"]
     }
   }
 }
 ```
 
-Replace both paths with the clone's absolute paths; forward slashes also work
+Replace the path with the clone's absolute path; forward slashes also work
 on Windows. Restart the client and check `/mcp list`, then try the first request
 below. This uses Gemini CLI's documented
 [stdio configuration](https://geminicli.com/docs/tools/mcp-server/).
@@ -85,7 +82,7 @@ It is not a configuration for the Gemini website.
 
 Register the same Node command and arguments shown above in your client's
 stdio server configuration. For a manual startup check from the clone, run
-`pnpm start:mcp`; it waits for protocol messages until you stop it. It does not
+`node mcp/dist/server.mjs`; it waits for protocol messages until you stop it. It does not
 open a web page or start an HTTP server.
 
 ### MCP tools (read-only)

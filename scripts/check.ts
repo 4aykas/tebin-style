@@ -1,7 +1,7 @@
 import { readdirSync, existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { diffTheme, diffRules, diffAssets } from '../src/check.js';
+import { diffTheme, diffRules, diffAssets, diffMcpBundle } from '../src/check.js';
 import { buildIndex } from '../src/index-builder.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -48,6 +48,13 @@ if (existsSync(join(root, 'rules', 'rules.json'))) {
   } else {
     console.log('✓ rules/dist/rules.md');
   }
+}
+
+if ((await diffMcpBundle()).length) {
+  failed = true;
+  console.error('✗ mcp/dist/server.mjs is out of date — run `pnpm build`');
+} else {
+  console.log('✓ mcp/dist/server.mjs');
 }
 
 if (failed) process.exit(1);

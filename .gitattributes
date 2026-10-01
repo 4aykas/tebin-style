@@ -3,3 +3,5 @@
 * text=auto eol=lf
 *.png binary
 *.ico binary
+# The bundled MCP server: generated, so GitHub folds it in diffs.
+mcp/dist/** linguist-generated

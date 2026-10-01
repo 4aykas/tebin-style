@@ -3,7 +3,17 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, relative, isAbsolute, win32 } from 'node:path';
 import type { RegistryIndex } from './index-builder.js';
 
-export const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+/** The nearest folder above this module with a package.json: works from src/ and from the mcp/dist/ bundle. */
+function findRoot(dir: string): string {
+  while (!existsSync(join(dir, 'package.json'))) {
+    const parent = dirname(dir);
+    if (parent === dir) throw new Error('tebin-style: no package.json above the server');
+    dir = parent;
+  }
+  return dir;
+}
+
+export const REPO_ROOT = findRoot(dirname(fileURLToPath(import.meta.url)));
 
 export class NotFoundError extends Error {
   constructor(message: string) {

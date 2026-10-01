@@ -4,10 +4,10 @@ import { toolDefinitions } from '../mcp/tools.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, cpSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
-import { createRequire } from 'node:module';
+import { join } from 'node:path';
 
 describe('mcp server', () => {
   it('constructs without throwing', () => {
@@ -50,21 +50,27 @@ describe('mcp server', () => {
     }
   });
 
-  it('starts over stdio from a different working directory', async () => {
+  it('runs the committed bundle with only Node and the data files', async () => {
+    // A copy with no node_modules proves the bundle is self-contained.
+    const dir = mkdtempSync(join(tmpdir(), 'tebin-mcp-'));
+    for (const path of ['package.json', 'registry', 'mcp/dist/server.mjs']) {
+      cpSync(fileURLToPath(new URL(`../${path}`, import.meta.url)), join(dir, path), { recursive: true });
+    }
     const client = new Client({ name: 'stdio-test', version: '1.0.0' });
     const transport = new StdioClientTransport({
-      command: process.execPath,
-      args: [createRequire(import.meta.url).resolve('tsx/cli'), fileURLToPath(new URL('../mcp/server.ts', import.meta.url))],
-      cwd: tmpdir(), stderr: 'pipe',
+      command: process.execPath, args: [join(dir, 'mcp', 'dist', 'server.mjs')], cwd: tmpdir(), stderr: 'pipe',
     });
     try {
       await client.connect(transport);
+      const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+      expect(client.getServerVersion()?.version).toBe(pkg.version);
       const result = await client.callTool({ name: 'list_themes', arguments: { query: 'print' } });
       expect(result.isError).not.toBe(true);
       expect(JSON.stringify(result.content)).toContain('tebin-classic');
     } finally {
       await client.close();
       await transport.close();
+      rmSync(dir, { recursive: true, force: true });
     }
   }, 15000);
 });

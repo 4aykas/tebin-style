@@ -29,13 +29,14 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "node --import tsx scripts/build.ts && node --import tsx scripts/build-assets.ts && node --import tsx scripts/build-index.ts && node --import tsx scripts/build-rules.ts",
+    "build": "node --import tsx scripts/build.ts && node --import tsx scripts/build-assets.ts && node --import tsx scripts/build-index.ts && node --import tsx scripts/build-rules.ts && node --import tsx scripts/build-mcp.ts",
+    "build:mcp": "node --import tsx scripts/build-mcp.ts",
     "validate": "node --import tsx scripts/validate.ts",
     "lint:themes": "node --import tsx scripts/lint.ts",
     "check": "node --import tsx scripts/check.ts",
     "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
     "test": "node node_modules/vitest/vitest.mjs run",
-    "start:mcp": "node --import tsx mcp/server.ts",
+    "start:mcp": "node mcp/dist/server.mjs",
     "pack:brand": "node --import tsx scripts/build-pack.ts --write",
     "verify": "pnpm typecheck && pnpm validate && pnpm lint:themes && pnpm check && pnpm test"
   },
@@ -43,6 +44,7 @@
     "@types/node": "^22.20.1",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
+    "esbuild": "^0.28.2",
     "style-dictionary": "^5.5.5",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",

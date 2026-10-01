@@ -17,8 +17,8 @@ the same declarations.
 
 ## Setup
 
-You need **Node 22+** and **pnpm 11** (the exact pnpm version is pinned in `package.json`). The skill and the MCP server read generated
-files, so build once after cloning.
+You need **Node 22+** and **pnpm 11** (the exact pnpm version is pinned in `package.json`). Generated files, the MCP
+server bundle included, are committed; run `pnpm build` after you change a source.
 
 ```bash
 git clone https://github.com/4aykas/tebin-style.git

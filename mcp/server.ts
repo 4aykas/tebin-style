@@ -3,9 +3,11 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { fileURLToPath } from 'node:url';
 import { readFileSync, realpathSync, existsSync } from 'node:fs';
 import { toolDefinitions } from './tools.js';
+import { REPO_ROOT } from '../src/registry.js';
+import { join } from 'node:path';
 
 export function createServer(): McpServer {
-  const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  const { version } = JSON.parse(readFileSync(join(REPO_ROOT, 'package.json'), 'utf8'));
   const server = new McpServer({ name: 'tebin-style', version });
 
   for (const def of toolDefinitions) {
