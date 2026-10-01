@@ -1,8 +1,13 @@
 # TEBIN in ChatGPT, Gemini and Claude
 
-Use the same source files in each chat. No Claude skill installation or local
-server is needed for this route. Model output still needs inspection: reading a
-guide does not guarantee a correct document, image or interface.
+Use the same source files in each chat. This route needs no skill and no local
+server. Model output still needs inspection: reading a guide does not guarantee
+a correct document, image or interface.
+
+In Claude, you can also add the skill: download `tebin-style-skill.zip` from the
+[latest release](https://github.com/4aykas/tebin-style/releases/latest) and
+upload it in Claude's skill settings. Attach the files below as well when the
+chat cannot browse.
 
 ## Prepare one style
 

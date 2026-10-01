@@ -36,7 +36,9 @@ export function packFileList(themesRoot: string): string[] {
     walk(join(dir, 'preview'));
   }
 
-  files.push('rules/dist/rules.md', 'LICENSE', 'README.md');
+  // The agent files travel too, so README links resolve and an offline agent has llms.txt.
+  files.push('rules/dist/rules.md', 'LICENSE', 'README.md', 'llms.txt', 'registry/index.json');
+  files.push(...skillFileList().map((f) => `skills/${f}`));
   const examples = join(root, 'examples');
   const addExamples = (dir: string): void => {
     if (!existsSync(dir)) return;
@@ -53,20 +55,34 @@ export function packFileList(themesRoot: string): string[] {
   return files.filter((f) => !f.endsWith('manifest.json')).sort();
 }
 
-if (process.argv[2] === '--write') {
-  const files = packFileList(join(root, 'themes'));
+/** The skill folder, relative to skills/: the shape claude.ai expects in an uploaded ZIP. */
+export function skillFileList(): string[] {
+  const files: string[] = [];
+  const walk = (dir: string): void => {
+    for (const item of readdirSync(join(root, 'skills', dir), { withFileTypes: true })) {
+      const p = `${dir}/${item.name}`;
+      if (item.isDirectory()) walk(p);
+      else files.push(p);
+    }
+  };
+  walk('tebin-style');
+  return files.sort();
+}
+
+/** Zip `files`, given relative to `cwd`, into `.tmp/<name>`. */
+function writeZip(cwd: string, files: string[], name: string): void {
   mkdirSync(join(root, '.tmp'), { recursive: true });
-  const out = join(root, '.tmp', 'tebin-brand-pack.zip');
+  const out = join(root, '.tmp', name);
   rmSync(out, { force: true });
   try {
     // `zip` is present on ubuntu-latest runners; -@ reads the file list from stdin.
-    execFileSync('zip', ['-q', '-@', out], { cwd: root, input: files.join('\n') });
+    execFileSync('zip', ['-q', '-@', out], { cwd, input: files.join('\n') });
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== 'ENOENT') throw err;
     // No zip CLI (Windows dev machine): stage the tree, then Compress-Archive it.
-    const staging = mkdtempSync(join(root, '.tmp', 'brand-pack-'));
+    const staging = mkdtempSync(join(root, '.tmp', 'pack-'));
     try {
-      for (const f of files) cpSync(join(root, f), join(staging, f));
+      for (const f of files) cpSync(join(cwd, f), join(staging, f));
       execFileSync('powershell.exe', [
         '-NoProfile', '-Command',
         'Compress-Archive -Path (Join-Path $env:TEBIN_PACK_STAGING "*") -DestinationPath $env:TEBIN_PACK_OUTPUT -Force',
@@ -76,4 +92,9 @@ if (process.argv[2] === '--write') {
     }
   }
   console.log(`packed ${files.length} files into ${out}`);
+}
+
+if (process.argv[2] === '--write') {
+  writeZip(root, packFileList(join(root, 'themes')), 'tebin-brand-pack.zip');
+  writeZip(join(root, 'skills'), skillFileList(), 'tebin-style-skill.zip');
 }

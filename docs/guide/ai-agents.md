@@ -10,12 +10,43 @@ Choose the route for your application, not just the model name:
 |---|---|
 | ChatGPT, Gemini Apps, Claude web | [Attach a guide and assets](chat-setup.md); use the shared starter instructions |
 | Gemini Gems | Save the same instructions and add the selected theme's files as knowledge |
-| Claude Code, Codex, Gemini CLI | Local MCP configuration below; the skill is optional |
+| Claude Code | [Install the plugin](#claude-code): skill and MCP server, no clone |
+| Codex, Cursor, Gemini CLI | Local MCP configuration below; the skill is optional |
 
 The design files and MCP tools do not require a particular model provider.
-The local MCP route needs **Node 22+** and a clone. The server is one
+The plugin and the local MCP route need **Node 22+**. The server is one
 prebuilt file, `mcp/dist/server.mjs`: no install or build step.
 The document-only route below needs no installation.
+
+## Claude Code
+
+Install the plugin. It brings the skill and the MCP server, with no clone:
+
+```text
+/plugin marketplace add 4aykas/tebin-style
+/plugin install tebin-style@tebin
+```
+
+Then ask: *"use the TEBIN Classic theme in this project."* The skill starts on
+its own, or run it as `/tebin-style:tebin-style`. Check the server with `/mcp`.
+The plugin follows the repository's commits; run
+`/plugin marketplace update tebin` to fetch the latest.
+
+Without the plugin, register the [local MCP server](#local-mcp-server) from a clone:
+`claude mcp add tebin-style -- node /abs/path/to/tebin-style/mcp/dist/server.mjs`.
+
+## Skill for other agents
+
+Install the skill for Codex, Cursor and other agents with the
+[skills CLI](https://github.com/vercel-labs/skills):
+
+```bash
+npx skills add 4aykas/tebin-style
+```
+
+## Local MCP server
+
+The other clients run the server from a clone:
 
 ```bash
 git clone https://github.com/4aykas/tebin-style.git
@@ -24,18 +55,6 @@ cd tebin-style
 
 Note the absolute path of the clone — you point your agent at it below
 (`/abs/path/to/tebin-style`; on Windows use `C:/Users/you/tebin-style`).
-
-## Claude Code
-
-```bash
-# Skill — copy into your skills dir (all projects, or .claude/skills in one)
-cp -r skills/tebin-style ~/.claude/skills/tebin-style
-# MCP server
-claude mcp add tebin-style -- node /abs/path/to/tebin-style/mcp/dist/server.mjs
-```
-
-Then ask: *"use the TEBIN Classic theme in this project."* Verify the server
-with `claude mcp list`.
 
 ## Codex
 
@@ -53,8 +72,8 @@ Use forward slashes in Windows TOML paths, for example
 manager shell wrappers and works independently of the client's working directory.
 See the [official MCP configuration guide](https://developers.openai.com/codex/mcp).
 
-The optional skill is in `skills/tebin-style`; install it in the skill directory
-supported by your client, or simply provide its instructions and the theme guide.
+For the skill, see [Skill for other agents](#skill-for-other-agents), or simply
+provide its instructions and the theme guide.
 
 ## Gemini CLI
 

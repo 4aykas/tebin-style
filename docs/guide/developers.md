@@ -165,7 +165,7 @@ pnpm build      # generate everything listed above
 pnpm check      # fail if a generated file drifts from its source
 pnpm lint:themes # fail on a contrast error or a broken token reference
 pnpm test       # run the test suite, including an actual MCP connection
-pnpm pack:brand # build .tmp/tebin-brand-pack.zip from generated files
+pnpm pack:brand # build .tmp/tebin-brand-pack.zip and .tmp/tebin-style-skill.zip
 pnpm audit     # check current dependency advisories (requires the registry)
 ```
 

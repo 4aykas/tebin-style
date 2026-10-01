@@ -48,7 +48,7 @@ Each style's design guide lists all available assets and sizes.
 | Get a logo and the right colours | [Quick start](docs/guide/quick-start.md) |
 | Make a document, spreadsheet or presentation | [Office guide](docs/guide/office.md) |
 | Prepare artwork for a printer | [Print guide](docs/guide/print.md) |
-| Build with an AI agent or connect MCP | [Agent and MCP guide](docs/guide/ai-agents.md) |
+| Build with an AI agent or connect MCP | [Agent and MCP guide](docs/guide/ai-agents.md); in Claude Code, install the `tebin-style@tebin` plugin |
 | Use ChatGPT, Gemini or Claude chat | [Files and ready-to-copy instructions](docs/guide/chat-setup.md) |
 | Import CSS, Tailwind or TypeScript tokens | [Developer guide](docs/guide/developers.md) |
 
@@ -100,7 +100,7 @@ styles. This is a brand library with selected component tokens, not a complete
 UI component library or a set of finished Word/PowerPoint templates.
 
 For machines: [registry/index.json](registry/index.json) · [llms.txt](llms.txt).
-For contributors: [CONTRIBUTING.md](CONTRIBUTING.md).
+For contributors: [CONTRIBUTING.md](https://github.com/4aykas/tebin-style/blob/main/CONTRIBUTING.md).
 Raw links above track `main`; pin a commit in automation when you need reproducible files.
 
 ## Licence
