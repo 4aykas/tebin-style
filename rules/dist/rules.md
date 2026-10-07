@@ -77,7 +77,7 @@
 - **[MUST]** (web) Set explicit image dimensions to prevent layout shift (CLS).
 - **[MUST]** (web) Virtualize large lists (more than about 50 items).
 - **[MUST]** (web) Preload above-the-fold images and lazy-load the rest.
-- **[NEVER]** (web) Never add a webfont request to a project that deliberately ships none. — _On tebin.pro the font stack is unloaded on purpose; a well-meant @font-face or Google Fonts link silently changes every page._
+- **[NEVER]** (web) Never add a font CDN request, a new family, or a weight the site does not render. tebin.pro self-hosts Roboto and Roboto Condensed at 400 and 700 only, plus Cormorant Garamond italic 400 on about-us. — _Every @font-face is render-blocking CSS on every page, and a weight nobody uses still ships. The set was measured over the built site in 2026-10: 300 and 500 rendered on fewer than 100 text nodes and were removed; the browser synthesises bolder weights from 700._
 
 ## theming
 

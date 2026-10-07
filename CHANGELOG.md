@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Rules
+- `performance-webfont-policy` now states what tebin.pro ships: self-hosted
+  Roboto and Roboto Condensed at 400 and 700 only, plus Cormorant Garamond
+  italic on about-us. The old text said the site loads no webfont, which has
+  not been true since 2026-06; weights 300 and 500 were dropped in 2026-10
+  after a measurement over the built site.
+
 ## 1.11.0 — 2026-10-02
 
 ### Breaking for MCP clients
