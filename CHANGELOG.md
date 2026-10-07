@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Tokens (tebin)
+- `font.mono` removed. tebin.pro dropped its monospace voice on 2026-10-07:
+  the 97 rules that asked for JetBrains Mono (never shipped, rendered as
+  Courier New) now use Roboto Condensed at 11px or more. `font.sans` and
+  `font.condensed` descriptions no longer claim the site loads no webfont.
+
 ### Rules
 - `performance-webfont-policy` now states what tebin.pro ships: self-hosted
   Roboto and Roboto Condensed at 400 and 700 only, plus Cormorant Garamond

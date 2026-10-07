@@ -177,9 +177,8 @@ A role is a pointer, not a copy — change the colour it names and every role us
 
 ## Typography
 
-- **sans** — Roboto, Helvetica, Arial, sans-serif — tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win.
-- **condensed** — Roboto Condensed, Roboto, sans-serif — Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it.
-- **mono** — JetBrains Mono, Courier New, monospace — The third voice on tebin.pro: tags, kickers, specification lists and figure captions — 58 rule blocks as of 2026-09-06, usually 9–12px uppercase with wide tracking. Recorded, not designed: the site loads no webfont, so almost every visitor reads this as Courier New, a thin face that is the weakest-rendering of the three at that size. Whether the mono voice stays is an open owner decision; until then a consumer of this theme should know it exists.
+- **sans** — Roboto, Helvetica, Arial, sans-serif — Self-hosted via @fontsource since 2026-06-17 at weights 400 and 700 only (BaseLayout.astro). Body copy.
+- **condensed** — Roboto Condensed, Roboto, sans-serif — Self-hosted via @fontsource at weights 400 and 700 only. Display type, headings, labels and kickers; since 2026-10-07 also the former mono-voice labels at 11px or more.
 - **Weights** — heading 700
 
 In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.

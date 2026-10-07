@@ -54,9 +54,8 @@
   --brand-a5: rgba(218, 41, 28, 0.28);
   --brand-a6: rgba(218, 41, 28, 0.14);
   --brand-a7: rgba(218, 41, 28, 0.06);
-  --font-sans: Roboto, Helvetica, Arial, sans-serif; /** tebin.pro ships no webfont, so this resolves to Helvetica or Arial in practice. Deliberate — do not add a font request to make Roboto win. */
-  --font-condensed: 'Roboto Condensed', Roboto, sans-serif; /** Same: no webfont is loaded on public pages, so this resolves to the visitor's system sans unless they happen to have Roboto Condensed installed. Only the og-preview/* pages request the real face, because the OG screenshots must render in it. */
-  --font-mono: 'JetBrains Mono', 'Courier New', monospace; /** The third voice on tebin.pro: tags, kickers, specification lists and figure captions — 58 rule blocks as of 2026-09-06, usually 9–12px uppercase with wide tracking. Recorded, not designed: the site loads no webfont, so almost every visitor reads this as Courier New, a thin face that is the weakest-rendering of the three at that size. Whether the mono voice stays is an open owner decision; until then a consumer of this theme should know it exists. */
+  --font-sans: Roboto, Helvetica, Arial, sans-serif; /** Self-hosted via @fontsource since 2026-06-17 at weights 400 and 700 only (BaseLayout.astro). Body copy. */
+  --font-condensed: 'Roboto Condensed', Roboto, sans-serif; /** Self-hosted via @fontsource at weights 400 and 700 only. Display type, headings, labels and kickers; since 2026-10-07 also the former mono-voice labels at 11px or more. */
   --font-weight-heading: 700;
   --line-height-heading: 1.35;
   --line-height-body: 1.7;
