@@ -26,6 +26,8 @@ Dependency updates are manual: `pnpm update`, then `pnpm build`, then
 - `mcp/`: the MCP server, bundled to `mcp/dist/server.mjs`.
 - `skills/tebin-style/`: the agent skill. `.claude-plugin/`: the plugin and
   marketplace manifests.
+- `docs/plans/`, `docs/specs/`, `docs/audits/`: dated history. Current values live in
+  `themes/*/tokens.json`, `theme.json` and `rules/rules.json`.
 
 ## Generated files
 
