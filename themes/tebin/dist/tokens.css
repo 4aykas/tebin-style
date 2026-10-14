@@ -10,6 +10,7 @@
   --color-charcoal: #242424;
   --color-ink: #292929;
   --color-muted: #666666;
+  --color-grey: #898d8d; /** Brand grey, the IN of the wordmark. A colour to paint with, not to read: 3.36:1 on white, below the 4.5:1 floor for small text. */
   --color-topbar: #f9f9f9;
   --color-subtle: #c1c1c1;
   --color-rule: #ececec;

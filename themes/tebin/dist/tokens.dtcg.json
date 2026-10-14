@@ -30,6 +30,17 @@
       "$type": "color",
       "$value": "#666666"
     },
+    "grey": {
+      "$type": "color",
+      "$value": "#898D8D",
+      "$description": "Brand grey, the IN of the wordmark. A colour to paint with, not to read: 3.36:1 on white, below the 4.5:1 floor for small text.",
+      "$extensions": {
+        "pro.tebin.print": {
+          "pantone": "423 C",
+          "cmyk": "22/14/18/45"
+        }
+      }
+    },
     "topbar": {
       "$type": "color",
       "$value": "#F9F9F9"

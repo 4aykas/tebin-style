@@ -7,20 +7,20 @@ describe('tebin brand assets', () => {
     expect(a.type).toBe('logo');
     expect(a.format).toBe('svg');
     expect(a.content).toContain('#fff');
-    expect(a.content).not.toContain('#808285');
-    expect(a.content).not.toContain('#ee3124');
+    expect(a.content).not.toContain('#898d8d');
+    expect(a.content).not.toContain('#da291c');
   });
 
   it('serves the solid red corner mark', () => {
     const a = getAsset({ id: 'tebin', assetId: 'corner-mark' });
     expect(a.type).toBe('pattern');
-    expect(a.content).toContain('#ee3124');
+    expect(a.content).toContain('#da291c');
   });
 
   it('serves the white corner mark (no brand red)', () => {
     const a = getAsset({ id: 'tebin', assetId: 'corner-mark-white' });
     expect(a.content).toContain('#fff');
-    expect(a.content).not.toContain('#ee3124');
+    expect(a.content).not.toContain('#da291c');
   });
 });
 

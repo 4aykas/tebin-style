@@ -2,7 +2,16 @@
 
 ## Unreleased
 
+### Assets (tebin)
+- The logo, corner mark and corner outline are redrawn in the brand book's
+  screen colours, `#DA291C` and `#898D8D` (#91). They were `#EE3124`,
+  `#808285` and `#EE3425`, print-to-screen conversions that sat ΔE 4.8 away
+  from the theme's own red. The shapes are unchanged and now match the Classic
+  logo exactly. PNGs are regenerated.
+
 ### Tokens (tebin)
+- New `color.grey` `#898D8D` (Pantone 423 C), the IN of the wordmark. A colour
+  to paint with, not a text colour.
 - `font.mono` removed. tebin.pro dropped its monospace voice on 2026-10-07:
   the 97 rules that asked for JetBrains Mono (never shipped, rendered as
   Courier New) now use Roboto Condensed at 11px or more. `font.sans` and
