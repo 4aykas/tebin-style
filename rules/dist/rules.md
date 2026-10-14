@@ -37,6 +37,7 @@
 - **[MUST]** (web) Use font-variant-numeric: tabular-nums when comparing numbers in columns.
 - **[NEVER]** (tebin, web) Never re-draw operating-system or browser chrome — traffic-light window bars, phone frames, fake IDE tabs — around a screenshot or code block; frame them typographically instead, with a rule, a filename and a rule. — _The reader already has real chrome; a painted-on copy is always slightly wrong and advertises that the surface is fake._
 - **[SHOULD]** (tebin, web) Use a numbered section eyebrow only where the content is genuinely ordinal, cap it at one or two per page, and stack the heading directly beneath it rather than beside it. — _Numbering every section erases the hierarchy it implies — when each one is a chapter, none is._
+- **[NEVER]** Never invent claims, certifications, prices, statistics, client names or quotes in branded material. Use only copy the user supplied or a source states, and mark a gap as a placeholder. — _A brand kit makes invented copy look official: a made-up figure set in the house style reads as a company statement._
 
 ## feedback
 

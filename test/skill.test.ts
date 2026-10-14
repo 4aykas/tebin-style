@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { getRule } from '../src/rules.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const skill = readFileSync(join(here, '..', 'skills', 'tebin-style', 'SKILL.md'), 'utf8');
@@ -58,6 +59,15 @@ describe('the skill forbids drawing the logo instead of fetching it', () => {
   it('says the wordmark is a file, not text', () => {
     expect(skill).toContain('never set the wordmark as text');
     expect(skill).toContain('drawn');
+  });
+});
+
+describe('the skill applies a brand and never redesigns it', () => {
+  it('says so before the steps, and names a rule that exists', () => {
+    const intro = skill.slice(skill.indexOf('## Apply a theme'), skill.indexOf('1. **Discover.**'));
+    expect(intro).toContain('never redesigns');
+    expect(intro).toContain('content-no-invented-claims');
+    expect(() => getRule('content-no-invented-claims')).not.toThrow();
   });
 });
 

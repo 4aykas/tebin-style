@@ -88,7 +88,8 @@ describe('list_rules', () => {
   it('supports theme and medium scope and rejects unknown themes', () => {
     const rules = listRules({ theme: 'tebin-classic', medium: 'document' });
     expect(rules.count).toBeGreaterThan(0);
-    expect(rules.rules.every((r) => r.category === 'brand')).toBe(true);
+    expect(new Set(rules.rules.map((r) => r.category))).toEqual(new Set(['brand', 'content']));
+    expect(rules.rules.filter((r) => r.category === 'content').map((r) => r.id)).toEqual(['content-no-invented-claims']);
     expect(() => listRules({ theme: 'unknown' })).toThrow(NotFoundError);
   });
   it('lists rules filtered by category', () => {

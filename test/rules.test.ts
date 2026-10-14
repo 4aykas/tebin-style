@@ -91,10 +91,10 @@ describe('post-audit rules (2026-07-29)', () => {
     }
   });
 
-  it('has 63 rules with unique ids', () => {
+  it('has 64 rules with unique ids', () => {
     const rules = loadRules();
-    expect(rules).toHaveLength(63);
-    expect(new Set(rules.map((r) => r.id)).size).toBe(63);
+    expect(rules).toHaveLength(64);
+    expect(new Set(rules.map((r) => r.id)).size).toBe(64);
   });
 
   it('opens a typography category of seven', () => {

@@ -31,6 +31,11 @@ Pick one access route:
 
 ## Apply a theme
 
+This skill applies a brand; it never redesigns one. Do not propose a new logo,
+palette or typeface, and do not "improve" the supplied ones. A request to
+change a brand value goes to the brand's owner. Copy follows rule
+`content-no-invented-claims`: no claim, figure or quote the user did not give.
+
 1. **Discover.** Read `registry/index.json`. Filter by `industry`, `mood` or
    name. For a vague request ("something industrial"), offer 2–3 candidates
    with their preview colours if a choice is needed. An explicit TEBIN request
