@@ -63,7 +63,9 @@ describe('token names in the palette SVG', () => {
       writeFileSync(tokensPath, JSON.stringify(tokens));
       const svg = buildPaletteSvg(work);
       expect(svg).toContain('a&amp;b&lt;c&gt;&quot;d');
-      expect(() => new Resvg(svg).render()).not.toThrow();
+      // No system fonts: well-formedness needs no text, and a font scan takes
+      // over 5 s on a Windows CI runner.
+      expect(() => new Resvg(svg, { font: { loadSystemFonts: false } }).render()).not.toThrow();
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }

@@ -23,7 +23,9 @@ beforeAll(async () => {
   // drift for artifacts the fixture never generated.
   writeColorsCsv(join(dir, 'sample'));
   await writePalettePreview(join(dir, 'sample'));
-});
+  // The preview renders labels with system fonts; scanning them takes over
+  // 10 s on a Windows CI runner.
+}, 60_000);
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 describe('diffTheme', () => {
