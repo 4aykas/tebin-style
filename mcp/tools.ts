@@ -8,6 +8,7 @@ import {
 import { loadRules, filterRules, getRule, SEVERITIES, MEDIA, type Rule, type RuleFilters } from '../src/rules.js';
 import { lintTheme, type LintResult } from '../src/lint.js';
 import { diffThemes, type DiffResult } from '../src/diff.js';
+import { checkImageFile, DEFAULT_THRESHOLD, type ImageCheckResult } from '../src/image-check.js';
 import { join } from 'node:path';
 
 const FORMATS = Object.keys(FORMAT_FILES) as Format[];
@@ -100,6 +101,10 @@ export function diffThemesTool(input: { a: string; b: string }): DiffResult {
   return diffThemes(themeDir(input.a), themeDir(input.b));
 }
 
+export function checkImageTool(input: { id: string; path: string; threshold?: number }): ImageCheckResult {
+  return checkImageFile(input.path, input.id, themeDir(input.id), input.threshold);
+}
+
 /**
  * The values a parameter accepts, read from the data at startup so the schema
  * cannot drift from the files. z.enum needs one value at least; with none, any string.
@@ -162,6 +167,14 @@ const diffOutput = z.object({
   }),
   regression: z.boolean(),
 }) satisfies z.ZodType<DiffResult>;
+const imageOutput = z.object({
+  theme: z.string(), width: z.number(), height: z.number(), threshold: z.number(),
+  colors: z.array(z.object({
+    hex: z.string(), share: z.number(), nearest: z.object({ token: z.string(), hex: z.string() }),
+    deltaE: z.number(), onPalette: z.boolean(),
+  })),
+  offPalette: z.number(), coverage: z.number(), note: z.string().optional(),
+}) satisfies z.ZodType<ImageCheckResult>;
 const rule = z.object({
   id: z.string(), category: z.string(), severity, statement: z.string(),
   rationale: z.string().optional(), tags: z.array(z.string()).optional(), source: z.string().optional(),
@@ -178,7 +191,7 @@ const themesOutput = z.object({
   hint: z.string().optional(),
 }) satisfies z.ZodType<ReturnType<typeof listThemes>>;
 
-/** Every tool reads local files and changes nothing. */
+/** Every tool reads local files and changes nothing. check_image also reads the file it is given. */
 const READ_ONLY: ToolAnnotations = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 
 /** One tool: its registerTool config plus a handler that returns MCP content. */
@@ -272,6 +285,21 @@ export const toolDefinitions: ToolDef[] = [
     outputSchema: diffOutput,
     annotations: READ_ONLY,
     handler: (args) => structured(diffThemesTool(args)),
+  }),
+  tool({
+    name: 'check_image',
+    title: 'Check image colours',
+    description:
+      "Compare a local PNG's main colours with a theme's palette by CIEDE2000. Lists each colour with its share, nearest palette token and ΔE; offPalette counts those above the threshold. A low coverage means a photo or gradient.",
+    inputSchema: z.strictObject({
+      id: themeId.describe('Theme id.'),
+      path: z.string().describe('Absolute path to a PNG on this machine, such as an exported slide or banner.'),
+      threshold: z.number().min(1).max(50).optional()
+        .describe(`ΔE2000 above which a colour is off-palette (default ${DEFAULT_THRESHOLD}).`),
+    }),
+    outputSchema: imageOutput,
+    annotations: READ_ONLY,
+    handler: (args) => structured(checkImageTool(args)),
   }),
   tool({
     name: 'get_rule',

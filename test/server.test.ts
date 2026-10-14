@@ -34,10 +34,10 @@ describe('mcp server', () => {
   it('constructs without throwing', () => {
     expect(() => createServer()).not.toThrow();
   });
-  it('registers exactly the seven known tools', () => {
+  it('registers exactly the eight known tools', () => {
     expect(toolDefinitions.map((t) => t.name)).toEqual([
       'list_themes', 'get_theme', 'get_asset', 'list_rules',
-      'lint_theme', 'diff_themes', 'get_rule',
+      'lint_theme', 'diff_themes', 'check_image', 'get_rule',
     ]);
   });
 
@@ -45,7 +45,7 @@ describe('mcp server', () => {
     const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
     expect(client.getServerVersion()?.version).toBe(pkg.version);
     const { tools } = await client.listTools();
-    expect(tools).toHaveLength(7);
+    expect(tools).toHaveLength(8);
     expect(tools.every((t) => t.annotations?.readOnlyHint === true && t.annotations.openWorldHint === false)).toBe(true);
     const png = await client.callTool({ name: 'get_asset', arguments: { id: 'tebin-classic', assetId: 'logo-full@512' } });
     expect(png.content).toEqual([
@@ -70,6 +70,7 @@ describe('mcp server', () => {
       ['list_rules', 'List design rules', ['theme', 'medium', 'category', 'severity', 'tag', 'query']],
       ['lint_theme', 'Lint theme', ['id']],
       ['diff_themes', 'Compare themes', ['a', 'b']],
+      ['check_image', 'Check image colours', ['id', 'path', 'threshold']],
       ['get_rule', 'Get design rule', ['id']],
     ]);
     const themeIds = loadIndex().themes.map((t) => t.id).sort();
@@ -112,13 +113,14 @@ describe('mcp server', () => {
   it('returns structuredContent that matches each outputSchema, and the same object as compact JSON', () => withClient(async (client) => {
     const { tools } = await client.listTools();
     const schemas = new Map(tools.filter((t) => t.outputSchema).map((t) => [t.name, t.outputSchema!]));
-    expect([...schemas.keys()].sort()).toEqual(['diff_themes', 'get_rule', 'lint_theme', 'list_rules', 'list_themes']);
+    expect([...schemas.keys()].sort()).toEqual(['check_image', 'diff_themes', 'get_rule', 'lint_theme', 'list_rules', 'list_themes']);
     const calls: Array<[string, Record<string, unknown>]> = [
       ['list_themes', {}], ['list_themes', { query: 'no such theme' }],
       ['list_rules', {}], ['list_rules', { theme: 'tebin-classic', medium: 'document' }], ['list_rules', { tag: 'nope' }],
       ['get_rule', { id: 'forms-loading-button' }],
       ...loadIndex().themes.map((t): [string, Record<string, unknown>] => ['lint_theme', { id: t.id }]),
       ['diff_themes', { a: 'tebin-classic', b: 'tebin' }],
+      ['check_image', { id: 'tebin-classic', path: fileURLToPath(new URL('../themes/tebin-classic/assets/png/logo-full-512.png', import.meta.url)) }],
     ];
     const ajv = new Ajv({ strict: false });
     for (const [name, args] of calls) {

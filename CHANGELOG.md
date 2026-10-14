@@ -14,6 +14,19 @@
   italic on about-us. The old text said the site loads no webfont, which has
   not been true since 2026-06; weights 300 and 500 were dropped in 2026-10
   after a measurement over the built site.
+- New `content-no-invented-claims` (NEVER, every theme and medium): branded
+  material carries only copy the user supplied or a source states (#89).
+
+### MCP server
+- New tool `check_image` (#90): compares a local PNG's main colours with a
+  theme's palette by CIEDE2000 and counts those over a threshold (default 10).
+  It decodes PNG itself, so the bundle gains no dependency. JPEG and
+  interlaced PNG are refused by name.
+
+### Skill
+- The skill states that it applies a brand and never redesigns it (#89).
+- `references/formats.md` covers Word, PowerPoint and Excel files built with
+  python-docx, python-pptx and openpyxl: colours, Arial and the logo PNG.
 
 ## 1.11.0 — 2026-10-02
 

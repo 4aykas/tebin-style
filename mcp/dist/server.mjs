@@ -21434,7 +21434,7 @@ var EMPTY_COMPLETION_RESULT = {
 };
 
 // mcp/server.ts
-import { readFileSync as readFileSync5 } from "node:fs";
+import { readFileSync as readFileSync7 } from "node:fs";
 
 // src/registry.ts
 import { readFileSync, existsSync, realpathSync } from "node:fs";
@@ -21548,10 +21548,13 @@ function filterRules(input) {
 }
 
 // src/lint.ts
-import { readFileSync as readFileSync3, existsSync as existsSync3 } from "node:fs";
-import { join as join3 } from "node:path";
+import { readFileSync as readFileSync4, existsSync as existsSync3 } from "node:fs";
+import { join as join4 } from "node:path";
 
 // src/colors-csv.ts
+import { readFileSync as readFileSync3, writeFileSync, mkdirSync } from "node:fs";
+import { join as join3 } from "node:path";
+var NO_PRINT_VALUE = "not specified in the 2017 brand book";
 function hexToRgb(hex) {
   const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());
   const digits = m?.[1];
@@ -21562,6 +21565,34 @@ function hexToRgb(hex) {
     g: parseInt(h.slice(2, 4), 16),
     b: parseInt(h.slice(4, 6), 16)
   };
+}
+function collectColorRows(themeDir2) {
+  const tokens = JSON.parse(readFileSync3(join3(themeDir2, "tokens.json"), "utf8"));
+  const rows = [];
+  const walk = (node, path) => {
+    for (const [key, value] of Object.entries(node)) {
+      if (key.startsWith("$") || typeof value !== "object" || value === null) continue;
+      const leaf = value;
+      const here = [...path, key];
+      if (leaf.$type === "color" && typeof leaf.$value === "string") {
+        const rgb = hexToRgb(leaf.$value);
+        if (!rgb) continue;
+        const print = leaf.$extensions?.["pro.tebin.print"];
+        rows.push({
+          token: here.join("."),
+          hex: leaf.$value.toUpperCase(),
+          rgb,
+          pantone: print?.pantone ?? NO_PRINT_VALUE,
+          cmyk: print?.cmyk ?? NO_PRINT_VALUE,
+          purpose: leaf.$description ?? ""
+        });
+        continue;
+      }
+      if (!leaf.$type) walk(value, here);
+    }
+  };
+  walk(tokens, []);
+  return rows;
 }
 
 // src/contrast.ts
@@ -21616,8 +21647,8 @@ function surfaceFor(role) {
 function lintTheme(themeDir2) {
   const findings = [];
   const push = (f) => findings.push(f);
-  const themePath2 = join3(themeDir2, "theme.json");
-  const tokensPath = join3(themeDir2, "tokens.json");
+  const themePath2 = join4(themeDir2, "theme.json");
+  const tokensPath = join4(themeDir2, "tokens.json");
   if (!existsSync3(themePath2) || !existsSync3(tokensPath)) {
     return {
       findings: [{ severity: "warning", path: ".", message: "not a theme directory" }],
@@ -21625,8 +21656,8 @@ function lintTheme(themeDir2) {
       coverage: { checked: 0, unchecked: 1 }
     };
   }
-  const theme = JSON.parse(readFileSync3(themePath2, "utf8"));
-  const tokens = JSON.parse(readFileSync3(tokensPath, "utf8"));
+  const theme = JSON.parse(readFileSync4(themePath2, "utf8"));
+  const tokens = JSON.parse(readFileSync4(tokensPath, "utf8"));
   const broken = /* @__PURE__ */ new Set();
   const checkValue = (value, path) => {
     if (referencePath(value) !== null && resolveToken(tokens, value) === null) {
@@ -21760,8 +21791,8 @@ function lintTheme(themeDir2) {
 }
 
 // src/diff.ts
-import { readFileSync as readFileSync4 } from "node:fs";
-import { join as join4 } from "node:path";
+import { readFileSync as readFileSync5 } from "node:fs";
+import { join as join5 } from "node:path";
 function canonical(value) {
   if (Array.isArray(value)) return value.map(canonical);
   if (value && typeof value === "object") {
@@ -21785,8 +21816,8 @@ function flatten(tree, prefix = [], out = /* @__PURE__ */ new Map()) {
 }
 var groupOf = (path) => path.split(".")[0] ?? path;
 function diffThemes(beforeDir, afterDir) {
-  const before = flatten(JSON.parse(readFileSync4(join4(beforeDir, "tokens.json"), "utf8")));
-  const after = flatten(JSON.parse(readFileSync4(join4(afterDir, "tokens.json"), "utf8")));
+  const before = flatten(JSON.parse(readFileSync5(join5(beforeDir, "tokens.json"), "utf8")));
+  const after = flatten(JSON.parse(readFileSync5(join5(afterDir, "tokens.json"), "utf8")));
   const tokens = {};
   const groupFor = (path) => tokens[groupOf(path)] ??= { added: [], removed: [], modified: [] };
   for (const [path, value] of after) {
@@ -21844,8 +21875,213 @@ function diffThemes(beforeDir, afterDir) {
   };
 }
 
+// src/image-check.ts
+import { readFileSync as readFileSync6, statSync } from "node:fs";
+import { extname as extname2 } from "node:path";
+
+// src/png.ts
+import { inflateSync } from "node:zlib";
+var SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
+var CHANNELS = { 0: 1, 2: 3, 3: 1, 4: 2, 6: 4 };
+var MAX_PIXELS = 4e7;
+function decodePng(file) {
+  if (file.length < 8 || SIGNATURE.some((b, i) => file[i] !== b)) throw new Error("not a PNG file");
+  const view = new DataView(file.buffer, file.byteOffset, file.byteLength);
+  let width = 0, height = 0, depth = 0, type = 0;
+  let palette;
+  let alpha;
+  const idat = [];
+  for (let at = 8; at + 8 <= file.length; ) {
+    const length = view.getUint32(at);
+    const name = String.fromCharCode(...file.subarray(at + 4, at + 8));
+    const body = file.subarray(at + 8, at + 8 + length);
+    if (name === "IHDR") {
+      width = view.getUint32(at + 8);
+      height = view.getUint32(at + 12);
+      depth = body[8];
+      type = body[9];
+      if (body[12] !== 0) throw new Error("interlaced PNG is not supported; export it without interlacing");
+    } else if (name === "PLTE") palette = body;
+    else if (name === "tRNS") alpha = body;
+    else if (name === "IDAT") idat.push(body);
+    else if (name === "IEND") break;
+    at += 12 + length;
+  }
+  const channels = CHANNELS[type];
+  if (!width || !height || channels === void 0) throw new Error("PNG has no valid header");
+  if (width * height > MAX_PIXELS) throw new Error(`PNG is ${width}\xD7${height}; the limit is ${MAX_PIXELS / 1e6} MP`);
+  if (type === 3 ? ![1, 2, 4, 8].includes(depth) : ![8, 16].includes(depth)) {
+    throw new Error(`PNG colour type ${type} at ${depth} bits is not supported`);
+  }
+  if (type === 3 && !palette) throw new Error("indexed PNG has no palette");
+  const bitsPerPixel = channels * depth;
+  const stride = Math.ceil(width * bitsPerPixel / 8);
+  const bpp = Math.max(1, bitsPerPixel >> 3);
+  const raw = inflateSync(Buffer.concat(idat));
+  if (raw.length < height * (stride + 1)) throw new Error("PNG image data is truncated");
+  const out = new Uint8Array(width * height * 4);
+  let previous = new Uint8Array(stride);
+  for (let y = 0; y < height; y++) {
+    const filter = raw[y * (stride + 1)];
+    const line = raw.subarray(y * (stride + 1) + 1, (y + 1) * (stride + 1));
+    const row = new Uint8Array(stride);
+    for (let x = 0; x < stride; x++) {
+      const a = x >= bpp ? row[x - bpp] : 0;
+      const b = previous[x];
+      const c = x >= bpp ? previous[x - bpp] : 0;
+      let predictor = 0;
+      if (filter === 1) predictor = a;
+      else if (filter === 2) predictor = b;
+      else if (filter === 3) predictor = a + b >> 1;
+      else if (filter === 4) {
+        const p = a + b - c, pa = Math.abs(p - a), pb = Math.abs(p - b), pc = Math.abs(p - c);
+        predictor = pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
+      } else if (filter !== 0) throw new Error(`PNG row ${y} has unknown filter ${filter}`);
+      row[x] = line[x] + predictor & 255;
+    }
+    for (let x = 0; x < width; x++) writePixel(row, x, out, (y * width + x) * 4, type, depth, palette, alpha);
+    previous = row;
+  }
+  return { width, height, data: out };
+}
+function writePixel(row, x, out, o, type, depth, palette, alpha) {
+  if (type === 3) {
+    const perByte = 8 / depth;
+    const index = row[Math.floor(x / perByte)] >> (perByte - 1 - x % perByte) * depth & (1 << depth) - 1;
+    out[o] = palette[index * 3] ?? 0;
+    out[o + 1] = palette[index * 3 + 1] ?? 0;
+    out[o + 2] = palette[index * 3 + 2] ?? 0;
+    out[o + 3] = alpha?.[index] ?? 255;
+    return;
+  }
+  const step = depth >> 3;
+  const sample = (channel) => row[(x * CHANNELS[type] + channel) * step];
+  if (type === 0 || type === 4) {
+    out[o] = out[o + 1] = out[o + 2] = sample(0);
+    out[o + 3] = type === 4 ? sample(1) : 255;
+  } else {
+    out[o] = sample(0);
+    out[o + 1] = sample(1);
+    out[o + 2] = sample(2);
+    out[o + 3] = type === 6 ? sample(3) : 255;
+  }
+}
+
+// src/image-check.ts
+var DEFAULT_THRESHOLD = 10;
+var MIN_SHARE = 5e-3;
+var PHOTO_COVERAGE = 0.6;
+var MAX_FILE_BYTES = 50 * 1024 * 1024;
+var MAX_COLORS = 24;
+var toHex = ({ r, g, b }) => `#${[r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("").toUpperCase()}`;
+function toLab({ r, g, b }) {
+  const lin = (v) => {
+    const c = v / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const [R, G, B] = [lin(r), lin(g), lin(b)];
+  const x = (0.4124564 * R + 0.3575761 * G + 0.1804375 * B) / 0.95047;
+  const y = 0.2126729 * R + 0.7151522 * G + 0.072175 * B;
+  const z = (0.0193339 * R + 0.119192 * G + 0.9503041 * B) / 1.08883;
+  const f = (t) => t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116;
+  return [116 * f(y) - 16, 500 * (f(x) - f(y)), 200 * (f(y) - f(z))];
+}
+function deltaE2000(a, b) {
+  const [L1, a1, b1] = a, [L2, a2, b2] = b;
+  const rad = Math.PI / 180;
+  const C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b2);
+  const Cm = (C1 + C2) / 2;
+  const G = 0.5 * (1 - Math.sqrt(Cm ** 7 / (Cm ** 7 + 25 ** 7)));
+  const a1p = a1 * (1 + G), a2p = a2 * (1 + G);
+  const C1p = Math.hypot(a1p, b1), C2p = Math.hypot(a2p, b2);
+  const hue = (bb, ap) => bb === 0 && ap === 0 ? 0 : (Math.atan2(bb, ap) / rad + 360) % 360;
+  const h1p = hue(b1, a1p), h2p = hue(b2, a2p);
+  const dLp = L2 - L1, dCp = C2p - C1p;
+  let dhp = 0;
+  if (C1p * C2p !== 0) {
+    dhp = h2p - h1p;
+    if (dhp > 180) dhp -= 360;
+    else if (dhp < -180) dhp += 360;
+  }
+  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin(dhp / 2 * rad);
+  const Lm = (L1 + L2) / 2, Cmp = (C1p + C2p) / 2;
+  let hm = h1p + h2p;
+  if (C1p * C2p !== 0) {
+    if (Math.abs(h1p - h2p) > 180) hm += h1p + h2p < 360 ? 360 : -360;
+    hm /= 2;
+  }
+  const T = 1 - 0.17 * Math.cos((hm - 30) * rad) + 0.24 * Math.cos(2 * hm * rad) + 0.32 * Math.cos((3 * hm + 6) * rad) - 0.2 * Math.cos((4 * hm - 63) * rad);
+  const SL = 1 + 0.015 * (Lm - 50) ** 2 / Math.sqrt(20 + (Lm - 50) ** 2);
+  const SC = 1 + 0.045 * Cmp, SH = 1 + 0.015 * Cmp * T;
+  const RT = -2 * Math.sqrt(Cmp ** 7 / (Cmp ** 7 + 25 ** 7)) * Math.sin(60 * Math.exp(-(((hm - 275) / 25) ** 2)) * rad);
+  return Math.sqrt((dLp / SL) ** 2 + (dCp / SC) ** 2 + (dHp / SH) ** 2 + RT * (dCp / SC) * (dHp / SH));
+}
+function dominantColors(image) {
+  const bins = /* @__PURE__ */ new Map();
+  let opaque = 0;
+  const { data } = image;
+  for (let i = 0; i < data.length; i += 4) {
+    if (data[i + 3] < 128) continue;
+    opaque++;
+    const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+    const key = r >> 3 << 10 | g >> 3 << 5 | b >> 3;
+    const bin = bins.get(key);
+    if (bin) {
+      bin.n++;
+      bin.r += r;
+      bin.g += g;
+      bin.b += b;
+    } else bins.set(key, { n: 1, r, g, b });
+  }
+  if (!opaque) return { opaque, colors: [] };
+  const floor = opaque * MIN_SHARE * 0.1;
+  const merged = [];
+  for (const bin of [...bins.values()].filter((b) => b.n >= floor).sort((x, y) => y.n - x.n)) {
+    const rgb = { r: Math.round(bin.r / bin.n), g: Math.round(bin.g / bin.n), b: Math.round(bin.b / bin.n) };
+    const lab = toLab(rgb);
+    const home = merged.find((m) => deltaE2000(m.lab, lab) < 3);
+    if (home) home.n += bin.n;
+    else merged.push({ rgb, lab, n: bin.n });
+  }
+  const colors = merged.map(({ rgb, n }) => ({ rgb, share: n / opaque })).filter((c) => c.share >= MIN_SHARE).sort((x, y) => y.share - x.share).slice(0, MAX_COLORS);
+  return { opaque, colors };
+}
+function checkImage(image, theme, palette, threshold = DEFAULT_THRESHOLD) {
+  const swatches = palette.map(({ token, hex, rgb }) => ({ token, hex, lab: toLab(rgb) }));
+  if (!swatches.length) throw new Error(`theme "${theme}" has no palette colours`);
+  const { opaque, colors: main } = dominantColors(image);
+  const colors = main.map(({ rgb, share }) => {
+    const lab = toLab(rgb);
+    const best = swatches.map((s) => ({ s, d: deltaE2000(lab, s.lab) })).sort((x, y) => x.d - y.d)[0];
+    const deltaE = Math.round(best.d * 10) / 10;
+    return {
+      hex: toHex(rgb),
+      share: Math.round(share * 1e3) / 1e3,
+      nearest: { token: best.s.token, hex: best.s.hex },
+      deltaE,
+      onPalette: deltaE <= threshold
+    };
+  });
+  const coverage = Math.round(colors.reduce((sum, c) => sum + c.share, 0) * 1e3) / 1e3;
+  return {
+    theme,
+    width: image.width,
+    height: image.height,
+    threshold,
+    colors,
+    offPalette: colors.filter((c) => !c.onPalette).length,
+    coverage,
+    ...opaque === 0 ? { note: "The image has no opaque pixels." } : coverage < PHOTO_COVERAGE ? { note: "Most pixels fall outside the main colours: likely a photo or gradient. The findings cover the main colours only." } : {}
+  };
+}
+function checkImageFile(path, theme, themeDir2, threshold) {
+  if (extname2(path).toLowerCase() !== ".png") throw new Error("only PNG is supported; export the image as PNG");
+  if (statSync(path).size > MAX_FILE_BYTES) throw new Error("the file is over 50 MB");
+  return checkImage(decodePng(readFileSync6(path)), theme, collectColorRows(themeDir2), threshold);
+}
+
 // mcp/tools.ts
-import { join as join5 } from "node:path";
+import { join as join6 } from "node:path";
 var FORMATS = Object.keys(FORMAT_FILES);
 function listThemes(input) {
   const { industry, mood, query } = input;
@@ -21922,13 +22158,16 @@ function listRules(input) {
 }
 function themeDir(id) {
   loadThemeManifest(id);
-  return join5(REPO_ROOT, "themes", id);
+  return join6(REPO_ROOT, "themes", id);
 }
 function lintThemeTool(input) {
   return lintTheme(themeDir(input.id));
 }
 function diffThemesTool(input) {
   return diffThemes(themeDir(input.a), themeDir(input.b));
+}
+function checkImageTool(input) {
+  return checkImageFile(input.path, input.id, themeDir(input.id), input.threshold);
 }
 function oneOf(values) {
   const [first, ...rest] = [...new Set(values)].sort();
@@ -21985,6 +22224,22 @@ var diffOutput = external_exports.object({
     unchecked: external_exports.array(external_exports.object({ before: finding, after: finding }))
   }),
   regression: external_exports.boolean()
+});
+var imageOutput = external_exports.object({
+  theme: external_exports.string(),
+  width: external_exports.number(),
+  height: external_exports.number(),
+  threshold: external_exports.number(),
+  colors: external_exports.array(external_exports.object({
+    hex: external_exports.string(),
+    share: external_exports.number(),
+    nearest: external_exports.object({ token: external_exports.string(), hex: external_exports.string() }),
+    deltaE: external_exports.number(),
+    onPalette: external_exports.boolean()
+  })),
+  offPalette: external_exports.number(),
+  coverage: external_exports.number(),
+  note: external_exports.string().optional()
 });
 var rule = external_exports.object({
   id: external_exports.string(),
@@ -22088,6 +22343,19 @@ var toolDefinitions = [
     handler: (args) => structured(diffThemesTool(args))
   }),
   tool({
+    name: "check_image",
+    title: "Check image colours",
+    description: "Compare a local PNG's main colours with a theme's palette by CIEDE2000. Lists each colour with its share, nearest palette token and \u0394E; offPalette counts those above the threshold. A low coverage means a photo or gradient.",
+    inputSchema: external_exports.strictObject({
+      id: themeId.describe("Theme id."),
+      path: external_exports.string().describe("Absolute path to a PNG on this machine, such as an exported slide or banner."),
+      threshold: external_exports.number().min(1).max(50).optional().describe(`\u0394E2000 above which a colour is off-palette (default ${DEFAULT_THRESHOLD}).`)
+    }),
+    outputSchema: imageOutput,
+    annotations: READ_ONLY,
+    handler: (args) => structured(checkImageTool(args))
+  }),
+  tool({
     name: "get_rule",
     title: "Get design rule",
     description: "Get a single design rule by id.",
@@ -22101,14 +22369,14 @@ var toolDefinitions = [
 ];
 
 // mcp/server.ts
-import { join as join6 } from "node:path";
+import { join as join7 } from "node:path";
 var INSTRUCTIONS = [
   "TEBIN brand kits and design rules, served from local files.",
   "Start with get_theme format design-md for the whole design guide: tebin is the modern web identity, tebin-classic the print and document one.",
-  "Scope list_rules by theme and medium. Fetch logos with get_asset; check a theme with lint_theme."
+  "Scope list_rules by theme and medium. Fetch logos with get_asset; check a theme with lint_theme and an exported PNG with check_image."
 ].join("\n");
 function createServer() {
-  const { version: version2 } = JSON.parse(readFileSync5(join6(REPO_ROOT, "package.json"), "utf8"));
+  const { version: version2 } = JSON.parse(readFileSync7(join7(REPO_ROOT, "package.json"), "utf8"));
   const server = new McpServer(
     { name: "tebin-style", title: "TEBIN Style", version: version2, websiteUrl: "https://github.com/4aykas/tebin-style" },
     { instructions: INSTRUCTIONS }

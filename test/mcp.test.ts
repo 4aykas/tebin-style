@@ -100,10 +100,10 @@ describe('list_rules', () => {
 });
 
 describe('toolDefinitions', () => {
-  it('declares the seven tools', () => {
+  it('declares the eight tools', () => {
     expect(toolDefinitions.map((t) => t.name)).toEqual([
       'list_themes', 'get_theme', 'get_asset', 'list_rules',
-      'lint_theme', 'diff_themes', 'get_rule',
+      'lint_theme', 'diff_themes', 'check_image', 'get_rule',
     ]);
   });
 });

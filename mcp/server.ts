@@ -8,7 +8,7 @@ import { join } from 'node:path';
 const INSTRUCTIONS = [
   'TEBIN brand kits and design rules, served from local files.',
   'Start with get_theme format design-md for the whole design guide: tebin is the modern web identity, tebin-classic the print and document one.',
-  'Scope list_rules by theme and medium. Fetch logos with get_asset; check a theme with lint_theme.',
+  'Scope list_rules by theme and medium. Fetch logos with get_asset; check a theme with lint_theme and an exported PNG with check_image.',
 ].join('\n');
 
 export function createServer(): McpServer {

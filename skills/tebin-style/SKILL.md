@@ -16,10 +16,10 @@ The registry is a set of static files. This skill only reads them.
 
 Pick one access route:
 
-- **MCP** — prefer the `tebin-style` server when it is connected. Its seven
+- **MCP** — prefer the `tebin-style` server when it is connected. Its eight
   read-only tools: `list_themes`, `get_theme` (tokens, or the whole guide with
   `format: "design-md"`), `get_asset`, `list_rules`, `get_rule`, `lint_theme`,
-  `diff_themes`. Below they are written `tebin-style:<tool>`.
+  `diff_themes`, `check_image`. Below they are written `tebin-style:<tool>`.
 - **Local clone** — read the files from disk.
 - **Neither** — fetch
   `https://raw.githubusercontent.com/4aykas/tebin-style/main/<path>`, or use the
@@ -92,6 +92,11 @@ On `tebin`, `type.*` and `spacing.*` values are **ceilings**: the token's
 rule can pair with a surface, and names what it could not reach. Run it after
 changing a colour; without MCP, run `pnpm lint:themes` in a clone. If neither
 is available, say that contrast was not checked.
+
+`tebin-style:check_image({ id, path })` checks a finished PNG (an exported
+slide, banner or screenshot) against the palette. It lists each main colour
+with its nearest token and ΔE2000; `offPalette` counts those above the
+threshold (default 10). It reads PNG only; export other formats first.
 
 `tebin-style:diff_themes({ a, b })` shows what moved and flags regressions.
 Read the findings; the flag is not a compatibility check.
