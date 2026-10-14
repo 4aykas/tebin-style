@@ -7,6 +7,7 @@ export const tebin = {
     "charcoal": "#242424",
     "ink": "#292929",
     "muted": "#666666",
+    "grey": "#898D8D",
     "topbar": "#F9F9F9",
     "subtle": "#C1C1C1",
     "rule": "#ECECEC",

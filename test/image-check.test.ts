@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { deflateSync } from 'node:zlib';
-import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { decodePng } from '../src/png.js';
 import { checkImage, checkImageFile, deltaE2000, dominantColors } from '../src/image-check.js';
 import { collectColorRows } from '../src/colors-csv.js';
 import { checkImageTool } from '../mcp/tools.js';
-import { REPO_ROOT } from '../src/registry.js';
+import { REPO_ROOT, loadIndex } from '../src/registry.js';
 
 /** A minimal PNG: one IHDR, one IDAT, given raw rows (each with its filter byte). */
 function png(width: number, height: number, type: number, depth: number, rows: number[][],
@@ -140,4 +140,25 @@ describe('checkImageFile and the MCP tool', () => {
   it('refuses an unknown theme', () => {
     expect(() => checkImageTool({ id: 'nope', path: asset('corner-mark-256.png') })).toThrow(/nope/);
   });
+});
+
+describe('every shipped PNG stays on its own palette', () => {
+  // #91: the tebin logo was drawn in #EE3124 / #808285 while its palette said
+  // #DA291C. A transparent PNG is the asset as drawn, so it must match.
+  for (const theme of loadIndex().themes) {
+    const dir = join(REPO_ROOT, 'themes', theme.id);
+    const manifestPath = join(dir, 'assets', 'png', 'manifest.json');
+    if (!existsSync(manifestPath)) continue; // a theme without raster assets
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as {
+      outputs: Array<{ path: string; variant: string }>;
+    };
+    for (const { path } of manifest.outputs.filter((o) => o.variant === 'transparent')) {
+      it(`${theme.id}/${path}`, () => {
+        // An asset is drawn in exact palette colours, so the bar is ΔE 2, not
+        // the default 10 meant for exported slides and photos.
+        const result = checkImageFile(join(dir, path), theme.id, dir, 2);
+        expect(result.colors.filter((c) => !c.onPalette), 'off-palette colours').toEqual([]);
+      });
+    }
+  }
 });
