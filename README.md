@@ -88,7 +88,7 @@ of the themes and are awaiting brand-owner approval.
 introduction. A build produces CSS, Tailwind v4, TypeScript, DTCG-style JSON,
 colour CSV, PNGs and a self-contained `DESIGN.md`.
 
-**Agent access:** a local, read-only MCP server exposes eight tools for theme
+**Agent access:** a local, read-only MCP server exposes tools for theme
 discovery, formats, assets, rules, contrast checks, comparisons and image
 palette checks. The same
 files work without MCP; hand an agent `DESIGN.md` and the assets it needs.

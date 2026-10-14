@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { existsSync, mkdtempSync, cpSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { Resvg } from '@resvg/resvg-js';
+import { renderNoFonts } from './resvg.js';
 import { buildPaletteSvg } from '../src/palette-preview.js';
 import { collectColorRows } from '../src/colors-csv.js';
 
@@ -63,9 +63,7 @@ describe('token names in the palette SVG', () => {
       writeFileSync(tokensPath, JSON.stringify(tokens));
       const svg = buildPaletteSvg(work);
       expect(svg).toContain('a&amp;b&lt;c&gt;&quot;d');
-      // No system fonts: well-formedness needs no text, and a font scan takes
-      // over 5 s on a Windows CI runner.
-      expect(() => new Resvg(svg, { font: { loadSystemFonts: false } }).render()).not.toThrow();
+      expect(() => renderNoFonts(svg)).not.toThrow();
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
