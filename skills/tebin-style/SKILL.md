@@ -16,8 +16,8 @@ The registry is a set of static files. This skill only reads them.
 
 Pick one access route:
 
-- **MCP** — prefer the `tebin-style` server when it is connected. Its eight
-  read-only tools: `list_themes`, `get_theme` (tokens, or the whole guide with
+- **MCP** — prefer the `tebin-style` server when it is connected. Its read-only
+  tools: `list_themes`, `get_theme` (tokens, or the whole guide with
   `format: "design-md"`), `get_asset`, `list_rules`, `get_rule`, `lint_theme`,
   `diff_themes`, `check_image`. Below they are written `tebin-style:<tool>`.
 - **Local clone** — read the files from disk.

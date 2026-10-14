@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { getRule } from '../src/rules.js';
+import { toolDefinitions } from '../mcp/tools.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const skill = readFileSync(join(here, '..', 'skills', 'tebin-style', 'SKILL.md'), 'utf8');
@@ -85,8 +86,8 @@ describe('the skill covers a host with no network', () => {
 });
 
 describe('the skill reaches every MCP tool by its server', () => {
-  it('lists all eight tools and qualifies them with the server name', () => {
-    for (const tool of ['list_themes', 'get_theme', 'get_asset', 'list_rules', 'get_rule', 'lint_theme', 'diff_themes', 'check_image']) {
+  it('lists every server tool and qualifies them with the server name', () => {
+    for (const { name: tool } of toolDefinitions) {
       expect(skill).toContain(`\`${tool}\``);
     }
     expect(skill).toContain('tebin-style:lint_theme');

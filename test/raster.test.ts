@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildRaster, plannedOutputs, padSvg, LADDER, CLEAR_SPACE_RATIO } from '../src/raster.js';
 import { diffAssets } from '../src/check.js';
-import { Resvg } from '@resvg/resvg-js';
+import { renderNoFonts } from './resvg.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const classic = join(root, 'themes', 'tebin-classic');
@@ -58,7 +58,7 @@ describe('padSvg', () => {
     const padded = padSvg(svg);
     expect(padded).toContain('xmlns:xlink="http://www.w3.org/1999/xlink"');
     expect(padded).toContain('fill="#00ff00"');
-    const { pixels, width, height } = new Resvg(padded, { fitTo: { mode: 'width', value: 24 }, font: { loadSystemFonts: false } }).render();
+    const { pixels, width, height } = renderNoFonts(padded, { fitTo: { mode: 'width', value: 24 } });
     const centre = (Math.floor(height / 2) * width + Math.floor(width / 2)) * 4;
     expect([...pixels.subarray(centre, centre + 4)]).toEqual([0, 255, 0, 255]);
   });
