@@ -89,6 +89,18 @@
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
+  --motion-duration-fast: 120ms; /** Press, hover and colour changes on one control. */
+  --motion-duration-base: 200ms; /** Reveals, tooltips, menus and fades. */
+  --motion-duration-slow: 300ms; /** Panels, drawers and height changes. Nothing on UI state runs longer. */
+  --motion-easing-enter: cubic-bezier(0.23, 1, 0.32, 1); /** Arriving or moving into place: a fast start and a long settle, with no overshoot. */
+  --motion-easing-exit: cubic-bezier(0.4, 0, 1, 1); /** Leaving: accelerate away. Exits are shorter than entrances. */
+  --motion-easing-linear: cubic-bezier(0, 0, 1, 1); /** Constant-speed progress only: spinners, shimmer, a determinate bar. */
+  --motion-spring-ui-stiffness: 520; /** Default spring for controls, thumbs and markers. Damping ratio about 1.1: it settles without overshoot. */
+  --motion-spring-ui-damping: 34;
+  --motion-spring-ui-mass: 0.45;
+  --motion-spring-panel-stiffness: 260; /** Larger surfaces: panels, drawers, reordered rows. Damping ratio about 1.2. */
+  --motion-spring-panel-damping: 34;
+  --motion-spring-panel-mass: 0.8;
   --role-primary: var(--color-brand); /** Identity red. Logo, fills, borders and large text. Not small text — use the on-dark or on-light variant there. */
   --role-primary-on-dark: var(--color-brand-on-dark); /** Small red text on a dark surface. */
   --role-primary-on-light: var(--color-brand-on-light); /** Small red text on a light surface. */

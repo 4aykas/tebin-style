@@ -37,7 +37,7 @@ export function packFileList(themesRoot: string): string[] {
   }
 
   // The agent files travel too, so README links resolve and an offline agent has llms.txt.
-  files.push('rules/dist/rules.md', 'LICENSE', 'README.md', 'llms.txt', 'registry/index.json');
+  files.push('rules/dist/rules.md', 'LICENSE', 'README.md', 'llms.txt', 'llms-full.txt', 'registry/index.json');
   files.push(...skillFileList().map((f) => `skills/${f}`));
   files.push(...filesUnder(join(root, 'examples'), /\.(md|html|docx|pptx)$/));
   for (const file of readdirSync(join(root, 'docs', 'guide'))) {

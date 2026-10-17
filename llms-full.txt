@@ -1,0 +1,839 @@
+# tebin-style
+
+> Brand kits for AI agents and people: W3C DTCG design tokens, logos as SVG
+> **and pre-rendered PNG** (for Word, Excel, PowerPoint and any tool that
+> cannot embed SVG), plus machine-readable design rules. Every repository URL
+> below is a raw link tracking main. Pin a commit for reproducible inputs.
+
+Choose one theme and supply its DESIGN.md plus actual assets. This file embeds
+Classic vectors only; use the Modern assets for a Modern deliverable.
+
+> **The wordmark is a file, never text.** Its letters are drawn outlines, not a
+> font, so typing “TEBIN” in Roboto or any other face does not reproduce the
+> logo — it produces different letterforms. Download one of the PNGs below and
+> insert it as an image. For Word, Excel and PowerPoint that is the whole job.
+
+## Logos (PNG — use these for documents and Office files)
+
+- [TEBIN Classic logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-1024.png): two-colour wordmark, transparent
+- [TEBIN Classic logo white, on red 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png): for red backgrounds
+- [TEBIN Classic logo white, on charcoal 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png): for dark backgrounds
+- [TEBIN Classic corner mark 512 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/png/corner-mark-512.png): the mark on its own
+- [TEBIN (web theme) logo 1024 px](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/png/logo-full-1024.png): web variant
+
+Other sizes follow the same pattern, 128 to 2048 px: `logo-full-512.png`,
+`logo-full-2048.png`, `corner-mark-128.png`, `corner-mark-256.png`.
+
+## Logos (SVG)
+
+- [TEBIN Classic logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full.svg): light backgrounds
+- [TEBIN Classic logo white SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/assets/logo/logo-full-white.svg): dark or red backgrounds
+- [TEBIN (web theme) logo SVG](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/assets/logo/logo-full.svg)
+
+## Vector source, inline
+
+**If you cannot fetch URLs, use these.** Never draw the mark
+(`brand-logo-never-typeset`); copy the source below.
+
+Copy a block verbatim. Do not restyle it, do not change a fill, do not swap the
+`viewBox`. To place the mark on a dark or red ground, take the white file below
+rather than recolouring the two-colour one.
+
+Some document-generation tools cannot embed SVG even when the destination
+Office application supports it. In that workflow, supply one of the PNGs above
+or render the original SVG with a suitable tool; do not redraw the logo.
+
+### `themes/tebin-classic/assets/logo/logo-full.svg`
+
+the two-colour wordmark — red TEB and corner, grey IN
+
+```svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.33 166.23">
+  <defs>
+    <style>
+      .cls-1 { fill: #898D8D; }
+      .cls-2 { fill: #DA291C; }
+    </style>
+  </defs>
+  <path class="cls-2" d="M31.26,78.43H0v-28.16h94.18v28.16h-31.27v87.8h-31.65v-87.8Z"/>
+  <path class="cls-2" d="M107.55,50.27h91.86v27.33h-60.53v17.56h54.82v25.35h-54.82v18.39h61.35v27.33h-92.67V50.27Z"/>
+  <path class="cls-2" d="M215.85,50.27h58.57c14.36,0,24.47,3.64,31.16,10.43,4.57,4.64,7.34,10.77,7.34,19.05,0,13.42-7.51,21.37-17.62,25.84,13.86,4.63,22.68,12.59,22.68,28.65,0,19.88-15.99,31.97-43.24,31.97h-58.9V50.27ZM266.59,96.49c9.63,0,15.01-3.31,15.01-10.43,0-6.3-4.89-9.94-14.35-9.94h-20.56v20.37h19.9ZM271.16,140.39c9.63,0,15.17-3.81,15.17-10.93,0-6.3-4.9-10.43-15.5-10.43h-24.15v21.36h24.47Z"/>
+  <path class="cls-1" d="M328.56,50.27h31.81v115.96h-31.81V50.27Z"/>
+  <path class="cls-1" d="M375.96,50.27h29.53l46.99,61.29v-61.29h31.33v115.96h-27.74l-48.78-63.61v63.61h-31.33V50.27Z"/>
+  <g>
+    <path class="cls-2" d="M533.33,0v24.68h-49.51V0h49.51Z"/>
+    <path class="cls-2" d="M533.33,50.28h-24.31V0h24.31v50.28Z"/>
+  </g>
+</svg>
+```
+
+### `themes/tebin-classic/assets/logo/logo-full-white.svg`
+
+the all-white wordmark, for dark or red grounds
+
+```svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.33 166.23">
+  <defs>
+    <style>
+      .cls-1, .cls-2 { fill: #fff; }
+    </style>
+  </defs>
+  <path class="cls-2" d="M31.26,78.43H0v-28.16h94.18v28.16h-31.27v87.8h-31.65v-87.8Z"/>
+  <path class="cls-2" d="M107.55,50.27h91.86v27.33h-60.53v17.56h54.82v25.35h-54.82v18.39h61.35v27.33h-92.67V50.27Z"/>
+  <path class="cls-2" d="M215.85,50.27h58.57c14.36,0,24.47,3.64,31.16,10.43,4.57,4.64,7.34,10.77,7.34,19.05,0,13.42-7.51,21.37-17.62,25.84,13.86,4.63,22.68,12.59,22.68,28.65,0,19.88-15.99,31.97-43.24,31.97h-58.9V50.27ZM266.59,96.49c9.63,0,15.01-3.31,15.01-10.43,0-6.3-4.89-9.94-14.35-9.94h-20.56v20.37h19.9ZM271.16,140.39c9.63,0,15.17-3.81,15.17-10.93,0-6.3-4.9-10.43-15.5-10.43h-24.15v21.36h24.47Z"/>
+  <path class="cls-1" d="M328.56,50.27h31.81v115.96h-31.81V50.27Z"/>
+  <path class="cls-1" d="M375.96,50.27h29.53l46.99,61.29v-61.29h31.33v115.96h-27.74l-48.78-63.61v63.61h-31.33V50.27Z"/>
+  <g>
+    <path class="cls-2" d="M533.33,0v24.68h-49.51V0h49.51Z"/>
+    <path class="cls-2" d="M533.33,50.28h-24.31V0h24.31v50.28Z"/>
+  </g>
+</svg>
+```
+
+### `themes/tebin-classic/assets/misc/corner-mark.svg`
+
+the corner mark alone, brand red
+
+```svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="483.82 0 49.51 50.28">
+  <path fill="#DA291C" d="M533.33,0v24.68h-49.51V0h49.51Z"/>
+  <path fill="#DA291C" d="M533.33,50.28h-24.31V0h24.31v50.28Z"/>
+</svg>
+```
+
+### `themes/tebin-classic/assets/misc/corner-mark-white.svg`
+
+the corner mark alone, white
+
+```svg
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="483.82 0 49.51 50.28">
+  <path fill="#fff" d="M533.33,0v24.68h-49.51V0h49.51Z"/>
+  <path fill="#fff" d="M533.33,50.28h-24.31V0h24.31v50.28Z"/>
+</svg>
+```
+
+## Themes
+
+Three themes ship here.
+
+- **tebin-classic** — the 2017 print-era identity: Pantone red and grey, Roboto
+  with an Arial fallback. Use it for documents and anything printed. Tokens at
+  `themes/tebin-classic/dist/`.
+- **tebin** — the web theme: red on charcoal, translucent scales, plus the type
+  and spacing scales used on tebin.pro. Tokens at `themes/tebin/dist/`.
+- **slate** — a neutral starter for projects that are not TEBIN.
+  **Tokens only, no logo assets.** MIT. Tokens at `themes/slate/dist/`.
+
+Each `dist/` holds `tokens.css`, `tailwind.css`, `tokens.dtcg.json`,
+`theme.ts` and `colors.csv`.
+
+Tokens are grouped as `color`, `role`, `font`, `radius` and — on `tebin` —
+`type`, `lineHeight`, `fontWeight`, `spacing` and `layout`. A **role** points
+at a palette colour instead of copying it, so `role.surface` resolves through
+`color.paper`.
+
+**Small red text may need a different red.** `#DA291C` reaches 4.87:1 on
+white, so Classic's white page takes it as is. It falls to 4.19:1 on Modern's
+cream `#EFEEE9` and 3.04:1 on its dark panel `#242830`. No single red clears
+4.5:1 on both surface families, so `tebin` adds `role.primary-on-light`
+(`#C7251A`) and `role.primary-on-dark` (`#EA6359`) for small text.
+
+## Machine-readable indexes
+
+- [Full asset index](https://raw.githubusercontent.com/4aykas/tebin-style/main/registry/index.json): every theme and asset, SVG and all PNG sizes, with direct `rawUrl` fields
+- [Design rules](https://raw.githubusercontent.com/4aykas/tebin-style/main/rules/dist/rules.md): the MUST / SHOULD / NEVER rules, most with the reason they exist
+- [Colour table (CSV)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/dist/colors.csv): RGB for Word and Excel
+- [Everything in one file](https://raw.githubusercontent.com/4aykas/tebin-style/main/llms-full.txt): this file, every theme's DESIGN.md and all rules
+- [shadcn/ui theme (TEBIN)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/dist/shadcn.json): `npx shadcn@latest add <this URL>`; light colours, radius, fonts and easing
+
+## Design guides
+
+One self-contained page per theme: palette with RGB and print values, roles,
+type, spacing, assets and rules. Every link inside is absolute, so the file
+still works when pasted into a chat.
+
+- [TEBIN Classic DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/DESIGN.md)
+- [TEBIN DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/DESIGN.md)
+- [Slate DESIGN.md](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/slate/DESIGN.md)
+
+## Agent integration
+
+- Claude Code plugin, with the skill and the MCP server:
+  `/plugin marketplace add 4aykas/tebin-style`, then
+  `/plugin install tebin-style@tebin`
+- [Skill](https://raw.githubusercontent.com/4aykas/tebin-style/main/skills/tebin-style/SKILL.md): `npx skills add 4aykas/tebin-style` for Codex, Cursor and other agents
+- MCP server `tebin-style`: `node mcp/dist/server.mjs` from a clone, Node 22+. Eight read-only tools: `list_themes`, `get_theme`, `get_asset`, `list_rules`, `get_rule`, `lint_theme`, `diff_themes`, `check_image`
+- [AI agent guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/ai-agents.md): setup for Claude Code, Codex, Cursor, Gemini CLI and other MCP clients
+- [Chat setup](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/chat-setup.md): files and starter instructions for ChatGPT, Gemini and Claude chats
+
+## Licence
+
+Tokens: MIT. Logos and brand assets: © TEBIN, all rights reserved — do not
+reuse them for another brand.
+
+## Optional
+
+- [Office guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/office.md): Word, Excel, PowerPoint and Google Docs
+- [Print guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/print.md): preparing artwork for print
+- [Developer guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/developers.md): build, validate and test the registry
+
+---
+
+<!-- themes/slate/DESIGN.md -->
+
+---
+version: alpha
+name: "Slate"
+description: "Neutral, modern SaaS palette: cool grays with a blue accent, Inter + JetBrains Mono."
+colors:
+  primary: "#2563EB"
+  surface: "#FFFFFF"
+  on-surface: "#0F172A"
+  on-surface-muted: "#64748B"
+  outline: "#E2E8F0"
+  error: "#C7251A"
+  warning: "#8A5300"
+  success: "#1F6F43"
+rounded:
+  sm: "4px"
+  md: "8px"
+  lg: "12px"
+omitted:
+  - section: "assets"
+    reason: "Token-only theme; no brand assets exist."
+  - section: "components"
+    reason: "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+---
+# Slate — design
+
+> Generated from `tokens.json`, `theme.json` and `rules/rules.json` — do not edit by hand.
+
+A neutral SaaS starter palette — blue accent, grey neutrals. Not a TEBIN brand:
+use it when a project needs a competent default rather than a corporate identity.
+
+**Version** 1.2.0. **Tokens** MIT. **Assets** MIT.
+
+## Palette
+
+| Token | HEX | RGB (Word, Excel) | Pantone | CMYK | Purpose |
+| --- | --- | --- | --- | --- | --- |
+| `color.brand` | `#2563EB` | 37, 99, 235 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.ink` | `#0F172A` | 15, 23, 42 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.muted` | `#64748B` | 100, 116, 139 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.topbar` | `#F8FAFC` | 248, 250, 252 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.surface` | `#FFFFFF` | 255, 255, 255 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.error` | `#C7251A` | 199, 37, 26 | not specified in the 2017 brand book | not specified in the 2017 brand book | Error text. 5.66:1 on #FFFFFF. |
+| `color.warning` | `#8A5300` | 138, 83, 0 | not specified in the 2017 brand book | not specified in the 2017 brand book | Warning text. 6.33:1 on #FFFFFF. |
+| `color.success` | `#1F6F43` | 31, 111, 67 | not specified in the 2017 brand book | not specified in the 2017 brand book | Success text. 6.15:1 on #FFFFFF. |
+| `color.rule` | `#E2E8F0` | 226, 232, 240 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+
+Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
+
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Accent. Fills, borders and large text. |
+| `role.surface` | `color.surface` | The base page surface. |
+| `role.on-surface` | `color.ink` | Primary text on the base surface. |
+| `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
+| `role.outline` | `color.rule` | Hairlines and dividers. |
+| `role.error` | `color.error` | Error text. |
+| `role.warning` | `color.warning` | Warning text. |
+| `role.success` | `color.success` | Success text. |
+
+## Typography
+
+- **sans** — Inter, system-ui, sans-serif
+- **mono** — JetBrains Mono, ui-monospace, monospace
+
+In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.
+
+## Geometry
+
+- `radius.sm` — 4px
+- `radius.md` — 8px
+- `radius.lg` — 12px
+
+## Rules
+
+### theming
+
+- **[MUST]** (web) Set color-scheme: dark on <html> for dark themes.
+- **[MUST]** (web) Give native <select> an explicit background-color and color (Windows fix).
+- **[MUST]** (web) Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
+- **[SHOULD]** (web) Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
+
+## Using this elsewhere
+
+- Word, Excel, PowerPoint, Google Docs — [the Office guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/office.md).
+- A coding agent — [the agent guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/ai-agents.md).
+- A web project — [the developer guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/developers.md).
+
+Every link in this file is absolute, so the file keeps working when it is pasted into a chat or saved beside a document.
+
+---
+
+<!-- themes/tebin/DESIGN.md -->
+
+---
+version: alpha
+name: "TEBIN"
+description: "Industrial design-and-engineering brand: condensed type, signal red on charcoal."
+colors:
+  primary: "#DA291C"
+  primary-on-dark: "#EA6359"
+  primary-on-light: "#C7251A"
+  surface: "#FCFBF8"
+  surface-inverse: "#242424"
+  on-surface: "#292929"
+  on-surface-muted: "#666666"
+  outline: "#ECECEC"
+  error-on-light: "#A43F39"
+  error-on-dark: "#D07C77"
+  warning-on-light: "#8A5300"
+  warning-on-dark: "#F0B429"
+  success-on-light: "#1F6F43"
+  success-on-dark: "#5FCF8E"
+typography:
+  h1:
+    fontFamily: "Roboto Condensed"
+    fontSize: "38px"
+    fontWeight: 700
+    lineHeight: 1.35
+  h2:
+    fontFamily: "Roboto Condensed"
+    fontSize: "34px"
+    fontWeight: 700
+    lineHeight: 1.35
+  h3:
+    fontFamily: "Roboto Condensed"
+    fontSize: "28px"
+    fontWeight: 700
+    lineHeight: 1.35
+  h4:
+    fontFamily: "Roboto Condensed"
+    fontSize: "24px"
+    fontWeight: 700
+    lineHeight: 1.35
+  h5:
+    fontFamily: "Roboto Condensed"
+    fontSize: "20px"
+    fontWeight: 700
+    lineHeight: 1.35
+  body:
+    fontFamily: "Roboto"
+    fontSize: "16px"
+    lineHeight: 1.7
+  label-sm:
+    fontFamily: "Roboto"
+    fontSize: "9px"
+  label-md:
+    fontFamily: "Roboto"
+    fontSize: "10px"
+  label-lg:
+    fontFamily: "Roboto"
+    fontSize: "11px"
+rounded:
+  panel: "2px"
+  control: "4px"
+  card: "8px"
+spacing:
+  gutter: "48px"
+  section-compact: "64px"
+  section-standard: "88px"
+  section-feature: "112px"
+  container-default: "1200px"
+  container-wide: "1400px"
+  container-reading: "760px"
+components:
+  button-primary:
+    backgroundColor: "{colors.on-surface}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.control}"
+    padding: "14px"
+    height: "40px"
+  button-primary-hover:
+    backgroundColor: "#242424"
+  button-commit:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.control}"
+    padding: "14px"
+    height: "40px"
+  button-commit-hover:
+    backgroundColor: "#B82217"
+  button-quiet:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface}"
+    borderColor: "{colors.outline}"
+    rounded: "{rounded.control}"
+    padding: "14px"
+    height: "40px"
+  button-danger:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.error-on-light}"
+    borderColor: "{colors.outline}"
+    rounded: "{rounded.control}"
+    padding: "14px"
+    height: "40px"
+  cta:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface}"
+    borderColor: "{colors.on-surface}"
+    rounded: "0px"
+    padding: "14px 28px"
+  cta-hover:
+    backgroundColor: "{colors.on-surface}"
+    textColor: "{colors.surface}"
+---
+# TEBIN — design
+
+> Generated from `tokens.json`, `theme.json` and `rules/rules.json` — do not edit by hand.
+
+Industrial design-and-engineering brand kit: signal red on charcoal, Roboto /
+Roboto Condensed type.
+
+> **Type on tebin.pro is unloaded by design.** The site requests no webfont, so
+> `--font-condensed` and `--font-sans` resolve to the visitor's system sans.
+> Only the `og-preview/*` routes load Roboto Condensed, because the OG images
+> are screenshotted from them and must render in the real face. If you are about
+> to "fix" a missing font request on a public page — don't; it is deliberate.
+> Consumers of this theme that *do* load webfonts get the intended face for free.
+
+**Version** 1.8.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Source** https://tebin.pro.
+
+## Palette
+
+| Token | HEX | RGB (Word, Excel) | Pantone | CMYK | Purpose |
+| --- | --- | --- | --- | --- | --- |
+| `color.brand` | `#DA291C` | 218, 41, 28 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.brand-dark` | `#B82217` | 184, 34, 23 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.brand-on-dark` | `#EA6359` | 234, 99, 89 | not specified in the 2017 brand book | not specified in the 2017 brand book | Small red TEXT on dark surfaces only. 4.5:1 on #242830, the lightest dark surface in use, and more on every darker one. The identity red #DA291C stays the colour for the logo, fills, borders and large text, which need only 3:1. |
+| `color.brand-on-light` | `#C7251A` | 199, 37, 26 | not specified in the 2017 brand book | not specified in the 2017 brand book | Small red TEXT on light surfaces only. 4.87:1 on #EFEEE9 and 5.32:1 on #F8F8F4. No single red clears 4.5:1 on both surface families: the luminance window is empty for any hue, so this is two tokens by arithmetic, not by preference. |
+| `color.charcoal` | `#242424` | 36, 36, 36 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.ink` | `#292929` | 41, 41, 41 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.muted` | `#666666` | 102, 102, 102 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.grey` | `#898D8D` | 137, 141, 141 | 423 C | 22/14/18/45 | Brand grey, the IN of the wordmark. A colour to paint with, not to read: 3.36:1 on white, below the 4.5:1 floor for small text. |
+| `color.topbar` | `#F9F9F9` | 249, 249, 249 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.subtle` | `#C1C1C1` | 193, 193, 193 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.rule` | `#ECECEC` | 236, 236, 236 | not specified in the 2017 brand book | not specified in the 2017 brand book | — |
+| `color.brick` | `#A43F39` | 164, 63, 57 | not specified in the 2017 brand book | 24/85/81/57 | Error text on light surfaces. 5.40:1 on #EFEEE9. The 2017 brand book's secondary red, and already the alert colour in tebin-expenses, where it is commented “errors — the red family, softened”. It reads against the signal red by saturation — 48% against 77% — not by lightness. |
+| `color.brick-on-dark` | `#D07C77` | 208, 124, 119 | not specified in the 2017 brand book | not specified in the 2017 brand book | Error text on dark surfaces. 4.81:1 on #242830. Derived from brick by the method that produced brand-on-dark: hold the hue (3.4 degrees) and the saturation (48%), lift the lightness until it clears the floor. Theme author's value — the brand book prices no dark-surface variant, and tebin-expenses, brick's only production user, ships no dark theme. |
+| `color.warning-on-light` | `#8A5300` | 138, 83, 0 | not specified in the 2017 brand book | not specified in the 2017 brand book | Warning text on light surfaces. 5.45:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.warning-on-dark` | `#F0B429` | 240, 180, 41 | not specified in the 2017 brand book | not specified in the 2017 brand book | Warning text on dark surfaces. 7.93:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.success-on-light` | `#1F6F43` | 31, 111, 67 | not specified in the 2017 brand book | not specified in the 2017 brand book | Success text on light surfaces. 5.30:1 on #EFEEE9, the darkest light surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.success-on-dark` | `#5FCF8E` | 95, 207, 142 | not specified in the 2017 brand book | not specified in the 2017 brand book | Success text on dark surfaces. 7.60:1 on #242830, the lightest dark surface in use. Theme author's value — the 2017 brand book prices no status colours. |
+| `color.paper` | `#FCFBF8` | 252, 251, 248 | not specified in the 2017 brand book | not specified in the 2017 brand book | Base page surface. Warm-tinted rather than pure #fff, which reads flat beside the cream band and the dark sections. |
+
+Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
+
+### Translucent scale
+
+Every semi-transparent colour comes from a step, never from an ad-hoc alpha; step 1 is always the strongest. Groups present in this theme: `on-dark`, `on-light`, `rule-dark`, `rule-light`, `surface-dark`. The steps below the contrast floor are for decoration, not for type. Full values: [tokens.json](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/tokens.json).
+
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Identity red. Logo, fills, borders and large text. Not small text — use the on-dark or on-light variant there. |
+| `role.primary-on-dark` | `color.brand-on-dark` | Small red text on a dark surface. |
+| `role.primary-on-light` | `color.brand-on-light` | Small red text on a light surface. |
+| `role.surface` | `color.paper` | The base page surface. |
+| `role.surface-inverse` | `color.charcoal` | The dark bands. |
+| `role.on-surface` | `color.ink` | Primary text on the base surface. |
+| `role.on-surface-muted` | `color.muted` | Secondary text on the base surface. |
+| `role.outline` | `color.rule` | Hairlines and dividers on light surfaces. |
+| `role.error-on-light` | `color.brick` | Error text on a light surface. Brick, not the signal red — the brand book has an error red and tebin-expenses already ships it. |
+| `role.error-on-dark` | `color.brick-on-dark` | Error text on a dark surface. |
+| `role.warning-on-light` | `color.warning-on-light` | Warning text on a light surface. |
+| `role.warning-on-dark` | `color.warning-on-dark` | Warning text on a dark surface. |
+| `role.success-on-light` | `color.success-on-light` | Success text on a light surface. |
+| `role.success-on-dark` | `color.success-on-dark` | Success text on a dark surface. |
+
+## Typography
+
+- **sans** — Roboto, Helvetica, Arial, sans-serif — Self-hosted via @fontsource since 2026-06-17 at weights 400 and 700 only (BaseLayout.astro). Body copy.
+- **condensed** — Roboto Condensed, Roboto, sans-serif — Self-hosted via @fontsource at weights 400 and 700 only. Display type, headings, labels and kickers; since 2026-10-07 also the former mono-voice labels at 11px or more.
+- **Weights** — heading 700
+
+In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.
+
+### Scale
+
+| Level | Size | Fluid range |
+| --- | --- | --- |
+| `type.h1` | 38px | `clamp(28px, 4.5vw, 38px)` |
+| `type.h2` | 34px | `clamp(24px, 3.8vw, 34px)` |
+| `type.h3` | 28px | `clamp(20px, 3vw, 28px)` |
+| `type.h4` | 24px | `clamp(18px, 2.4vw, 24px)` |
+| `type.h5` | 20px | `clamp(16px, 2vw, 20px)` |
+| `type.body` | 16px | fixed |
+| `type.label-sm` | 9px | fixed |
+| `type.label-md` | 10px | fixed |
+| `type.label-lg` | 11px | fixed |
+
+Where a level shows a fluid range, the size column is its **ceiling**, not a fixed size. Display type is sized against the locale with the longest words — a range that fits English alone is an English-only cap.
+
+Leading: heading 1.35, body 1.7.
+Weights: heading 700.
+
+## Geometry
+
+- `radius.panel` — 2px
+- `radius.control` — 4px
+- `radius.card` — 8px
+
+## Spacing
+
+| Step | Ceiling | Fluid range |
+| --- | --- | --- |
+| `spacing.gutter` | 48px | `clamp(20px, 4vw, 48px)` |
+| `spacing.section-compact` | 64px | `clamp(40px, 5.5vw, 64px)` |
+| `spacing.section-standard` | 88px | `clamp(56px, 7vw, 88px)` |
+| `spacing.section-feature` | 112px | `clamp(72px, 9vw, 112px)` |
+
+Container widths: `container-default` 1200px, `container-wide` 1400px, `container-reading` 760px.
+
+## Motion
+
+| Token | Value | Use for |
+| --- | --- | --- |
+| `motion.duration.fast` | 120ms | Press, hover and colour changes on one control. |
+| `motion.duration.base` | 200ms | Reveals, tooltips, menus and fades. |
+| `motion.duration.slow` | 300ms | Panels, drawers and height changes. Nothing on UI state runs longer. |
+| `motion.easing.enter` | `cubic-bezier(0.23, 1, 0.32, 1)` | Arriving or moving into place: a fast start and a long settle, with no overshoot. |
+| `motion.easing.exit` | `cubic-bezier(0.4, 0, 1, 1)` | Leaving: accelerate away. Exits are shorter than entrances. |
+| `motion.easing.linear` | `cubic-bezier(0, 0, 1, 1)` | Constant-speed progress only: spinners, shimmer, a determinate bar. |
+| `motion.spring.ui` | stiffness 520, damping 34, mass 0.45 | Default spring for controls, thumbs and markers. Damping ratio about 1.1: it settles without overshoot. |
+| `motion.spring.panel` | stiffness 260, damping 34, mass 0.8 | Larger surfaces: panels, drawers, reordered rows. Damping ratio about 1.2. |
+
+Springs are for motion libraries that take stiffness, damping and mass, such as Motion. Every curve and spring here settles without overshoot; under `prefers-reduced-motion` the state arrives at once.
+
+## Components
+
+| Component | Background | Text | Border | Shape | Padding | Height |
+| --- | --- | --- | --- | --- | --- | --- |
+| `button-primary` | `role.on-surface` | `role.surface` | — | `radius.control` | `14px` | `40px` |
+| `button-primary-hover` | `color.charcoal` | — | — | — | — | — |
+| `button-commit` | `role.primary` | `role.surface` | — | `radius.control` | `14px` | `40px` |
+| `button-commit-hover` | `color.brand-dark` | — | — | — | — | — |
+| `button-quiet` | `role.surface` | `role.on-surface` | `role.outline` | `radius.control` | `14px` | `40px` |
+| `button-danger` | `role.surface` | `role.error-on-light` | `role.outline` | `radius.control` | `14px` | `40px` |
+| `cta` | `role.surface` | `role.on-surface` | `role.on-surface` | `0px` | `14px 28px` | — |
+| `cta-hover` | `role.on-surface` | `role.surface` | — | — | — | — |
+
+A variant states only what it changes; everything else comes from the component it names.
+
+- **`button-primary.backgroundColor`** — The everyday action is ink, not red. Most screens carry one of these and no red at all.
+- **`button-primary.padding`** — Horizontal. The vertical size comes from height.
+- **`button-primary.height`** — Expand the hit area to 44px on touch if the visual stays this size.
+- **`button-commit.backgroundColor`** — Red is the colour of commitment — submitting, publishing, sending. Never a casual action.
+- **`button-quiet.borderColor`** — Beyond the DESIGN.md property set, which names no border. A quiet button is its border, so the token stays.
+- **`cta.borderColor`** — A 2px rule. The editorial CTA is a bordered word, not a filled button.
+- **`cta.rounded`** — Square on purpose. The site's CTA takes no radius.
+- **`cta.padding`** — Two values: this component sets its own vertical padding rather than a height.
+
+## Assets
+
+| Asset | Source | PNG |
+| --- | --- | --- |
+| `logo-full` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/logo/logo-full.svg?raw=1) | [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-512.png?raw=1) · [1024 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-1024.png?raw=1) · [2048 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-2048.png?raw=1) |
+| `logo-full-white` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/logo/logo-full-white.svg?raw=1) | [512 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-white-512-on-brand.png?raw=1) · [512 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-white-512-on-charcoal.png?raw=1) · [1024 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-white-1024-on-brand.png?raw=1) · [1024 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-white-1024-on-charcoal.png?raw=1) · [2048 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-white-2048-on-brand.png?raw=1) · [2048 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/logo-full-white-2048-on-charcoal.png?raw=1) |
+| `favicon-svg` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/favicon/favicon.svg?raw=1) | [128 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/favicon-svg-128.png?raw=1) · [256 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/favicon-svg-256.png?raw=1) · [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/favicon-svg-512.png?raw=1) |
+| `favicon-png` | [PNG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/favicon/favicon.png?raw=1) | — |
+| `favicon-ico` | [ICO](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/favicon/favicon.ico?raw=1) | — |
+| `corner-outline` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/misc/corner_outline.svg?raw=1) | [128 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-outline-128.png?raw=1) · [256 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-outline-256.png?raw=1) · [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-outline-512.png?raw=1) |
+| `corner-mark` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/misc/corner-mark.svg?raw=1) | [128 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-128.png?raw=1) · [256 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-256.png?raw=1) · [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-512.png?raw=1) |
+| `corner-mark-white` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/misc/corner-mark-white.svg?raw=1) | [128 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-white-128-on-brand.png?raw=1) · [128 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-white-128-on-charcoal.png?raw=1) · [256 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-white-256-on-brand.png?raw=1) · [256 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-white-256-on-charcoal.png?raw=1) · [512 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-white-512-on-brand.png?raw=1) · [512 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/png/corner-mark-white-512-on-charcoal.png?raw=1) |
+| `fxptebin` | [PNG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/assets/misc/fxptebin.png?raw=1) | — |
+
+For scripts and agents, the same files without the HTML page around them: `https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/…`. Note that a raw SVG is served as `text/plain`, so a browser shows its source — use the vector links above to download one by hand.
+
+Colour table as a spreadsheet: [colors.csv](https://github.com/4aykas/tebin-style/blob/main/themes/tebin/dist/colors.csv?raw=1).
+
+## Rules
+
+### brand
+
+- **[MUST]** On dark or saturated brand-color (e.g. corporate red) backgrounds, use the all-white monochrome logo — the corner mark and every letter white. — _The two-color logo loses the grey "IN" and puts red on red._
+- **[NEVER]** Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
+- **[SHOULD]** The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
+- **[MUST]** Keep clear space around the logo at least the height of the "B" in the wordmark on all sides.
+- **[NEVER]** Never re-create the wordmark by typing TEBIN in a font. The letterforms are drawn outlines, not type. Insert the supplied asset: SVG on the web, and PNG in Word, Excel, PowerPoint or anything else that cannot embed SVG. — _An agent handed only the repository link repeatedly styled the name as text instead of fetching the logo, which produces letterforms that are not the logo at all. The other brand rules govern placing the logo and quietly assume you already have the file; none of them forbids drawing it yourself, so a careful agent could follow every rule and still ship the wrong mark._
+- **[SHOULD]** On a busy or photographic background where the white logo lacks contrast, place the approved two-colour logo on a solid white rectangle with the required clear space. Do not place the white logo on white.
+- **[NEVER]** Never apply disproportional transforms to the logo or rescale its elements independently.
+- **[NEVER]** Never add shadows or other effects to the logo.
+- **[NEVER]** Never recolor the logo outside the approved palette (red, grey, all-white, all-black).
+- **[SHOULD]** For Classic corporate material, use Roboto where available and Arial in Office documents. For Modern, use the font stacks defined by the theme and respect the target project's font-loading policy.
+
+### typography
+
+- **[NEVER]** (web) A heading never breaks a word — not mid-letter and not with a hyphen. Do not put hyphens: auto, overflow-wrap: anywhere or &shy; on display type; resize the type or rewrite the line. — _Settled by the owner on 2026-07-29, reversing a sweep of 177 wrap rules made the day before; &shy; is not an escape hatch because the HTML minifier strips it._
+- **[SHOULD]** (web) Body copy carries overflow-wrap: anywhere and hyphens: auto so long technical strings cannot overflow their column. — _The pair is right for running text and wrong for display type — the distinction is the rule._
+- **[MUST]** (web) Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
+- **[NEVER]** (web) Never set a negative letter-spacing; tracking is zero or positive.
+- **[NEVER]** (web) Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
+- **[SHOULD]** (web) Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** (web) Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._
+
+### theming
+
+- **[MUST]** (web) Set color-scheme: dark on <html> for dark themes.
+- **[MUST]** (web) Give native <select> an explicit background-color and color (Windows fix).
+- **[MUST]** (web) Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
+- **[MUST]** (web) Take translucent colours from the scale — on-dark, on-light, rule-dark, rule-light, surface-dark, brand-a — rather than inventing an alpha per use. — _Forty-odd different white alphas read as looseness even when no single value looks wrong._
+- **[NEVER]** (web) Never use #fff as a page or panel surface; use --color-paper. — _Pure white reads flat and synthetic beside the cream band and the dark sections._
+- **[SHOULD]** (web) On dark surfaces express elevation with a lighter surface step, not a shadow. — _A shadow on a dark ground reads as a coloured halo rather than as depth._
+- **[SHOULD]** (web) Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
+
+## Using this elsewhere
+
+- Word, Excel, PowerPoint, Google Docs — [the Office guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/office.md).
+- A coding agent — [the agent guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/ai-agents.md).
+- A web project — [the developer guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/developers.md).
+
+Every link in this file is absolute, so the file keeps working when it is pasted into a chat or saved beside a document.
+
+---
+
+<!-- themes/tebin-classic/DESIGN.md -->
+
+---
+version: alpha
+name: "TEBIN Classic"
+description: "Faithful reproduction of the 2017 TEBIN print brand book: Pantone red + grey, Roboto / Arial, corporate-print identity."
+colors:
+  primary: "#DA291C"
+  surface: "#FFFFFF"
+  on-surface: "#1A1A1A"
+omitted:
+  - section: "role.outline"
+    reason: "Document theme: table rules come from Word's own table styles, and the 2017 brand book names no hairline colour."
+  - section: "role.on-surface-muted"
+    reason: "The brand book's grey #898D8D is 3.36:1 on white — below the 4.5:1 floor for small text. It is a colour to paint with, not one to read; the book prices no darker grey, so this theme has no secondary text colour."
+  - section: "role.status"
+    reason: "A printed page has no error, warning or success state."
+  - section: "components"
+    reason: "No canonical button exists across the TEBIN apps; codifying one would invent a house style rather than record one."
+---
+# TEBIN Classic — design
+
+> Generated from `tokens.json`, `theme.json` and `rules/rules.json` — do not edit by hand.
+
+The 2017 TEBIN corporate identity, reproduced from the printed brand book:
+Pantone red and grey, Roboto for screen, Arial in Office documents. Use this
+theme for anything that has to match printed TEBIN material — a document, a
+certificate, a slide deck, a business card.
+
+The grey is specified twice in the book — Pantone 423 C and "Black 60%" — two
+routes to the same ink; the tokens carry the Pantone name.
+
+**Version** 1.1.1. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Source** TEBIN Branding Principles & Style Guide (2017, Rev. A).
+
+## Palette
+
+| Token | HEX | RGB (Word, Excel) | Pantone | CMYK | Purpose |
+| --- | --- | --- | --- | --- | --- |
+| `color.brand` | `#DA291C` | 218, 41, 28 | 485 C | 0/95/100/0 | Brand red — emphasis and the logo. Never recolor the logo with the secondary palette. |
+| `color.grey` | `#898D8D` | 137, 141, 141 | 423 C | 22/14/18/45 | Brand grey — secondary text and UI, the IN of the wordmark. |
+| `color.ink` | `#1A1A1A` | 26, 26, 26 | not specified in the 2017 brand book | not specified in the 2017 brand book | Body text. |
+| `color.topbar` | `#FFFFFF` | 255, 255, 255 | not specified in the 2017 brand book | not specified in the 2017 brand book | Surfaces. |
+| `color.maroon` | `#B02954` | 176, 41, 84 | not specified in the 2017 brand book | 23/97/54/8 | — |
+| `color.brick` | `#A43F39` | 164, 63, 57 | not specified in the 2017 brand book | 24/85/81/57 | — |
+| `color.salmon` | `#EB807A` | 235, 128, 122 | not specified in the 2017 brand book | 2/62/46/0 | — |
+| `color.orange` | `#F38B4C` | 243, 139, 76 | not specified in the 2017 brand book | 0/54/80/0 | — |
+| `color.yellow` | `#FBD551` | 251, 213, 81 | not specified in the 2017 brand book | 2/13/84/0 | — |
+| `color.teal` | `#69B7C2` | 105, 183, 194 | not specified in the 2017 brand book | 58/10/21/0 | — |
+| `color.grey-light` | `#B3B4B6` | 179, 180, 182 | not specified in the 2017 brand book | 31/23/23/0 | — |
+| `color.grey-lighter` | `#CDCDCE` | 205, 205, 206 | not specified in the 2017 brand book | 19/15/15/0 | — |
+
+Where a cell reads "not specified in the 2017 brand book", no value was printed there — do not convert one from the RGB.
+
+## Roles
+
+A role is a pointer, not a copy — change the colour it names and every role using it follows.
+
+| Role | Points at | Use for |
+| --- | --- | --- |
+| `role.primary` | `color.brand` | Identity red. Fills and large text. |
+| `role.surface` | `color.topbar` | The white page a document prints on. |
+| `role.on-surface` | `color.ink` | Body text on the page. |
+
+## Typography
+
+- **sans** — Roboto, Arial, Helvetica, sans-serif
+- **document** — Arial, Helvetica, sans-serif
+- **Weights** — regular 400, medium 500, bold 700, black 900
+
+In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.
+
+## Assets
+
+| Asset | Source | PNG |
+| --- | --- | --- |
+| `logo-full` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/logo/logo-full.svg?raw=1) | [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-512.png?raw=1) · [1024 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-1024.png?raw=1) · [2048 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-2048.png?raw=1) |
+| `logo-full-white` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/logo/logo-full-white.svg?raw=1) | [512 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-512-on-brand.png?raw=1) · [512 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-512-on-charcoal.png?raw=1) · [1024 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-brand.png?raw=1) · [1024 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-1024-on-charcoal.png?raw=1) · [2048 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-brand.png?raw=1) · [2048 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/logo-full-white-2048-on-charcoal.png?raw=1) |
+| `corner-mark` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/misc/corner-mark.svg?raw=1) | [128 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-128.png?raw=1) · [256 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-256.png?raw=1) · [512 px](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-512.png?raw=1) |
+| `corner-mark-white` | [SVG](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/misc/corner-mark-white.svg?raw=1) | [128 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-white-128-on-brand.png?raw=1) · [128 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-white-128-on-charcoal.png?raw=1) · [256 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-white-256-on-brand.png?raw=1) · [256 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-white-256-on-charcoal.png?raw=1) · [512 px on brand](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-white-512-on-brand.png?raw=1) · [512 px on charcoal](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/assets/png/corner-mark-white-512-on-charcoal.png?raw=1) |
+
+For scripts and agents, the same files without the HTML page around them: `https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/…`. Note that a raw SVG is served as `text/plain`, so a browser shows its source — use the vector links above to download one by hand.
+
+Colour table as a spreadsheet: [colors.csv](https://github.com/4aykas/tebin-style/blob/main/themes/tebin-classic/dist/colors.csv?raw=1).
+
+## Rules
+
+### brand
+
+- **[MUST]** On dark or saturated brand-color (e.g. corporate red) backgrounds, use the all-white monochrome logo — the corner mark and every letter white. — _The two-color logo loses the grey "IN" and puts red on red._
+- **[NEVER]** Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
+- **[SHOULD]** The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
+- **[MUST]** Keep clear space around the logo at least the height of the "B" in the wordmark on all sides.
+- **[NEVER]** Never re-create the wordmark by typing TEBIN in a font. The letterforms are drawn outlines, not type. Insert the supplied asset: SVG on the web, and PNG in Word, Excel, PowerPoint or anything else that cannot embed SVG. — _An agent handed only the repository link repeatedly styled the name as text instead of fetching the logo, which produces letterforms that are not the logo at all. The other brand rules govern placing the logo and quietly assume you already have the file; none of them forbids drawing it yourself, so a careful agent could follow every rule and still ship the wrong mark._
+- **[SHOULD]** On a busy or photographic background where the white logo lacks contrast, place the approved two-colour logo on a solid white rectangle with the required clear space. Do not place the white logo on white.
+- **[NEVER]** Never apply disproportional transforms to the logo or rescale its elements independently.
+- **[NEVER]** Never add shadows or other effects to the logo.
+- **[NEVER]** Never recolor the logo outside the approved palette (red, grey, all-white, all-black).
+- **[SHOULD]** For Classic corporate material, use Roboto where available and Arial in Office documents. For Modern, use the font stacks defined by the theme and respect the target project's font-loading policy.
+
+### theming
+
+- **[MUST]** (web) Set color-scheme: dark on <html> for dark themes.
+- **[MUST]** (web) Give native <select> an explicit background-color and color (Windows fix).
+- **[MUST]** (web) Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
+- **[SHOULD]** (web) Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
+
+## Using this elsewhere
+
+- Word, Excel, PowerPoint, Google Docs — [the Office guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/office.md).
+- A coding agent — [the agent guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/ai-agents.md).
+- A web project — [the developer guide](https://github.com/4aykas/tebin-style/blob/main/docs/guide/developers.md).
+
+Every link in this file is absolute, so the file keeps working when it is pasted into a chat or saved beside a document.
+
+---
+
+<!-- rules/dist/rules.md -->
+
+# Design rules
+
+> Generated from `rules/rules.json` — do not edit by hand.
+
+## accessibility
+
+- **[NEVER]** (web) Never disable browser zoom (user-scalable=no or maximum-scale=1).
+- **[MUST]** (web) Text meets 4.5:1 against its own background (3:1 at 24px or larger). On the dark bands that means --on-dark-6 or stronger; on the cream band, --on-light-3 or stronger. The fainter steps are for decoration, not type. — _Before this rule the faintest labels on tebin.pro measured 1.8:1._
+- **[MUST]** (tebin, web) Set body content, list items, table headers and clickable text at 11px or larger, and 13px or larger for running lists. Reserve 9px mono for non-essential kickers and codes.
+
+## animation
+
+- **[MUST]** (web) Honor prefers-reduced-motion: the new state still arrives, at once and in full; only the travel is dropped. Constant-speed progress signals such as a spinner may stay. — _Disabling the animation must not disable the information: a count that never counts up, or a panel that never opens, fails the people the preference protects._
+- **[MUST]** (web) Animate only compositor-friendly properties (transform, opacity). — _Avoids layout thrash and jank._
+- **[NEVER]** (web) Never use transition: all; list the properties explicitly.
+- **[NEVER]** (tebin, web) Never use overshoot or bounce easing (a cubic-bezier whose second control point exceeds 1) on UI state — reveals, buttons, modals, tooltips. — _Overshoot on UI state is a recognised generated-design tell; reserve it for genuine physical interactions such as a drag release._
+- **[SHOULD]** (tebin, web) Limit scroll reveals to one orchestrated entrance plus the major content blocks; never stagger every item of a mapped list or fade in every section head. — _When everything animates on scroll the page never settles, and a staggered list is the clearest sign the reveal was applied by rule rather than by intent._
+- **[SHOULD]** (web) When a disclosure animates height, run opacity on its own, shorter clock so it finishes first; on close, fade before the height collapses. — _Content then never shows half-formed while the layout around it is still moving._
+- **[MUST]** (tebin, web) Take durations, easing curves and springs from the theme's motion tokens; never invent a timing in a component. — _One small set of timings is what makes motion read as one product; ad-hoc values drift apart screen by screen._
+
+## brand
+
+- **[MUST]** (tebin, tebin-classic) On dark or saturated brand-color (e.g. corporate red) backgrounds, use the all-white monochrome logo — the corner mark and every letter white. — _The two-color logo loses the grey "IN" and puts red on red._
+- **[NEVER]** (tebin, tebin-classic) Never place the two-color (red/grey) logo on a dark or red background; switch to the all-white logo instead.
+- **[SHOULD]** (tebin, tebin-classic) The corner mark may stand alone as a decorative marker signalling TEBIN authorship — typically the top-right corner of a photo or slide. Keep it brand red on light backgrounds and white on dark or red ones.
+- **[MUST]** (tebin, tebin-classic) Keep clear space around the logo at least the height of the "B" in the wordmark on all sides.
+- **[NEVER]** (tebin, tebin-classic) Never re-create the wordmark by typing TEBIN in a font. The letterforms are drawn outlines, not type. Insert the supplied asset: SVG on the web, and PNG in Word, Excel, PowerPoint or anything else that cannot embed SVG. — _An agent handed only the repository link repeatedly styled the name as text instead of fetching the logo, which produces letterforms that are not the logo at all. The other brand rules govern placing the logo and quietly assume you already have the file; none of them forbids drawing it yourself, so a careful agent could follow every rule and still ship the wrong mark._
+- **[SHOULD]** (tebin, tebin-classic) On a busy or photographic background where the white logo lacks contrast, place the approved two-colour logo on a solid white rectangle with the required clear space. Do not place the white logo on white.
+- **[NEVER]** (tebin, tebin-classic) Never apply disproportional transforms to the logo or rescale its elements independently.
+- **[NEVER]** (tebin, tebin-classic) Never add shadows or other effects to the logo.
+- **[NEVER]** (tebin, tebin-classic) Never recolor the logo outside the approved palette (red, grey, all-white, all-black).
+- **[SHOULD]** (tebin, tebin-classic) For Classic corporate material, use Roboto where available and Arial in Office documents. For Modern, use the font stacks defined by the theme and respect the target project's font-loading policy.
+
+## content
+
+- **[MUST]** (web) Prefer native semantics (button, a, label, table) before ARIA.
+- **[MUST]** (web) Give icon-only buttons a descriptive aria-label.
+- **[MUST]** (web) Convey status with more than color alone; pair icons with text labels.
+- **[MUST]** (web) Use font-variant-numeric: tabular-nums when comparing numbers in columns.
+- **[NEVER]** (tebin, web) Never re-draw operating-system or browser chrome — traffic-light window bars, phone frames, fake IDE tabs — around a screenshot or code block; frame them typographically instead, with a rule, a filename and a rule. — _The reader already has real chrome; a painted-on copy is always slightly wrong and advertises that the surface is fake._
+- **[SHOULD]** (tebin, web) Use a numbered section eyebrow only where the content is genuinely ordinal, cap it at one or two per page, and stack the heading directly beneath it rather than beside it. — _Numbering every section erases the hierarchy it implies — when each one is a chapter, none is._
+- **[NEVER]** Never invent claims, certifications, prices, statistics, client names or quotes in branded material. Use only copy the user supplied or a source states, and mark a gap as a placeholder. — _A brand kit makes invented copy look official: a made-up figure set in the house style reads as a company statement._
+
+## feedback
+
+- **[MUST]** (web) Confirm destructive actions or provide an Undo window.
+- **[MUST]** (web) Announce toasts and inline validation with a polite aria-live region.
+- **[SHOULD]** (web) Announce a changing state once it has settled (hold about 500ms), as one sentence that states the outcome, such as "Page 4 of 12" or "Building, step 2 of 4". — _A status that hops through three values in a second should be heard once, not as three interruptions._
+- **[SHOULD]** (web) Use optimistic UI; reconcile on response and roll back or offer Undo on failure.
+
+## forms
+
+- **[MUST]** (web) Use a font-size of at least 16px on mobile inputs to prevent iOS zoom.
+- **[MUST]** (web) Loading buttons keep their width and their label: show a spinner beside the original label. A short state label such as "Saving…" may replace it only when the button already reserves the width of its longest state. — _Avoids layout shift and keeps the action legible while pending; a button that resizes moves its neighbours under the pointer._
+- **[NEVER]** (web) Never block paste in inputs or textareas.
+- **[MUST]** (web) Enter submits a focused single-line input; in a textarea, Cmd/Ctrl+Enter submits.
+- **[MUST]** (web) Show validation errors inline next to fields and focus the first error on submit.
+- **[MUST]** (web) Set autocomplete and a meaningful name, with the correct type and inputmode.
+- **[MUST]** (web) Warn before navigating away from unsaved changes.
+
+## interactions
+
+- **[MUST]** (web) Provide visible focus rings using :focus-visible, grouped with :focus-within where appropriate. — _Keyboard users must see where focus is._
+- **[NEVER]** (web) Never set outline: none without providing a visible focus replacement.
+- **[MUST]** (web) Support full keyboard interaction per the WAI-ARIA Authoring Practices.
+- **[MUST]** (web) Every press-and-hold or drag ends cleanly when it is abandoned: pointer drift past a small slop (about 8px), pointercancel, window blur, the tab hiding, or Escape. The click that follows a completed long press is swallowed. — _A hold that survives an app switch, or a long press that also fires its tap, is the usual reason touch gestures feel broken._
+- **[SHOULD]** (web) Controls that are unavailable only for now (a pager arrow at its last page, a submit before the form is valid) use aria-disabled and refuse the action in the handler, instead of the disabled attribute. — _disabled removes the control from the tab order and the accessibility tree, so the person cannot find out why it does nothing; aria-disabled keeps it discoverable and keeps the theme colours instead of the browser grey._
+
+## layout
+
+- **[MUST]** (web) Verify layouts on mobile, laptop, and ultra-wide (simulate ultra-wide at 50% zoom).
+- **[MUST]** (web) Respect safe areas using env(safe-area-inset-*).
+- **[MUST]** (web) Give flex children min-width: 0 so they can truncate.
+- **[MUST]** (web) Reserve the space of every state a component can reach from its first paint: the error line, the counter, the check mark, the widest label. A state change alters colour and marks, never the component's size. — _Layout shift is not only images: a validation message or a loading label that pushes the form down is the same jump._
+
+## navigation
+
+- **[MUST]** (web) Use <a>/<Link> for navigation so Cmd/Ctrl/middle-click work.
+- **[NEVER]** (web) Never use a div with onClick for navigation.
+- **[MUST]** (web) Reflect state in the URL (filters, tabs, pagination, expanded panels) for deep-linking.
+
+## performance
+
+- **[MUST]** (web) Set explicit image dimensions to prevent layout shift (CLS).
+- **[MUST]** (web) Virtualize large lists (more than about 50 items).
+- **[MUST]** (web) Preload above-the-fold images and lazy-load the rest.
+- **[NEVER]** (web) Never add a font CDN request, a new family, or a weight the site does not render. tebin.pro self-hosts Roboto and Roboto Condensed at 400 and 700 only, plus Cormorant Garamond italic 400 on about-us. — _Every @font-face is render-blocking CSS on every page, and a weight nobody uses still ships. The set was measured over the built site in 2026-10: 300 and 500 rendered on fewer than 100 text nodes and were removed; the browser synthesises bolder weights from 700._
+
+## theming
+
+- **[MUST]** (web) Set color-scheme: dark on <html> for dark themes.
+- **[MUST]** (web) Give native <select> an explicit background-color and color (Windows fix).
+- **[MUST]** (web) Resolve every colour through a named token; do not write hex or rgba() literals in component styles. — _Ad-hoc literals accumulated to roughly 3000 values across tebin.pro, which turned a contrast change into a repository-wide sweep instead of a single edit._
+- **[MUST]** (tebin, web) Take translucent colours from the scale — on-dark, on-light, rule-dark, rule-light, surface-dark, brand-a — rather than inventing an alpha per use. — _Forty-odd different white alphas read as looseness even when no single value looks wrong._
+- **[NEVER]** (tebin, web) Never use #fff as a page or panel surface; use --color-paper. — _Pure white reads flat and synthetic beside the cream band and the dark sections._
+- **[SHOULD]** (tebin, web) On dark surfaces express elevation with a lighter surface step, not a shadow. — _A shadow on a dark ground reads as a coloured halo rather than as depth._
+- **[SHOULD]** (web) Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
+
+## touch
+
+- **[MUST]** (web) Use hit targets of at least 24px (44px on mobile); expand the hit area if the visual is smaller.
+- **[MUST]** (web) Set touch-action: manipulation to prevent double-tap zoom delays.
+
+## typography
+
+- **[NEVER]** (tebin, web) A heading never breaks a word — not mid-letter and not with a hyphen. Do not put hyphens: auto, overflow-wrap: anywhere or &shy; on display type; resize the type or rewrite the line. — _Settled by the owner on 2026-07-29, reversing a sweep of 177 wrap rules made the day before; &shy; is not an escape hatch because the HTML minifier strips it._
+- **[SHOULD]** (tebin, web) Body copy carries overflow-wrap: anywhere and hyphens: auto so long technical strings cannot overflow their column. — _The pair is right for running text and wrong for display type — the distinction is the rule._
+- **[MUST]** (tebin, web) Size display type against the locale with the longest words, not against the source language. — _A vw-based display size that fits English becomes an English-only cap in a fractional grid column: German compounds overlapped the next column by up to 343px on production._
+- **[NEVER]** (tebin, web) Never set a negative letter-spacing; tracking is zero or positive.
+- **[NEVER]** (tebin, web) Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
+- **[SHOULD]** (tebin, web) Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
+- **[SHOULD]** (tebin, web) Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._

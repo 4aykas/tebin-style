@@ -17,6 +17,10 @@ beforeAll(async () => {
     radius: { card: { $type: 'dimension', $value: '8px' } },
     type: { h1: { $type: 'dimension', $value: '38px' } },
     lineHeight: { body: { $type: 'number', $value: 1.5 } },
+    motion: {
+      duration: { base: { $type: 'duration', $value: '200ms' } },
+      easing: { enter: { $type: 'cubicBezier', $value: [0.23, 1, 0.32, 1] } },
+    },
     role: { surface: { $type: 'color', $value: '{color.brand}' } },
     components: { cta: { padding: { $type: 'dimension', $value: '14px 28px' },
       alias: { $type: 'dimension', $value: '{components.cta.padding}' } } },
@@ -53,6 +57,12 @@ describe('buildTheme', () => {
     }
     expect(css).toContain('font-size: var(--text-h1)');
     expect(css).toContain('background-color: var(--color-role-surface)');
+  });
+  it('writes motion tokens as CSS values and easing in the Tailwind ease namespace', async () => {
+    expect(read('tokens.css')).toContain('--motion-duration-base: 200ms;');
+    expect(read('tokens.css')).toContain('--motion-easing-enter: cubic-bezier(0.23, 1, 0.32, 1);');
+    const compiler = await compile(read('tailwind.css') + '\n@tailwind utilities;');
+    expect(compiler.build(['ease-enter'])).toContain('var(--ease-enter)');
   });
   it('writes normalized DTCG JSON', () => {
     const dtcg = JSON.parse(read('tokens.dtcg.json'));

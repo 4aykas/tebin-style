@@ -108,6 +108,7 @@ export function registerFormats(): void {
           if (rawType(t) === 'color' && t.path[0] !== 'color') names.add(`color-${t.name}`);
           if (t.path[0] === 'type') names.add(t.name.replace(/^type-/, 'text-'));
           if (t.path[0] === 'lineHeight') names.add(`leading-${t.path.slice(1).join('-')}`);
+          if (rawType(t) === 'cubicBezier' && t.path[0] === 'motion') names.add(`ease-${t.path.slice(2).join('-')}`);
           return [...names].map((name) => `  --${name}: ${outValue(t)};`);
         })
         .join('\n')}\n}\n`,

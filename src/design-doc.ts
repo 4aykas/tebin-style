@@ -155,6 +155,38 @@ function spacingSection(themeDir: string): string {
   return out;
 }
 
+function motionSection(themeDir: string): string {
+  type MotionLeaf = { $value?: unknown; $description?: string };
+  const tokens = readTokens(themeDir) as {
+    motion?: {
+      duration?: Record<string, MotionLeaf>;
+      easing?: Record<string, MotionLeaf>;
+      spring?: Record<string, Record<string, MotionLeaf>>;
+    };
+  };
+  const motion = tokens.motion;
+  if (!motion) return '';
+  const rows: string[] = [];
+  for (const [name, leaf] of Object.entries(motion.duration ?? {})) {
+    rows.push(`| \`motion.duration.${name}\` | ${leaf.$value} | ${escapeCell(leaf.$description ?? '—')} |`);
+  }
+  for (const [name, leaf] of Object.entries(motion.easing ?? {})) {
+    const curve = Array.isArray(leaf.$value) ? `\`cubic-bezier(${leaf.$value.join(', ')})\`` : String(leaf.$value);
+    rows.push(`| \`motion.easing.${name}\` | ${curve} | ${escapeCell(leaf.$description ?? '—')} |`);
+  }
+  for (const [name, parts] of Object.entries(motion.spring ?? {})) {
+    const v = (p: string) => parts[p]?.$value ?? '—';
+    const note = Object.values(parts).find((p) => p.$description)?.$description ?? '—';
+    rows.push(`| \`motion.spring.${name}\` | stiffness ${v('stiffness')}, damping ${v('damping')}, mass ${v('mass')} | ${escapeCell(note)} |`);
+  }
+  if (!rows.length) return '';
+  return (
+    '\n## Motion\n\n| Token | Value | Use for |\n| --- | --- | --- |\n' + rows.join('\n') + '\n' +
+    '\nSprings are for motion libraries that take stiffness, damping and mass, such as Motion. ' +
+    'Every curve and spring here settles without overshoot; under `prefers-reduced-motion` the state arrives at once.\n'
+  );
+}
+
 function componentSection(themeDir: string): string {
   const tokens = readTokens(themeDir) as {
     components?: Record<string, Record<string, { $value?: string; $description?: string }>>;
@@ -237,6 +269,7 @@ export function buildDesignDoc(themeDir: string): string {
   out += typeScaleSection(themeDir);
   out += geometrySection(themeDir);
   out += spacingSection(themeDir);
+  out += motionSection(themeDir);
   out += componentSection(themeDir);
   out += assetSection(themeDir, theme);
   out += rulesSection(theme.id);

@@ -108,12 +108,13 @@ open a web page or start an HTTP server.
 | Tool | Input | Returns |
 |------|-------|---------|
 | `list_themes` | `{ industry?, mood?, query? }` | matching theme summaries; assets come from `get_asset` |
-| `get_theme` | `{ id, format? }` | tokens in `css` \| `tailwind` \| `dtcg` \| `ts` \| `design-md` \| `colors-csv` |
+| `get_theme` | `{ id, format? }` | tokens in `css` \| `tailwind` \| `dtcg` \| `ts` \| `design-md` \| `colors-csv` \| `shadcn` (web themes) |
 | `get_asset` | `{ id, assetId? }` | asset list with licence and size, or one asset (SVG text / native PNG image / link) |
 | `list_rules` | `{ theme?, medium?, category?, severity?, tag?, query? }` | rules matching the theme, medium and other filters |
 | `get_rule` | `{ id }` | a single design rule |
 | `lint_theme` | `{ id }` | contrast failures and broken references, with the ratio and the surface used |
 | `diff_themes` | `{ a, b }` | token diff by group, plus a regression flag |
+| `check_image` | `{ id, path, threshold? }` | a local PNG's main colours, each with its nearest palette token and ΔE2000; `offPalette` counts those over the threshold |
 
 `diff_themes` sets `regression` when a lint error appears or worsens, or a
 measured pair loses its check (`findings.unchecked`).

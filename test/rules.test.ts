@@ -91,10 +91,18 @@ describe('post-audit rules (2026-07-29)', () => {
     }
   });
 
-  it('has 64 rules with unique ids', () => {
+  it('has 70 rules with unique ids', () => {
     const rules = loadRules();
-    expect(rules).toHaveLength(64);
-    expect(new Set(rules.map((r) => r.id)).size).toBe(64);
+    expect(rules).toHaveLength(70);
+    expect(new Set(rules.map((r) => r.id)).size).toBe(70);
+  });
+
+  it('carries the interaction rules from the interior.dev review (2026-10)', () => {
+    const ids = loadRules().map((r) => r.id);
+    for (const id of ['interactions-gesture-cancel', 'interactions-aria-disabled', 'feedback-live-settled',
+      'animation-disclosure-opacity-first', 'animation-motion-tokens', 'layout-reserve-state-space']) {
+      expect(ids, id).toContain(id);
+    }
   });
 
   it('opens a typography category of seven', () => {

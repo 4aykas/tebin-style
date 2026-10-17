@@ -10,11 +10,13 @@
 
 ## animation
 
-- **[MUST]** (web) Honor prefers-reduced-motion with a reduced or disabled variant.
+- **[MUST]** (web) Honor prefers-reduced-motion: the new state still arrives, at once and in full; only the travel is dropped. Constant-speed progress signals such as a spinner may stay. — _Disabling the animation must not disable the information: a count that never counts up, or a panel that never opens, fails the people the preference protects._
 - **[MUST]** (web) Animate only compositor-friendly properties (transform, opacity). — _Avoids layout thrash and jank._
 - **[NEVER]** (web) Never use transition: all; list the properties explicitly.
 - **[NEVER]** (tebin, web) Never use overshoot or bounce easing (a cubic-bezier whose second control point exceeds 1) on UI state — reveals, buttons, modals, tooltips. — _Overshoot on UI state is a recognised generated-design tell; reserve it for genuine physical interactions such as a drag release._
 - **[SHOULD]** (tebin, web) Limit scroll reveals to one orchestrated entrance plus the major content blocks; never stagger every item of a mapped list or fade in every section head. — _When everything animates on scroll the page never settles, and a staggered list is the clearest sign the reveal was applied by rule rather than by intent._
+- **[SHOULD]** (web) When a disclosure animates height, run opacity on its own, shorter clock so it finishes first; on close, fade before the height collapses. — _Content then never shows half-formed while the layout around it is still moving._
+- **[MUST]** (tebin, web) Take durations, easing curves and springs from the theme's motion tokens; never invent a timing in a component. — _One small set of timings is what makes motion read as one product; ad-hoc values drift apart screen by screen._
 
 ## brand
 
@@ -43,12 +45,13 @@
 
 - **[MUST]** (web) Confirm destructive actions or provide an Undo window.
 - **[MUST]** (web) Announce toasts and inline validation with a polite aria-live region.
+- **[SHOULD]** (web) Announce a changing state once it has settled (hold about 500ms), as one sentence that states the outcome, such as "Page 4 of 12" or "Building, step 2 of 4". — _A status that hops through three values in a second should be heard once, not as three interruptions._
 - **[SHOULD]** (web) Use optimistic UI; reconcile on response and roll back or offer Undo on failure.
 
 ## forms
 
 - **[MUST]** (web) Use a font-size of at least 16px on mobile inputs to prevent iOS zoom.
-- **[MUST]** (web) Loading buttons show a spinner and keep their original label. — _Avoids layout shift and keeps the action legible while pending._
+- **[MUST]** (web) Loading buttons keep their width and their label: show a spinner beside the original label. A short state label such as "Saving…" may replace it only when the button already reserves the width of its longest state. — _Avoids layout shift and keeps the action legible while pending; a button that resizes moves its neighbours under the pointer._
 - **[NEVER]** (web) Never block paste in inputs or textareas.
 - **[MUST]** (web) Enter submits a focused single-line input; in a textarea, Cmd/Ctrl+Enter submits.
 - **[MUST]** (web) Show validation errors inline next to fields and focus the first error on submit.
@@ -60,12 +63,15 @@
 - **[MUST]** (web) Provide visible focus rings using :focus-visible, grouped with :focus-within where appropriate. — _Keyboard users must see where focus is._
 - **[NEVER]** (web) Never set outline: none without providing a visible focus replacement.
 - **[MUST]** (web) Support full keyboard interaction per the WAI-ARIA Authoring Practices.
+- **[MUST]** (web) Every press-and-hold or drag ends cleanly when it is abandoned: pointer drift past a small slop (about 8px), pointercancel, window blur, the tab hiding, or Escape. The click that follows a completed long press is swallowed. — _A hold that survives an app switch, or a long press that also fires its tap, is the usual reason touch gestures feel broken._
+- **[SHOULD]** (web) Controls that are unavailable only for now (a pager arrow at its last page, a submit before the form is valid) use aria-disabled and refuse the action in the handler, instead of the disabled attribute. — _disabled removes the control from the tab order and the accessibility tree, so the person cannot find out why it does nothing; aria-disabled keeps it discoverable and keeps the theme colours instead of the browser grey._
 
 ## layout
 
 - **[MUST]** (web) Verify layouts on mobile, laptop, and ultra-wide (simulate ultra-wide at 50% zoom).
 - **[MUST]** (web) Respect safe areas using env(safe-area-inset-*).
 - **[MUST]** (web) Give flex children min-width: 0 so they can truncate.
+- **[MUST]** (web) Reserve the space of every state a component can reach from its first paint: the error line, the counter, the check mark, the widest label. A state change alters colour and marks, never the component's size. — _Layout shift is not only images: a validation message or a loading label that pushes the form down is the same jump._
 
 ## navigation
 

@@ -8,6 +8,7 @@ Each theme generates four token files plus `colors.csv` in `themes/<id>/dist/`:
 | `tailwind.css` | Tailwind v4 | paste the `@theme { … }` block into the file that has `@import "tailwindcss";` |
 | `theme.ts` | React / CSS-in-JS / TypeScript | import the exported `as const` object; use the exported type |
 | `tokens.dtcg.json` | Figma plugins, Style Dictionary, other tooling | feed into the tool that consumes DTCG |
+| `shadcn.json` (web themes only) | a shadcn/ui project | `npx shadcn@latest add <raw URL of the file>`; light colours, radius, fonts and easing only |
 
 Prefer the format that matches the target's existing styling approach. Do not
 mix competing token sources in one target. The colour CSV and design guide can accompany any token format.
@@ -20,7 +21,9 @@ aliases and emits fluid ceilings.
 
 Tailwind adds utility namespaces while keeping existing variables:
 `type.h1` → `text-h1`, `role.surface` → `bg-role-surface`, and
-`lineHeight.body` → `leading-body` when those tokens exist in the theme.
+`lineHeight.body` → `leading-body`, `motion.easing.enter` → `ease-enter` when
+those tokens exist in the theme. Motion durations and springs are plain
+variables (`--motion-duration-base`, `--motion-spring-ui-stiffness`).
 For Office and print colours, use `colors.csv` or MCP
 `get_theme({ id, format: "colors-csv" })`.
 

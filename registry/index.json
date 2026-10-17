@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14",
+  "generatedAt": "2026-10-17",
   "count": 3,
   "themes": [
     {
@@ -28,14 +28,15 @@
         "dtcg": "themes/slate/dist/tokens.dtcg.json",
         "ts": "themes/slate/dist/theme.ts",
         "design-md": "themes/slate/DESIGN.md",
-        "colors-csv": "themes/slate/dist/colors.csv"
+        "colors-csv": "themes/slate/dist/colors.csv",
+        "shadcn": "themes/slate/dist/shadcn.json"
       },
       "assets": []
     },
     {
       "id": "tebin",
       "name": "TEBIN",
-      "version": "1.7.1",
+      "version": "1.8.0",
       "description": "Industrial design-and-engineering brand: condensed type, signal red on charcoal.",
       "industry": [
         "engineering",
@@ -58,7 +59,8 @@
         "dtcg": "themes/tebin/dist/tokens.dtcg.json",
         "ts": "themes/tebin/dist/theme.ts",
         "design-md": "themes/tebin/DESIGN.md",
-        "colors-csv": "themes/tebin/dist/colors.csv"
+        "colors-csv": "themes/tebin/dist/colors.csv",
+        "shadcn": "themes/tebin/dist/shadcn.json"
       },
       "assets": [
         {

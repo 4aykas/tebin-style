@@ -30,6 +30,7 @@ pnpm build
 ## Output formats
 
 Each theme generates four token files and a colour CSV in `themes/<id>/dist/`.
+A web theme (`"media": ["web"]` in `theme.json`) also gets `shadcn.json`.
 
 | File | Use it when | How |
 |------|-------------|-----|
@@ -37,6 +38,7 @@ Each theme generates four token files and a colour CSV in `themes/<id>/dist/`.
 | `tailwind.css` | Tailwind v4 | paste the `@theme { … }` block into the file that has `@import "tailwindcss";` |
 | `theme.ts` | React, CSS-in-JS, TypeScript | import the `as const` object and its type |
 | `tokens.dtcg.json` | Figma plugins, Style Dictionary, other tooling | feed it to the tool that reads DTCG |
+| `shadcn.json` | a shadcn/ui project | `npx shadcn@latest add https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/dist/shadcn.json` |
 
 Pick one token format as the styling source for a target. The generated
 `colors.csv` and design guide can accompany it. The JSON uses this repository's
@@ -50,6 +52,15 @@ The DTCG export retains `$description` and `$extensions`, including print
 references and fluid ranges. TypeScript resolves aliases to literal values
 and exposes fluid ceilings rather than CSS `clamp()` expressions.
 
+`shadcn.json` is a `registry:theme` item. It sets only the shadcn variables a
+token answers: background, foreground, card, popover, primary, ring,
+muted-foreground, destructive, border, input and `--radius`, plus the font
+stacks and easing curves. `primary` is the theme's everyday button
+(`components.button-primary`), not its identity colour, so on `tebin` it is
+ink. `--radius` is the control radius plus 2px, because shadcn buttons use
+`rounded-md`, which is `--radius` minus 2px. Dark mode keeps the project's
+own values.
+
 ### Tailwind v4 utilities
 
 The generated theme keeps existing custom property names and adds
@@ -61,6 +72,7 @@ The generated theme keeps existing custom property names and adds
 | `role.on-surface` | `--color-role-on-surface` | `text-role-on-surface` |
 | `type.h1` | `--text-h1` | `text-h1` |
 | `lineHeight.body` | `--leading-body` | `leading-body` |
+| `motion.easing.enter` | `--ease-enter` | `ease-enter` |
 
 Typography and spacing tokens exist only in themes that define them. Importing
 the theme does not load fonts or provide ready-made accessible components.
@@ -76,6 +88,7 @@ the theme does not load fonts or provide ready-made accessible components.
 | `spacing`, `layout` | the spacing scale and container widths |
 | `radius` | corner radii |
 | `font` | font stacks |
+| `motion` | durations, easing curves and springs |
 
 Not every theme has every group. `tebin` has all of them; `slate` and
 `tebin-classic` carry colours, roles, fonts and radii.
@@ -136,6 +149,10 @@ surface and the lightest dark surface actually in use. A role under 4.5:1 is
 an error; a broken `{reference}` is a warning. Both errors and warnings fail
 this command. Ratios are compared before rounding, so 4.499:1 fails 4.5:1.
 
+It fails a motion token that overshoots: a curve with a y control point outside
+0..1, or a spring whose damping ratio is below 1 (rule
+`animation-no-overshoot-ui`).
+
 It also prints what it could not check. A role no rule reaches is reported,
 not skipped, because a checker that quietly covers half the palette reads as
 "everything passes".
@@ -146,10 +163,11 @@ Hand-edited, per theme: `tokens.json` (the DTCG source), `theme.json`
 (metadata and the asset list), `design.intro.md` (the prose opening of
 `DESIGN.md`). Repository-wide: `rules/rules.json`.
 
-Everything else is generated: `dist/*` including `colors.csv`, `assets/png/*`
-and its `manifest.json`, `preview/palette.svg` and `.png`, `DESIGN.md`,
-`registry/index.json`, `rules/dist/rules.md`. Edit the source, run the build,
-commit both.
+Everything else is generated: `themes/*/dist/**` (including `colors.csv` and
+`shadcn.json`), `themes/*/DESIGN.md`, `themes/*/assets/png/**` (with its
+`manifest.json`), `themes/*/preview/**`, `registry/index.json`,
+`rules/dist/**`, `mcp/dist/server.mjs` and `llms-full.txt`. Edit the source,
+run the build, commit both.
 
 PNG bytes are never compared. Staleness comes from the raster manifest — the
 source SVG's sha256 plus the size ladder, background colour and clear space — so a different resvg build cannot

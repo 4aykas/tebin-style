@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slate",
+  "type": "registry:theme",
+  "title": "Slate",
+  "description": "Neutral, modern SaaS palette: cool grays with a blue accent, Inter + JetBrains Mono.",
+  "docs": "Light-mode colours and theme variables from the Slate theme. Dark mode keeps your current values. Every token: https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/slate/dist/tokens.css",
+  "cssVars": {
+    "theme": {
+      "font-sans": "Inter, system-ui, sans-serif",
+      "font-mono": "\"JetBrains Mono\", ui-monospace, monospace"
+    },
+    "light": {
+      "background": "#FFFFFF",
+      "foreground": "#0F172A",
+      "card": "#FFFFFF",
+      "card-foreground": "#0F172A",
+      "popover": "#FFFFFF",
+      "popover-foreground": "#0F172A",
+      "primary": "#2563EB",
+      "primary-foreground": "#FFFFFF",
+      "ring": "#2563EB",
+      "muted-foreground": "#64748B",
+      "destructive": "#C7251A",
+      "border": "#E2E8F0",
+      "input": "#E2E8F0",
+      "radius": "10px"
+    }
+  }
+}

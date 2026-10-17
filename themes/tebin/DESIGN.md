@@ -123,7 +123,7 @@ Roboto Condensed type.
 > to "fix" a missing font request on a public page — don't; it is deliberate.
 > Consumers of this theme that *do* load webfonts get the intended face for free.
 
-**Version** 1.7.1. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
+**Version** 1.8.0. **Tokens** MIT. **Assets** © TEBIN — all rights reserved.
 **Source** https://tebin.pro.
 
 ## Palette
@@ -219,6 +219,21 @@ Weights: heading 700.
 | `spacing.section-feature` | 112px | `clamp(72px, 9vw, 112px)` |
 
 Container widths: `container-default` 1200px, `container-wide` 1400px, `container-reading` 760px.
+
+## Motion
+
+| Token | Value | Use for |
+| --- | --- | --- |
+| `motion.duration.fast` | 120ms | Press, hover and colour changes on one control. |
+| `motion.duration.base` | 200ms | Reveals, tooltips, menus and fades. |
+| `motion.duration.slow` | 300ms | Panels, drawers and height changes. Nothing on UI state runs longer. |
+| `motion.easing.enter` | `cubic-bezier(0.23, 1, 0.32, 1)` | Arriving or moving into place: a fast start and a long settle, with no overshoot. |
+| `motion.easing.exit` | `cubic-bezier(0.4, 0, 1, 1)` | Leaving: accelerate away. Exits are shorter than entrances. |
+| `motion.easing.linear` | `cubic-bezier(0, 0, 1, 1)` | Constant-speed progress only: spinners, shimmer, a determinate bar. |
+| `motion.spring.ui` | stiffness 520, damping 34, mass 0.45 | Default spring for controls, thumbs and markers. Damping ratio about 1.1: it settles without overshoot. |
+| `motion.spring.panel` | stiffness 260, damping 34, mass 0.8 | Larger surfaces: panels, drawers, reordered rows. Damping ratio about 1.2. |
+
+Springs are for motion libraries that take stiffness, damping and mass, such as Motion. Every curve and spring here settles without overshoot; under `prefers-reduced-motion` the state arrives at once.
 
 ## Components
 

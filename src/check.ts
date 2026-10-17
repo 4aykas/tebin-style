@@ -10,8 +10,19 @@ import { REPO_ROOT } from './registry.js';
 import { loadRules } from './rules.js';
 import { buildRulesMarkdown } from './rules-build.js';
 import { buildMcpBundle, MCP_BUNDLE } from './mcp-bundle.js';
+import { shadcnFileContent, SHADCN_FILE } from './shadcn.js';
 
 const DIST_FILES = ['tokens.css', 'tailwind.css', 'tokens.dtcg.json', 'theme.ts'];
+
+/**
+ * Every generated, committed path, as AGENTS.md and the developer guide list
+ * it. A test holds both documents and every drift message in
+ * scripts/check.ts to this list, so a new generated file is added here once.
+ */
+export const GENERATED_PATHS = [
+  'themes/*/dist/**', 'themes/*/DESIGN.md', 'themes/*/assets/png/**', 'themes/*/preview/**',
+  'registry/index.json', 'rules/dist/**', 'mcp/dist/server.mjs', 'llms-full.txt',
+];
 
 export function diffRules(): string[] {
   const committedPath = join(REPO_ROOT, 'rules', 'dist', 'rules.md');
@@ -91,6 +102,11 @@ export async function diffTheme(themeDir: string): Promise<string[]> {
     const committedCsvPath = join(themeDir, 'dist', 'colors.csv');
     const committedCsv = existsSync(committedCsvPath) ? readFileSync(committedCsvPath, 'utf8') : null;
     if (committedCsv !== buildColorsCsv(themeDir)) drift.push('dist/colors.csv');
+    if (existsSync(join(themeDir, 'theme.json'))) {
+      const committedShadcnPath = join(themeDir, 'dist', SHADCN_FILE);
+      const committedShadcn = existsSync(committedShadcnPath) ? readFileSync(committedShadcnPath, 'utf8') : null;
+      if (committedShadcn !== shadcnFileContent(themeDir)) drift.push(`dist/${SHADCN_FILE}`);
+    }
     // Only the SVG is compared; palette.png is raster and follows the no-byte-compare rule.
     const committedSvgPath = join(themeDir, 'preview', 'palette.svg');
     const committedSvg = existsSync(committedSvgPath) ? readFileSync(committedSvgPath, 'utf8') : null;

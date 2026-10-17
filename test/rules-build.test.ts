@@ -8,7 +8,7 @@ describe('buildRulesMarkdown', () => {
     expect(md).toContain('# Design rules');
     expect(md).toContain('## forms');
     expect(md).toContain('**[MUST]**');
-    expect(md).toContain('Loading buttons show a spinner');
+    expect(md).toContain('Loading buttons keep their width');
   });
   it('omits the rationale dash when absent', () => {
     const md = buildRulesMarkdown([

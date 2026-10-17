@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.12.0 — 2026-10-17
 
 ### Assets (tebin)
 - The logo, corner mark and corner outline are redrawn in the brand book's
@@ -16,6 +16,33 @@
   the 97 rules that asked for JetBrains Mono (never shipped, rendered as
   Courier New) now use Roboto Condensed at 11px or more. `font.sans` and
   `font.condensed` descriptions no longer claim the site loads no webfont.
+- New `motion` group (theme 1.8.0): durations `fast` 120ms, `base` 200ms and
+  `slow` 300ms; easing `enter`, `exit` and `linear` (`cubicBezier`); springs
+  `ui` and `panel` as stiffness, damping and mass. Every curve and spring
+  settles without overshoot. Values follow interior.dev, a reviewed set of
+  React micro-interactions.
+
+### Formats
+- Web themes ship `dist/shadcn.json`, a shadcn/ui `registry:theme` item:
+  `npx shadcn@latest add <raw URL>`. It sets only the variables a token
+  answers. `primary` is the everyday button, so on `tebin` it is ink, not red.
+  MCP `get_theme` serves it as format `shadcn`. `theme.json` gains `media`
+  (`web`, `document`, `print`) to say which themes are web themes.
+- New `llms-full.txt`: `llms.txt`, every theme's DESIGN.md and all rules in
+  one file. `pnpm check` fails when it is stale.
+- Tailwind output adds the `--ease-*` namespace, so `ease-enter` works.
+- `DESIGN.md` gains a Motion section where a theme has motion tokens.
+
+### Docs
+- `llms.txt` and the agent guide list all eight MCP tools; `check_image` was
+  missing from both. New `test/doc-lists.test.ts` holds the generated-file
+  lists, the format lists and the tool lists in the docs to the code.
+- New `CODING_STANDARDS.md` for review: brand values name a source,
+  borrowing reviews record what they left, rules state the target.
+
+### Lint
+- A motion token that overshoots is an error: a curve with a y control point
+  outside 0..1, or a spring with a damping ratio below 1.
 
 ### Rules
 - `performance-webfont-policy` now states what tebin.pro ships: self-hosted
@@ -25,6 +52,18 @@
   after a measurement over the built site.
 - New `content-no-invented-claims` (NEVER, every theme and medium): branded
   material carries only copy the user supplied or a source states (#89).
+- Six new web rules from a review of interior.dev:
+  `interactions-gesture-cancel`, `interactions-aria-disabled`,
+  `feedback-live-settled`, `animation-disclosure-opacity-first`,
+  `layout-reserve-state-space` and, for `tebin`, `animation-motion-tokens`.
+  Left out: interior's "accent marks what is yours" rule. On `tebin` red is
+  the identity and commit colour and ink the everyday button, so the rule
+  would contradict the theme.
+- `forms-loading-button` allows a short state label ("Saving…") when the
+  button already reserves the width of its longest state. Spinner beside the
+  label stays the default.
+- `animation-reduced-motion` says what the reduced variant keeps: the new
+  state arrives at once and in full. Only the travel is dropped.
 
 ### MCP server
 - New tool `check_image` (#90): compares a local PNG's main colours with a

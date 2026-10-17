@@ -1,0 +1,33 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tebin",
+  "type": "registry:theme",
+  "title": "TEBIN",
+  "description": "Industrial design-and-engineering brand: condensed type, signal red on charcoal.",
+  "docs": "Light-mode colours and theme variables from the TEBIN theme. Dark mode keeps your current values. Every token: https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/dist/tokens.css",
+  "cssVars": {
+    "theme": {
+      "font-sans": "Roboto, Helvetica, Arial, sans-serif",
+      "font-condensed": "\"Roboto Condensed\", Roboto, sans-serif",
+      "ease-enter": "cubic-bezier(0.23, 1, 0.32, 1)",
+      "ease-exit": "cubic-bezier(0.4, 0, 1, 1)",
+      "ease-linear": "cubic-bezier(0, 0, 1, 1)"
+    },
+    "light": {
+      "background": "#FCFBF8",
+      "foreground": "#292929",
+      "card": "#FCFBF8",
+      "card-foreground": "#292929",
+      "popover": "#FCFBF8",
+      "popover-foreground": "#292929",
+      "primary": "#292929",
+      "primary-foreground": "#FCFBF8",
+      "ring": "#292929",
+      "muted-foreground": "#666666",
+      "destructive": "#A43F39",
+      "border": "#ECECEC",
+      "input": "#ECECEC",
+      "radius": "6px"
+    }
+  }
+}

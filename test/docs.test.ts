@@ -146,3 +146,13 @@ describe('llms.txt states only what the data says', () => {
     }
   });
 });
+
+describe('llms-full.txt', () => {
+  const full = readFileSync(join(root, 'llms-full.txt'), 'utf8');
+  it('starts with llms.txt and carries every theme guide and every rule', () => {
+    expect(full.startsWith(readFileSync(join(root, 'llms.txt'), 'utf8').trimEnd())).toBe(true);
+    for (const id of ['tebin', 'tebin-classic', 'slate']) expect(full).toContain(`<!-- themes/${id}/DESIGN.md -->`);
+    const rules = JSON.parse(readFileSync(join(root, 'rules', 'rules.json'), 'utf8')) as Array<{ statement: string }>;
+    for (const rule of rules) expect(full).toContain(rule.statement);
+  });
+});
