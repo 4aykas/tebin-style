@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { diffTheme, diffRules, diffAssets, diffMcpBundle } from '../src/check.js';
 import { buildIndex } from '../src/index-builder.js';
+import { buildLlmsFull, LLMS_FULL } from '../src/llms-full.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const themesRoot = join(root, 'themes');
@@ -48,6 +49,13 @@ if (existsSync(join(root, 'rules', 'rules.json'))) {
   } else {
     console.log('✓ rules/dist/rules.md');
   }
+}
+
+if ((existsSync(LLMS_FULL) ? readFileSync(LLMS_FULL, 'utf8') : '') !== buildLlmsFull()) {
+  failed = true;
+  console.error('✗ llms-full.txt is out of date — run `pnpm build`');
+} else {
+  console.log('✓ llms-full.txt');
 }
 
 if ((await diffMcpBundle()).length) {

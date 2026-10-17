@@ -176,6 +176,45 @@ export const tebin = {
     "panel": "2px",
     "control": "4px",
     "card": "8px"
+  },
+  "motion": {
+    "duration": {
+      "fast": "120ms",
+      "base": "200ms",
+      "slow": "300ms"
+    },
+    "easing": {
+      "enter": [
+        0.23,
+        1,
+        0.32,
+        1
+      ],
+      "exit": [
+        0.4,
+        0,
+        1,
+        1
+      ],
+      "linear": [
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    "spring": {
+      "ui": {
+        "stiffness": 520,
+        "damping": 34,
+        "mass": 0.45
+      },
+      "panel": {
+        "stiffness": 260,
+        "damping": 34,
+        "mass": 0.8
+      }
+    }
   }
 } as const;
 

@@ -196,4 +196,19 @@
   --radius-panel: 2px;
   --radius-control: 4px;
   --radius-card: 8px;
+  --motion-duration-fast: 120ms;
+  --motion-duration-base: 200ms;
+  --motion-duration-slow: 300ms;
+  --motion-easing-enter: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-enter: cubic-bezier(0.23, 1, 0.32, 1);
+  --motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+  --ease-linear: cubic-bezier(0, 0, 1, 1);
+  --motion-spring-ui-stiffness: 520;
+  --motion-spring-ui-damping: 34;
+  --motion-spring-ui-mass: 0.45;
+  --motion-spring-panel-stiffness: 260;
+  --motion-spring-panel-damping: 34;
+  --motion-spring-panel-mass: 0.8;
 }

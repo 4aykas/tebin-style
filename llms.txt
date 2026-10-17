@@ -147,6 +147,8 @@ cream `#EFEEE9` and 3.04:1 on its dark panel `#242830`. No single red clears
 - [Full asset index](https://raw.githubusercontent.com/4aykas/tebin-style/main/registry/index.json): every theme and asset, SVG and all PNG sizes, with direct `rawUrl` fields
 - [Design rules](https://raw.githubusercontent.com/4aykas/tebin-style/main/rules/dist/rules.md): the MUST / SHOULD / NEVER rules, most with the reason they exist
 - [Colour table (CSV)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin-classic/dist/colors.csv): RGB for Word and Excel
+- [Everything in one file](https://raw.githubusercontent.com/4aykas/tebin-style/main/llms-full.txt): this file, every theme's DESIGN.md and all rules
+- [shadcn/ui theme (TEBIN)](https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/tebin/dist/shadcn.json): `npx shadcn@latest add <this URL>`; light colours, radius, fonts and easing
 
 ## Design guides
 
@@ -164,7 +166,7 @@ still works when pasted into a chat.
   `/plugin marketplace add 4aykas/tebin-style`, then
   `/plugin install tebin-style@tebin`
 - [Skill](https://raw.githubusercontent.com/4aykas/tebin-style/main/skills/tebin-style/SKILL.md): `npx skills add 4aykas/tebin-style` for Codex, Cursor and other agents
-- MCP server `tebin-style`: `node mcp/dist/server.mjs` from a clone, Node 22+. Seven read-only tools: `list_themes`, `get_theme`, `get_asset`, `list_rules`, `get_rule`, `lint_theme`, `diff_themes`
+- MCP server `tebin-style`: `node mcp/dist/server.mjs` from a clone, Node 22+. Eight read-only tools: `list_themes`, `get_theme`, `get_asset`, `list_rules`, `get_rule`, `lint_theme`, `diff_themes`, `check_image`
 - [AI agent guide](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/ai-agents.md): setup for Claude Code, Codex, Cursor, Gemini CLI and other MCP clients
 - [Chat setup](https://raw.githubusercontent.com/4aykas/tebin-style/main/docs/guide/chat-setup.md): files and starter instructions for ChatGPT, Gemini and Claude chats
 

@@ -4,6 +4,7 @@
   "name": "Slate",
   "description": "Neutral, modern SaaS palette: cool grays with a blue accent, Inter + JetBrains Mono.",
   "version": "1.2.0",
+  "media": ["web"],
   "industry": [
     "saas",
     "web",

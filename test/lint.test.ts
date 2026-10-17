@@ -133,6 +133,30 @@ describe('lintTheme', () => {
   });
 });
 
+describe('lintTheme on motion', () => {
+  const motionFixture = (name: string, motion: unknown) =>
+    lintTheme(fixture(name, { ...base, surfaces: { light: '#FFFFFF' } }, { role: {}, motion }));
+
+  it('errors on a curve whose y control point leaves 0..1', () => {
+    const r = motionFixture('overshoot-curve', {
+      easing: {
+        back: { $type: 'cubicBezier', $value: [0.34, 1.56, 0.64, 1] },
+        enter: { $type: 'cubicBezier', $value: [0.23, 1, 0.32, 1] },
+      },
+    });
+    expect(r.findings.filter((f) => f.severity === 'error').map((f) => f.path)).toEqual(['motion.easing.back']);
+  });
+  it('errors on an underdamped spring and passes a damped one', () => {
+    const spring = (k: number, c: number, m: number) => ({
+      stiffness: { $type: 'number', $value: k }, damping: { $type: 'number', $value: c }, mass: { $type: 'number', $value: m },
+    });
+    const r = motionFixture('springs', { spring: { pop: spring(640, 22, 0.7), ui: spring(520, 34, 0.45) } });
+    const errors = r.findings.filter((f) => f.severity === 'error');
+    expect(errors.map((f) => f.path)).toEqual(['motion.spring.pop']);
+    expect(errors[0]!.message).toMatch(/damping ratio 0\.52/);
+  });
+});
+
 describe('lintTheme on components', () => {
   const THEME = { ...base, surfaces: { light: '#FFFFFF' } };
 

@@ -84,6 +84,8 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
         ts: `${base}/dist/theme.ts`,
         'design-md': `${base}/DESIGN.md`,
         'colors-csv': `${base}/dist/colors.csv`,
+        // shadcn/ui is a web stack, so only a web theme gets an item.
+        ...(theme.media?.includes('web') ? { shadcn: `${base}/dist/shadcn.json` } : {}),
       },
       assets: [...assets, ...rasterAssets],
     });

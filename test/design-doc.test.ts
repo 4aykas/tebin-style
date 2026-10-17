@@ -107,9 +107,16 @@ describe('the new token groups reach the document', () => {
     expect(tebin).toContain('1200px');
   });
 
+  it('prints the motion tokens: durations, curves and springs', () => {
+    expect(tebin).toContain('## Motion');
+    expect(tebin).toContain('`cubic-bezier(0.23, 1, 0.32, 1)`');
+    expect(tebin).toContain('stiffness 520, damping 34, mass 0.45');
+  });
+
   it('omits the sections a theme does not have', () => {
     const slate = buildDesignDoc(join(root, 'themes', 'slate'));
     expect(slate).not.toContain('## Spacing');
+    expect(slate).not.toContain('## Motion');
   });
 });
 

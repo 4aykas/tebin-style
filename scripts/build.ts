@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { buildTheme } from '../src/build.js';
 import { writeColorsCsv } from '../src/colors-csv.js';
+import { writeShadcnItem } from '../src/shadcn.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const themesRoot = join(root, 'themes');
@@ -16,5 +17,6 @@ for (const entry of readdirSync(themesRoot, { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
   await buildTheme(join(themesRoot, entry.name));
   writeColorsCsv(join(themesRoot, entry.name));
+  writeShadcnItem(join(themesRoot, entry.name));
   console.log(`built ${entry.name}`);
 }

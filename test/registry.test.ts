@@ -31,6 +31,7 @@ describe('registry read layer', () => {
       css: 'tokens.css', tailwind: 'tailwind.css', dtcg: 'tokens.dtcg.json', ts: 'theme.ts',
       'design-md': 'DESIGN.md',
       'colors-csv': 'colors.csv',
+      shadcn: 'shadcn.json',
     });
   });
 

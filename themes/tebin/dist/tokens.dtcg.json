@@ -680,5 +680,88 @@
       "$type": "dimension",
       "$value": "8px"
     }
+  },
+  "motion": {
+    "duration": {
+      "fast": {
+        "$type": "duration",
+        "$value": "120ms",
+        "$description": "Press, hover and colour changes on one control."
+      },
+      "base": {
+        "$type": "duration",
+        "$value": "200ms",
+        "$description": "Reveals, tooltips, menus and fades."
+      },
+      "slow": {
+        "$type": "duration",
+        "$value": "300ms",
+        "$description": "Panels, drawers and height changes. Nothing on UI state runs longer."
+      }
+    },
+    "easing": {
+      "enter": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.23,
+          1,
+          0.32,
+          1
+        ],
+        "$description": "Arriving or moving into place: a fast start and a long settle, with no overshoot."
+      },
+      "exit": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.4,
+          0,
+          1,
+          1
+        ],
+        "$description": "Leaving: accelerate away. Exits are shorter than entrances."
+      },
+      "linear": {
+        "$type": "cubicBezier",
+        "$value": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "$description": "Constant-speed progress only: spinners, shimmer, a determinate bar."
+      }
+    },
+    "spring": {
+      "ui": {
+        "stiffness": {
+          "$type": "number",
+          "$value": 520,
+          "$description": "Default spring for controls, thumbs and markers. Damping ratio about 1.1: it settles without overshoot."
+        },
+        "damping": {
+          "$type": "number",
+          "$value": 34
+        },
+        "mass": {
+          "$type": "number",
+          "$value": 0.45
+        }
+      },
+      "panel": {
+        "stiffness": {
+          "$type": "number",
+          "$value": 260,
+          "$description": "Larger surfaces: panels, drawers, reordered rows. Damping ratio about 1.2."
+        },
+        "damping": {
+          "$type": "number",
+          "$value": 34
+        },
+        "mass": {
+          "$type": "number",
+          "$value": 0.8
+        }
+      }
+    }
   }
 }

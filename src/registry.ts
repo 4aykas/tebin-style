@@ -22,7 +22,7 @@ export class NotFoundError extends Error {
   }
 }
 
-export type Format = 'css' | 'tailwind' | 'dtcg' | 'ts' | 'design-md' | 'colors-csv';
+export type Format = 'css' | 'tailwind' | 'dtcg' | 'ts' | 'design-md' | 'colors-csv' | 'shadcn';
 
 export const FORMAT_FILES: Record<Format, string> = {
   css: 'tokens.css',
@@ -31,6 +31,7 @@ export const FORMAT_FILES: Record<Format, string> = {
   ts: 'theme.ts',
   'design-md': 'DESIGN.md',
   'colors-csv': 'colors.csv',
+  shadcn: 'shadcn.json',
 };
 
 function containedFile(root: string, path: string): string {

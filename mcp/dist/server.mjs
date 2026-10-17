@@ -21461,7 +21461,8 @@ var FORMAT_FILES = {
   dtcg: "tokens.dtcg.json",
   ts: "theme.ts",
   "design-md": "DESIGN.md",
-  "colors-csv": "colors.csv"
+  "colors-csv": "colors.csv",
+  shadcn: "shadcn.json"
 };
 function containedFile(root, path) {
   if (isAbsolute(path) || win32.isAbsolute(path) || path.split(/[\\/]/).includes("..")) {
@@ -21772,6 +21773,31 @@ function lintTheme(themeDir2) {
       ratio,
       required: AA_NORMAL
     });
+  }
+  const motion = tokens.motion ?? {};
+  for (const [name, leaf] of Object.entries(motion.easing ?? {})) {
+    const v = leaf.$value;
+    if (!Array.isArray(v) || v.length !== 4 || !v.every((n) => typeof n === "number")) continue;
+    const [, y1, , y2] = v;
+    if (y1 < 0 || y1 > 1 || y2 < 0 || y2 > 1) {
+      push({
+        severity: "error",
+        path: `motion.easing.${name}`,
+        message: `cubic-bezier(${v.join(", ")}) overshoots: a y control point is outside 0..1`
+      });
+    }
+  }
+  for (const [name, spring] of Object.entries(motion.spring ?? {})) {
+    const [k, c, m] = ["stiffness", "damping", "mass"].map((p) => spring[p]?.$value);
+    if (typeof k !== "number" || typeof c !== "number" || typeof m !== "number" || k <= 0 || m <= 0) continue;
+    const ratio = c / (2 * Math.sqrt(k * m));
+    if (ratio < 1) {
+      push({
+        severity: "error",
+        path: `motion.spring.${name}`,
+        message: `damping ratio ${ratio.toFixed(2)} is below 1, so the spring overshoots`
+      });
+    }
   }
   if (!("role" in tokens) && !omitted.has("role")) {
     push({ severity: "warning", path: "role", message: "no role group, and no omitted entry explaining why" });
