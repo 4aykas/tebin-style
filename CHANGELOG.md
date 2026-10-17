@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.12.1 — 2026-10-17
+
+### Rules
+- `layout-reserve-state-space` no longer asks for an error slot held under
+  every field. A field's error line may open below it when it appears only
+  after blur. This follows the tebin.pro contact form: a standing slot under
+  three of seven fields broke the row rhythm. Buttons, counters and check
+  marks still keep their size from the first paint.
+
 ## 1.12.0 — 2026-10-17
 
 ### Assets (tebin)

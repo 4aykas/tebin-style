@@ -71,7 +71,7 @@
 - **[MUST]** (web) Verify layouts on mobile, laptop, and ultra-wide (simulate ultra-wide at 50% zoom).
 - **[MUST]** (web) Respect safe areas using env(safe-area-inset-*).
 - **[MUST]** (web) Give flex children min-width: 0 so they can truncate.
-- **[MUST]** (web) Reserve the space of every state a component can reach from its first paint: the error line, the counter, the check mark, the widest label. A state change alters colour and marks, never the component's size. — _Layout shift is not only images: a validation message or a loading label that pushes the form down is the same jump._
+- **[MUST]** (web) A component keeps its size through its own states: the button holds the width of its widest label, the counter and the check mark have their place from the first paint. A field's error line may open below the field when it appears only after blur, once the user has typed. — _A control that resizes moves its neighbours under the pointer. A slot held empty under every field breaks the form's row rhythm, and a blur-only message shifts the form rarely and never under the pointer._
 
 ## navigation
 
