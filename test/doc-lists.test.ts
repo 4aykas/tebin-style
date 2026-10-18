@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { GENERATED_PATHS } from '../src/check.js';
-import { FORMAT_FILES } from '../src/registry.js';
+import { FORMAT_FILES, loadIndex } from '../src/registry.js';
 import { toolDefinitions } from '../mcp/tools.js';
 
 // Lists that documents repeat from the code. Each test names the code as the
@@ -49,9 +49,22 @@ describe('theme formats', () => {
   });
 });
 
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+
+describe('themes', () => {
+  const ids = loadIndex().themes.map((t) => t.id);
+
+  it('llms.txt counts every theme and gives each a bullet', () => {
+    const text = read('llms.txt');
+    const match = /(\w+) themes ship here/.exec(text);
+    expect(match, 'llms.txt has no "<N> themes ship here" line').not.toBeNull();
+    expect(match![1]!.toLowerCase()).toBe(WORDS[ids.length]);
+    for (const id of ids) expect(text, id).toContain(`- **${id}** — `);
+  });
+});
+
 describe('MCP tools', () => {
   const names = toolDefinitions.map((t) => t.name);
-  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 
   it('llms.txt counts and names every tool', () => {
     const match = /(\w+) read-only tools: ([^\n]+)/.exec(read('llms.txt'));
