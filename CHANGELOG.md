@@ -8,6 +8,12 @@
   redirects; `TEBIN` is visible only to signed-in users.
 - A project hook, `.claude/hooks/mirror-guard.mjs`, denies `gh pr`,
   `gh issue` and `git push github`, which would land on the mirror.
+- Gitea `main` takes changes only through a pull request with a green
+  `CI / verify`, as GitHub's did. `scripts/gitea-api.mjs` gains `pr` and
+  `merge`. A `pre-push` hook (`.githooks`, set by `pnpm install`) runs
+  `pnpm verify`.
+- `CODING_STANDARDS.md`: a rule or `tebin` value agrees with the decisions
+  recorded for tebin.pro; the release review runs against it.
 
 ## 1.12.2 — 2026-10-18
 

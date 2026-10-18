@@ -12,6 +12,15 @@ brand book, or an owner decision with its issue. `tebin` describes the live
 site, so a value from another library or design system is a proposal until it
 is checked against tebin.pro. Flag a brand value with no source.
 
+## The site's decisions win
+
+A new or changed rule or `tebin` value agrees with the decisions recorded
+for tebin.pro in the personal wiki, `projects/tebin/design-system.md`
+(`C:/Users/maxudl/wiki/vault`; search it with `tools/wiki.ps1 search`). The
+site is built and reviewed against real pages, so where a rule borrowed from
+elsewhere meets a recorded site decision, the rule bends or carries the
+exception. Flag a contradiction with the section that records the decision.
+
 ## Borrowing reviews record what was left
 
 A change that adopts ideas from an outside project says what it took, what

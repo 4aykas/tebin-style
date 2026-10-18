@@ -1,0 +1,5 @@
+#!/bin/sh
+# Runs the gate before anything leaves the machine. Gitea CI runs it again on
+# the pull request; this catches a red tree before it costs a run.
+# Installed by `pnpm install` (the `prepare` script sets core.hooksPath).
+exec pnpm verify

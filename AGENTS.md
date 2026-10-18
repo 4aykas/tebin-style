@@ -49,10 +49,14 @@ requests, issues, CI and releases. GitHub `4aykas/tebin-style` (`github`)
 is a public push mirror. Raw URLs, the plugin marketplace and the GitHub
 release read from it, so its `main` matches Gitea's. Push to `origin` only;
 `.claude/hooks/mirror-guard.mjs` denies `gh pr`, `gh issue` and
-`git push github`. Read a run with `node scripts/gitea-api.mjs watch`.
+`git push github`. `main` takes changes only through a Gitea PR with green
+CI: push a branch, then `node scripts/gitea-api.mjs pr "<title>" [body-file]`,
+`watch <sha>` and `merge <n>`. `.githooks/pre-push` runs `pnpm verify`.
 
 ## Release
 
+- Before the tag, review the diff since the last tag against
+  `CODING_STANDARDS.md` (`/code-review`, base: the last `v*` tag).
 - Push a tag `v<version>` from a commit on `main`. The tag must equal the
   `package.json` version, and `CHANGELOG.md` needs a `## <version> — <date>`
   entry (`scripts/check-release.mjs`).
