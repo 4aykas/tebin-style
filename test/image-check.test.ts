@@ -78,6 +78,9 @@ describe('decodePng', () => {
     // 1×1 in the header, 64 MB of zeros in the data: refused, not inflated.
     const bomb = png(1, 1, 6, 8, [], [], 0, new Uint8Array(64 * 1024 * 1024));
     expect(() => decodePng(bomb)).toThrow(/larger than its 1×1 header/);
+    // A few spare bytes after the rows still decode.
+    const padded = png(1, 1, 6, 8, [], [], 0, Uint8Array.from([0, 1, 2, 3, 4, 0, 0, 0, 0]));
+    expect([...decodePng(padded).data]).toEqual([1, 2, 3, 4]);
   });
 });
 

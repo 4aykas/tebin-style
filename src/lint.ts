@@ -42,7 +42,8 @@ function surfaceFor(role: string): 'light' | 'dark' | 'surface' | null {
 }
 
 /** A measured pair: info when it reaches its floor, an error when it does not. */
-function measured(path: string, fg: string, bg: string, required = AA_NORMAL, label = ''): Finding {
+function measured(path: string, fg: string, bg: string,
+  { required = AA_NORMAL, label = '' }: { required?: number; label?: string } = {}): Finding {
   const ratio = contrastRatio(fg, bg);
   return { severity: ratio >= required ? 'info' : 'error', path,
     message: `${label}${fg} on ${bg} is ${ratio.toFixed(4)}:1`, ratio, required };
@@ -141,7 +142,7 @@ export function lintTheme(themeDir: string): LintResult {
         push({ severity: 'error', path, message: `min ${JSON.stringify(pair.min)} is not one of ${PAIR_FLOORS.join(', ')}` });
         continue;
       }
-      push(measured(path, foreground, background, pair.min));
+      push(measured(path, foreground, background, { required: pair.min }));
     }
 
     // A component states both of its colours, so it is the one pair that needs no
@@ -166,7 +167,7 @@ export function lintTheme(themeDir: string): LintResult {
         push({ severity: 'info', path, message: 'not checked: not an opaque colour' });
         continue;
       }
-      push(measured(path, fg, bg, AA_NORMAL, 'label '));
+      push(measured(path, fg, bg, { label: 'label ' }));
     }
   };
 

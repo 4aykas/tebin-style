@@ -2,10 +2,9 @@ import { readdirSync, existsSync, mkdirSync, mkdtempSync, cpSync, rmSync } from 
 import { fileURLToPath } from 'node:url';
 import { dirname, join, relative } from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { loadIndex } from '../src/registry.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-
-const DIST_IN_PACK = ['tokens.css', 'tailwind.css', 'tokens.dtcg.json', 'theme.ts', 'colors.csv', 'shadcn.json'];
 
 const rel = (p: string) => relative(root, p).split('\\').join('/');
 
@@ -21,18 +20,11 @@ function filesUnder(dir: string, re: RegExp): string[] {
 export function packFileList(themesRoot: string): string[] {
   const files: string[] = [];
 
-  for (const entry of readdirSync(themesRoot, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const dir = join(themesRoot, entry.name);
-
-    const doc = join(dir, 'DESIGN.md');
-    if (existsSync(doc)) files.push(rel(doc));
-
-    for (const f of DIST_IN_PACK) {
-      const p = join(dir, 'dist', f);
-      if (existsSync(p)) files.push(rel(p));
-    }
-
+  // A theme's formats are the ones the registry lists for it: one list, so a
+  // new format or a theme that drops one needs no edit here.
+  for (const theme of loadIndex().themes) {
+    files.push(...Object.values(theme.formats));
+    const dir = join(themesRoot, theme.id);
     for (const sub of ['assets', 'preview']) files.push(...filesUnder(join(dir, sub), /\.(svg|png|ico)$/i));
   }
 

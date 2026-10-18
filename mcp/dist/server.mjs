@@ -21681,7 +21681,7 @@ function surfaceFor(role) {
   if (TEXT_ON_SURFACE.has(role)) return "surface";
   return null;
 }
-function measured(path, fg, bg, required2 = AA_NORMAL, label = "") {
+function measured(path, fg, bg, { required: required2 = AA_NORMAL, label = "" } = {}) {
   const ratio = contrastRatio(fg, bg);
   return {
     severity: ratio >= required2 ? "info" : "error",
@@ -21777,7 +21777,7 @@ function lintTheme(themeDir2) {
         push2({ severity: "error", path, message: `min ${JSON.stringify(pair.min)} is not one of ${PAIR_FLOORS.join(", ")}` });
         continue;
       }
-      push2(measured(path, foreground, background, pair.min));
+      push2(measured(path, foreground, background, { required: pair.min }));
     }
     const components = tokens2.components ?? {};
     for (const [name, parts] of Object.entries(components)) {
@@ -21795,7 +21795,7 @@ function lintTheme(themeDir2) {
         push2({ severity: "info", path, message: "not checked: not an opaque colour" });
         continue;
       }
-      push2(measured(path, fg, bg, AA_NORMAL, "label "));
+      push2(measured(path, fg, bg, { label: "label " }));
     }
   };
   const defaultTokens = baseTokens(tokens);
@@ -22016,7 +22016,7 @@ function decodePng(file) {
   const expected = height * (stride + 1);
   let raw;
   try {
-    raw = inflateSync(Buffer.concat(idat), { maxOutputLength: expected });
+    raw = inflateSync(Buffer.concat(idat), { maxOutputLength: expected + 65536 });
   } catch (e) {
     if (e.code !== "ERR_BUFFER_TOO_LARGE") throw e;
     throw new Error(`PNG image data is larger than its ${width}\xD7${height} header allows`);

@@ -39,15 +39,19 @@ describe('generated files', () => {
   const files = generatedText();
 
   it('carry no value a template failed to format', () => {
+    // Prose (DESIGN.md, llms-full.txt, rules.md) may say "undefined" in a
+    // sentence; only a stringified object never belongs anywhere.
+    const prose = (f: string) => /\.(md|txt)$/.test(f);
     for (const [file, text] of files) {
-      for (const bad of [/\[object Object\]/, /\bundefined\b/, /\bNaN\b/]) {
+      for (const bad of prose(file) ? [/\[object Object\]/] : [/\[object Object\]/, /\bundefined\b/, /\bNaN\b/]) {
         expect(text, `${file} contains ${bad}`).not.toMatch(bad);
       }
     }
   });
 
   it('name every CSS variable they use, and no empty one', () => {
-    for (const [file, text] of files.filter(([f]) => f.endsWith('.css'))) {
+    for (const [file, raw] of files.filter(([f]) => f.endsWith('.css'))) {
+      const text = raw.replace(/\/\*[\s\S]*?\*\//g, '');
       expect(text, `${file} writes a variable with an empty name`).not.toMatch(/---/);
       const defined = new Set([...text.matchAll(/(--[\w-]+):/g)].map((m) => m[1]));
       for (const [, used] of text.matchAll(/var\((--[\w-]+)/g)) {
