@@ -5,7 +5,9 @@
 Theme metadata can declare `contrastPairs`, a map of named pairs containing
 `foreground` and `background`. Each value is an opaque hex colour or a token
 reference such as `{color.brand}`. These additional checks use the normal-text
-4.5:1 threshold; they do not replace the existing role/component checks.
+4.5:1 threshold unless the pair sets `min`: `3` for a non-text edge or icon
+(WCAG 1.4.11), `7` for AAA text. They do not replace the existing
+role/component checks.
 Unresolved or translucent pairs produce warnings rather than assumed passes.
 
 `lint_theme` returns `coverage.checked` (findings with a measured ratio) and

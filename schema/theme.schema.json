@@ -47,7 +47,11 @@
         "required": ["foreground", "background"],
         "properties": {
           "foreground": { "type": "string", "minLength": 1 },
-          "background": { "type": "string", "minLength": 1 }
+          "background": { "type": "string", "minLength": 1 },
+          "min": {
+            "description": "The ratio the pair must reach. 4.5 (the default) for text; 3 for a non-text edge or icon (WCAG 1.4.11); 7 for AAA text.",
+            "enum": [3, 4.5, 7]
+          }
         }
       }
     },

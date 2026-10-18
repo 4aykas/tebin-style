@@ -30,14 +30,10 @@
     "accent-on-raised": { "foreground": "{role.primary}", "background": "{role.surface-raised}" },
     "success-on-raised": { "foreground": "{role.success}", "background": "{role.surface-raised}" },
     "warning-on-raised": { "foreground": "{role.warning}", "background": "{role.surface-raised}" },
-    "error-on-raised": { "foreground": "{role.error}", "background": "{role.surface-raised}" }
+    "error-on-raised": { "foreground": "{role.error}", "background": "{role.surface-raised}" },
+    "control-edge-on-page": { "foreground": "{role.outline-control}", "background": "{role.surface}", "min": 3 },
+    "control-edge-on-raised": { "foreground": "{role.outline-control}", "background": "{role.surface-raised}", "min": 3 }
   },
-  "omitted": [
-    {
-      "section": "control-edge",
-      "reason": "A control's edge (role.outline-control) must reach 3:1 against the page. The lint measures 4.5:1 text pairs only, so the source dashboard's own contrast test holds that floor."
-    }
-  ],
   "assets": [
     { "id": "logo-mark", "type": "logo", "variant": "full", "format": "svg", "path": "assets/logo/logo-mark.svg" },
     { "id": "logo-tile", "type": "logo", "variant": "tile", "format": "svg", "path": "assets/logo/logo-tile.svg" },

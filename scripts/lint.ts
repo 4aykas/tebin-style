@@ -4,6 +4,8 @@ import { lintTheme } from '../src/lint.js';
 import { REPO_ROOT } from '../src/registry.js';
 
 const themesDir = join(REPO_ROOT, 'themes');
+// Tokens no rule pairs are counted in one line; --verbose lists each.
+const verbose = process.argv.includes('--verbose');
 let errors = 0;
 let warnings = 0;
 
@@ -13,10 +15,13 @@ for (const id of readdirSync(themesDir)) {
   errors += e;
   warnings += w;
   console.log(`${e === 0 ? '✓' : '✗'} ${id} — ${e} error(s), ${w} warning(s), ${i} checked or noted`);
+  let unpaired = 0;
   for (const f of result.findings) {
     if (f.severity === 'info' && f.ratio !== undefined) continue; // a pass needs no line
+    if (f.severity === 'info' && f.message.startsWith('not checked:') && !verbose) { unpaired++; continue; }
     console.log(`    [${f.severity}] ${f.path}: ${f.message}`);
   }
+  if (unpaired > 0) console.log(`    [info] ${unpaired} token(s) not checked (pnpm lint:themes --verbose lists them)`);
 }
 
 if (errors > 0 || warnings > 0) {

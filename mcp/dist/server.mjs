@@ -21777,13 +21777,14 @@ function lintTheme(themeDir2) {
         push2({ severity: "warning", path, message: "not checked: explicit pair must resolve to two opaque hex colours" });
         continue;
       }
+      const required2 = pair.min ?? AA_NORMAL;
       const ratio = contrastRatio(foreground, background);
       push2({
-        severity: ratio >= AA_NORMAL ? "info" : "error",
+        severity: ratio >= required2 ? "info" : "error",
         path,
         message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`,
         ratio,
-        required: AA_NORMAL
+        required: required2
       });
     }
     const components = tokens2.components ?? {};
