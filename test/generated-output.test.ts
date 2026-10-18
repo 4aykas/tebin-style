@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname } from 'node:path';
-import { modeNames, modeSelector } from '../src/tokens.js';
+import { modeNames, modeSelector, tokensForMode, leavesOf, resolveToken, MODE_GROUP } from '../src/tokens.js';
 
 // What the generators write, read back. Drift only says a file matches its
 // source; these say the file is sound: no value a template failed to format,
@@ -79,6 +79,20 @@ describe('modes across formats', () => {
       for (const [name, value] of vars) {
         if (!flat.has(name)) continue;
         expect(flat.get(name)!.toLowerCase(), `${id} ${mode ?? 'default'} ${name}`).toBe(resolve(value).toLowerCase());
+      }
+    }
+  });
+
+  it.each(withModes)('%s: theme.ts holds every value each mode resolves to', (id) => {
+    const source = JSON.parse(readFileSync(join(root, 'themes', id, 'tokens.json'), 'utf8'));
+    const ts = readFileSync(join(root, 'themes', id, 'dist', 'theme.ts'), 'utf8');
+    const theme = JSON.parse(/= (\{[\s\S]*\}) as const;/.exec(ts)![1]!);
+    const at = (tree: any, path: string) => path.split('.').reduce((n, s) => n?.[s], tree);
+    for (const mode of modeNames(source)) {
+      const look = tokensForMode(source, mode);
+      for (const [path, leaf] of leavesOf(look)) {
+        const shipped = at(theme[MODE_GROUP][mode], path) ?? at(theme, path);
+        expect(shipped, `${id} ${mode} ${path}`).toEqual(resolveToken(look, leaf.$value));
       }
     }
   });

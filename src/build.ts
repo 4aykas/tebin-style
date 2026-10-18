@@ -1,6 +1,6 @@
 import StyleDictionary from 'style-dictionary';
-import type { DesignTokens } from 'style-dictionary/types';
-import { appendFileSync, readFileSync } from 'node:fs';
+import type { DesignTokens, PlatformConfig } from 'style-dictionary/types';
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { MODE_GROUP, modeSelector, referencePath, modeNames, tokensForMode, leavesOf, type TokenTree } from './tokens.js';
 
@@ -73,19 +73,23 @@ const notMode = (t: { path: string[] }) => t.path[0] !== MODE_GROUP;
  * (and, for Tailwind, its utility names), so every rule written against the
  * default follows the mode without a rule of its own. Values are resolved.
  */
+/** The tokens one mode sees, through a platform's transforms, references resolved. */
+async function modeLeaves(source: TokenTree, mode: string, platform: PlatformConfig): Promise<Leaf[]> {
+  const sd = new StyleDictionary({
+    usesDtcg: true,
+    log: { verbosity: 'silent' },
+    tokens: tokensForMode(source, mode) as DesignTokens,
+    platforms: { out: platform },
+  });
+  return (await sd.getPlatformTokens('out')).allTokens as unknown as Leaf[];
+}
+
 async function modeBlocks(source: TokenTree, defaults: Map<string, Leaf>, tailwind: boolean): Promise<string> {
   let out = '';
   for (const mode of modeNames(source)) {
-    const sd = new StyleDictionary({
-      usesDtcg: true,
-      log: { verbosity: 'silent' },
-      tokens: tokensForMode(source, mode) as DesignTokens,
-      platforms: { out: { transformGroup: 'css-tebin' } },
-    });
-    const { allTokens } = await sd.getPlatformTokens('out');
     const overridden = new Set(leavesOf(((source[MODE_GROUP] as TokenTree)[mode] ?? {}) as TokenTree).map(([p]) => p));
     const lines: string[] = [];
-    for (const t of allTokens as unknown as Leaf[]) {
+    for (const t of await modeLeaves(source, mode, { transformGroup: 'css-tebin' })) {
       const path = t.path.join('.');
       const base = defaults.get(path);
       if (!base) continue;
@@ -180,18 +184,20 @@ export function registerFormats(): void {
 
   StyleDictionary.registerFormat({
     name: 'javascript/theme-ts',
-    format: ({ dictionary, options }) => {
-      const tree = nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => outValue(t));
-      const name = (options as { themeName: string }).themeName;
-      const safe = name.replace(/-/g, '_');
-      const typeName =
-        name.charAt(0).toUpperCase() + name.slice(1).replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
-      return (
-        `export const ${safe} = ${JSON.stringify(tree, null, 2)} as const;\n\n` +
-        `export type ${typeName}Theme = typeof ${safe};\n`
-      );
-    },
+    format: ({ dictionary, options }) =>
+      themeTs((options as { themeName: string }).themeName,
+        nestByPath(dictionary.allTokens as unknown as Leaf[], (t) => outValue(t))),
   });
+}
+
+function themeTs(name: string, tree: Record<string, unknown>): string {
+  const safe = name.replace(/-/g, '_');
+  const typeName =
+    name.charAt(0).toUpperCase() + name.slice(1).replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+  return (
+    `export const ${safe} = ${JSON.stringify(tree, null, 2)} as const;\n\n` +
+    `export type ${typeName}Theme = typeof ${safe};\n`
+  );
 }
 
 export async function buildTheme(themeDir: string): Promise<void> {
@@ -241,4 +247,19 @@ export async function buildTheme(themeDir: string): Promise<void> {
     const blocks = await modeBlocks(source, defaults, platform === 'tailwind');
     if (blocks) appendFileSync(join(themeDir, 'dist', file), blocks);
   }
+
+  // theme.ts holds resolved values too, so `mode.<name>` carries every value
+  // the mode changes, components built on a role among them.
+  const tsDefaults = ((await sd.getPlatformTokens('ts')).allTokens as unknown as Leaf[]).filter(notMode);
+  const byPath = new Map(tsDefaults.map((t) => [t.path.join('.'), t]));
+  const modes: Record<string, unknown> = {};
+  for (const mode of modeNames(source)) {
+    const changed = (await modeLeaves(source, mode, { transforms: ['name/kebab'] })).filter((t) => {
+      const base = byPath.get(t.path.join('.'));
+      return base && JSON.stringify(outValue(t)) !== JSON.stringify(outValue(base));
+    });
+    modes[mode] = nestByPath(changed, (t) => outValue(t));
+  }
+  writeFileSync(join(themeDir, 'dist', 'theme.ts'),
+    themeTs(themeName, { ...nestByPath(tsDefaults, (t) => outValue(t)), [MODE_GROUP]: modes }));
 }

@@ -24,8 +24,11 @@
   override with no default; a finding a mode does not change is reported
   once. In `tailwind.css`, whose values are resolved, a mode block also
   redefines every token that follows an overridden one, such as a button
-  built on `role.primary`. In `shadcn.json`, `dark` takes `error-on-dark`
-  where a theme has one.
+  built on `role.primary`; `theme.ts` does the same under `mode.<name>`.
+  In `shadcn.json`, `dark` takes `error-on-dark` where a theme has one.
+- The brand pack carries `shadcn.json`, which its `llms.txt` and skill name.
+- `check_image` refuses a PNG whose pixel data inflates past its header's
+  size, instead of inflating a small file into gigabytes.
 - A theme without `color.brand`, `ink` or `topbar` shows `role.primary`,
   `on-surface` and `surface` as its registry preview.
 - DESIGN.md names Arial for Office only for a theme whose font stacks fall

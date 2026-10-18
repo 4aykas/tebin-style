@@ -55,8 +55,17 @@ export function decodePng(file: Uint8Array): Rgba {
   const bitsPerPixel = channels * depth;
   const stride = Math.ceil((width * bitsPerPixel) / 8);
   const bpp = Math.max(1, bitsPerPixel >> 3);
-  const raw = inflateSync(Buffer.concat(idat));
-  if (raw.length < height * (stride + 1)) throw new Error('PNG image data is truncated');
+  // The header bounds the pixel data, so inflating stops there: a few
+  // megabytes of compressed zeros cannot grow into gigabytes.
+  const expected = height * (stride + 1);
+  let raw: Buffer;
+  try {
+    raw = inflateSync(Buffer.concat(idat), { maxOutputLength: expected });
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code !== 'ERR_BUFFER_TOO_LARGE') throw e;
+    throw new Error(`PNG image data is larger than its ${width}×${height} header allows`);
+  }
+  if (raw.length < expected) throw new Error('PNG image data is truncated');
 
   const out = new Uint8Array(width * height * 4);
   let previous = new Uint8Array(stride);

@@ -11,7 +11,7 @@ import { REPO_ROOT, loadIndex } from '../src/registry.js';
 
 /** A minimal PNG: one IHDR, one IDAT, given raw rows (each with its filter byte). */
 function png(width: number, height: number, type: number, depth: number, rows: number[][],
-  extra: Array<[string, number[]]> = [], interlace = 0): Uint8Array {
+  extra: Array<[string, number[]]> = [], interlace = 0, raw?: Uint8Array): Uint8Array {
   const chunk = (name: string, body: Uint8Array) => {
     const out = Buffer.alloc(12 + body.length);
     out.writeUInt32BE(body.length, 0);
@@ -26,7 +26,7 @@ function png(width: number, height: number, type: number, depth: number, rows: n
   return Buffer.concat([
     Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr),
     ...extra.map(([name, body]) => chunk(name, Uint8Array.from(body))),
-    chunk('IDAT', deflateSync(Uint8Array.from(rows.flat()))), chunk('IEND', new Uint8Array()),
+    chunk('IDAT', deflateSync(raw ?? Uint8Array.from(rows.flat()))), chunk('IEND', new Uint8Array()),
   ]);
 }
 
@@ -75,6 +75,9 @@ describe('decodePng', () => {
     expect(() => decodePng(Buffer.from('GIF89a......'))).toThrow(/not a PNG/);
     expect(() => decodePng(png(1, 1, 6, 8, [[0, 0, 0, 0, 0]], [], 1))).toThrow(/interlaced/);
     expect(() => decodePng(png(1, 1, 2, 4, [[0, 0]]))).toThrow(/not supported/);
+    // 1×1 in the header, 64 MB of zeros in the data: refused, not inflated.
+    const bomb = png(1, 1, 6, 8, [], [], 0, new Uint8Array(64 * 1024 * 1024));
+    expect(() => decodePng(bomb)).toThrow(/larger than its 1×1 header/);
   });
 });
 

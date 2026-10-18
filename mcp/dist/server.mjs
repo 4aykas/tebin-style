@@ -21681,6 +21681,16 @@ function surfaceFor(role) {
   if (TEXT_ON_SURFACE.has(role)) return "surface";
   return null;
 }
+function measured(path, fg, bg, required2 = AA_NORMAL, label = "") {
+  const ratio = contrastRatio(fg, bg);
+  return {
+    severity: ratio >= required2 ? "info" : "error",
+    path,
+    message: `${label}${fg} on ${bg} is ${ratio.toFixed(4)}:1`,
+    ratio,
+    required: required2
+  };
+}
 function lintTheme(themeDir2) {
   const findings = [];
   const push = (f) => findings.push(f);
@@ -21702,16 +21712,7 @@ function lintTheme(themeDir2) {
       for (const [key, child] of Object.entries(value)) checkValue(child, `${path}.${key}`);
     }
   };
-  const checkReferences = (tree, prefix = "") => {
-    for (const [key, child] of Object.entries(tree)) {
-      if (key.startsWith("$") || !child || typeof child !== "object") continue;
-      const path = prefix ? `${prefix}.${key}` : key;
-      const leaf = child;
-      if ("$value" in leaf) checkValue(leaf.$value, path);
-      else checkReferences(child, path);
-    }
-  };
-  checkReferences(tokens);
+  for (const [path, leaf] of leavesOf(tokens)) checkValue(leaf.$value, path);
   const omitted = new Set((theme.omitted ?? []).map((o) => o.section));
   const surfaces = theme.surfaces;
   if (!surfaces?.light) {
@@ -21762,14 +21763,7 @@ function lintTheme(themeDir2) {
         });
         continue;
       }
-      const ratio = contrastRatio(value, against);
-      push2({
-        severity: ratio >= AA_NORMAL ? "info" : "error",
-        path,
-        message: `${value} on ${against} is ${ratio.toFixed(4)}:1`,
-        ratio,
-        required: AA_NORMAL
-      });
+      push2(measured(path, value, against));
     }
     for (const [name, pair] of Object.entries(theme.contrastPairs ?? {})) {
       const path = `contrastPairs.${name}`;
@@ -21783,15 +21777,7 @@ function lintTheme(themeDir2) {
         push2({ severity: "error", path, message: `min ${JSON.stringify(pair.min)} is not one of ${PAIR_FLOORS.join(", ")}` });
         continue;
       }
-      const required2 = pair.min ?? AA_NORMAL;
-      const ratio = contrastRatio(foreground, background);
-      push2({
-        severity: ratio >= required2 ? "info" : "error",
-        path,
-        message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`,
-        ratio,
-        required: required2
-      });
+      push2(measured(path, foreground, background, pair.min));
     }
     const components = tokens2.components ?? {};
     for (const [name, parts] of Object.entries(components)) {
@@ -21809,14 +21795,7 @@ function lintTheme(themeDir2) {
         push2({ severity: "info", path, message: "not checked: not an opaque colour" });
         continue;
       }
-      const ratio = contrastRatio(fg, bg);
-      push2({
-        severity: ratio >= AA_NORMAL ? "info" : "error",
-        path,
-        message: `label ${fg} on ${bg} is ${ratio.toFixed(4)}:1`,
-        ratio,
-        required: AA_NORMAL
-      });
+      push2(measured(path, fg, bg, AA_NORMAL, "label "));
     }
   };
   const defaultTokens = baseTokens(tokens);
@@ -21837,8 +21816,8 @@ function lintTheme(themeDir2) {
     const prefix = `${MODE_GROUP}.${mode}:`;
     const start = findings.length;
     measure(tokensForMode(tokens, mode), (p) => `${prefix}${p}`);
-    const measured = findings.splice(start);
-    findings.push(...measured.filter((f) => !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
+    const measured2 = findings.splice(start);
+    findings.push(...measured2.filter((f) => !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
   }
   const motion = tokens.motion ?? {};
   for (const [name, leaf] of Object.entries(motion.easing ?? {})) {
@@ -21958,8 +21937,8 @@ function diffThemes(beforeDir, afterDir) {
   const previous = failures(beforeLint);
   const current = failures(afterLint);
   const atPath = new Map(afterLint.findings.map((f) => [f.path, f]));
-  const measured = new Set(afterLint.findings.filter((f) => f.ratio !== void 0).map((f) => f.path));
-  const unchecked = beforeLint.findings.filter((f) => f.ratio !== void 0 && !measured.has(f.path) && atPath.has(f.path)).map((before2) => ({ before: before2, after: atPath.get(before2.path) }));
+  const measured2 = new Set(afterLint.findings.filter((f) => f.ratio !== void 0).map((f) => f.path));
+  const unchecked = beforeLint.findings.filter((f) => f.ratio !== void 0 && !measured2.has(f.path) && atPath.has(f.path)).map((before2) => ({ before: before2, after: atPath.get(before2.path) }));
   const lost = new Set(unchecked.map((u) => u.before.path));
   const floors = new Map(beforeLint.findings.filter((f) => f.required !== void 0).map((f) => [f.path, f]));
   const loosened = afterLint.findings.filter((f) => f.required !== void 0 && f.required < (floors.get(f.path)?.required ?? 0)).map((after2) => ({ before: floors.get(after2.path), after: after2 }));
@@ -22034,8 +22013,15 @@ function decodePng(file) {
   const bitsPerPixel = channels * depth;
   const stride = Math.ceil(width * bitsPerPixel / 8);
   const bpp = Math.max(1, bitsPerPixel >> 3);
-  const raw = inflateSync(Buffer.concat(idat));
-  if (raw.length < height * (stride + 1)) throw new Error("PNG image data is truncated");
+  const expected = height * (stride + 1);
+  let raw;
+  try {
+    raw = inflateSync(Buffer.concat(idat), { maxOutputLength: expected });
+  } catch (e) {
+    if (e.code !== "ERR_BUFFER_TOO_LARGE") throw e;
+    throw new Error(`PNG image data is larger than its ${width}\xD7${height} header allows`);
+  }
+  if (raw.length < expected) throw new Error("PNG image data is truncated");
   const out = new Uint8Array(width * height * 4);
   let previous = new Uint8Array(stride);
   for (let y = 0; y < height; y++) {
