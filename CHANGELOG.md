@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Repository
+- The Gitea repo lives in the public `tebin-oss` organisation:
+  `git.tebin.co/tebin-oss/tebin-style`. The old `TEBIN/tebin-style` path
+  redirects; `TEBIN` is visible only to signed-in users.
+
 ## 1.12.2 — 2026-10-18
 
 ### Repository

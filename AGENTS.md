@@ -44,7 +44,7 @@ a generated file is stale.
 
 ## Repository
 
-The home is Gitea, `git.tebin.co/TEBIN/tebin-style` (`origin`): pull
+The home is Gitea, `git.tebin.co/tebin-oss/tebin-style` (`origin`): pull
 requests, issues, CI and releases. GitHub `4aykas/tebin-style` (`github`)
 is a public push mirror. Raw URLs, the plugin marketplace and the GitHub
 release read from it, so its `main` matches Gitea's. Push to `origin` only;
@@ -70,7 +70,7 @@ release read from it, so its `main` matches Gitea's. Push to `origin` only;
 
 ### Issue tracker
 
-Issues live on Gitea (`TEBIN/tebin-style`), driven via its REST API. See `docs/agents/issue-tracker.md`.
+Issues live on Gitea (`tebin-oss/tebin-style`), driven via its REST API. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

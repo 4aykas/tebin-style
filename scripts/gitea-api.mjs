@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// A small client for the Gitea Actions API of TEBIN/tebin-style (git.tebin.co),
+// A small client for the Gitea Actions API of tebin-oss/tebin-style (git.tebin.co),
 // for reading a push's CI run. The token comes from GITEA_TOKEN or the file
 // ~/.env/.gitea and is never printed. Retries network errors: a TLS hiccup
 // must not read as a failed run.
@@ -14,7 +14,7 @@ import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-const REPO = process.env.GITEA_REPO ?? 'TEBIN/tebin-style';
+const REPO = process.env.GITEA_REPO ?? 'tebin-oss/tebin-style';
 const BASE = `${process.env.GITEA_URL ?? 'https://git.tebin.co'}/api/v1/repos/${REPO}`;
 
 function token() {

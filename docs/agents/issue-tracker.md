@@ -1,13 +1,13 @@
 # Issue tracker: Gitea
 
-Issues and PRDs for this repo live on Gitea: `git.tebin.co/TEBIN/tebin-style`
+Issues and PRDs for this repo live on Gitea: `git.tebin.co/tebin-oss/tebin-style`
 (since 2026-10-18, imported with their history from GitHub). The GitHub
 repo `4aykas/tebin-style` is a push mirror; nothing is filed or answered there, and
 `gh issue` reaches the stale copy.
 
 ## Conventions
 
-Use the Gitea REST API (`https://git.tebin.co/api/v1/repos/TEBIN/tebin-style`) with
+Use the Gitea REST API (`https://git.tebin.co/api/v1/repos/tebin-oss/tebin-style`) with
 `Authorization: token <t>`, where the token comes from `GITEA_TOKEN` or the
 file `~/.env/.gitea`. Never print it. Write request bodies to a file with the
 Write tool and pass them with `--data @file`.
@@ -37,7 +37,7 @@ Used by `/wayfinder`. The **map** is a single issue with **child** issues as tic
 
 - **Map**: a single issue labelled `wayfinder:map`, holding the Notes / Decisions-so-far / Fog body.
 - **Child ticket**: listed in a task list in the map body, with `Part of #<map>` at the top of the child body. Labels: `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`). Once claimed, the ticket is assigned to the driving dev.
-- **Blocking**: Gitea's issue dependencies. `POST /issues/<child>/dependencies` with `{"owner": "TEBIN", "repo": "tebin-style", "index": <blocker>}`; `GET /issues/<child>/dependencies` lists the blockers. A ticket is unblocked when every blocker is closed.
+- **Blocking**: Gitea's issue dependencies. `POST /issues/<child>/dependencies` with `{"owner": "tebin-oss", "repo": "tebin-style", "index": <blocker>}`; `GET /issues/<child>/dependencies` lists the blockers. A ticket is unblocked when every blocker is closed.
 - **Frontier query**: the map's open children, minus any with an open blocker or an assignee; first in map order wins.
 - **Claim**: `PATCH /issues/<n>` with `{"assignees": ["<login>"]}`, the session's first write.
 - **Resolve**: comment the answer, close the issue, then append a context pointer (gist + link) to the map's Decisions-so-far.
