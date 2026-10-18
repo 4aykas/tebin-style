@@ -116,8 +116,9 @@ open a web page or start an HTTP server.
 | `diff_themes` | `{ a, b }` | token diff by group, plus a regression flag |
 | `check_image` | `{ id, path, threshold? }` | a local PNG's main colours, each with its nearest palette token and ΔE2000; `offPalette` counts those over the threshold |
 
-`diff_themes` sets `regression` when a lint error appears or worsens, or a
-measured pair loses its check (`findings.unchecked`).
+`diff_themes` sets `regression` when a lint error appears or worsens, a
+measured pair loses its check (`findings.unchecked`), or a pair's floor is
+lowered (in `findings.worsened`).
 
 `get_theme` includes licensing, declared surfaces and documented omissions.
 Theme search also covers descriptions and tags, so `query: "print"` finds

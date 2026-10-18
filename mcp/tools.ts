@@ -277,7 +277,7 @@ export const toolDefinitions: ToolDef[] = [
     name: 'diff_themes',
     title: 'Compare themes',
     description:
-      'Compare two themes: tokens added, removed or modified per group, and lint findings introduced, resolved, worsened or unchecked. regression is true when a lint error appears or worsens, or a measured contrast pair loses its check. Not a compatibility guarantee.',
+      'Compare two themes: tokens added, removed or modified per group, and lint findings introduced, resolved, worsened or unchecked. regression is true when a lint error appears or worsens, a measured contrast pair loses its check, or a pair\'s floor is lowered. Not a compatibility guarantee.',
     inputSchema: z.strictObject({
       a: themeId.describe('Theme to compare from (before).'),
       b: themeId.describe('Theme to compare to (after).'),

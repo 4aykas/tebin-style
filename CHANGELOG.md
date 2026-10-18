@@ -56,9 +56,12 @@
 - A contrast pair can set `min`: 3 for a non-text edge or icon (WCAG
   1.4.11), 7 for AAA text; 4.5 stays the default. `fleet` now measures its
   control edges against the page and the raised surface at 3:1 in both modes,
-  instead of listing that check as omitted.
-- `pnpm lint:themes` counts tokens no rule pairs in one line per theme;
-  `--verbose` lists them.
+  instead of listing that check as omitted. Lint refuses any other `min`, a
+  role a pair measures is no longer called unchecked, and `diff_themes`
+  calls a lowered floor a regression.
+- `pnpm lint:themes` counts roles with no surface pairing rule in one line
+  per theme, each role once across modes; `--verbose` lists them. Other
+  unchecked findings still print.
 
 ## 1.12.2 — 2026-10-18
 

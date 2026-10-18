@@ -25,3 +25,9 @@ export function contrastRatio(a: string, b: string): number {
 
 /** WCAG AA for normal-size text. */
 export const AA_NORMAL = 4.5;
+
+/** The floors a contrast pair may set: non-text (WCAG 1.4.11), text, AAA text. */
+export const PAIR_FLOORS = [3, 4.5, 7] as const;
+
+/** A named contrast check in theme.json. `min` is the ratio it must reach. */
+export interface ContrastPair { foreground: string; background: string; min?: number }

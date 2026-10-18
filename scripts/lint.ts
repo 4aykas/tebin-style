@@ -15,13 +15,19 @@ for (const id of readdirSync(themesDir)) {
   errors += e;
   warnings += w;
   console.log(`${e === 0 ? '✓' : '✗'} ${id} — ${e} error(s), ${w} warning(s), ${i} checked or noted`);
-  let unpaired = 0;
+  // A token unpaired in several modes counts once.
+  const unpaired = new Set<string>();
   for (const f of result.findings) {
     if (f.severity === 'info' && f.ratio !== undefined) continue; // a pass needs no line
-    if (f.severity === 'info' && f.message.startsWith('not checked:') && !verbose) { unpaired++; continue; }
+    if (!verbose && f.severity === 'info' && f.message.includes('no surface pairing rule')) {
+      unpaired.add(f.path.replace(/^mode\.[^:]+:/, ''));
+      continue;
+    }
     console.log(`    [${f.severity}] ${f.path}: ${f.message}`);
   }
-  if (unpaired > 0) console.log(`    [info] ${unpaired} token(s) not checked (pnpm lint:themes --verbose lists them)`);
+  if (unpaired.size > 0) {
+    console.log(`    [info] ${unpaired.size} role(s) with no surface pairing rule (pnpm lint:themes --verbose lists them)`);
+  }
 }
 
 if (errors > 0 || warnings > 0) {

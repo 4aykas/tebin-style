@@ -87,12 +87,20 @@ export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
     .filter(f => f.ratio !== undefined && !measured.has(f.path) && atPath.has(f.path))
     .map(before => ({ before, after: atPath.get(before.path)! }));
   const lost = new Set(unchecked.map(u => u.before.path));
+  // A pair whose floor dropped (a `min` lowered) passes on a weaker check: its
+  // old error is not resolved, and the change is a regression.
+  const floors = new Map(beforeLint.findings.filter(f => f.required !== undefined).map(f => [f.path, f]));
+  const loosened = afterLint.findings
+    .filter(f => f.required !== undefined && f.required < (floors.get(f.path)?.required ?? 0))
+    .map(after => ({ before: floors.get(after.path)!, after }));
+  const lowered = new Set(loosened.map(l => l.after.path));
   const introduced = [...current].filter(([id]) => !previous.has(id)).map(([, f]) => f);
-  const resolved = [...previous].filter(([id, f]) => !current.has(id) && !lost.has(f.path)).map(([, f]) => f);
-  const worsened: DiffResult['findings']['worsened'] = [];
+  const resolved = [...previous]
+    .filter(([id, f]) => !current.has(id) && !lost.has(f.path) && !lowered.has(f.path)).map(([, f]) => f);
+  const worsened: DiffResult['findings']['worsened'] = [...loosened];
   for (const [id, after] of current) {
     const before = previous.get(id);
-    if (before && ((before.severity === 'warning' && after.severity === 'error') ||
+    if (before && !lowered.has(after.path) && ((before.severity === 'warning' && after.severity === 'error') ||
       (before.ratio !== undefined && after.ratio !== undefined &&
         after.ratio / (after.required ?? 1) < before.ratio / (before.required ?? 1)))) {
       worsened.push({ before, after });
@@ -112,6 +120,6 @@ export function diffThemes(beforeDir: string, afterDir: string): DiffResult {
     },
     // Token removals and warnings are visible separately, not compatibility claims.
     regression: introduced.some(f => f.severity === 'error') ||
-      worsened.some(f => f.after.severity === 'error') || unchecked.length > 0,
+      worsened.some(f => f.after.severity === 'error') || unchecked.length > 0 || loosened.length > 0,
   };
 }

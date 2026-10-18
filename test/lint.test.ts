@@ -47,6 +47,18 @@ describe('lintTheme', () => {
     expect(find('edge-as-text')).toMatchObject({ severity: 'error', required: 4.5 });
     expect(find('faint-edge')?.severity).toBe('error');
   });
+  it('refuses a floor outside 3, 4.5 and 7, and stops calling a paired role unchecked', () => {
+    const dir = fixture('pair-min-bad', { ...base, surfaces: { light: '#FFFFFF' },
+      contrastPairs: {
+        loose: { foreground: '#EEEEEE', background: '#FFFFFF', min: 1 },
+        edge: { foreground: '{role.outline}', background: '#FFFFFF', min: 3 },
+      },
+    }, { role: { outline: { $value: '#949494' } } });
+    const findings = lintTheme(dir).findings;
+    expect(findings.find(f => f.path === 'contrastPairs.loose')).toMatchObject({ severity: 'error' });
+    expect(findings.find(f => f.path === 'contrastPairs.loose')?.ratio).toBeUndefined();
+    expect(findings.some(f => f.path === 'role.outline')).toBe(false);
+  });
   it('fails a ratio just below 4.5 for both roles and component labels', () => {
     const dir = fixture('rounding', { ...base, surfaces: { light: '#FFFFFF' } }, {
       role: { surface: { $value: '#FFFFFF' }, 'on-surface': { $value: '#6e7978' } },
