@@ -18,6 +18,9 @@ export interface LintResult {
   coverage: { checked: number; unchecked: number };
 }
 
+/** A brand theme's ledger of token values and their sources. */
+export const SOURCES_FILE = 'sources.json';
+
 interface Leaf { $type?: string; $value?: unknown }
 type Tree = TokenTree;
 
@@ -189,6 +192,39 @@ export function lintTheme(themeDir: string): LintResult {
     if (ratio < 1) {
       push({ severity: 'error', path: `motion.spring.${name}`,
              message: `damping ratio ${ratio.toFixed(2)} is below 1, so the spring overshoots` });
+    }
+  }
+
+  // A brand theme keeps sources.json: every token's value with where it came
+  // from. A token that is new, changed or gone fails until its entry names a
+  // source, so a brand value cannot land unsourced. A `proposal:` source is
+  // shipped but unconfirmed, and stays listed until it is checked.
+  const sourcesPath = join(themeDir, SOURCES_FILE);
+  if (existsSync(sourcesPath)) {
+    const ledger = JSON.parse(readFileSync(sourcesPath, 'utf8')) as Record<string, { value: unknown; source: string }>;
+    const leaves = new Map<string, unknown>();
+    const collect = (tree: Tree, prefix = ''): void => {
+      for (const [key, child] of Object.entries(tree)) {
+        if (key.startsWith('$') || !child || typeof child !== 'object') continue;
+        const path = prefix ? `${prefix}.${key}` : key;
+        if ('$value' in child) leaves.set(path, (child as Leaf).$value);
+        else collect(child as Tree, path);
+      }
+    };
+    collect(tokens);
+    for (const [path, value] of leaves) {
+      const entry = ledger[path];
+      if (!entry?.source?.trim()) {
+        push({ severity: 'error', path, message: `no source in ${SOURCES_FILE}: add the value and where it came from` });
+      } else if (JSON.stringify(entry.value) !== JSON.stringify(value)) {
+        push({ severity: 'error', path,
+               message: `value changed from ${JSON.stringify(entry.value)}: update ${SOURCES_FILE} with the new value and its source` });
+      } else if (entry.source.startsWith('proposal')) {
+        push({ severity: 'info', path, message: `unconfirmed: ${entry.source}` });
+      }
+    }
+    for (const path of Object.keys(ledger)) {
+      if (!leaves.has(path)) push({ severity: 'error', path, message: `in ${SOURCES_FILE} but not in tokens.json` });
     }
   }
 

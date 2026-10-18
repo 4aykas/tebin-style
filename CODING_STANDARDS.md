@@ -5,12 +5,12 @@ decide belongs in `pnpm verify` instead.
 
 ## Brand values have a source
 
-A new or changed value in `themes/tebin/tokens.json` or
-`themes/tebin-classic/tokens.json` (colour, type, spacing, radius, motion)
-names its source in the PR or in `$description`: tebin.pro as built, the 2017
-brand book, or an owner decision with its issue. `tebin` describes the live
-site, so a value from another library or design system is a proposal until it
-is checked against tebin.pro. Flag a brand value with no source.
+`pnpm lint:themes` makes every token in `tebin` and `tebin-classic` carry an
+entry in the theme's `sources.json`. Review checks that the entry is true:
+tebin.pro as built, the 2017 brand book, or an owner decision with its issue.
+`tebin` describes the live site, so a value from another library or design
+system is `proposal: …` until it is checked against tebin.pro. Flag a
+`proposal` turned into a firm source with no check named.
 
 ## The site's decisions win
 

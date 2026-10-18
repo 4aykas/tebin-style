@@ -1,0 +1,23 @@
+{
+  "color.brand": {"value":"#DA291C","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.grey": {"value":"#898D8D","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.ink": {"value":"#1A1A1A","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.topbar": {"value":"#FFFFFF","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.maroon": {"value":"#B02954","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.brick": {"value":"#A43F39","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.salmon": {"value":"#EB807A","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.orange": {"value":"#F38B4C","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.yellow": {"value":"#FBD551","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.teal": {"value":"#69B7C2","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.grey-light": {"value":"#B3B4B6","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "color.grey-lighter": {"value":"#CDCDCE","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "role.primary": {"value":"{color.brand}","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "role.surface": {"value":"{color.topbar}","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "role.on-surface": {"value":"{color.ink}","source":"baseline 2026-10-18: the 2017 print brand book"},
+  "font.sans": {"value":["Roboto","Arial","Helvetica","sans-serif"],"source":"baseline 2026-10-18: the 2017 print brand book"},
+  "font.document": {"value":["Arial","Helvetica","sans-serif"],"source":"baseline 2026-10-18: the 2017 print brand book"},
+  "fontWeight.regular": {"value":400,"source":"baseline 2026-10-18: the 2017 print brand book"},
+  "fontWeight.medium": {"value":500,"source":"baseline 2026-10-18: the 2017 print brand book"},
+  "fontWeight.bold": {"value":700,"source":"baseline 2026-10-18: the 2017 print brand book"},
+  "fontWeight.black": {"value":900,"source":"baseline 2026-10-18: the 2017 print brand book"}
+}

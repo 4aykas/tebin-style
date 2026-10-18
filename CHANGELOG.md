@@ -15,6 +15,13 @@
 - `CODING_STANDARDS.md`: a rule or `tebin` value agrees with the decisions
   recorded for tebin.pro; the release review runs against it.
 
+### Lint
+- `tebin` and `tebin-classic` gain `sources.json`: every token's value and
+  its source. Lint fails a token with no entry, a changed value and a stale
+  entry. The baseline is the theme's own premise (tebin.pro as built; the
+  2017 brand book); `color.grey` names #91, and the `motion` group is
+  `proposal`, listed as unconfirmed until checked against tebin.pro.
+
 ## 1.12.2 — 2026-10-18
 
 ### Repository

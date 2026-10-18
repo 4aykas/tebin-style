@@ -21638,6 +21638,7 @@ function resolveString(tokens, value) {
 }
 
 // src/lint.ts
+var SOURCES_FILE = "sources.json";
 var TEXT_ON_SURFACE = /* @__PURE__ */ new Set(["on-surface", "on-surface-muted", "error", "warning", "success"]);
 function surfaceFor(role) {
   if (role.endsWith("-on-light")) return "light";
@@ -21797,6 +21798,37 @@ function lintTheme(themeDir2) {
         path: `motion.spring.${name}`,
         message: `damping ratio ${ratio.toFixed(2)} is below 1, so the spring overshoots`
       });
+    }
+  }
+  const sourcesPath = join4(themeDir2, SOURCES_FILE);
+  if (existsSync3(sourcesPath)) {
+    const ledger = JSON.parse(readFileSync4(sourcesPath, "utf8"));
+    const leaves = /* @__PURE__ */ new Map();
+    const collect = (tree, prefix = "") => {
+      for (const [key, child] of Object.entries(tree)) {
+        if (key.startsWith("$") || !child || typeof child !== "object") continue;
+        const path = prefix ? `${prefix}.${key}` : key;
+        if ("$value" in child) leaves.set(path, child.$value);
+        else collect(child, path);
+      }
+    };
+    collect(tokens);
+    for (const [path, value] of leaves) {
+      const entry = ledger[path];
+      if (!entry?.source?.trim()) {
+        push({ severity: "error", path, message: `no source in ${SOURCES_FILE}: add the value and where it came from` });
+      } else if (JSON.stringify(entry.value) !== JSON.stringify(value)) {
+        push({
+          severity: "error",
+          path,
+          message: `value changed from ${JSON.stringify(entry.value)}: update ${SOURCES_FILE} with the new value and its source`
+        });
+      } else if (entry.source.startsWith("proposal")) {
+        push({ severity: "info", path, message: `unconfirmed: ${entry.source}` });
+      }
+    }
+    for (const path of Object.keys(ledger)) {
+      if (!leaves.has(path)) push({ severity: "error", path, message: `in ${SOURCES_FILE} but not in tokens.json` });
     }
   }
   if (!("role" in tokens) && !omitted.has("role")) {

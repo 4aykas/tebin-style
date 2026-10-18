@@ -153,6 +153,13 @@ It fails a motion token that overshoots: a curve with a y control point outside
 0..1, or a spring whose damping ratio is below 1 (rule
 `animation-no-overshoot-ui`).
 
+A brand theme (`tebin`, `tebin-classic`) keeps `sources.json`: each token's
+path, its value and where the value came from. Lint fails a token with no
+entry, a value that no longer matches its entry, and an entry whose token is
+gone. Changing a brand value therefore means writing its new source beside
+it. A source that starts with `proposal` is shipped but unconfirmed; lint
+lists it as a note until it is checked.
+
 It also prints what it could not check. A role no rule reaches is reported,
 not skipped, because a checker that quietly covers half the palette reads as
 "everything passes".

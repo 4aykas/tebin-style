@@ -38,7 +38,10 @@ async function api(path, init = {}) {
         console.error(`Gitea API ${path}: HTTP ${res.status}${res.status === 401 ? ' (token rejected: ~/.env/.gitea)' : ''}`);
         process.exit(2);
       }
-      return res.status === 204 ? null : await res.json();
+      // Some calls (a PR merge) answer 200 with an empty body; parsing it
+      // would throw and retry a merge that already happened.
+      const text = await res.text();
+      return text ? JSON.parse(text) : null;
     } catch (e) {
       if (i === 5) throw e;
       await new Promise((r) => setTimeout(r, 10_000));
