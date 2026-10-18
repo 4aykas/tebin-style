@@ -35,7 +35,11 @@ writeFileSync('package.json', pkg.replace(/"version": "[^"]+"/, `"version": "${v
 
 step('build and verify');
 live('pnpm', ['build']);
-live('pnpm', ['verify']);
+// The pre-push hook runs verify on the branch push; run it here only when the
+// hook is not installed, so one release runs the gate once on this machine.
+let hooks = '';
+try { hooks = sh('git', ['config', 'core.hooksPath']); } catch { /* unset */ }
+if (hooks !== '.githooks') live('pnpm', ['verify']);
 
 step('pull request');
 const branch = `release/${tag}`;

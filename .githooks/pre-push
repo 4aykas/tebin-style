@@ -1,5 +1,13 @@
 #!/bin/sh
-# Runs the gate before anything leaves the machine. Gitea CI runs it again on
-# the pull request; this catches a red tree before it costs a run.
-# Installed by `pnpm install` (the `prepare` script sets core.hooksPath).
-exec pnpm verify
+# Runs the gate before a branch leaves the machine. Gitea CI runs it again on
+# the pull request; this catches a red tree before it costs a run. A push of
+# tags only (a release tag on a commit CI already passed) or of deletions
+# skips it.
+# Installed by `pnpm install` (scripts/prepare.mjs sets core.hooksPath).
+while read -r local_ref _local_sha _remote_ref _remote_sha; do
+  case "$local_ref" in
+    refs/tags/* | "(delete)") ;;
+    *) exec pnpm verify ;;
+  esac
+done
+exit 0

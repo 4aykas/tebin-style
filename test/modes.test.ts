@@ -63,6 +63,28 @@ describe('build with a mode', () => {
   });
 });
 
+describe('build with a mode that a component follows', () => {
+  let dir: string;
+  beforeAll(async () => {
+    const t = structuredClone(tokens) as any;
+    t.components = { button: { backgroundColor: color('{role.surface}') } };
+    t.mode.highContrast = { role: { surface: color('#000000') } };
+    dir = fixture('follows', t);
+    await buildTheme(dir);
+  });
+  const read = (f: string) => readFileSync(join(dir, 'dist', f), 'utf8');
+
+  it('redefines in Tailwind every token whose resolved value the mode changes', () => {
+    expect(read('tailwind.css'))
+      .toMatch(/:root\[data-theme="light"\] \{[^}]*--components-button-background-color: #f8fafc;/i);
+  });
+  it('names a camelCase mode\'s variables after the default token', () => {
+    const css = read('tokens.css');
+    expect(css).toContain(':root[data-theme="highContrast"] {\n  --role-surface: #000000;');
+    expect(css).not.toContain('---');
+  });
+});
+
 describe('lint with a mode', () => {
   it('measures contrast in every mode, prefixed', () => {
     const r = lintTheme(fixture('measured', tokens));
@@ -77,6 +99,20 @@ describe('lint with a mode', () => {
     expect(errors).toContain('mode.light:role.on-surface');
     expect(errors).toContain('mode.light.role.ghost');
   });
+  it('reports a failure the mode does not change once, not once per mode', () => {
+    const t = structuredClone(tokens) as any;
+    t.components = { badge: { textColor: color('#777777'), backgroundColor: color('#888888') } };
+    const errors = lintTheme(fixture('once', t)).findings.filter((f) => f.severity === 'error').map((f) => f.path);
+    expect(errors).toEqual(['components.badge']);
+  });
+  it('measures a mode\'s valid value over a broken default, and warns the break once', () => {
+    const t = structuredClone(tokens) as any;
+    t.role['on-surface-muted'] = color('{color.missing}');
+    t.mode.light.role['on-surface-muted'] = color('#334155');
+    const findings = lintTheme(fixture('broken-default', t)).findings;
+    expect(findings.find((f) => f.path === 'mode.light:role.on-surface-muted')?.ratio).toBeGreaterThan(4.5);
+    expect(findings.filter((f) => f.severity === 'warning').map((f) => f.path)).toEqual(['role.on-surface-muted']);
+  });
 });
 
 describe('shadcn with a mode', () => {
@@ -84,6 +120,14 @@ describe('shadcn with a mode', () => {
     const item = buildShadcnItem(fixture('shadcn', tokens))!;
     expect(item.cssVars.light.background).toBe('#F8FAFC');
     expect(item.cssVars.dark?.background).toBe('#0F172A');
+  });
+  it('takes destructive from the error role made for each look', () => {
+    const t = structuredClone(tokens) as any;
+    t.role['error-on-light'] = color('#B91C1C');
+    t.role['error-on-dark'] = color('#F87171');
+    const item = buildShadcnItem(fixture('destructive', t))!;
+    expect(item.cssVars.light.destructive).toBe('#B91C1C');
+    expect(item.cssVars.dark?.destructive).toBe('#F87171');
   });
   it('fills dark for fleet and leaves it out for tebin', () => {
     expect(buildShadcnItem(join(root, 'themes', 'fleet'))!.cssVars.dark?.primary).toBe('#4ADE80');
@@ -96,6 +140,8 @@ describe('DESIGN.md with a mode', () => {
     const doc = buildDesignDoc(join(root, 'themes', 'fleet'));
     expect(doc).toContain('## Modes');
     expect(doc).toContain('| `role.surface` | `#0F172A` | `#F8FAFC` |');
+    expect(doc).toContain('| `shadow.sm` | `0px 1px 2px 0px rgba(0, 0, 0, 0.3)` |');
+    expect(doc).not.toContain('[object Object]');
   });
   it('names Arial for Office only where a theme falls back to it', () => {
     expect(buildDesignDoc(join(root, 'themes', 'fleet'))).not.toContain('use **Arial**');

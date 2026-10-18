@@ -28,6 +28,10 @@ function token() {
 }
 
 async function api(path, init = {}) {
+  // Only a read is retried. A POST that failed in flight (a reset after Gitea
+  // took the merge) may have landed; sending it again would fail on its own
+  // success, so the caller checks the state instead.
+  const retry = (init.method ?? 'GET') === 'GET';
   for (let i = 0; i < 6; i++) {
     try {
       const res = await fetch(`${BASE}${path}`, { ...init, headers: { Authorization: `token ${token()}`, 'Content-Type': 'application/json' } });
@@ -43,6 +47,10 @@ async function api(path, init = {}) {
       const text = await res.text();
       return text ? JSON.parse(text) : null;
     } catch (e) {
+      if (!retry) {
+        console.error(`Gitea API ${init.method} ${path} failed (${e.message}); it may have landed: check before running it again.`);
+        process.exit(2);
+      }
       if (i === 5) throw e;
       await new Promise((r) => setTimeout(r, 10_000));
     }

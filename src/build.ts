@@ -1,7 +1,8 @@
 import StyleDictionary from 'style-dictionary';
-import { appendFileSync } from 'node:fs';
+import type { DesignTokens } from 'style-dictionary/types';
+import { appendFileSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
-import { MODE_GROUP, modeSelector, referencePath } from './tokens.js';
+import { MODE_GROUP, modeSelector, referencePath, modeNames, tokensForMode, leavesOf, type TokenTree } from './tokens.js';
 
 interface Leaf {
   $type?: string;
@@ -72,22 +73,37 @@ const notMode = (t: { path: string[] }) => t.path[0] !== MODE_GROUP;
  * (and, for Tailwind, its utility names), so every rule written against the
  * default follows the mode without a rule of its own. Values are resolved.
  */
-function modeBlocks(tokens: Leaf[], tailwind: boolean): string {
-  const byMode = new Map<string, string[]>();
-  for (const t of tokens) {
-    if (t.path[0] !== MODE_GROUP || t.path.length < 3) continue;
-    const mode = t.path[1]!;
-    const base = t.path.slice(2);
-    const name = t.name.slice(`${MODE_GROUP}-${mode}-`.length);
-    const names = tailwind ? tailwindNames(name, base, rawType(t)) : [name];
-    // tokens.css keeps a reference as a reference, as its default block does.
-    const ref = tailwind ? null : referencePath(rawValue(t));
-    const value = ref ? `var(--${kebab(ref)})` : outValue(t);
-    const lines = byMode.get(mode) ?? [];
-    lines.push(...names.map((n) => `  --${n}: ${value};`));
-    byMode.set(mode, lines);
+async function modeBlocks(source: TokenTree, defaults: Map<string, Leaf>, tailwind: boolean): Promise<string> {
+  let out = '';
+  for (const mode of modeNames(source)) {
+    const sd = new StyleDictionary({
+      usesDtcg: true,
+      log: { verbosity: 'silent' },
+      tokens: tokensForMode(source, mode) as DesignTokens,
+      platforms: { out: { transformGroup: 'css-tebin' } },
+    });
+    const { allTokens } = await sd.getPlatformTokens('out');
+    const overridden = new Set(leavesOf(((source[MODE_GROUP] as TokenTree)[mode] ?? {}) as TokenTree).map(([p]) => p));
+    const lines: string[] = [];
+    for (const t of allTokens as unknown as Leaf[]) {
+      const path = t.path.join('.');
+      const base = defaults.get(path);
+      if (!base) continue;
+      if (tailwind) {
+        // tailwind.css holds resolved values, so every token whose value the
+        // mode changes is redefined, components that reference a role too.
+        if (JSON.stringify(outValue(t)) === JSON.stringify(outValue(base))) continue;
+        lines.push(...tailwindNames(base.name, t.path, rawType(t)).map((n) => `  --${n}: ${outValue(t)};`));
+      } else if (overridden.has(path)) {
+        // tokens.css keeps a reference as a reference, as its default block does.
+        const ref = referencePath(rawValue(t));
+        const value = ref ? `var(--${defaults.get(ref)?.name ?? kebab(ref)})` : outValue(t);
+        lines.push(`  --${base.name}: ${value};`);
+      }
+    }
+    if (lines.length) out += `\n${modeSelector(mode)} {\n${lines.join('\n')}\n}\n`;
   }
-  return [...byMode].map(([mode, lines]) => `\n${modeSelector(mode)} {\n${lines.join('\n')}\n}\n`).join('');
+  return out;
 }
 
 let registered = false;
@@ -214,9 +230,12 @@ export async function buildTheme(themeDir: string): Promise<void> {
 
   await sd.buildAllPlatforms();
 
+  const source = JSON.parse(readFileSync(join(themeDir, 'tokens.json'), 'utf8')) as TokenTree;
+  if (modeNames(source).length === 0) return;
   for (const [platform, file] of [['css', 'tokens.css'], ['tailwind', 'tailwind.css']] as const) {
     const { allTokens } = await sd.getPlatformTokens(platform);
-    const blocks = modeBlocks(allTokens as unknown as Leaf[], platform === 'tailwind');
+    const defaults = new Map((allTokens as unknown as Leaf[]).filter(notMode).map((t) => [t.path.join('.'), t]));
+    const blocks = await modeBlocks(source, defaults, platform === 'tailwind');
     if (blocks) appendFileSync(join(themeDir, 'dist', file), blocks);
   }
 }

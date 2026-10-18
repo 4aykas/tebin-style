@@ -272,9 +272,9 @@ The tables above are the default mode. One more mode overrides the same tokens, 
 | `role.tone-tasks` | `#60A5FA` | `#1D4ED8` |
 | `role.tone-users` | `#F472B6` | `#BE185D` |
 | `role.tone-access` | `#2DD4BF` | `#115E59` |
-| `shadow.sm` | `[object Object]` | `[object Object]` |
-| `shadow.md` | `[object Object]` | `[object Object]` |
-| `shadow.lg` | `[object Object]` | `[object Object]` |
+| `shadow.sm` | `0px 1px 2px 0px rgba(0, 0, 0, 0.3)` | `0px 1px 3px 0px rgba(15, 23, 42, 0.08)` |
+| `shadow.md` | `0px 2px 6px 0px rgba(0, 0, 0, 0.35)` | `0px 4px 8px 0px rgba(15, 23, 42, 0.1)` |
+| `shadow.lg` | `0px 8px 20px 0px rgba(0, 0, 0, 0.4)` | `0px 8px 24px 0px rgba(15, 23, 42, 0.12)` |
 
 ## Typography
 
