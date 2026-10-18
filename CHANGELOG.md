@@ -6,6 +6,8 @@
 - The Gitea repo lives in the public `tebin-oss` organisation:
   `git.tebin.co/tebin-oss/tebin-style`. The old `TEBIN/tebin-style` path
   redirects; `TEBIN` is visible only to signed-in users.
+- A project hook, `.claude/hooks/mirror-guard.mjs`, denies `gh pr`,
+  `gh issue` and `git push github`, which would land on the mirror.
 
 ## 1.12.2 — 2026-10-18
 

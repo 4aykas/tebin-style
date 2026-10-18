@@ -48,7 +48,8 @@ The home is Gitea, `git.tebin.co/tebin-oss/tebin-style` (`origin`): pull
 requests, issues, CI and releases. GitHub `4aykas/tebin-style` (`github`)
 is a public push mirror. Raw URLs, the plugin marketplace and the GitHub
 release read from it, so its `main` matches Gitea's. Push to `origin` only;
-`gh` reaches the mirror. Read a run with `node scripts/gitea-api.mjs watch`.
+`.claude/hooks/mirror-guard.mjs` denies `gh pr`, `gh issue` and
+`git push github`. Read a run with `node scripts/gitea-api.mjs watch`.
 
 ## Release
 
