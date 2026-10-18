@@ -53,7 +53,7 @@ export function lintTheme(themeDir: string): LintResult {
   }
 
   const theme = JSON.parse(readFileSync(themePath, 'utf8')) as {
-    contrastPairs?: Record<string, { foreground: string; background: string }>;
+    contrastPairs?: Record<string, { foreground: string; background: string; min?: number }>;
     surfaces?: { light?: string; dark?: string };
     omitted?: Array<{ section: string; reason: string }>;
   };
@@ -140,9 +140,12 @@ export function lintTheme(themeDir: string): LintResult {
         push({ severity: 'warning', path, message: 'not checked: explicit pair must resolve to two opaque hex colours' });
         continue;
       }
+      // `min` lowers the floor to 3:1 for a pair that is not text: a control's
+      // edge or an icon (WCAG 1.4.11).
+      const required = pair.min ?? AA_NORMAL;
       const ratio = contrastRatio(foreground, background);
-      push({ severity: ratio >= AA_NORMAL ? 'info' : 'error', path,
-        message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`, ratio, required: AA_NORMAL });
+      push({ severity: ratio >= required ? 'info' : 'error', path,
+        message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`, ratio, required });
     }
 
     // A component states both of its colours, so it is the one pair that needs no

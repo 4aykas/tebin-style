@@ -2,7 +2,8 @@
 
 Optional theme `contrastPairs` map named checks to `foreground` and `background`
 strings. The linter resolves token references and requires opaque hex values,
-using the normal-text contrast threshold. It reports unchecked declarations
+using the normal-text contrast threshold unless the pair sets `min` (3, 4.5
+or 7). It reports unchecked declarations
 as warnings. Names must be lowercase words separated by hyphens.
 
 Three JSON Schemas (2020-12) guard this repository.

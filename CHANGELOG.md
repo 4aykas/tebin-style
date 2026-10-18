@@ -53,6 +53,12 @@
   entry. The baseline is the theme's own premise (tebin.pro as built; the
   2017 brand book); `color.grey` names #91, and the `motion` group is
   `proposal`, listed as unconfirmed until checked against tebin.pro.
+- A contrast pair can set `min`: 3 for a non-text edge or icon (WCAG
+  1.4.11), 7 for AAA text; 4.5 stays the default. `fleet` now measures its
+  control edges against the page and the raised surface at 3:1 in both modes,
+  instead of listing that check as omitted.
+- `pnpm lint:themes` counts tokens no rule pairs in one line per theme;
+  `--verbose` lists them.
 
 ## 1.12.2 — 2026-10-18
 

@@ -299,9 +299,6 @@ components:
     borderColor: "{colors.outline-control}"
     rounded: "{rounded.control}"
     padding: "0.5rem 1rem"
-omitted:
-  - section: "control-edge"
-    reason: "A control's edge (role.outline-control) must reach 3:1 against the page. The lint measures 4.5:1 text pairs only, so the source dashboard's own contrast test holds that floor."
 ---
 # FleetView — design
 

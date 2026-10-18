@@ -34,6 +34,19 @@ describe('lintTheme', () => {
     expect(result.findings.find(f => f.path === 'contrastPairs.missing')?.severity).toBe('warning');
     expect(result.coverage).toEqual({ checked: 2, unchecked: 2 });
   });
+  it('holds a pair to its own min, 3:1 for a non-text edge', () => {
+    const dir = fixture('pair-min', { ...base, surfaces: { light: '#FFFFFF' },
+      contrastPairs: {
+        'edge-3': { foreground: '#949494', background: '#FFFFFF', min: 3 },
+        'edge-as-text': { foreground: '#949494', background: '#FFFFFF' },
+        'faint-edge': { foreground: '#AAAAAA', background: '#FFFFFF', min: 3 },
+      },
+    }, { color: { grey: { $value: '#949494' } } });
+    const find = (name: string) => lintTheme(dir).findings.find(f => f.path === `contrastPairs.${name}`);
+    expect(find('edge-3')).toMatchObject({ severity: 'info', required: 3 });
+    expect(find('edge-as-text')).toMatchObject({ severity: 'error', required: 4.5 });
+    expect(find('faint-edge')?.severity).toBe('error');
+  });
   it('fails a ratio just below 4.5 for both roles and component labels', () => {
     const dir = fixture('rounding', { ...base, surfaces: { light: '#FFFFFF' } }, {
       role: { surface: { $value: '#FFFFFF' }, 'on-surface': { $value: '#6e7978' } },
