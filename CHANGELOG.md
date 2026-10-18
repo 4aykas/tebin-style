@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.12.2 — 2026-10-18
 
 ### Repository
 - The repo moves to Gitea, `git.tebin.co/TEBIN/tebin-style` (public), for
