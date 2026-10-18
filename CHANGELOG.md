@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.13.0 — 2026-10-18
 
 ### Themes
 - New theme `fleet` (FleetView 1.0.0), the look of TEBIN's server console,
