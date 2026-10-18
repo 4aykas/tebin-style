@@ -42,6 +42,10 @@
   release runs.
 - `CODING_STANDARDS.md`: a rule or `tebin` value agrees with the decisions
   recorded for tebin.pro; the release review runs against it.
+- `CONTRIBUTING.md` is a full checklist for a new theme: intro, sources,
+  contrast pairs, modes, theme rules and the three lists that name every
+  theme. A test checks that `llms.txt` counts and names every theme. Rule
+  tests no longer pin the number of rules.
 
 ### Lint
 - `tebin` and `tebin-classic` gain `sources.json`: every token's value and
