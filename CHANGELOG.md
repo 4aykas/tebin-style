@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Repository
+- The repo moves to Gitea, `git.tebin.co/TEBIN/tebin-style` (public), for
+  pull requests, issues, CI and releases. GitHub `4aykas/tebin-style` stays
+  as a push mirror, so raw URLs, the plugin marketplace and the GitHub
+  release keep working. CI runs Linux on Gitea and Windows on GitHub. A tag
+  makes two releases: Gitea's, and GitHub's with build provenance.
+  Dependabot is removed: its pull requests would land on the mirror.
+
 ## 1.12.1 — 2026-10-17
 
 ### Rules
