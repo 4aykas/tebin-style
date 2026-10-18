@@ -1,8 +1,10 @@
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { readManifest, byCodepoint } from './raster.js';
+import { modeNames, resolveString } from './tokens.js';
 
 export const PREVIEW_KEYS = ['brand', 'ink', 'topbar'];
+const PREVIEW_ROLES: Record<string, string> = { brand: 'primary', ink: 'on-surface', topbar: 'surface' };
 
 export interface ThemeEntry {
   id: string;
@@ -12,6 +14,8 @@ export interface ThemeEntry {
   industry: string[];
   mood: string[];
   preview: Record<string, string>;
+  /** Modes besides the default, each a `:root[data-theme="<mode>"]` block. */
+  modes?: string[];
   formats: Record<string, string>;
   /** `bytes` is the file size, so an agent can decide before fetching. */
   assets: Array<{ id: string; type: string; path: string; bytes: number; rawUrl?: string; license?: string }>;
@@ -39,10 +43,14 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
     const tokens = JSON.parse(readFileSync(tokensPath, 'utf8'));
     const colors = (tokens.color ?? {}) as Record<string, { $value?: string }>;
 
+    // A theme whose palette has no brand, ink or topbar (fleet names its
+    // colours by hue) shows the roles that play those parts.
     const preview: Record<string, string> = {};
     for (const key of PREVIEW_KEYS) {
-      if (colors[key]?.$value) preview[key] = colors[key].$value as string;
+      const value = colors[key]?.$value ?? resolveString(tokens, tokens.role?.[PREVIEW_ROLES[key]!]?.$value);
+      if (value) preview[key] = value as string;
     }
+    const modes = modeNames(tokens);
 
     const base = `themes/${entry.name}`;
     const assets = (theme.assets ?? []).map((a: { id: string; type: string; path: string; license?: string }) => ({
@@ -77,6 +85,7 @@ export function buildIndex(themesRoot: string, opts: { rawBaseUrl?: string } = {
       industry: theme.industry ?? [],
       mood: theme.mood ?? [],
       preview,
+      ...(modes.length ? { modes } : {}),
       formats: {
         css: `${base}/dist/tokens.css`,
         tailwind: `${base}/dist/tailwind.css`,

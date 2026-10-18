@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schema/theme.schema.json",
+  "id": "fleet",
+  "name": "FleetView",
+  "description": "Operator console for a fleet of servers: dense, flat, slate on slate, colour spent only on state and one accent.",
+  "version": "1.0.0",
+  "media": ["web"],
+  "industry": ["it-operations", "monitoring", "internal-tools"],
+  "mood": ["dense", "technical", "calm"],
+  "source": {
+    "url": "https://fleet.tebin.pro",
+    "extractedBy": "manual"
+  },
+  "license": {
+    "tokens": "MIT",
+    "assets": "© TEBIN — all rights reserved"
+  },
+  "author": "TEBIN",
+  "createdAt": "2026-10-18",
+  "updatedAt": "2026-10-18",
+  "surfaces": {
+    "light": "#F8FAFC",
+    "dark": "#0F172A"
+  },
+  "contrastPairs": {
+    "text-on-raised": { "foreground": "{role.on-surface}", "background": "{role.surface-raised}" },
+    "muted-on-raised": { "foreground": "{role.on-surface-muted}", "background": "{role.surface-raised}" },
+    "subtle-on-page": { "foreground": "{role.on-surface-subtle}", "background": "{role.surface}" },
+    "subtle-on-raised": { "foreground": "{role.on-surface-subtle}", "background": "{role.surface-raised}" },
+    "accent-on-raised": { "foreground": "{role.primary}", "background": "{role.surface-raised}" },
+    "success-on-raised": { "foreground": "{role.success}", "background": "{role.surface-raised}" },
+    "warning-on-raised": { "foreground": "{role.warning}", "background": "{role.surface-raised}" },
+    "error-on-raised": { "foreground": "{role.error}", "background": "{role.surface-raised}" }
+  },
+  "omitted": [
+    {
+      "section": "control-edge",
+      "reason": "A control's edge (role.outline-control) must reach 3:1 against the page. The lint measures 4.5:1 text pairs only, so the source dashboard's own contrast test holds that floor."
+    }
+  ],
+  "assets": [
+    { "id": "logo-mark", "type": "logo", "variant": "full", "format": "svg", "path": "assets/logo/logo-mark.svg" },
+    { "id": "logo-tile", "type": "logo", "variant": "tile", "format": "svg", "path": "assets/logo/logo-tile.svg" },
+    { "id": "favicon-svg", "type": "favicon", "format": "svg", "path": "assets/favicon/favicon.svg" },
+    { "id": "favicon-png", "type": "favicon", "format": "png", "path": "assets/favicon/favicon.png" },
+    { "id": "favicon-ico", "type": "favicon", "format": "ico", "path": "assets/favicon/favicon.ico" }
+  ]
+}

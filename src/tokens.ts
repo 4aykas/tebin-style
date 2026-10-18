@@ -57,3 +57,59 @@ export function resolveString(tokens: TokenTree, value: unknown): string | null 
   const resolved = resolveToken(tokens, value);
   return typeof resolved === 'string' ? resolved : null;
 }
+
+/**
+ * Modes. A theme with more than one look keeps its default in the ordinary
+ * groups and each other mode in `mode.<name>`, which repeats a token's path
+ * with the value that mode gives it: `mode.light.role.surface` overrides
+ * `role.surface`. A browser selects one with `:root[data-theme="<name>"]`.
+ */
+export const MODE_GROUP = 'mode';
+
+/** CSS selector that turns a mode on. */
+export const modeSelector = (mode: string) => `:root[data-theme="${mode}"]`;
+
+/** The names under `mode`, in source order. */
+export function modeNames(tokens: TokenTree): string[] {
+  const group = tokens[MODE_GROUP];
+  return group && typeof group === 'object' ? Object.keys(group).filter((k) => !k.startsWith('$')) : [];
+}
+
+/** Every `[path, leaf]` under a tree, as dotted paths. */
+export function leavesOf(tree: TokenTree, prefix = ''): Array<[string, TokenLeaf]> {
+  const out: Array<[string, TokenLeaf]> = [];
+  for (const [key, child] of Object.entries(tree)) {
+    if (key.startsWith('$') || !child || typeof child !== 'object') continue;
+    const path = prefix ? `${prefix}.${key}` : key;
+    if ('$value' in child) out.push([path, child as TokenLeaf]);
+    else out.push(...leavesOf(child as TokenTree, path));
+  }
+  return out;
+}
+
+/** The tree without its `mode` group: the default mode. */
+export function baseTokens(tokens: TokenTree): TokenTree {
+  const { [MODE_GROUP]: _modes, ...rest } = tokens;
+  return rest;
+}
+
+/**
+ * The tree as one mode sees it: the default with that mode's overrides laid
+ * over, and no `mode` group. A reference inside an override resolves in the
+ * merged tree, so it may point at the default palette.
+ */
+export function tokensForMode(tokens: TokenTree, mode: string): TokenTree {
+  const merged = structuredClone(baseTokens(tokens));
+  const overrides = ((tokens[MODE_GROUP] ?? {}) as TokenTree)[mode] as TokenTree | undefined;
+  for (const [path, leaf] of leavesOf(overrides ?? {})) {
+    let node = merged;
+    const parts = path.split('.');
+    for (const seg of parts.slice(0, -1)) {
+      node[seg] = (node[seg] as TokenTree | undefined) ?? {};
+      node = node[seg] as TokenTree;
+    }
+    const last = parts[parts.length - 1]!;
+    node[last] = { ...((node[last] as TokenLeaf | undefined) ?? {}), $value: leaf.$value };
+  }
+  return merged;
+}

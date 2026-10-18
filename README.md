@@ -14,9 +14,11 @@ Choose a style, download the real brand assets, or connect an AI agent to the sa
 |---|---|---|
 | **TEBIN Modern** · `tebin` | Websites and apps: signal red, charcoal, sans, condensed and monospace type | [Open the guide](themes/tebin/DESIGN.md) |
 | **TEBIN Classic** · `tebin-classic` | Corporate documents, presentations and print, based on the 2017 brand book | [Open the guide](themes/tebin-classic/DESIGN.md) |
+| **FleetView** · `fleet` | Operator consoles and internal tools: dense slate surfaces, one green accent, Geist and Geist Mono, dark with a light mode | [Open the guide](themes/fleet/DESIGN.md) |
 
-These are two supported styles, not an old version and its replacement. Modern's
-machine id stays `tebin`. Choose one for a deliverable; keep its colours, type
+Modern and Classic are two supported styles, not an old version and its
+replacement. Modern's machine id stays `tebin`. FleetView is the look of
+TEBIN's server console. Choose one for a deliverable; keep its colours, type
 and rules together. [Slate](themes/slate/DESIGN.md) (`slate`) is an optional,
 unbranded starter with tokens only.
 

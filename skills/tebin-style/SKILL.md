@@ -40,7 +40,8 @@ change a brand value goes to the brand's owner. Copy follows rule
    name. For a vague request ("something industrial"), offer 2–3 candidates
    with their preview colours if a choice is needed. An explicit TEBIN request
    normally means `tebin` for modern web/app work and `tebin-classic` for
-   corporate documents and print. Preserve a theme the user already chose.
+   corporate documents and print; FleetView or an operator console means
+   `fleet`. Preserve a theme the user already chose.
 2. **Read its `DESIGN.md`.** `themes/<id>/DESIGN.md` is self-contained. Read
    it before `README.md` or `theme.json`.
 3. **Detect the target and pick one format.** Match how the project already

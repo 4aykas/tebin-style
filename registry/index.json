@@ -1,7 +1,154 @@
 {
-  "generatedAt": "2026-10-17",
-  "count": 3,
+  "generatedAt": "2026-10-18",
+  "count": 4,
   "themes": [
+    {
+      "id": "fleet",
+      "name": "FleetView",
+      "version": "1.0.0",
+      "description": "Operator console for a fleet of servers: dense, flat, slate on slate, colour spent only on state and one accent.",
+      "industry": [
+        "it-operations",
+        "monitoring",
+        "internal-tools"
+      ],
+      "mood": [
+        "dense",
+        "technical",
+        "calm"
+      ],
+      "preview": {
+        "brand": "#4ADE80",
+        "ink": "#F1F5F9",
+        "topbar": "#0F172A"
+      },
+      "modes": [
+        "light"
+      ],
+      "formats": {
+        "css": "themes/fleet/dist/tokens.css",
+        "tailwind": "themes/fleet/dist/tailwind.css",
+        "dtcg": "themes/fleet/dist/tokens.dtcg.json",
+        "ts": "themes/fleet/dist/theme.ts",
+        "design-md": "themes/fleet/DESIGN.md",
+        "colors-csv": "themes/fleet/dist/colors.csv",
+        "shadcn": "themes/fleet/dist/shadcn.json"
+      },
+      "assets": [
+        {
+          "id": "logo-mark",
+          "type": "logo",
+          "path": "themes/fleet/assets/logo/logo-mark.svg",
+          "bytes": 773,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/logo/logo-mark.svg"
+        },
+        {
+          "id": "logo-tile",
+          "type": "logo",
+          "path": "themes/fleet/assets/logo/logo-tile.svg",
+          "bytes": 845,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/logo/logo-tile.svg"
+        },
+        {
+          "id": "favicon-svg",
+          "type": "favicon",
+          "path": "themes/fleet/assets/favicon/favicon.svg",
+          "bytes": 773,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/favicon/favicon.svg"
+        },
+        {
+          "id": "favicon-png",
+          "type": "favicon",
+          "path": "themes/fleet/assets/favicon/favicon.png",
+          "bytes": 238,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/favicon/favicon.png"
+        },
+        {
+          "id": "favicon-ico",
+          "type": "favicon",
+          "path": "themes/fleet/assets/favicon/favicon.ico",
+          "bytes": 260,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/favicon/favicon.ico"
+        },
+        {
+          "id": "favicon-svg@128",
+          "type": "favicon",
+          "path": "themes/fleet/assets/png/favicon-svg-128.png",
+          "bytes": 824,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/favicon-svg-128.png"
+        },
+        {
+          "id": "favicon-svg@256",
+          "type": "favicon",
+          "path": "themes/fleet/assets/png/favicon-svg-256.png",
+          "bytes": 1813,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/favicon-svg-256.png"
+        },
+        {
+          "id": "favicon-svg@512",
+          "type": "favicon",
+          "path": "themes/fleet/assets/png/favicon-svg-512.png",
+          "bytes": 5042,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/favicon-svg-512.png"
+        },
+        {
+          "id": "logo-mark@1024",
+          "type": "logo",
+          "path": "themes/fleet/assets/png/logo-mark-1024.png",
+          "bytes": 13430,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/logo-mark-1024.png"
+        },
+        {
+          "id": "logo-mark@2048",
+          "type": "logo",
+          "path": "themes/fleet/assets/png/logo-mark-2048.png",
+          "bytes": 35961,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/logo-mark-2048.png"
+        },
+        {
+          "id": "logo-mark@512",
+          "type": "logo",
+          "path": "themes/fleet/assets/png/logo-mark-512.png",
+          "bytes": 5042,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/logo-mark-512.png"
+        },
+        {
+          "id": "logo-tile@1024",
+          "type": "logo",
+          "path": "themes/fleet/assets/png/logo-tile-1024.png",
+          "bytes": 21168,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/logo-tile-1024.png"
+        },
+        {
+          "id": "logo-tile@2048",
+          "type": "logo",
+          "path": "themes/fleet/assets/png/logo-tile-2048.png",
+          "bytes": 50888,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/logo-tile-2048.png"
+        },
+        {
+          "id": "logo-tile@512",
+          "type": "logo",
+          "path": "themes/fleet/assets/png/logo-tile-512.png",
+          "bytes": 8272,
+          "license": "© TEBIN — all rights reserved",
+          "rawUrl": "https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/assets/png/logo-tile-512.png"
+        }
+      ]
+    },
     {
       "id": "slate",
       "name": "Slate",

@@ -91,10 +91,10 @@ describe('post-audit rules (2026-07-29)', () => {
     }
   });
 
-  it('has 70 rules with unique ids', () => {
+  it('has 77 rules with unique ids', () => {
     const rules = loadRules();
-    expect(rules).toHaveLength(70);
-    expect(new Set(rules.map((r) => r.id)).size).toBe(70);
+    expect(rules).toHaveLength(77);
+    expect(new Set(rules.map((r) => r.id)).size).toBe(77);
   });
 
   it('carries the interaction rules from the interior.dev review (2026-10)', () => {
@@ -105,8 +105,8 @@ describe('post-audit rules (2026-07-29)', () => {
     }
   });
 
-  it('opens a typography category of seven', () => {
-    expect(filterRules({ category: 'typography' })).toHaveLength(7);
+  it('opens a typography category of nine', () => {
+    expect(filterRules({ category: 'typography' })).toHaveLength(9);
   });
 
   it('states the heading rule as a NEVER and names the shy escape hatch', () => {

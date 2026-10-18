@@ -118,18 +118,24 @@ the corner mark alone, white
 
 ## Themes
 
-Three themes ship here.
+Four themes ship here.
 
 - **tebin-classic** — the 2017 print-era identity: Pantone red and grey, Roboto
   with an Arial fallback. Use it for documents and anything printed. Tokens at
   `themes/tebin-classic/dist/`.
 - **tebin** — the web theme: red on charcoal, translucent scales, plus the type
   and spacing scales used on tebin.pro. Tokens at `themes/tebin/dist/`.
+- **fleet** — FleetView, TEBIN's server console: slate surfaces, one green
+  accent, Geist and Geist Mono. Dark by default, with a light mode as
+  `:root[data-theme="light"]`. Tokens at `themes/fleet/dist/`.
 - **slate** — a neutral starter for projects that are not TEBIN.
   **Tokens only, no logo assets.** MIT. Tokens at `themes/slate/dist/`.
 
 Each `dist/` holds `tokens.css`, `tailwind.css`, `tokens.dtcg.json`,
-`theme.ts` and `colors.csv`.
+`theme.ts` and `colors.csv`; web themes add `shadcn.json`. A theme with modes
+keeps its default in the ordinary groups and each other mode in
+`mode.<name>`, which `tokens.css` and `tailwind.css` turn into one
+`:root[data-theme="<name>"]` block each.
 
 Tokens are grouped as `color`, `role`, `font`, `radius` and — on `tebin` —
 `type`, `lineHeight`, `fontWeight`, `spacing` and `layout`. A **role** points

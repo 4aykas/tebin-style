@@ -1,0 +1,37 @@
+token,hex,r,g,b,pantone,cmyk,purpose
+color.slate-25,#FBFCFE,251,252,254,not specified in the 2017 brand book,not specified in the 2017 brand book,Raised surface on the light page.
+color.slate-50,#F8FAFC,248,250,252,not specified in the 2017 brand book,not specified in the 2017 brand book,The light page.
+color.slate-100,#F1F5F9,241,245,249,not specified in the 2017 brand book,not specified in the 2017 brand book,Text on the dark page.
+color.slate-200,#E2E8F0,226,232,240,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-300,#CBD5E1,203,213,225,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-400,#94A3B8,148,163,184,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-450,#8494AB,132,148,171,not specified in the 2017 brand book,not specified in the 2017 brand book,"Tertiary text on dark: 4.5:1 on the raised surface, where #64748B gave 3.07:1."
+color.slate-475,#808EA2,128,142,162,not specified in the 2017 brand book,not specified in the 2017 brand book,Control edge on light: 3:1 against the page.
+color.slate-500,#64748B,100,116,139,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-600,#475569,71,85,105,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-700,#334155,51,65,85,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-800,#1E293B,30,41,59,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.slate-900,#0F172A,15,23,42,not specified in the 2017 brand book,not specified in the 2017 brand book,"The dark page, and the browser chrome in dark mode."
+color.green-400,#4ADE80,74,222,128,not specified in the 2017 brand book,not specified in the 2017 brand book,Accent and OK on dark.
+color.green-500,#22C55E,34,197,94,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.green-600,#16A34A,22,163,74,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.green-700,#15803D,21,128,61,not specified in the 2017 brand book,not specified in the 2017 brand book,"Accent on light: a button label and a link both reach 4.5:1, where #16A34A gave 3.15:1."
+color.green-800,#166534,22,101,52,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.amber-400,#FBBF24,251,191,36,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.amber-600,#D97706,217,119,6,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.amber-700,#B45309,180,83,9,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.amber-800,#92400E,146,64,14,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.red-400,#F87171,248,113,113,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.red-500,#EF4444,239,68,68,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.red-600,#DC2626,220,38,38,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.red-700,#B91C1C,185,28,28,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.cyan-400,#22D3EE,34,211,238,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.cyan-600,#0891B2,8,145,178,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.violet-400,#A78BFA,167,139,250,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.violet-600,#7C3AED,124,58,237,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.blue-400,#60A5FA,96,165,250,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.blue-700,#1D4ED8,29,78,216,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.pink-400,#F472B6,244,114,182,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.pink-700,#BE185D,190,24,93,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.teal-400,#2DD4BF,45,212,191,not specified in the 2017 brand book,not specified in the 2017 brand book,
+color.teal-800,#115E59,17,94,89,not specified in the 2017 brand book,not specified in the 2017 brand book,
