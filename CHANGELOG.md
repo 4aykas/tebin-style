@@ -12,6 +12,9 @@
   `CI / verify`, as GitHub's did. `scripts/gitea-api.mjs` gains `pr` and
   `merge`. A `pre-push` hook (`.githooks`, set by `pnpm install`) runs
   `pnpm verify`.
+- `scripts/release.mjs <version> --reviewed` cuts a release: changelog and
+  version, build and verify, a PR with green CI, the merge, the tag, then both
+  release runs.
 - `CODING_STANDARDS.md`: a rule or `tebin` value agrees with the decisions
   recorded for tebin.pro; the release review runs against it.
 
