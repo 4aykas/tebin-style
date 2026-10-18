@@ -8,7 +8,10 @@
 //   node scripts/gitea-api.mjs run-for [sha|ref] [workflow] → run id, exit 1 if none
 //   node scripts/gitea-api.mjs jobs <run>                   → "  name: conclusion" lines
 //   node scripts/gitea-api.mjs rerun-failed <run>
-// The workflow defaults to ci.yml; a tag's run is release.yml.
+//   node scripts/gitea-api.mjs pr <title> [body-file]       → opens a PR from the current branch to main
+//   node scripts/gitea-api.mjs merge <pr>                   → merges once CI is green, deletes the branch
+// The workflow defaults to ci.yml; a tag's run is release.yml. `main` takes
+// changes only through a PR with a green `CI / verify (pull_request)`.
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -84,7 +87,15 @@ if (cmd === 'run-for') {
   await printJobs(arg);
 } else if (cmd === 'rerun-failed') {
   await api(`/actions/runs/${arg}/rerun-failed-jobs`, { method: 'POST' });
+} else if (cmd === 'pr') {
+  const head = execFileSync('git', ['branch', '--show-current'], { encoding: 'utf8' }).trim();
+  const body = extra ? readFileSync(extra, 'utf8') : '';
+  const pr = await api('/pulls', { method: 'POST', body: JSON.stringify({ head, base: 'main', title: arg, body }) });
+  console.log(`#${pr.number} ${pr.html_url}`);
+} else if (cmd === 'merge') {
+  await api(`/pulls/${arg}/merge`, { method: 'POST', body: JSON.stringify({ Do: 'merge', delete_branch_after_merge: true }) });
+  console.log(`merged #${arg}`);
 } else {
-  console.error('usage: gitea-api.mjs watch [sha] [workflow] | run-for [sha] [workflow] | jobs <run> | rerun-failed <run>');
+  console.error('usage: gitea-api.mjs watch [sha] [workflow] | run-for [sha] [workflow] | jobs <run> | rerun-failed <run> | pr <title> [body-file] | merge <pr>');
   process.exit(2);
 }
