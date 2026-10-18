@@ -157,6 +157,41 @@ describe('lintTheme on motion', () => {
   });
 });
 
+describe('lintTheme on sources.json', () => {
+  const tokens = {
+    role: {},
+    color: {
+      red: { $type: 'color', $value: '#DA291C' },
+      grey: { $type: 'color', $value: '#898D8D' },
+      teal: { $type: 'color', $value: '#008080' },
+    },
+  };
+  const r = (() => {
+    const dir = fixture('sources', { ...base, surfaces: { light: '#FFFFFF' } }, tokens);
+    writeFileSync(join(dir, 'sources.json'), JSON.stringify({
+      'color.red': { value: '#DA291C', source: 'brand book 2017' },
+      'color.grey': { value: '#808285', source: 'brand book 2017' },
+      'color.gone': { value: '#000000', source: 'brand book 2017' },
+    }));
+    return lintTheme(dir);
+  })();
+  const at = (path: string) => r.findings.filter((f) => f.path === path);
+
+  it('passes a value that matches its entry', () => {
+    expect(at('color.red')).toEqual([]);
+  });
+  it('errors on a changed value, a token with no entry and an entry with no token', () => {
+    expect(at('color.grey')[0]).toMatchObject({ severity: 'error', message: expect.stringMatching(/value changed/) });
+    expect(at('color.teal')[0]).toMatchObject({ severity: 'error', message: expect.stringMatching(/no source/) });
+    expect(at('color.gone')[0]).toMatchObject({ severity: 'error', message: expect.stringMatching(/not in tokens\.json/) });
+  });
+  it('lists a proposal as unconfirmed, not as an error', () => {
+    const dir = fixture('proposal', { ...base, surfaces: { light: '#FFFFFF' } }, { role: {}, color: { red: tokens.color.red } });
+    writeFileSync(join(dir, 'sources.json'), JSON.stringify({ 'color.red': { value: '#DA291C', source: 'proposal: a review' } }));
+    expect(lintTheme(dir).findings).toContainEqual(expect.objectContaining({ severity: 'info', message: 'unconfirmed: proposal: a review' }));
+  });
+});
+
 describe('lintTheme on components', () => {
   const THEME = { ...base, surfaces: { light: '#FFFFFF' } };
 

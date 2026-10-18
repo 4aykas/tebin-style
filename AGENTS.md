@@ -21,7 +21,9 @@ Dependency updates are manual: `pnpm update`, then `pnpm build`, then
 ## Layout
 
 - `themes/<id>/`: one theme. Sources are `tokens.json`, `theme.json`,
-  `design.intro.md` and `assets/` (except `assets/png/`).
+  `design.intro.md` and `assets/` (except `assets/png/`). Brand themes add
+  `sources.json`: each token's value and where it came from, checked by
+  `pnpm lint:themes`.
 - `rules/rules.json`: design rules.
 - `src/`: the library. `scripts/`: build, check and release scripts.
 - `mcp/`: the MCP server, bundled to `mcp/dist/server.mjs`.
