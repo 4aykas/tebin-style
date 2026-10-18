@@ -21611,6 +21611,7 @@ function contrastRatio(a, b) {
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 var AA_NORMAL = 4.5;
+var PAIR_FLOORS = [3, 4.5, 7];
 
 // src/tokens.ts
 function referencePath(value) {
@@ -21725,6 +21726,7 @@ function lintTheme(themeDir2) {
   const measure = (tokens2, at) => {
     const push2 = (f) => findings.push({ ...f, path: at(f.path) });
     const roles = tokens2.role ?? {};
+    const paired = new Set(Object.values(theme.contrastPairs ?? {}).map((p) => referencePath(p.foreground)));
     const surfaceValue = resolveString(tokens2, roles.surface?.$value);
     for (const [name, leaf] of Object.entries(roles)) {
       const path = `role.${name}`;
@@ -21739,6 +21741,7 @@ function lintTheme(themeDir2) {
         continue;
       }
       const which = surfaceFor(name);
+      if (which === null && paired.has(path)) continue;
       if (which === null) {
         push2({ severity: "info", path, message: "not checked: no surface pairing rule for this name" });
         continue;
@@ -21775,6 +21778,10 @@ function lintTheme(themeDir2) {
       const background = resolveString(tokens2, pair.background);
       if (!foreground || !background || !hexToRgb(foreground) || !hexToRgb(background)) {
         push2({ severity: "warning", path, message: "not checked: explicit pair must resolve to two opaque hex colours" });
+        continue;
+      }
+      if (pair.min !== void 0 && !PAIR_FLOORS.includes(pair.min)) {
+        push2({ severity: "error", path, message: `min ${JSON.stringify(pair.min)} is not one of ${PAIR_FLOORS.join(", ")}` });
         continue;
       }
       const required2 = pair.min ?? AA_NORMAL;
@@ -21959,12 +21966,15 @@ function diffThemes(beforeDir, afterDir) {
   const measured = new Set(afterLint.findings.filter((f) => f.ratio !== void 0).map((f) => f.path));
   const unchecked = beforeLint.findings.filter((f) => f.ratio !== void 0 && !measured.has(f.path) && atPath.has(f.path)).map((before2) => ({ before: before2, after: atPath.get(before2.path) }));
   const lost = new Set(unchecked.map((u) => u.before.path));
+  const floors = new Map(beforeLint.findings.filter((f) => f.required !== void 0).map((f) => [f.path, f]));
+  const loosened = afterLint.findings.filter((f) => f.required !== void 0 && f.required < (floors.get(f.path)?.required ?? 0)).map((after2) => ({ before: floors.get(after2.path), after: after2 }));
+  const lowered = new Set(loosened.map((l) => l.after.path));
   const introduced = [...current].filter(([id]) => !previous.has(id)).map(([, f]) => f);
-  const resolved = [...previous].filter(([id, f]) => !current.has(id) && !lost.has(f.path)).map(([, f]) => f);
-  const worsened = [];
+  const resolved = [...previous].filter(([id, f]) => !current.has(id) && !lost.has(f.path) && !lowered.has(f.path)).map(([, f]) => f);
+  const worsened = [...loosened];
   for (const [id, after2] of current) {
     const before2 = previous.get(id);
-    if (before2 && (before2.severity === "warning" && after2.severity === "error" || before2.ratio !== void 0 && after2.ratio !== void 0 && after2.ratio / (after2.required ?? 1) < before2.ratio / (before2.required ?? 1))) {
+    if (before2 && !lowered.has(after2.path) && (before2.severity === "warning" && after2.severity === "error" || before2.ratio !== void 0 && after2.ratio !== void 0 && after2.ratio / (after2.required ?? 1) < before2.ratio / (before2.required ?? 1))) {
       worsened.push({ before: before2, after: after2 });
     }
   }
@@ -21983,7 +21993,7 @@ function diffThemes(beforeDir, afterDir) {
       }
     },
     // Token removals and warnings are visible separately, not compatibility claims.
-    regression: introduced.some((f) => f.severity === "error") || worsened.some((f) => f.after.severity === "error") || unchecked.length > 0
+    regression: introduced.some((f) => f.severity === "error") || worsened.some((f) => f.after.severity === "error") || unchecked.length > 0 || loosened.length > 0
   };
 }
 
@@ -22446,7 +22456,7 @@ var toolDefinitions = [
   tool({
     name: "diff_themes",
     title: "Compare themes",
-    description: "Compare two themes: tokens added, removed or modified per group, and lint findings introduced, resolved, worsened or unchecked. regression is true when a lint error appears or worsens, or a measured contrast pair loses its check. Not a compatibility guarantee.",
+    description: "Compare two themes: tokens added, removed or modified per group, and lint findings introduced, resolved, worsened or unchecked. regression is true when a lint error appears or worsens, a measured contrast pair loses its check, or a pair's floor is lowered. Not a compatibility guarantee.",
     inputSchema: external_exports.strictObject({
       a: themeId.describe("Theme to compare from (before)."),
       b: themeId.describe("Theme to compare to (after).")

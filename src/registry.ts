@@ -2,6 +2,7 @@ import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, extname, relative, isAbsolute, win32 } from 'node:path';
 import type { RegistryIndex } from './index-builder.js';
+import type { ContrastPair } from './contrast.js';
 
 /** The nearest folder above this module with a package.json: works from src/ and from the mcp/dist/ bundle. */
 function findRoot(dir: string): string {
@@ -62,7 +63,7 @@ export interface ThemeManifest {
   version: string;
   description?: string;
   surfaces?: { light?: string; dark?: string };
-  contrastPairs?: Record<string, { foreground: string; background: string }>;
+  contrastPairs?: Record<string, ContrastPair>;
   omitted?: Array<{ section: string; reason: string }>;
   license: { tokens: string; assets: string };
   assets: Array<{ id: string; type: string; format: string; path: string }>;

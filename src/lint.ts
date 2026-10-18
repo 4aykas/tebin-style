@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { contrastRatio, AA_NORMAL } from './contrast.js';
+import { contrastRatio, AA_NORMAL, PAIR_FLOORS, type ContrastPair } from './contrast.js';
 import { hexToRgb } from './colors-csv.js';
 import { referencePath, resolveToken, resolveString, baseTokens, leavesOf, modeNames, tokensForMode, MODE_GROUP,
   type TokenTree } from './tokens.js';
@@ -53,7 +53,7 @@ export function lintTheme(themeDir: string): LintResult {
   }
 
   const theme = JSON.parse(readFileSync(themePath, 'utf8')) as {
-    contrastPairs?: Record<string, { foreground: string; background: string; min?: number }>;
+    contrastPairs?: Record<string, ContrastPair>;
     surfaces?: { light?: string; dark?: string };
     omitted?: Array<{ section: string; reason: string }>;
   };
@@ -90,6 +90,7 @@ export function lintTheme(themeDir: string): LintResult {
   const measure = (tokens: Tree, at: (path: string) => string): void => {
     const push = (f: Finding) => findings.push({ ...f, path: at(f.path) });
     const roles = (tokens.role ?? {}) as Record<string, Leaf>;
+    const paired = new Set(Object.values(theme.contrastPairs ?? {}).map((p) => referencePath(p.foreground)));
     const surfaceValue = resolveString(tokens, roles.surface?.$value);
 
     for (const [name, leaf] of Object.entries(roles)) {
@@ -103,6 +104,7 @@ export function lintTheme(themeDir: string): LintResult {
       }
 
       const which = surfaceFor(name);
+      if (which === null && paired.has(path)) continue; // a contrast pair measures it
       if (which === null) {
         push({ severity: 'info', path, message: 'not checked: no surface pairing rule for this name' });
         continue;
@@ -140,8 +142,13 @@ export function lintTheme(themeDir: string): LintResult {
         push({ severity: 'warning', path, message: 'not checked: explicit pair must resolve to two opaque hex colours' });
         continue;
       }
-      // `min` lowers the floor to 3:1 for a pair that is not text: a control's
-      // edge or an icon (WCAG 1.4.11).
+      // `min` sets the pair's floor: 3 for a non-text edge or icon (WCAG
+      // 1.4.11), 7 for AAA text, 4.5 by default. Any other value is refused
+      // here too, since lint_theme runs without the schema.
+      if (pair.min !== undefined && !(PAIR_FLOORS as readonly number[]).includes(pair.min)) {
+        push({ severity: 'error', path, message: `min ${JSON.stringify(pair.min)} is not one of ${PAIR_FLOORS.join(', ')}` });
+        continue;
+      }
       const required = pair.min ?? AA_NORMAL;
       const ratio = contrastRatio(foreground, background);
       push({ severity: ratio >= required ? 'info' : 'error', path,

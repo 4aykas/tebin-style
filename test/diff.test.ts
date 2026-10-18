@@ -56,6 +56,14 @@ describe('diffThemes', () => {
     expect(d.regression).toBe(true);
   });
 
+  it('calls a lowered pair floor a regression, not a fix', () => {
+    const pair = (min?: number) => ({ ...THEME, contrastPairs: {
+      edge: { foreground: '#949494', background: '#FFFFFF', ...(min ? { min } : {}) } } });
+    const d = diffThemes(make('floor-a', ok, pair()), make('floor-b', ok, pair(3)));
+    expect(d.findings.resolved).toEqual([]);
+    expect(d.findings.worsened.map(w => [w.before.required, w.after.required])).toEqual([[4.5, 3]]);
+    expect(d.regression).toBe(true);
+  });
   it('calls deleting the surfaces a regression when a pair measured on them fails', () => {
     const tokens = { ...ok, role: { ...ok.role, 'text-on-light': { $type: 'color', $value: '#999999' } } };
     const { surfaces: _, ...bare } = THEME;
