@@ -41,6 +41,14 @@ function surfaceFor(role: string): 'light' | 'dark' | 'surface' | null {
   return null;
 }
 
+/** A measured pair: info when it reaches its floor, an error when it does not. */
+function measured(path: string, fg: string, bg: string,
+  { required = AA_NORMAL, label = '' }: { required?: number; label?: string } = {}): Finding {
+  const ratio = contrastRatio(fg, bg);
+  return { severity: ratio >= required ? 'info' : 'error', path,
+    message: `${label}${fg} on ${bg} is ${ratio.toFixed(4)}:1`, ratio, required };
+}
+
 export function lintTheme(themeDir: string): LintResult {
   const findings: Finding[] = [];
   const push = (f: Finding) => findings.push(f);
@@ -65,16 +73,7 @@ export function lintTheme(themeDir: string): LintResult {
       for (const [key, child] of Object.entries(value)) checkValue(child, `${path}.${key}`);
     }
   };
-  const checkReferences = (tree: Tree, prefix = ''): void => {
-    for (const [key, child] of Object.entries(tree)) {
-      if (key.startsWith('$') || !child || typeof child !== 'object') continue;
-      const path = prefix ? `${prefix}.${key}` : key;
-      const leaf = child as Leaf;
-      if ('$value' in leaf) checkValue(leaf.$value, path);
-      else checkReferences(child as Tree, path);
-    }
-  };
-  checkReferences(tokens);
+  for (const [path, leaf] of leavesOf(tokens)) checkValue(leaf.$value, path);
   const omitted = new Set((theme.omitted ?? []).map((o) => o.section));
 
   const surfaces = theme.surfaces;
@@ -125,14 +124,7 @@ export function lintTheme(themeDir: string): LintResult {
         continue;
       }
 
-      const ratio = contrastRatio(value, against);
-      push({
-        severity: ratio >= AA_NORMAL ? 'info' : 'error',
-        path,
-        message: `${value} on ${against} is ${ratio.toFixed(4)}:1`,
-        ratio,
-        required: AA_NORMAL,
-      });
+      push(measured(path, value, against));
     }
 
     for (const [name, pair] of Object.entries(theme.contrastPairs ?? {})) {
@@ -150,10 +142,7 @@ export function lintTheme(themeDir: string): LintResult {
         push({ severity: 'error', path, message: `min ${JSON.stringify(pair.min)} is not one of ${PAIR_FLOORS.join(', ')}` });
         continue;
       }
-      const required = pair.min ?? AA_NORMAL;
-      const ratio = contrastRatio(foreground, background);
-      push({ severity: ratio >= required ? 'info' : 'error', path,
-        message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`, ratio, required });
+      push(measured(path, foreground, background, { required: pair.min }));
     }
 
     // A component states both of its colours, so it is the one pair that needs no
@@ -178,14 +167,7 @@ export function lintTheme(themeDir: string): LintResult {
         push({ severity: 'info', path, message: 'not checked: not an opaque colour' });
         continue;
       }
-      const ratio = contrastRatio(fg, bg);
-      push({
-        severity: ratio >= AA_NORMAL ? 'info' : 'error',
-        path,
-        message: `label ${fg} on ${bg} is ${ratio.toFixed(4)}:1`,
-        ratio,
-        required: AA_NORMAL,
-      });
+      push(measured(path, fg, bg, { label: 'label ' }));
     }
   };
 

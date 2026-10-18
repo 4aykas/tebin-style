@@ -25,6 +25,11 @@ if (sh('git', ['branch', '--show-current']) !== 'main') throw new Error('run fro
 if (sh('git', ['status', '--porcelain'])) throw new Error('the tree has uncommitted changes');
 sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
 
+// The release branch comes first, so a red step leaves main clean: switch
+// back with `git checkout -f main` and delete the branch to start over.
+const branch = `release/${tag}`;
+sh('git', ['checkout', '-q', '-b', branch]);
+
 step(`changelog and package.json → ${version}`);
 const today = new Date().toISOString().slice(0, 10);
 const changelog = readFileSync('CHANGELOG.md', 'utf8');
@@ -42,9 +47,10 @@ try { hooks = sh('git', ['config', 'core.hooksPath']); } catch { /* unset */ }
 if (hooks !== '.githooks') live('pnpm', ['verify']);
 
 step('pull request');
-const branch = `release/${tag}`;
-sh('git', ['checkout', '-q', '-b', branch]);
-sh('git', ['commit', '-q', '-am', `release: ${version}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`]);
+// The tree was clean at the start, so everything here is the bump and what
+// the build made from it, new generated files included.
+sh('git', ['add', '-A']);
+sh('git', ['commit', '-q', '-m', `release: ${version}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`]);
 live('git', ['push', '-q', '-u', 'origin', branch]);
 const pr = sh('node', ['scripts/gitea-api.mjs', 'pr', `release: ${version}`]).match(/^#(\d+)/)?.[1];
 if (!pr) throw new Error('no pull request number');

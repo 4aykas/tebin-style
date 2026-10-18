@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, posix } from 'node:path';
 import { packFileList, skillFileList } from '../scripts/build-pack.js';
+import { loadIndex } from '../src/registry.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -30,6 +31,12 @@ describe('packFileList', () => {
     expect(files).toContain('examples/classic/project-report.docx');
     expect(files).toContain('examples/classic/presentation-layouts.pptx');
     expect(files).toContain('examples/modern/project-form.html');
+  });
+
+  it('carries every format the registry lists for every theme', () => {
+    for (const theme of loadIndex().themes) {
+      for (const path of Object.values(theme.formats)) expect(files, path).toContain(path);
+    }
   });
 
   it('excludes source and build files', () => {

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // A small client for the Gitea Actions API of tebin-oss/tebin-style (git.tebin.co),
 // for reading a push's CI run. The token comes from GITEA_TOKEN or the file
-// ~/.env/.gitea and is never printed. Retries network errors: a TLS hiccup
-// must not read as a failed run.
+// ~/.env/.gitea and is never printed. Retries a read on a network error, so a
+// TLS hiccup does not read as a failed run; a failed POST stops instead.
 //
 //   node scripts/gitea-api.mjs watch [sha|ref] [workflow]   → waits for the run, prints jobs; exit 0 = green
 //   node scripts/gitea-api.mjs run-for [sha|ref] [workflow] → run id, exit 1 if none

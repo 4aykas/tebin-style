@@ -242,6 +242,41 @@ export const fleet = {
           "blur": "24px",
           "spread": "0px"
         }
+      },
+      "components": {
+        "button": {
+          "backgroundColor": "#FBFCFE",
+          "textColor": "#0F172A",
+          "borderColor": "#808EA2"
+        },
+        "button-primary": {
+          "backgroundColor": "#15803D",
+          "textColor": "#F8FAFC",
+          "borderColor": "#15803D"
+        },
+        "button-primary-hover": {
+          "backgroundColor": "#166534",
+          "borderColor": "#166534"
+        },
+        "button-danger": {
+          "backgroundColor": "#DC2626",
+          "textColor": "#F8FAFC",
+          "borderColor": "#DC2626"
+        },
+        "button-danger-hover": {
+          "backgroundColor": "#B91C1C",
+          "borderColor": "#B91C1C"
+        },
+        "button-danger-quiet": {
+          "backgroundColor": "#FBFCFE",
+          "textColor": "#B91C1C",
+          "borderColor": "#DC2626"
+        },
+        "input": {
+          "backgroundColor": "#F8FAFC",
+          "textColor": "#0F172A",
+          "borderColor": "#808EA2"
+        }
       }
     }
   }
