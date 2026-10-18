@@ -201,6 +201,9 @@ export async function buildTheme(themeDir: string): Promise<void> {
 
   const sd = new StyleDictionary({
     usesDtcg: true,
+    // No line per written file; a warning (a name collision, a broken
+    // reference) fails the build instead of scrolling past.
+    log: { verbosity: 'silent', warnings: 'error' },
     source: [join(themeDir, 'tokens.json')],
     platforms: {
       css: {

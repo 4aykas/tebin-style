@@ -48,6 +48,12 @@
   release runs.
 - `CODING_STANDARDS.md`: a rule or `tebin` value agrees with the decisions
   recorded for tebin.pro; the release review runs against it.
+- Tests read the generated files back: none may carry `[object Object]`,
+  `undefined`, `NaN` or a CSS variable it uses but never defines, and a
+  theme with modes must resolve to the same value in `tailwind.css` and
+  `tokens.css` in every mode. `pnpm verify` prints about a third as much:
+  Style Dictionary logs no line per file (its warnings now fail the build),
+  and passing tests print no stdout. A code PR is reviewed before it merges.
 - `CONTRIBUTING.md` is a full checklist for a new theme: intro, sources,
   contrast pairs, modes, theme rules and the three lists that name every
   theme. A test checks that `llms.txt` counts and names every theme. Rule

@@ -20,7 +20,7 @@
     "lint:themes": "node --import tsx scripts/lint.ts",
     "check": "node --import tsx scripts/check.ts",
     "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
-    "test": "node node_modules/vitest/vitest.mjs run",
+    "test": "node node_modules/vitest/vitest.mjs run --silent=passed-only",
     "start:mcp": "node mcp/dist/server.mjs",
     "pack:brand": "node --import tsx scripts/build-pack.ts --write",
     "verify": "pnpm typecheck && pnpm validate && pnpm lint:themes && pnpm check && pnpm test",
