@@ -55,8 +55,8 @@ export function buildShadcnItem(themeDir: string): ShadcnItem | null {
   const lightTokens = views.find((t) => !isDark(t)) ?? tokens;
   const darkTokens = modes.length ? views.find(isDark) : undefined;
 
-  const light = colourVars(lightTokens);
-  const dark = darkTokens ? colourVars(darkTokens) : undefined;
+  const light = colourVars(lightTokens, 'light');
+  const dark = darkTokens ? colourVars(darkTokens, 'dark') : undefined;
 
   // shadcn derives its radius scale from --radius, with rounded-md at
   // --radius minus 2px. Buttons and inputs use rounded-md, so the control
@@ -91,7 +91,7 @@ export function buildShadcnItem(themeDir: string): ShadcnItem | null {
 }
 
 /** shadcn's colour variables from one mode's tokens; only those a token answers. */
-function colourVars(tokens: TokenTree): Record<string, string> {
+function colourVars(tokens: TokenTree, look: 'light' | 'dark'): Record<string, string> {
   const group = (name: string) => (tokens[name] ?? {}) as Record<string, Leaf>;
   const role = (name: string) => resolveString(tokens, group('role')[name]?.$value);
   const component = (name: string, prop: string) => {
@@ -123,7 +123,7 @@ function colourVars(tokens: TokenTree): Record<string, string> {
   set('primary-foreground', onPrimary);
   set('ring', primary);
   set('muted-foreground', role('on-surface-muted'));
-  set('destructive', role('error-on-light') ?? role('error'));
+  set('destructive', role(`error-on-${look}`) ?? role('error'));
   set('border', role('outline'));
   set('input', role('outline-control') ?? role('outline'));
   return out;

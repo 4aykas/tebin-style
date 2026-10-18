@@ -98,11 +98,21 @@ function modeSection(themeDir: string): string {
     out += `\n### ${mode} — \`${modeSelector(mode)}\`\n\n| Token | Default | ${mode} |\n| --- | --- | --- |\n`;
     for (const [path] of leavesOf((tokens[MODE_GROUP] as Record<string, any>)[mode] ?? {})) {
       const at = (tree: Record<string, any>) => path.split('.').reduce((n, s) => n?.[s], tree)?.$value;
-      const show = (tree: Record<string, any>) => String(resolveToken(tree, at(tree)) ?? at(tree) ?? '—');
+      const show = (tree: Record<string, any>) => cellValue(resolveToken(tree, at(tree)) ?? at(tree) ?? '—');
       out += `| \`${path}\` | \`${show(base)}\` | \`${show(merged)}\` |\n`;
     }
   }
   return out;
+}
+
+/** A token value as one table cell: a shadow as its CSS, other objects as JSON. */
+function cellValue(value: unknown): string {
+  const shadow = (s: Record<string, unknown>) => `${s.offsetX} ${s.offsetY} ${s.blur} ${s.spread ?? '0px'} ${s.color}`;
+  if (Array.isArray(value)) return value.map((v) => cellValue(v)).join(', ');
+  if (value && typeof value === 'object') {
+    return 'offsetX' in value ? shadow(value as Record<string, unknown>) : JSON.stringify(value);
+  }
+  return String(value);
 }
 
 function geometrySection(themeDir: string): string {

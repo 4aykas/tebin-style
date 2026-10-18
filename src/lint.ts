@@ -58,10 +58,8 @@ export function lintTheme(themeDir: string): LintResult {
     omitted?: Array<{ section: string; reason: string }>;
   };
   const tokens = JSON.parse(readFileSync(tokensPath, 'utf8')) as Tree;
-  const broken = new Set<string>();
   const checkValue = (value: unknown, path: string): void => {
     if (referencePath(value) !== null && resolveToken(tokens, value) === null) {
-      broken.add(path);
       push({ severity: 'warning', path, message: `${JSON.stringify(value)} does not resolve to a value` });
     } else if (value && typeof value === 'object') {
       for (const [key, child] of Object.entries(value)) checkValue(child, `${path}.${key}`);
@@ -95,7 +93,10 @@ export function lintTheme(themeDir: string): LintResult {
 
     for (const [name, leaf] of Object.entries(roles)) {
       const path = `role.${name}`;
-      if (name.startsWith('$') || broken.has(path)) continue;
+      // A broken reference is warned once, where it is written, and judged in
+      // this tree: a mode can override a broken default with a valid value.
+      if (name.startsWith('$')) continue;
+      if (referencePath(leaf.$value) !== null && resolveToken(tokens, leaf.$value) === null) continue;
       const value = resolveString(tokens, leaf.$value);
       if (value === null) {
         push({ severity: 'warning', path,
@@ -190,6 +191,9 @@ export function lintTheme(themeDir: string): LintResult {
 
   const defaultTokens = baseTokens(tokens);
   measure(defaultTokens, (p) => p);
+  // A mode reports only what it changes: a finding the default already made,
+  // same check and same result, is not repeated once per mode.
+  const seen = new Set(findings.map((f) => JSON.stringify([f.path, f.severity, f.message])));
   const baseLeaves = new Set(leavesOf(defaultTokens).map(([p]) => p));
   for (const mode of modeNames(tokens)) {
     const overrides = leavesOf(((tokens[MODE_GROUP] as Tree)[mode] ?? {}) as Tree);
@@ -199,7 +203,12 @@ export function lintTheme(themeDir: string): LintResult {
                message: `overrides ${path}, which the default mode does not have` });
       }
     }
-    measure(tokensForMode(tokens, mode), (p) => `${MODE_GROUP}.${mode}:${p}`);
+    const prefix = `${MODE_GROUP}.${mode}:`;
+    const start = findings.length;
+    measure(tokensForMode(tokens, mode), (p) => `${prefix}${p}`);
+    const measured = findings.splice(start);
+    findings.push(...measured.filter((f) =>
+      !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
   }
 
   // Motion tokens time UI state, where overshoot is banned
@@ -232,16 +241,7 @@ export function lintTheme(themeDir: string): LintResult {
   const sourcesPath = join(themeDir, SOURCES_FILE);
   if (existsSync(sourcesPath)) {
     const ledger = JSON.parse(readFileSync(sourcesPath, 'utf8')) as Record<string, { value: unknown; source: string }>;
-    const leaves = new Map<string, unknown>();
-    const collect = (tree: Tree, prefix = ''): void => {
-      for (const [key, child] of Object.entries(tree)) {
-        if (key.startsWith('$') || !child || typeof child !== 'object') continue;
-        const path = prefix ? `${prefix}.${key}` : key;
-        if ('$value' in child) leaves.set(path, (child as Leaf).$value);
-        else collect(child as Tree, path);
-      }
-    };
-    collect(tokens);
+    const leaves = new Map(leavesOf(tokens).map(([path, leaf]) => [path, leaf.$value]));
     for (const [path, value] of leaves) {
       const entry = ledger[path];
       if (!entry?.source?.trim()) {

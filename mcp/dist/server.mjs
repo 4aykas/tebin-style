@@ -21695,10 +21695,8 @@ function lintTheme(themeDir2) {
   }
   const theme = JSON.parse(readFileSync4(themePath2, "utf8"));
   const tokens = JSON.parse(readFileSync4(tokensPath, "utf8"));
-  const broken = /* @__PURE__ */ new Set();
   const checkValue = (value, path) => {
     if (referencePath(value) !== null && resolveToken(tokens, value) === null) {
-      broken.add(path);
       push({ severity: "warning", path, message: `${JSON.stringify(value)} does not resolve to a value` });
     } else if (value && typeof value === "object") {
       for (const [key, child] of Object.entries(value)) checkValue(child, `${path}.${key}`);
@@ -21730,7 +21728,8 @@ function lintTheme(themeDir2) {
     const surfaceValue = resolveString(tokens2, roles.surface?.$value);
     for (const [name, leaf] of Object.entries(roles)) {
       const path = `role.${name}`;
-      if (name.startsWith("$") || broken.has(path)) continue;
+      if (name.startsWith("$")) continue;
+      if (referencePath(leaf.$value) !== null && resolveToken(tokens2, leaf.$value) === null) continue;
       const value = resolveString(tokens2, leaf.$value);
       if (value === null) {
         push2({
@@ -21822,6 +21821,7 @@ function lintTheme(themeDir2) {
   };
   const defaultTokens = baseTokens(tokens);
   measure(defaultTokens, (p) => p);
+  const seen = new Set(findings.map((f) => JSON.stringify([f.path, f.severity, f.message])));
   const baseLeaves = new Set(leavesOf(defaultTokens).map(([p]) => p));
   for (const mode of modeNames(tokens)) {
     const overrides = leavesOf(tokens[MODE_GROUP][mode] ?? {});
@@ -21834,7 +21834,11 @@ function lintTheme(themeDir2) {
         });
       }
     }
-    measure(tokensForMode(tokens, mode), (p) => `${MODE_GROUP}.${mode}:${p}`);
+    const prefix = `${MODE_GROUP}.${mode}:`;
+    const start = findings.length;
+    measure(tokensForMode(tokens, mode), (p) => `${prefix}${p}`);
+    const measured = findings.splice(start);
+    findings.push(...measured.filter((f) => !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
   }
   const motion = tokens.motion ?? {};
   for (const [name, leaf] of Object.entries(motion.easing ?? {})) {
@@ -21864,16 +21868,7 @@ function lintTheme(themeDir2) {
   const sourcesPath = join4(themeDir2, SOURCES_FILE);
   if (existsSync3(sourcesPath)) {
     const ledger = JSON.parse(readFileSync4(sourcesPath, "utf8"));
-    const leaves = /* @__PURE__ */ new Map();
-    const collect = (tree, prefix = "") => {
-      for (const [key, child] of Object.entries(tree)) {
-        if (key.startsWith("$") || !child || typeof child !== "object") continue;
-        const path = prefix ? `${prefix}.${key}` : key;
-        if ("$value" in child) leaves.set(path, child.$value);
-        else collect(child, path);
-      }
-    };
-    collect(tokens);
+    const leaves = new Map(leavesOf(tokens).map(([path, leaf]) => [path, leaf.$value]));
     for (const [path, value] of leaves) {
       const entry = ledger[path];
       if (!entry?.source?.trim()) {

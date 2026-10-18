@@ -24,7 +24,7 @@
     "start:mcp": "node mcp/dist/server.mjs",
     "pack:brand": "node --import tsx scripts/build-pack.ts --write",
     "verify": "pnpm typecheck && pnpm validate && pnpm lint:themes && pnpm check && pnpm test",
-    "prepare": "git config core.hooksPath .githooks"
+    "prepare": "node scripts/prepare.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",

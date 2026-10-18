@@ -21,7 +21,11 @@
   `:root[data-theme="<name>"]` block per mode, `shadcn.json` fills `dark`
   for a theme with a dark mode, DESIGN.md gains a Modes table, and the
   registry lists `modes`. Lint measures contrast in every mode and fails an
-  override with no default.
+  override with no default; a finding a mode does not change is reported
+  once. In `tailwind.css`, whose values are resolved, a mode block also
+  redefines every token that follows an overridden one, such as a button
+  built on `role.primary`. In `shadcn.json`, `dark` takes `error-on-dark`
+  where a theme has one.
 - A theme without `color.brand`, `ink` or `topbar` shows `role.primary`,
   `on-surface` and `surface` as its registry preview.
 - DESIGN.md names Arial for Office only for a theme whose font stacks fall
@@ -35,8 +39,10 @@
   `gh issue` and `git push github`, which would land on the mirror.
 - Gitea `main` takes changes only through a pull request with a green
   `CI / verify`, as GitHub's did. `scripts/gitea-api.mjs` gains `pr` and
-  `merge`. A `pre-push` hook (`.githooks`, set by `pnpm install`) runs
-  `pnpm verify`.
+  `merge`, and retries only reads, never a POST that may have landed. A
+  `pre-push` hook (`.githooks`, set by `pnpm install` inside a git checkout,
+  unless another hooks path is set) runs `pnpm verify` on a branch push; a
+  tag-only push skips it.
 - `scripts/release.mjs <version> --reviewed` cuts a release: changelog and
   version, build and verify, a PR with green CI, the merge, the tag, then both
   release runs.
