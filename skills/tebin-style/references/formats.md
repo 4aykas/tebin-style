@@ -8,7 +8,7 @@ Each theme generates four token files plus `colors.csv` in `themes/<id>/dist/`:
 | `tailwind.css` | Tailwind v4 | paste the `@theme { … }` block into the file that has `@import "tailwindcss";` |
 | `theme.ts` | React / CSS-in-JS / TypeScript | import the exported `as const` object; use the exported type |
 | `tokens.dtcg.json` | Figma plugins, Style Dictionary, other tooling | feed into the tool that consumes DTCG |
-| `shadcn.json` (web themes only) | a shadcn/ui project | `npx shadcn@latest add <raw URL of the file>`; light colours, radius, fonts and easing only |
+| `shadcn.json` (web themes only) | a shadcn/ui project | `npx shadcn@latest add <raw URL of the file>`; light colours (and dark, for a theme with a dark mode), radius, fonts and easing |
 
 Prefer the format that matches the target's existing styling approach. Do not
 mix competing token sources in one target. The colour CSV and design guide can accompany any token format.

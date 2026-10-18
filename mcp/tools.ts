@@ -186,7 +186,7 @@ const themesOutput = z.object({
   themes: z.array(z.object({
     id: z.string(), name: z.string(), version: z.string(), description: z.string().optional(),
     industry: z.array(z.string()), mood: z.array(z.string()),
-    preview: z.record(z.string()), formats: z.record(z.string()),
+    preview: z.record(z.string()), modes: z.array(z.string()).optional(), formats: z.record(z.string()),
   })),
   hint: z.string().optional(),
 }) satisfies z.ZodType<ReturnType<typeof listThemes>>;

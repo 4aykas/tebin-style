@@ -66,8 +66,6 @@ A role is a pointer, not a copy — change the colour it names and every role us
 - **sans** — Inter, system-ui, sans-serif
 - **mono** — JetBrains Mono, ui-monospace, monospace
 
-In Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.
-
 ## Geometry
 
 - `radius.sm` — 4px

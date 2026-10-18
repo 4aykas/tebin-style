@@ -58,8 +58,8 @@ muted-foreground, destructive, border, input and `--radius`, plus the font
 stacks and easing curves. `primary` is the theme's everyday button
 (`components.button-primary`), not its identity colour, so on `tebin` it is
 ink. `--radius` is the control radius plus 2px, because shadcn buttons use
-`rounded-md`, which is `--radius` minus 2px. Dark mode keeps the project's
-own values.
+`rounded-md`, which is `--radius` minus 2px. A theme with a dark mode (`fleet`)
+fills shadcn's `dark` too; any other keeps the project's own dark values.
 
 ### Tailwind v4 utilities
 
@@ -89,9 +89,30 @@ the theme does not load fonts or provide ready-made accessible components.
 | `radius` | corner radii |
 | `font` | font stacks |
 | `motion` | durations, easing curves and springs |
+| `shadow` | elevation shadows |
+| `components` | the colours, shape and padding of named controls |
+| `mode` | other modes: `mode.<name>` repeats a token's path with that mode's value |
 
-Not every theme has every group. `tebin` has all of them; `slate` and
-`tebin-classic` carry colours, roles, fonts and radii.
+Not every theme has every group. `tebin` has most of them; `fleet` adds
+`shadow` and a light `mode`; `slate` and `tebin-classic` carry colours,
+roles, fonts and radii.
+
+### Modes
+
+A theme's default look lives in its ordinary groups. Each other mode lives in
+`mode.<name>` and repeats only the tokens it changes, by their full path:
+`mode.light.role.surface` overrides `role.surface`. `tokens.css` and
+`tailwind.css` add one block per mode that redefines those variables:
+
+```css
+:root[data-theme="light"] {
+  --role-surface: var(--color-slate-50);
+}
+```
+
+So everything written against a token follows the mode; set `data-theme` on
+`<html>` before the first paint. `pnpm lint:themes` measures contrast in every
+mode, and fails an override whose path the default mode does not have.
 
 ### Roles are pointers
 

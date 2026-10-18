@@ -1,0 +1,112 @@
+{
+  "outputs": [
+    {
+      "assetId": "favicon-svg",
+      "source": "assets/favicon/favicon.svg",
+      "sourceSha256": "15b1c3cd1181ad0fd5ada38fa58436d360eb3684e94d3e26f9e89a947fe4481c",
+      "width": 128,
+      "height": 128,
+      "variant": "transparent",
+      "path": "assets/png/favicon-svg-128.png",
+      "sha256": "2a7990fd3cf9aac5fef105d2b8a7f548bdd5b05e5c92874b09da2b6a206b4b90",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "favicon-svg",
+      "source": "assets/favicon/favicon.svg",
+      "sourceSha256": "15b1c3cd1181ad0fd5ada38fa58436d360eb3684e94d3e26f9e89a947fe4481c",
+      "width": 256,
+      "height": 256,
+      "variant": "transparent",
+      "path": "assets/png/favicon-svg-256.png",
+      "sha256": "b3920eeec36e63f9bd0f9062b8b42bedf75b6afb562577575dbf033512de1ead",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "favicon-svg",
+      "source": "assets/favicon/favicon.svg",
+      "sourceSha256": "15b1c3cd1181ad0fd5ada38fa58436d360eb3684e94d3e26f9e89a947fe4481c",
+      "width": 512,
+      "height": 512,
+      "variant": "transparent",
+      "path": "assets/png/favicon-svg-512.png",
+      "sha256": "e2569fe84c3b89013d4c8e1b9229a8c738e36077babd9462e5221d5242f803ee",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "logo-mark",
+      "source": "assets/logo/logo-mark.svg",
+      "sourceSha256": "15b1c3cd1181ad0fd5ada38fa58436d360eb3684e94d3e26f9e89a947fe4481c",
+      "width": 1024,
+      "height": 1024,
+      "variant": "transparent",
+      "path": "assets/png/logo-mark-1024.png",
+      "sha256": "7194d783d778b49dd7d6de6c914bf074fd978531338dbf853c15f38df774cb86",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "logo-mark",
+      "source": "assets/logo/logo-mark.svg",
+      "sourceSha256": "15b1c3cd1181ad0fd5ada38fa58436d360eb3684e94d3e26f9e89a947fe4481c",
+      "width": 2048,
+      "height": 2048,
+      "variant": "transparent",
+      "path": "assets/png/logo-mark-2048.png",
+      "sha256": "e5adda733fb0d8dc3f68694e67fbf8e26e0e5abd3a8826a41ed7c8b3f9a829e4",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "logo-mark",
+      "source": "assets/logo/logo-mark.svg",
+      "sourceSha256": "15b1c3cd1181ad0fd5ada38fa58436d360eb3684e94d3e26f9e89a947fe4481c",
+      "width": 512,
+      "height": 512,
+      "variant": "transparent",
+      "path": "assets/png/logo-mark-512.png",
+      "sha256": "e2569fe84c3b89013d4c8e1b9229a8c738e36077babd9462e5221d5242f803ee",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "logo-tile",
+      "source": "assets/logo/logo-tile.svg",
+      "sourceSha256": "7e8faec27d84479ead327606d92ca918586edefb7844d0e642d3b106139a3f9e",
+      "width": 1024,
+      "height": 1024,
+      "variant": "transparent",
+      "path": "assets/png/logo-tile-1024.png",
+      "sha256": "ced9a8fc9d3d009b5ee3e1bfbdc7d573be57530c40912f1509e1811e069009b3",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "logo-tile",
+      "source": "assets/logo/logo-tile.svg",
+      "sourceSha256": "7e8faec27d84479ead327606d92ca918586edefb7844d0e642d3b106139a3f9e",
+      "width": 2048,
+      "height": 2048,
+      "variant": "transparent",
+      "path": "assets/png/logo-tile-2048.png",
+      "sha256": "729f129131efec6e374317c1c6fcfb16ff8a98000185bd5cd56c6a9b7b636e1f",
+      "background": null,
+      "clearSpaceRatio": 0
+    },
+    {
+      "assetId": "logo-tile",
+      "source": "assets/logo/logo-tile.svg",
+      "sourceSha256": "7e8faec27d84479ead327606d92ca918586edefb7844d0e642d3b106139a3f9e",
+      "width": 512,
+      "height": 512,
+      "variant": "transparent",
+      "path": "assets/png/logo-tile-512.png",
+      "sha256": "8be10b7425d2f08fdd9e0078da6cd99e0a9eae9e3065d2b36563450e9635f59a",
+      "background": null,
+      "clearSpaceRatio": 0
+    }
+  ]
+}

@@ -1,0 +1,752 @@
+{
+  "color": {
+    "slate-25": {
+      "$type": "color",
+      "$value": "#FBFCFE",
+      "$description": "Raised surface on the light page."
+    },
+    "slate-50": {
+      "$type": "color",
+      "$value": "#F8FAFC",
+      "$description": "The light page."
+    },
+    "slate-100": {
+      "$type": "color",
+      "$value": "#F1F5F9",
+      "$description": "Text on the dark page."
+    },
+    "slate-200": {
+      "$type": "color",
+      "$value": "#E2E8F0"
+    },
+    "slate-300": {
+      "$type": "color",
+      "$value": "#CBD5E1"
+    },
+    "slate-400": {
+      "$type": "color",
+      "$value": "#94A3B8"
+    },
+    "slate-450": {
+      "$type": "color",
+      "$value": "#8494AB",
+      "$description": "Tertiary text on dark: 4.5:1 on the raised surface, where #64748B gave 3.07:1."
+    },
+    "slate-475": {
+      "$type": "color",
+      "$value": "#808EA2",
+      "$description": "Control edge on light: 3:1 against the page."
+    },
+    "slate-500": {
+      "$type": "color",
+      "$value": "#64748B"
+    },
+    "slate-600": {
+      "$type": "color",
+      "$value": "#475569"
+    },
+    "slate-700": {
+      "$type": "color",
+      "$value": "#334155"
+    },
+    "slate-800": {
+      "$type": "color",
+      "$value": "#1E293B"
+    },
+    "slate-900": {
+      "$type": "color",
+      "$value": "#0F172A",
+      "$description": "The dark page, and the browser chrome in dark mode."
+    },
+    "green-400": {
+      "$type": "color",
+      "$value": "#4ADE80",
+      "$description": "Accent and OK on dark."
+    },
+    "green-500": {
+      "$type": "color",
+      "$value": "#22C55E"
+    },
+    "green-600": {
+      "$type": "color",
+      "$value": "#16A34A"
+    },
+    "green-700": {
+      "$type": "color",
+      "$value": "#15803D",
+      "$description": "Accent on light: a button label and a link both reach 4.5:1, where #16A34A gave 3.15:1."
+    },
+    "green-800": {
+      "$type": "color",
+      "$value": "#166534"
+    },
+    "amber-400": {
+      "$type": "color",
+      "$value": "#FBBF24"
+    },
+    "amber-600": {
+      "$type": "color",
+      "$value": "#D97706"
+    },
+    "amber-700": {
+      "$type": "color",
+      "$value": "#B45309"
+    },
+    "amber-800": {
+      "$type": "color",
+      "$value": "#92400E"
+    },
+    "red-400": {
+      "$type": "color",
+      "$value": "#F87171"
+    },
+    "red-500": {
+      "$type": "color",
+      "$value": "#EF4444"
+    },
+    "red-600": {
+      "$type": "color",
+      "$value": "#DC2626"
+    },
+    "red-700": {
+      "$type": "color",
+      "$value": "#B91C1C"
+    },
+    "cyan-400": {
+      "$type": "color",
+      "$value": "#22D3EE"
+    },
+    "cyan-600": {
+      "$type": "color",
+      "$value": "#0891B2"
+    },
+    "violet-400": {
+      "$type": "color",
+      "$value": "#A78BFA"
+    },
+    "violet-600": {
+      "$type": "color",
+      "$value": "#7C3AED"
+    },
+    "blue-400": {
+      "$type": "color",
+      "$value": "#60A5FA"
+    },
+    "blue-700": {
+      "$type": "color",
+      "$value": "#1D4ED8"
+    },
+    "pink-400": {
+      "$type": "color",
+      "$value": "#F472B6"
+    },
+    "pink-700": {
+      "$type": "color",
+      "$value": "#BE185D"
+    },
+    "teal-400": {
+      "$type": "color",
+      "$value": "#2DD4BF"
+    },
+    "teal-800": {
+      "$type": "color",
+      "$value": "#115E59"
+    }
+  },
+  "role": {
+    "surface": {
+      "$type": "color",
+      "$value": "{color.slate-900}",
+      "$description": "The page. Dark is the default mode."
+    },
+    "surface-raised": {
+      "$type": "color",
+      "$value": "{color.slate-800}",
+      "$description": "Cards, panels, dialogs and the default button."
+    },
+    "on-surface": {
+      "$type": "color",
+      "$value": "{color.slate-100}",
+      "$description": "Text."
+    },
+    "on-surface-muted": {
+      "$type": "color",
+      "$value": "{color.slate-400}",
+      "$description": "Secondary text: labels, meta."
+    },
+    "on-surface-subtle": {
+      "$type": "color",
+      "$value": "{color.slate-450}",
+      "$description": "A fact the operator should notice but not act on."
+    },
+    "outline": {
+      "$type": "color",
+      "$value": "{color.slate-700}",
+      "$description": "Dividers and card edges. Stays quiet."
+    },
+    "outline-subtle": {
+      "$type": "color",
+      "$value": "{color.slate-800}"
+    },
+    "outline-strong": {
+      "$type": "color",
+      "$value": "{color.slate-600}"
+    },
+    "outline-control": {
+      "$type": "color",
+      "$value": "{color.slate-500}",
+      "$description": "Inputs, selects and buttons: 3:1 against the page, so a control's edge is visible."
+    },
+    "primary": {
+      "$type": "color",
+      "$value": "{color.green-400}",
+      "$description": "The accent: the primary action of a view and nothing else. As text and as fill."
+    },
+    "primary-hover": {
+      "$type": "color",
+      "$value": "{color.green-500}"
+    },
+    "success": {
+      "$type": "color",
+      "$value": "{color.green-400}",
+      "$description": "OK set as text."
+    },
+    "success-fill": {
+      "$type": "color",
+      "$value": "{color.green-400}",
+      "$description": "OK as a bar, dot, edge or badge border."
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "{color.amber-400}",
+      "$description": "Warn set as text."
+    },
+    "warning-fill": {
+      "$type": "color",
+      "$value": "{color.amber-400}"
+    },
+    "error": {
+      "$type": "color",
+      "$value": "{color.red-400}",
+      "$description": "Crit set as text. Also the destructive-action colour."
+    },
+    "error-fill": {
+      "$type": "color",
+      "$value": "{color.red-400}"
+    },
+    "error-hover": {
+      "$type": "color",
+      "$value": "{color.red-500}"
+    },
+    "error-subtle": {
+      "$type": "color",
+      "$value": "rgba(248, 113, 113, 0.12)",
+      "$description": "The danger zone's tint."
+    },
+    "info": {
+      "$type": "color",
+      "$value": "{color.cyan-400}",
+      "$description": "Informational fill."
+    },
+    "kind-pc": {
+      "$type": "color",
+      "$value": "{color.violet-400}",
+      "$description": "Marks a desktop PC among servers, apart from the state colours and the accent."
+    },
+    "tone-fleet": {
+      "$type": "color",
+      "$value": "{color.green-400}",
+      "$description": "Section colour in the nav. An active label is set in its tone on a 14% tint of it."
+    },
+    "tone-security": {
+      "$type": "color",
+      "$value": "{color.amber-400}"
+    },
+    "tone-tasks": {
+      "$type": "color",
+      "$value": "{color.blue-400}"
+    },
+    "tone-users": {
+      "$type": "color",
+      "$value": "{color.pink-400}"
+    },
+    "tone-access": {
+      "$type": "color",
+      "$value": "{color.teal-400}"
+    }
+  },
+  "font": {
+    "sans": {
+      "$type": "fontFamily",
+      "$value": [
+        "Geist",
+        "-apple-system",
+        "Segoe UI",
+        "Helvetica",
+        "sans-serif"
+      ],
+      "$description": "Prose."
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": [
+        "Geist Mono",
+        "JetBrains Mono",
+        "Consolas",
+        "Liberation Mono",
+        "Menlo",
+        "monospace"
+      ],
+      "$description": "Identity and machine values: headings, section labels, names, IDs, counts. A value compared down a column takes tabular figures."
+    }
+  },
+  "fontWeight": {
+    "control": {
+      "$type": "fontWeight",
+      "$value": 600,
+      "$description": "Button labels."
+    }
+  },
+  "type": {
+    "xs": {
+      "$type": "dimension",
+      "$value": "0.75rem",
+      "$description": "The floor: nothing is set smaller than 12px."
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "0.8125rem",
+      "$description": "Section and disclosure labels, in mono capitals."
+    },
+    "base": {
+      "$type": "dimension",
+      "$value": "0.875rem",
+      "$description": "Body and controls. On a touch screen inputs are 16px, the size below which iOS zooms into a focused field."
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "$description": "Zone headings."
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "1.25rem"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$description": "The page title."
+    }
+  },
+  "spacing": {
+    "1": {
+      "$type": "dimension",
+      "$value": "0.25rem"
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": "0.5rem"
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": "0.75rem"
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": "1rem"
+    },
+    "5": {
+      "$type": "dimension",
+      "$value": "1.25rem"
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": "1.5rem"
+    },
+    "7": {
+      "$type": "dimension",
+      "$value": "1.75rem"
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": "2rem"
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": "2.5rem"
+    },
+    "14": {
+      "$type": "dimension",
+      "$value": "3.5rem"
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": "4rem"
+    },
+    "pad-badge": {
+      "$type": "dimension",
+      "$value": "0.125rem 0.375rem",
+      "$description": "A badge is shaped, not spaced: padded to the layout scale it would read as a button."
+    },
+    "pad-chip": {
+      "$type": "dimension",
+      "$value": "0.25rem 0.5rem"
+    }
+  },
+  "radius": {
+    "tag": {
+      "$type": "dimension",
+      "$value": "3px",
+      "$description": "Inline code, kind badges, meter tracks."
+    },
+    "control": {
+      "$type": "dimension",
+      "$value": "4px",
+      "$description": "Buttons, inputs, selects, cards in a grid."
+    },
+    "panel": {
+      "$type": "dimension",
+      "$value": "6px",
+      "$description": "Panels, reveals, task columns."
+    },
+    "dialog": {
+      "$type": "dimension",
+      "$value": "8px",
+      "$description": "The confirmation dialog, nav items, segmented controls."
+    },
+    "overlay": {
+      "$type": "dimension",
+      "$value": "10px",
+      "$description": "The command palette and the nav panel."
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": "999px",
+      "$description": "Chips and pills."
+    }
+  },
+  "shadow": {
+    "sm": {
+      "$type": "shadow",
+      "$value": {
+        "color": "rgba(0, 0, 0, 0.3)",
+        "offsetX": "0px",
+        "offsetY": "1px",
+        "blur": "2px",
+        "spread": "0px"
+      },
+      "$description": "Depth separates a surface from the page; it never draws attention or carries status."
+    },
+    "md": {
+      "$type": "shadow",
+      "$value": {
+        "color": "rgba(0, 0, 0, 0.35)",
+        "offsetX": "0px",
+        "offsetY": "2px",
+        "blur": "6px",
+        "spread": "0px"
+      }
+    },
+    "lg": {
+      "$type": "shadow",
+      "$value": {
+        "color": "rgba(0, 0, 0, 0.4)",
+        "offsetX": "0px",
+        "offsetY": "8px",
+        "blur": "20px",
+        "spread": "0px"
+      }
+    }
+  },
+  "motion": {
+    "duration": {
+      "fast": {
+        "$type": "duration",
+        "$value": "150ms",
+        "$description": "Colour, border and shadow changes on a control or card."
+      },
+      "press": {
+        "$type": "duration",
+        "$value": "80ms",
+        "$description": "A hold-to-confirm fill, at constant speed."
+      }
+    }
+  },
+  "components": {
+    "button": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.surface-raised}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.outline-control}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "0.5rem 1.25rem"
+      }
+    },
+    "button-primary": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.primary}",
+        "$description": "One per view: two accents on one screen means one of them is not primary."
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.primary}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "0.5rem 1.25rem"
+      }
+    },
+    "button-primary-hover": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.primary-hover}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.primary-hover}"
+      }
+    },
+    "button-danger": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.error-fill}",
+        "$description": "The solid fill means \"this is the moment\": in a confirmation, or a single destructive action."
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.error-fill}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "0.5rem 1.25rem"
+      }
+    },
+    "button-danger-hover": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.error-hover}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.error-hover}"
+      }
+    },
+    "button-danger-quiet": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.surface-raised}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.error}",
+        "$description": "Repeated down a list: intent in the label's colour, the fill only on hover or in its confirmation."
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.error-fill}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "0.25rem 0.5rem"
+      }
+    },
+    "input": {
+      "backgroundColor": {
+        "$type": "color",
+        "$value": "{role.surface}"
+      },
+      "textColor": {
+        "$type": "color",
+        "$value": "{role.on-surface}"
+      },
+      "borderColor": {
+        "$type": "color",
+        "$value": "{role.outline-control}"
+      },
+      "rounded": {
+        "$type": "dimension",
+        "$value": "{radius.control}"
+      },
+      "padding": {
+        "$type": "dimension",
+        "$value": "0.5rem 1rem"
+      }
+    }
+  },
+  "mode": {
+    "light": {
+      "role": {
+        "surface": {
+          "$type": "color",
+          "$value": "{color.slate-50}"
+        },
+        "surface-raised": {
+          "$type": "color",
+          "$value": "{color.slate-25}"
+        },
+        "on-surface": {
+          "$type": "color",
+          "$value": "{color.slate-900}"
+        },
+        "on-surface-muted": {
+          "$type": "color",
+          "$value": "{color.slate-600}"
+        },
+        "on-surface-subtle": {
+          "$type": "color",
+          "$value": "{color.slate-500}"
+        },
+        "outline": {
+          "$type": "color",
+          "$value": "{color.slate-300}"
+        },
+        "outline-subtle": {
+          "$type": "color",
+          "$value": "{color.slate-200}"
+        },
+        "outline-strong": {
+          "$type": "color",
+          "$value": "{color.slate-400}"
+        },
+        "outline-control": {
+          "$type": "color",
+          "$value": "{color.slate-475}"
+        },
+        "primary": {
+          "$type": "color",
+          "$value": "{color.green-700}"
+        },
+        "primary-hover": {
+          "$type": "color",
+          "$value": "{color.green-800}"
+        },
+        "success": {
+          "$type": "color",
+          "$value": "{color.green-700}"
+        },
+        "success-fill": {
+          "$type": "color",
+          "$value": "{color.green-600}"
+        },
+        "warning": {
+          "$type": "color",
+          "$value": "{color.amber-700}"
+        },
+        "warning-fill": {
+          "$type": "color",
+          "$value": "{color.amber-600}"
+        },
+        "error": {
+          "$type": "color",
+          "$value": "{color.red-700}"
+        },
+        "error-fill": {
+          "$type": "color",
+          "$value": "{color.red-600}"
+        },
+        "error-hover": {
+          "$type": "color",
+          "$value": "{color.red-700}"
+        },
+        "error-subtle": {
+          "$type": "color",
+          "$value": "rgba(220, 38, 38, 0.12)"
+        },
+        "info": {
+          "$type": "color",
+          "$value": "{color.cyan-600}"
+        },
+        "kind-pc": {
+          "$type": "color",
+          "$value": "{color.violet-600}"
+        },
+        "tone-fleet": {
+          "$type": "color",
+          "$value": "{color.green-800}"
+        },
+        "tone-security": {
+          "$type": "color",
+          "$value": "{color.amber-800}"
+        },
+        "tone-tasks": {
+          "$type": "color",
+          "$value": "{color.blue-700}"
+        },
+        "tone-users": {
+          "$type": "color",
+          "$value": "{color.pink-700}"
+        },
+        "tone-access": {
+          "$type": "color",
+          "$value": "{color.teal-800}"
+        }
+      },
+      "shadow": {
+        "sm": {
+          "$type": "shadow",
+          "$value": {
+            "color": "rgba(15, 23, 42, 0.08)",
+            "offsetX": "0px",
+            "offsetY": "1px",
+            "blur": "3px",
+            "spread": "0px"
+          }
+        },
+        "md": {
+          "$type": "shadow",
+          "$value": {
+            "color": "rgba(15, 23, 42, 0.1)",
+            "offsetX": "0px",
+            "offsetY": "4px",
+            "blur": "8px",
+            "spread": "0px"
+          }
+        },
+        "lg": {
+          "$type": "shadow",
+          "$value": {
+            "color": "rgba(15, 23, 42, 0.12)",
+            "offsetX": "0px",
+            "offsetY": "8px",
+            "blur": "24px",
+            "spread": "0px"
+          }
+        }
+      }
+    }
+  }
+}

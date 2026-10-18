@@ -1,0 +1,45 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fleet",
+  "type": "registry:theme",
+  "title": "FleetView",
+  "description": "Operator console for a fleet of servers: dense, flat, slate on slate, colour spent only on state and one accent.",
+  "docs": "Light- and dark-mode colours and theme variables from the FleetView theme. Every token: https://raw.githubusercontent.com/4aykas/tebin-style/main/themes/fleet/dist/tokens.css",
+  "cssVars": {
+    "theme": {
+      "font-sans": "Geist, -apple-system, \"Segoe UI\", Helvetica, sans-serif",
+      "font-mono": "\"Geist Mono\", \"JetBrains Mono\", Consolas, \"Liberation Mono\", Menlo, monospace"
+    },
+    "light": {
+      "background": "#F8FAFC",
+      "foreground": "#0F172A",
+      "card": "#FBFCFE",
+      "card-foreground": "#0F172A",
+      "popover": "#FBFCFE",
+      "popover-foreground": "#0F172A",
+      "primary": "#15803D",
+      "primary-foreground": "#F8FAFC",
+      "ring": "#15803D",
+      "muted-foreground": "#475569",
+      "destructive": "#B91C1C",
+      "border": "#CBD5E1",
+      "input": "#808EA2",
+      "radius": "6px"
+    },
+    "dark": {
+      "background": "#0F172A",
+      "foreground": "#F1F5F9",
+      "card": "#1E293B",
+      "card-foreground": "#F1F5F9",
+      "popover": "#1E293B",
+      "popover-foreground": "#F1F5F9",
+      "primary": "#4ADE80",
+      "primary-foreground": "#0F172A",
+      "ring": "#4ADE80",
+      "muted-foreground": "#94A3B8",
+      "destructive": "#F87171",
+      "border": "#334155",
+      "input": "#64748B"
+    }
+  }
+}

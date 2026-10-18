@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4600 154" width="4600" height="154">
+  <rect x="0" y="0" width="120" height="120" fill="#FBFCFE" />
+  <text x="10" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-25</text>
+  <text x="10" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#FBFCFE</text>
+  <rect x="128" y="0" width="120" height="120" fill="#F8FAFC" />
+  <text x="138" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-50</text>
+  <text x="138" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#F8FAFC</text>
+  <rect x="256" y="0" width="120" height="120" fill="#F1F5F9" />
+  <text x="266" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-100</text>
+  <text x="266" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#F1F5F9</text>
+  <rect x="384" y="0" width="120" height="120" fill="#E2E8F0" />
+  <text x="394" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-200</text>
+  <text x="394" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#E2E8F0</text>
+  <rect x="512" y="0" width="120" height="120" fill="#CBD5E1" />
+  <text x="522" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-300</text>
+  <text x="522" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#CBD5E1</text>
+  <rect x="640" y="0" width="120" height="120" fill="#94A3B8" />
+  <text x="650" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-400</text>
+  <text x="650" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#94A3B8</text>
+  <rect x="768" y="0" width="120" height="120" fill="#8494AB" />
+  <text x="778" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-450</text>
+  <text x="778" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#8494AB</text>
+  <rect x="896" y="0" width="120" height="120" fill="#808EA2" />
+  <text x="906" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">slate-475</text>
+  <text x="906" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#808EA2</text>
+  <rect x="1024" y="0" width="120" height="120" fill="#64748B" />
+  <text x="1034" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">slate-500</text>
+  <text x="1034" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#64748B</text>
+  <rect x="1152" y="0" width="120" height="120" fill="#475569" />
+  <text x="1162" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">slate-600</text>
+  <text x="1162" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#475569</text>
+  <rect x="1280" y="0" width="120" height="120" fill="#334155" />
+  <text x="1290" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">slate-700</text>
+  <text x="1290" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#334155</text>
+  <rect x="1408" y="0" width="120" height="120" fill="#1E293B" />
+  <text x="1418" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">slate-800</text>
+  <text x="1418" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#1E293B</text>
+  <rect x="1536" y="0" width="120" height="120" fill="#0F172A" />
+  <text x="1546" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">slate-900</text>
+  <text x="1546" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#0F172A</text>
+  <rect x="1664" y="0" width="120" height="120" fill="#4ADE80" />
+  <text x="1674" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">green-400</text>
+  <text x="1674" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#4ADE80</text>
+  <rect x="1792" y="0" width="120" height="120" fill="#22C55E" />
+  <text x="1802" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">green-500</text>
+  <text x="1802" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#22C55E</text>
+  <rect x="1920" y="0" width="120" height="120" fill="#16A34A" />
+  <text x="1930" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">green-600</text>
+  <text x="1930" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#16A34A</text>
+  <rect x="2048" y="0" width="120" height="120" fill="#15803D" />
+  <text x="2058" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">green-700</text>
+  <text x="2058" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#15803D</text>
+  <rect x="2176" y="0" width="120" height="120" fill="#166534" />
+  <text x="2186" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">green-800</text>
+  <text x="2186" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#166534</text>
+  <rect x="2304" y="0" width="120" height="120" fill="#FBBF24" />
+  <text x="2314" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">amber-400</text>
+  <text x="2314" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#FBBF24</text>
+  <rect x="2432" y="0" width="120" height="120" fill="#D97706" />
+  <text x="2442" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">amber-600</text>
+  <text x="2442" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#D97706</text>
+  <rect x="2560" y="0" width="120" height="120" fill="#B45309" />
+  <text x="2570" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">amber-700</text>
+  <text x="2570" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#B45309</text>
+  <rect x="2688" y="0" width="120" height="120" fill="#92400E" />
+  <text x="2698" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">amber-800</text>
+  <text x="2698" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#92400E</text>
+  <rect x="2816" y="0" width="120" height="120" fill="#F87171" />
+  <text x="2826" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">red-400</text>
+  <text x="2826" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#F87171</text>
+  <rect x="2944" y="0" width="120" height="120" fill="#EF4444" />
+  <text x="2954" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">red-500</text>
+  <text x="2954" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#EF4444</text>
+  <rect x="3072" y="0" width="120" height="120" fill="#DC2626" />
+  <text x="3082" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">red-600</text>
+  <text x="3082" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#DC2626</text>
+  <rect x="3200" y="0" width="120" height="120" fill="#B91C1C" />
+  <text x="3210" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">red-700</text>
+  <text x="3210" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#B91C1C</text>
+  <rect x="3328" y="0" width="120" height="120" fill="#22D3EE" />
+  <text x="3338" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">cyan-400</text>
+  <text x="3338" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#22D3EE</text>
+  <rect x="3456" y="0" width="120" height="120" fill="#0891B2" />
+  <text x="3466" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">cyan-600</text>
+  <text x="3466" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#0891B2</text>
+  <rect x="3584" y="0" width="120" height="120" fill="#A78BFA" />
+  <text x="3594" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">violet-400</text>
+  <text x="3594" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#A78BFA</text>
+  <rect x="3712" y="0" width="120" height="120" fill="#7C3AED" />
+  <text x="3722" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">violet-600</text>
+  <text x="3722" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#7C3AED</text>
+  <rect x="3840" y="0" width="120" height="120" fill="#60A5FA" />
+  <text x="3850" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">blue-400</text>
+  <text x="3850" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#60A5FA</text>
+  <rect x="3968" y="0" width="120" height="120" fill="#1D4ED8" />
+  <text x="3978" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">blue-700</text>
+  <text x="3978" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#1D4ED8</text>
+  <rect x="4096" y="0" width="120" height="120" fill="#F472B6" />
+  <text x="4106" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">pink-400</text>
+  <text x="4106" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#F472B6</text>
+  <rect x="4224" y="0" width="120" height="120" fill="#BE185D" />
+  <text x="4234" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">pink-700</text>
+  <text x="4234" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#BE185D</text>
+  <rect x="4352" y="0" width="120" height="120" fill="#2DD4BF" />
+  <text x="4362" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#000000">teal-400</text>
+  <text x="4362" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#2DD4BF</text>
+  <rect x="4480" y="0" width="120" height="120" fill="#115E59" />
+  <text x="4490" y="106" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#FFFFFF">teal-800</text>
+  <text x="4490" y="140" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#666666">#115E59</text>
+</svg>

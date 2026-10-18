@@ -95,6 +95,11 @@
 - **[NEVER]** (tebin, web) Never use #fff as a page or panel surface; use --color-paper. — _Pure white reads flat and synthetic beside the cream band and the dark sections._
 - **[SHOULD]** (tebin, web) On dark surfaces express elevation with a lighter surface step, not a shadow. — _A shadow on a dark ground reads as a coloured halo rather than as depth._
 - **[SHOULD]** (web) Make a design policy checkable; a policy that lives only in prose is enforced only where somebody remembered it. — _A no-webfont rule written in AGENTS.md was honoured on the English pages and quietly not on the thirty localized copies, so 31 public pages fetched a Google font for a year._
+- **[MUST]** (fleet, web) Use success, warning and error only where the value they describe is on screen; a surface that merely relates to a problem keeps on-surface and outline. — _An operator reads colour as a finding. Colour on a surface that is not the finding sends the eye to the wrong place under time pressure._
+- **[MUST]** (fleet, web) Spend the accent (role.primary) on the primary action of a view and nothing else; two accents on one screen means one of them is not primary. — _The accent answers "what do I do here"; a second one makes the answer ambiguous._
+- **[MUST]** (fleet, web) Set a state colour as text with its plain role (success, warning, error) and as a bar, dot, edge or badge border with its -fill role. — _On light the fill is too bright to read as text; the two are the same value only on dark._
+- **[SHOULD]** (fleet, web) A destructive control repeated down a list carries its label in error and fills only on hover or in its confirmation; keep the solid fill for the one moment of commitment. — _Repeated solid red stops meaning "this is the moment" and becomes background._
+- **[NEVER]** (fleet, web) Never express status with a gradient, a glow or a shadow; status is a flat edge or a flat fill. — _A grid of cards reads down one column of edges; depth only lifts a surface off the page._
 
 ## touch
 
@@ -110,3 +115,5 @@
 - **[NEVER]** (tebin, web) Never use <br> inside a heading to shape its lines. — _It welds words together for anything reading textContent, and it fixes a line count that every other breakpoint has to live with._
 - **[SHOULD]** (tebin, web) Take heading sizes from the global type scale (type.h1 … type.h5 in the theme) rather than from per-page clamp() overrides. — _Page-local overrides accumulated until the global heading styles described almost nothing that shipped._
 - **[SHOULD]** (tebin, web) Shape a heading's lines with text-wrap: balance (text-pretty for running text); it is the supported replacement for the manual <br> and hyphenation the other heading rules forbid. — _Two NEVER rules remove every manual way to even out a ragged heading without naming the one that works, and a rule that forbids the only known method is a rule people break._
+- **[MUST]** (fleet, web) Set identity and machine values in mono: headings, section labels, names, IDs, counts; a value compared down a column takes tabular figures. Prose is sans. — _Machine values are scanned and compared, and mono with tabular figures keeps them aligned._
+- **[MUST]** (fleet, web) Use the six sizes of the type scale (xs to xl) and nothing else, and nothing under 12px; inputs on a touch screen are 16px. — _A dense console stays legible only with a fixed floor; below 16px iOS zooms into a focused field._

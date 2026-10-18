@@ -21636,6 +21636,40 @@ function resolveString(tokens, value) {
   const resolved = resolveToken(tokens, value);
   return typeof resolved === "string" ? resolved : null;
 }
+var MODE_GROUP = "mode";
+function modeNames(tokens) {
+  const group = tokens[MODE_GROUP];
+  return group && typeof group === "object" ? Object.keys(group).filter((k) => !k.startsWith("$")) : [];
+}
+function leavesOf(tree, prefix = "") {
+  const out = [];
+  for (const [key, child] of Object.entries(tree)) {
+    if (key.startsWith("$") || !child || typeof child !== "object") continue;
+    const path = prefix ? `${prefix}.${key}` : key;
+    if ("$value" in child) out.push([path, child]);
+    else out.push(...leavesOf(child, path));
+  }
+  return out;
+}
+function baseTokens(tokens) {
+  const { [MODE_GROUP]: _modes, ...rest } = tokens;
+  return rest;
+}
+function tokensForMode(tokens, mode) {
+  const merged = structuredClone(baseTokens(tokens));
+  const overrides = (tokens[MODE_GROUP] ?? {})[mode];
+  for (const [path, leaf] of leavesOf(overrides ?? {})) {
+    let node = merged;
+    const parts = path.split(".");
+    for (const seg of parts.slice(0, -1)) {
+      node[seg] = node[seg] ?? {};
+      node = node[seg];
+    }
+    const last = parts[parts.length - 1];
+    node[last] = { ...node[last] ?? {}, $value: leaf.$value };
+  }
+  return merged;
+}
 
 // src/lint.ts
 var SOURCES_FILE = "sources.json";
@@ -21688,92 +21722,111 @@ function lintTheme(themeDir2) {
       message: "no surfaces declared, so no contrast could be checked"
     });
   }
-  const roles = tokens.role ?? {};
-  const surfaceValue = resolveString(tokens, roles.surface?.$value);
-  for (const [name, leaf] of Object.entries(roles)) {
-    const path = `role.${name}`;
-    if (name.startsWith("$") || broken.has(path)) continue;
-    const value = resolveString(tokens, leaf.$value);
-    if (value === null) {
-      push({
-        severity: "warning",
+  const measure = (tokens2, at) => {
+    const push2 = (f) => findings.push({ ...f, path: at(f.path) });
+    const roles = tokens2.role ?? {};
+    const surfaceValue = resolveString(tokens2, roles.surface?.$value);
+    for (const [name, leaf] of Object.entries(roles)) {
+      const path = `role.${name}`;
+      if (name.startsWith("$") || broken.has(path)) continue;
+      const value = resolveString(tokens2, leaf.$value);
+      if (value === null) {
+        push2({
+          severity: "warning",
+          path,
+          message: `${JSON.stringify(leaf.$value)} does not resolve to a value`
+        });
+        continue;
+      }
+      const which = surfaceFor(name);
+      if (which === null) {
+        push2({ severity: "info", path, message: "not checked: no surface pairing rule for this name" });
+        continue;
+      }
+      const against = which === "surface" ? surfaceValue : which === "light" ? surfaces?.light : surfaces?.dark;
+      if (!against) {
+        push2({
+          severity: "warning",
+          path,
+          message: `names a ${which} surface, but the manifest declares no ${which} surface to measure against`
+        });
+        continue;
+      }
+      if (!hexToRgb(value) || !hexToRgb(against)) {
+        push2({
+          severity: "info",
+          path,
+          message: "not checked: not an opaque colour, and a translucent value has no ratio until it is composited"
+        });
+        continue;
+      }
+      const ratio = contrastRatio(value, against);
+      push2({
+        severity: ratio >= AA_NORMAL ? "info" : "error",
         path,
-        message: `${JSON.stringify(leaf.$value)} does not resolve to a value`
+        message: `${value} on ${against} is ${ratio.toFixed(4)}:1`,
+        ratio,
+        required: AA_NORMAL
       });
-      continue;
     }
-    const which = surfaceFor(name);
-    if (which === null) {
-      push({ severity: "info", path, message: "not checked: no surface pairing rule for this name" });
-      continue;
-    }
-    const against = which === "surface" ? surfaceValue : which === "light" ? surfaces?.light : surfaces?.dark;
-    if (!against) {
-      push({
-        severity: "warning",
+    for (const [name, pair] of Object.entries(theme.contrastPairs ?? {})) {
+      const path = `contrastPairs.${name}`;
+      const foreground = resolveString(tokens2, pair.foreground);
+      const background = resolveString(tokens2, pair.background);
+      if (!foreground || !background || !hexToRgb(foreground) || !hexToRgb(background)) {
+        push2({ severity: "warning", path, message: "not checked: explicit pair must resolve to two opaque hex colours" });
+        continue;
+      }
+      const ratio = contrastRatio(foreground, background);
+      push2({
+        severity: ratio >= AA_NORMAL ? "info" : "error",
         path,
-        message: `names a ${which} surface, but the manifest declares no ${which} surface to measure against`
+        message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`,
+        ratio,
+        required: AA_NORMAL
       });
-      continue;
     }
-    if (!hexToRgb(value) || !hexToRgb(against)) {
-      push({
-        severity: "info",
+    const components = tokens2.components ?? {};
+    for (const [name, parts] of Object.entries(components)) {
+      const base = name.replace(/-(hover|active|pressed|focus)$/, "");
+      const inherited = base === name ? void 0 : components[base];
+      const pick2 = (prop) => resolveString(tokens2, parts[prop]?.$value ?? inherited?.[prop]?.$value);
+      const fg = pick2("textColor");
+      const bg = pick2("backgroundColor");
+      const path = `components.${name}`;
+      if (!fg || !bg) {
+        push2({ severity: "info", path, message: "not checked: states no text or no background colour" });
+        continue;
+      }
+      if (!hexToRgb(fg) || !hexToRgb(bg)) {
+        push2({ severity: "info", path, message: "not checked: not an opaque colour" });
+        continue;
+      }
+      const ratio = contrastRatio(fg, bg);
+      push2({
+        severity: ratio >= AA_NORMAL ? "info" : "error",
         path,
-        message: "not checked: not an opaque colour, and a translucent value has no ratio until it is composited"
+        message: `label ${fg} on ${bg} is ${ratio.toFixed(4)}:1`,
+        ratio,
+        required: AA_NORMAL
       });
-      continue;
     }
-    const ratio = contrastRatio(value, against);
-    push({
-      severity: ratio >= AA_NORMAL ? "info" : "error",
-      path,
-      message: `${value} on ${against} is ${ratio.toFixed(4)}:1`,
-      ratio,
-      required: AA_NORMAL
-    });
-  }
-  for (const [name, pair] of Object.entries(theme.contrastPairs ?? {})) {
-    const path = `contrastPairs.${name}`;
-    const foreground = resolveString(tokens, pair.foreground);
-    const background = resolveString(tokens, pair.background);
-    if (!foreground || !background || !hexToRgb(foreground) || !hexToRgb(background)) {
-      push({ severity: "warning", path, message: "not checked: explicit pair must resolve to two opaque hex colours" });
-      continue;
+  };
+  const defaultTokens = baseTokens(tokens);
+  measure(defaultTokens, (p) => p);
+  const baseLeaves = new Set(leavesOf(defaultTokens).map(([p]) => p));
+  for (const mode of modeNames(tokens)) {
+    const overrides = leavesOf(tokens[MODE_GROUP][mode] ?? {});
+    for (const [path] of overrides) {
+      if (!baseLeaves.has(path)) {
+        push({
+          severity: "error",
+          path: `${MODE_GROUP}.${mode}.${path}`,
+          message: `overrides ${path}, which the default mode does not have`
+        });
+      }
     }
-    const ratio = contrastRatio(foreground, background);
-    push({
-      severity: ratio >= AA_NORMAL ? "info" : "error",
-      path,
-      message: `${foreground} on ${background} is ${ratio.toFixed(4)}:1`,
-      ratio,
-      required: AA_NORMAL
-    });
-  }
-  const components = tokens.components ?? {};
-  for (const [name, parts] of Object.entries(components)) {
-    const base = name.replace(/-(hover|active|pressed|focus)$/, "");
-    const inherited = base === name ? void 0 : components[base];
-    const pick2 = (prop) => resolveString(tokens, parts[prop]?.$value ?? inherited?.[prop]?.$value);
-    const fg = pick2("textColor");
-    const bg = pick2("backgroundColor");
-    const path = `components.${name}`;
-    if (!fg || !bg) {
-      push({ severity: "info", path, message: "not checked: states no text or no background colour" });
-      continue;
-    }
-    if (!hexToRgb(fg) || !hexToRgb(bg)) {
-      push({ severity: "info", path, message: "not checked: not an opaque colour" });
-      continue;
-    }
-    const ratio = contrastRatio(fg, bg);
-    push({
-      severity: ratio >= AA_NORMAL ? "info" : "error",
-      path,
-      message: `label ${fg} on ${bg} is ${ratio.toFixed(4)}:1`,
-      ratio,
-      required: AA_NORMAL
-    });
+    measure(tokensForMode(tokens, mode), (p) => `${MODE_GROUP}.${mode}:${p}`);
   }
   const motion = tokens.motion ?? {};
   for (const [name, leaf] of Object.entries(motion.easing ?? {})) {
@@ -22321,6 +22374,7 @@ var themesOutput = external_exports.object({
     industry: external_exports.array(external_exports.string()),
     mood: external_exports.array(external_exports.string()),
     preview: external_exports.record(external_exports.string()),
+    modes: external_exports.array(external_exports.string()).optional(),
     formats: external_exports.record(external_exports.string())
   })),
   hint: external_exports.string().optional()

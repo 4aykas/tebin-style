@@ -1,5 +1,7 @@
 import StyleDictionary from 'style-dictionary';
+import { appendFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
+import { MODE_GROUP, modeSelector, referencePath } from './tokens.js';
 
 interface Leaf {
   $type?: string;
@@ -45,6 +47,47 @@ function nestByPath<T>(tokens: Leaf[], leafValue: (t: Leaf) => T): Record<string
     });
   }
   return out;
+}
+
+/** A token's variable plus the Tailwind utility namespaces it also fills. */
+function tailwindNames(name: string, path: string[], type: string | undefined): string[] {
+  const names = new Set([name]);
+  if (type === 'color' && path[0] !== 'color') names.add(`color-${name}`);
+  if (path[0] === 'type') names.add(name.replace(/^type-/, 'text-'));
+  if (path[0] === 'lineHeight') names.add(`leading-${path.slice(1).join('-')}`);
+  if (type === 'cubicBezier' && path[0] === 'motion') names.add(`ease-${path.slice(2).join('-')}`);
+  return [...names];
+}
+
+/** A dotted token path as Style Dictionary's kebab variable name. */
+const kebab = (path: string) =>
+  path.split('.').map((s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()).join('-');
+
+/** Keeps `mode.*` out of the default `:root` block. */
+const notMode = (t: { path: string[] }) => t.path[0] !== MODE_GROUP;
+
+/**
+ * One `:root[data-theme="<mode>"]` block per mode, appended to the CSS and
+ * Tailwind files: each override redefines the default token's own variable
+ * (and, for Tailwind, its utility names), so every rule written against the
+ * default follows the mode without a rule of its own. Values are resolved.
+ */
+function modeBlocks(tokens: Leaf[], tailwind: boolean): string {
+  const byMode = new Map<string, string[]>();
+  for (const t of tokens) {
+    if (t.path[0] !== MODE_GROUP || t.path.length < 3) continue;
+    const mode = t.path[1]!;
+    const base = t.path.slice(2);
+    const name = t.name.slice(`${MODE_GROUP}-${mode}-`.length);
+    const names = tailwind ? tailwindNames(name, base, rawType(t)) : [name];
+    // tokens.css keeps a reference as a reference, as its default block does.
+    const ref = tailwind ? null : referencePath(rawValue(t));
+    const value = ref ? `var(--${kebab(ref)})` : outValue(t);
+    const lines = byMode.get(mode) ?? [];
+    lines.push(...names.map((n) => `  --${n}: ${value};`));
+    byMode.set(mode, lines);
+  }
+  return [...byMode].map(([mode, lines]) => `\n${modeSelector(mode)} {\n${lines.join('\n')}\n}\n`).join('');
 }
 
 let registered = false;
@@ -102,15 +145,7 @@ export function registerFormats(): void {
     name: 'css/tailwind-theme',
     format: ({ dictionary }) =>
       `@theme {\n${(dictionary.allTokens as unknown as Leaf[])
-        .flatMap((t) => {
-          // Keep existing variables and add Tailwind's utility namespaces.
-          const names = new Set([t.name]);
-          if (rawType(t) === 'color' && t.path[0] !== 'color') names.add(`color-${t.name}`);
-          if (t.path[0] === 'type') names.add(t.name.replace(/^type-/, 'text-'));
-          if (t.path[0] === 'lineHeight') names.add(`leading-${t.path.slice(1).join('-')}`);
-          if (rawType(t) === 'cubicBezier' && t.path[0] === 'motion') names.add(`ease-${t.path.slice(2).join('-')}`);
-          return [...names].map((name) => `  --${name}: ${outValue(t)};`);
-        })
+        .flatMap((t) => tailwindNames(t.name, t.path, rawType(t)).map((name) => `  --${name}: ${outValue(t)};`))
         .join('\n')}\n}\n`,
   });
 
@@ -156,13 +191,13 @@ export async function buildTheme(themeDir: string): Promise<void> {
         transformGroup: 'css-tebin',
         buildPath,
         files: [
-          { destination: 'tokens.css', format: 'css/variables', options: { outputReferences: true } },
+          { destination: 'tokens.css', format: 'css/variables', filter: notMode, options: { outputReferences: true } },
         ],
       },
       tailwind: {
         transformGroup: 'css-tebin',
         buildPath,
-        files: [{ destination: 'tailwind.css', format: 'css/tailwind-theme' }],
+        files: [{ destination: 'tailwind.css', format: 'css/tailwind-theme', filter: notMode }],
       },
       dtcg: {
         transforms: ['name/kebab'],
@@ -178,4 +213,10 @@ export async function buildTheme(themeDir: string): Promise<void> {
   });
 
   await sd.buildAllPlatforms();
+
+  for (const [platform, file] of [['css', 'tokens.css'], ['tailwind', 'tailwind.css']] as const) {
+    const { allTokens } = await sd.getPlatformTokens(platform);
+    const blocks = modeBlocks(allTokens as unknown as Leaf[], platform === 'tailwind');
+    if (blocks) appendFileSync(join(themeDir, 'dist', file), blocks);
+  }
 }

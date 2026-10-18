@@ -2,6 +2,31 @@
 
 ## Unreleased
 
+### Themes
+- New theme `fleet` (FleetView 1.0.0), the look of TEBIN's server console,
+  taken from its dashboard stylesheet: a slate palette, roles for state text
+  and state fills, one green accent, Geist and Geist Mono, a six-step type
+  scale with a 12px floor, spacing, radii, shadows, button and input
+  components, and the console's own invader as mark, app tile and favicon.
+  Dark is the default; light is a mode. Every text pair reaches 4.5:1 in
+  both. Seven web rules for `fleet`: state colour only on the finding, one
+  accent per view, state text versus fill, quiet destructive controls in
+  lists, status as a flat edge, mono for machine values, six sizes. Left
+  out: the product's glossary and page layout, which describe the product,
+  not its look.
+
+### Formats
+- Themes can have modes. `mode.<name>` repeats a token's path with that
+  mode's value; `tokens.css` and `tailwind.css` add a
+  `:root[data-theme="<name>"]` block per mode, `shadcn.json` fills `dark`
+  for a theme with a dark mode, DESIGN.md gains a Modes table, and the
+  registry lists `modes`. Lint measures contrast in every mode and fails an
+  override with no default.
+- A theme without `color.brand`, `ink` or `topbar` shows `role.primary`,
+  `on-surface` and `surface` as its registry preview.
+- DESIGN.md names Arial for Office only for a theme whose font stacks fall
+  back to Arial; `slate` no longer claims it.
+
 ### Repository
 - The Gitea repo lives in the public `tebin-oss` organisation:
   `git.tebin.co/tebin-oss/tebin-style`. The old `TEBIN/tebin-style` path

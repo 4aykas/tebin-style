@@ -4,7 +4,7 @@ import { collectColorRows, NO_PRINT_VALUE } from './colors-csv.js';
 import { readManifest } from './raster.js';
 import { filterRules, type Rule } from './rules.js';
 import { buildFrontMatter } from './front-matter.js';
-import { referencePath } from './tokens.js';
+import { referencePath, resolveToken, baseTokens, leavesOf, modeNames, modeSelector, tokensForMode, MODE_GROUP } from './tokens.js';
 
 export const BLOB_BASE = 'https://github.com/4aykas/tebin-style/blob/main';
 export const RAW_BASE = 'https://raw.githubusercontent.com/4aykas/tebin-style/main';
@@ -76,7 +76,32 @@ function typeSection(themeDir: string): string {
   if (weights.length) {
     out += `- **Weights** — ${weights.map(([n, l]) => `${n} ${l.$value}`).join(', ')}\n`;
   }
-  out += `\nIn Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.\n`;
+  // Only a theme whose own stacks fall back to Arial has said what Office uses.
+  const stacks = Object.values(tokens.font ?? {}).flatMap((leaf) => leaf.$value ?? []);
+  if (stacks.includes('Arial')) {
+    out += `\nIn Word, Excel, PowerPoint and Google Docs use **Arial**. It is the brand book's own substitute where Roboto is unavailable, and it is installed everywhere.\n`;
+  }
+  return out;
+}
+
+function modeSection(themeDir: string): string {
+  const tokens = readTokens(themeDir);
+  const modes = modeNames(tokens);
+  if (!modes.length) return '';
+  const base = baseTokens(tokens);
+  let out = '\n## Modes\n\n';
+  out += `The tables above are the default mode. ${modes.length === 1 ? 'One more mode overrides' : `${modes.length} more modes override`} ` +
+    `the same tokens, so every rule written against a token follows the mode. ` +
+    `Turn one on with its selector; \`tokens.css\` and \`tailwind.css\` carry each as its own block.\n`;
+  for (const mode of modes) {
+    const merged = tokensForMode(tokens, mode);
+    out += `\n### ${mode} — \`${modeSelector(mode)}\`\n\n| Token | Default | ${mode} |\n| --- | --- | --- |\n`;
+    for (const [path] of leavesOf((tokens[MODE_GROUP] as Record<string, any>)[mode] ?? {})) {
+      const at = (tree: Record<string, any>) => path.split('.').reduce((n, s) => n?.[s], tree)?.$value;
+      const show = (tree: Record<string, any>) => String(resolveToken(tree, at(tree)) ?? at(tree) ?? '—');
+      out += `| \`${path}\` | \`${show(base)}\` | \`${show(merged)}\` |\n`;
+    }
+  }
   return out;
 }
 
@@ -265,6 +290,7 @@ export function buildDesignDoc(themeDir: string): string {
   out += `\nWhere a cell reads "${NO_PRINT_VALUE}", no value was printed there — do not convert one from the RGB.\n`;
   out += translucentNote(themeDir, theme.id);
   out += roleSection(themeDir);
+  out += modeSection(themeDir);
   out += typeSection(themeDir);
   out += typeScaleSection(themeDir);
   out += geometrySection(themeDir);
