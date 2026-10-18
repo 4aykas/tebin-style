@@ -15,7 +15,9 @@
    pnpm build && pnpm verify
    ```
 6. Commit the source files **and** every generated output (`dist/`,
-   `DESIGN.md`, `assets/png/`, `preview/`, `registry/index.json`). Open a PR. CI runs `pnpm verify` on the committed outputs before a rebuild can hide drift.
+   `DESIGN.md`, `assets/png/`, `preview/`, `registry/index.json`). Open a pull
+   request on [git.tebin.co/TEBIN/tebin-style](https://git.tebin.co/TEBIN/tebin-style);
+   GitHub is a mirror. CI runs `pnpm verify` on the committed outputs before a rebuild can hide drift.
 
 Do not hand-edit generated files. [`AGENTS.md`](./AGENTS.md#generated-files)
 lists them all.

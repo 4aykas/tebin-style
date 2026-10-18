@@ -1,0 +1,40 @@
+# The Gitea half of a release. A `v*` tag pushed here builds the same brand and
+# skill ZIPs as .github/workflows/release.yml and attaches them, with a SHA-256
+# file each, to a Gitea release. The push mirror carries the tag to GitHub,
+# whose own release adds build provenance, which Gitea cannot sign.
+name: Release
+on:
+  push:
+    tags: ['v*']
+concurrency:
+  group: release
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check the tagged commit is on main
+        run: |
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main ||
+            { echo "::error::$GITHUB_REF_NAME is not on main"; exit 1; }
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Check release tag and changelog
+        run: node scripts/check-release.mjs
+      - run: pnpm install --frozen-lockfile
+      # verify runs before packing, so a release never ships a stale tree.
+      - run: pnpm verify
+      - run: pnpm pack:brand
+      - name: Attach the ZIPs to a Gitea release
+        run: node scripts/gitea-release.mjs .tmp/tebin-brand-pack.zip .tmp/tebin-style-skill.zip
+        env:
+          GITEA_TOKEN: ${{ github.token }}

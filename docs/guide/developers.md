@@ -187,7 +187,9 @@ pnpm pack:brand # build .tmp/tebin-brand-pack.zip and .tmp/tebin-style-skill.zip
 pnpm audit     # check current dependency advisories (requires the registry)
 ```
 
-CI verifies and packs on Linux and Windows. Dependency audit is separate from
+CI verifies on Linux on Gitea (`.gitea/workflows`) and on Windows on the
+GitHub mirror (`.github/workflows`). Dependency updates are manual; there is
+no Dependabot. Dependency audit is separate from
 the deterministic checks because its results depend on current registry data.
 After dependency updates, rebuild and inspect output changes before accepting
 them. Style Dictionary 5 needs the local shorthand transform to preserve
