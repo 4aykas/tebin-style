@@ -10,6 +10,9 @@ describe('mirror guard hook', () => {
     'gh.exe issue view 12',
     'git push github main',
     'git push -q github v1.12.2',
+    'bash -c "gh pr create --title x"',
+    "pwsh -Command 'git push github main'",
+    'eval "gh issue list"',
   ])('denies %s', (command) => {
     expect(verdict(command)).toMatch(/Gitea|origin/);
   });
@@ -19,6 +22,11 @@ describe('mirror guard hook', () => {
     'git push -q -u origin feat/x --no-verify',
     'git commit --no-verify -m "wip"',
     'git add -A && git commit -n -m x',
+    'git -C . push --no-verify',
+    'git push --no-verif origin main',
+    'git commit -anm "x"',
+    'git -c core.hooksPath=/dev/null push origin main',
+    'bash -c "git push --no-verify"',
   ])('denies skipping the hooks: %s', (command) => {
     expect(verdict(command)).toMatch(/hooks/);
   });
@@ -39,6 +47,8 @@ describe('mirror guard hook', () => {
     'git ls-remote github refs/heads/main',
     'node scripts/gitea-api.mjs watch HEAD',
     'grep -n "gh pr" docs/agents/issue-tracker.md',
+    'git commit --amend --no-edit',
+    'bash -c "git push origin main"',
   ])('allows %s', (command) => {
     expect(verdict(command)).toBeNull();
   });

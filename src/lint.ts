@@ -192,10 +192,12 @@ export function lintTheme(themeDir: string): LintResult {
     findings.push(...measured.filter((f) =>
       !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
   }
-  // The build sets each look's color-scheme from its surface; a theme with
-  // modes whose surface is not an opaque hex would lose it without a word.
+  // The build sets each look's color-scheme from its surface; a surface that
+  // is not an opaque hex would lose it without a word. A one-look theme with
+  // no surface keeps the browser default, as it should.
   const modes = modeNames(tokens);
-  if (modes.length) {
+  const hasSurface = Boolean((defaultTokens.role as Record<string, unknown> | undefined)?.surface);
+  if (modes.length || hasSurface) {
     for (const [at, look] of [['role.surface', defaultTokens], ...modes.map((m) =>
       [`${MODE_GROUP}.${m}:role.surface`, tokensForMode(tokens, m)] as const)] as const) {
       if (surfaceIsDark(look) === null) {

@@ -84,10 +84,13 @@ let tagged = remoteTagged();
 let pr = tagged ? null : releasePr();
 const local = quiet('git', ['rev-parse', '--verify', '-q', `refs/heads/${branch}`]);
 let localInPr = false;
-if (local && pr) {
-  // The PR's head is on its branch, or in main's history once merged.
+// The PR's head is on its branch, or in main's history once merged: watch
+// and the ancestry check below need it here, in a fresh clone too.
+if (pr) {
   quiet('git', ['fetch', '-q', 'origin', 'main']);
   quiet('git', ['fetch', '-q', 'origin', branch]);
+}
+if (local && pr) {
   try { sh('git', ['merge-base', '--is-ancestor', local, pr.head], { stdio: ['ignore', 'pipe', 'ignore'] }); localInPr = true; } catch { /* ahead, or the head is unknown here */ }
 }
 const plan = resumeStep({ branch, remoteTag: tagged, pr, local, localInPr });

@@ -102,6 +102,11 @@ describe('color-scheme without modes', () => {
     expect(readFileSync(join(dark, 'dist', 'tokens.css'), 'utf8')).toContain(':root {\n  color-scheme: dark;\n}');
     expect(readFileSync(join(light, 'dist', 'tokens.css'), 'utf8')).not.toContain('color-scheme');
   });
+  it('warns for a one-look surface the scheme cannot be read from', () => {
+    const t = { color: tokens.color, role: { ...tokens.role, surface: color('rgba(0, 0, 0, 0.9)') } };
+    const warnings = lintTheme(fixture('one-translucent', t)).findings.filter((f) => f.severity === 'warning');
+    expect(warnings.map((f) => f.path)).toContain('role.surface');
+  });
 });
 
 describe('lint with a mode', () => {

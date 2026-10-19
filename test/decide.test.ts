@@ -24,7 +24,7 @@ describe('resumeStep', () => {
     ['no PR', { remoteTag: '', pr: null, local: '', localInPr: false }, /no pull request from release\/v1\.2\.3/],
     ['a closed PR', { remoteTag: '', pr: { number: '9', state: 'closed', head: A }, local: '', localInPr: false }, /#9 was closed/],
     ['a local branch ahead of an open PR', { remoteTag: '', pr: { number: '9', state: 'open', head: A }, local: B, localInPr: false }, /local release\/v1\.2\.3 at bbbbbbb has commits the PR \(at aaaaaaa\) lacks/],
-    ['a local branch ahead of a merged PR', { remoteTag: '', pr: { number: '9', state: 'merged', head: A, merge: M }, local: B, localInPr: false }, /has commits the PR/],
+    ['a local branch ahead of a merged PR', { remoteTag: '', pr: { number: '9', state: 'merged', head: A, merge: M }, local: B, localInPr: false }, /has commits the PR \(at aaaaaaa\) lacks, and it is merged: take them to main in a new PR/],
   ])('refuses %s', (_, input, reason) => {
     expect(resumeStep({ branch, ...input }).refuse).toMatch(reason);
   });

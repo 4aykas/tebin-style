@@ -21825,7 +21825,8 @@ function lintTheme(themeDir2) {
     findings.push(...measured2.filter((f) => !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
   }
   const modes = modeNames(tokens);
-  if (modes.length) {
+  const hasSurface = Boolean(defaultTokens.role?.surface);
+  if (modes.length || hasSurface) {
     for (const [at, look] of [["role.surface", defaultTokens], ...modes.map((m) => [`${MODE_GROUP}.${m}:role.surface`, tokensForMode(tokens, m)])]) {
       if (surfaceIsDark(look) === null) {
         push({ severity: "warning", path: at, message: "not an opaque hex, so the build cannot set this look's color-scheme" });

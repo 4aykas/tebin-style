@@ -63,7 +63,9 @@ async function api(path, init = {}, { instance = false, soft = false, raw = fals
         console.error(`Gitea API ${init.method} ${path} failed (${e.message}); it may have landed: check before running it again.`);
         process.exit(2);
       }
-      if (i === 5) { if (soft) return null; throw e; }
+      // A hint the caller can do without is not worth a minute of retries.
+      if (soft) return null;
+      if (i === 5) throw e;
       await new Promise((r) => setTimeout(r, 10_000));
     }
   }
@@ -80,13 +82,17 @@ async function runFor(sha, workflow) {
 }
 
 /**
- * The instance's runners by state, or null when the token may not see them:
- * the list is an admin endpoint, and a missing answer only means no hint.
+ * The runners that may take the repo's jobs (the instance's, the org's, the
+ * repo's) by state, or null when the token sees none: the instance list is
+ * an admin endpoint, and a missing answer only means no hint.
  */
 async function runners() {
-  const answer = await api('/admin/actions/runners', {}, { instance: true, soft: true });
-  // No answer, or no instance runner (they may sit at org or repo level): no hint.
-  const list = answer?.runners ?? [];
+  const answers = await Promise.all([
+    api('/admin/actions/runners', {}, { instance: true, soft: true }),
+    api(`/orgs/${REPO.split('/')[0]}/actions/runners`, {}, { instance: true, soft: true }),
+    api('/actions/runners', {}, { soft: true }),
+  ]);
+  const list = [...new Map(answers.flatMap((a) => a?.runners ?? []).map((r) => [r.id, r])).values()];
   if (!list.length) return null;
   const name = (r) => r.name;
   return { online: list.filter((r) => r.status !== 'offline').map(name), offline: list.filter((r) => r.status === 'offline').map(name) };
@@ -173,7 +179,8 @@ if (cmd === 'run-for') {
   // `/admin/...` into a file path.
   if (!arg || /^[A-Za-z]:/.test(arg)) { console.error('usage: get <path> [field,field.sub], e.g. get actions/runs/85 status'); process.exit(2); }
   const path = arg.startsWith('/') ? arg : `/${arg}`;
-  const instance = /^\/(admin|repos|orgs|users?|teams|notifications|packages|settings|topics|markdown|version)\b/.test(path);
+  // Not topics or notifications: the repo has its own.
+  const instance = /^\/(admin|repos|orgs|users?|teams|packages|settings|markdown|version)\b/.test(path);
   const answer = await api(path, {}, { instance });
   if (!extra) console.log(JSON.stringify(answer, null, 2));
   else {
@@ -196,10 +203,14 @@ if (cmd === 'run-for') {
 } else if (cmd === 'pr-for') {
   // "<number> <open|merged|closed> <head sha> [merge sha]" for the newest PR
   // from a branch. Once the branch is deleted its name lives on in head.label.
-  // Gitea has no "newest" sort: take the recently updated, then the highest number.
-  const pulls = await api('/pulls?state=all&sort=recentupdate&limit=50');
-  const pr = pulls.filter((p) => p.head?.ref === arg || p.head?.label === arg)
-    .sort((a, b) => b.number - a.number)[0];
+  // Gitea has no "newest" sort: page through the recently updated (up to 500)
+  // until a page holds one, then take the highest number.
+  let pr;
+  for (let page = 1; page <= 10 && !pr; page++) {
+    const pulls = await api(`/pulls?state=all&sort=recentupdate&limit=50&page=${page}`);
+    pr = pulls.filter((p) => p.head?.ref === arg || p.head?.label === arg).sort((a, b) => b.number - a.number)[0];
+    if (pulls.length < 50) break;
+  }
   if (!pr) { console.error(`no pull request from ${arg}`); process.exit(1); }
   console.log([pr.number, pr.merged ? 'merged' : pr.state, pr.head.sha, pr.merged ? pr.merge_commit_sha : ''].join(' ').trim());
 } else if (cmd === 'merge') {
