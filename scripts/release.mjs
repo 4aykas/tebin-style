@@ -24,12 +24,19 @@ const branch = `release/${tag}`;
 const sh = (cmd, args, opts = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], shell: process.platform === 'win32' && cmd === 'pnpm', ...opts }).trim();
 const live = (cmd, args) => execFileSync(cmd, args, { stdio: 'inherit', shell: process.platform === 'win32' && cmd === 'pnpm' });
 const step = (s) => console.log(`\n== ${s}`);
-const api = (...args) => sh('node', ['scripts/gitea-api.mjs', ...args]);
+// scripts/gitea-api.mjs: `gitea` shows its output, `giteaOut` returns it.
+const gitea = (...args) => live('node', ['scripts/gitea-api.mjs', ...args]);
+const giteaOut = (...args) => sh('node', ['scripts/gitea-api.mjs', ...args]);
+const quiet = (cmd, args) => { try { return sh(cmd, args, { stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return ''; } };
 
-/** The release PR as `{ number, state, head, merge }`, or null when there is none. */
+/**
+ * The release PR as `{ number, state, head, merge }`, or null when the branch
+ * has none. Any other failure (a rejected token, the network) stops the
+ * release with gitea-api's own message.
+ */
 function releasePr() {
   let line;
-  try { line = sh('node', ['scripts/gitea-api.mjs', 'pr-for', branch], { stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; }
+  try { line = giteaOut('pr-for', branch); } catch (e) { if (e.status === 1) return null; throw e; }
   const [number, state, head, merge] = line.split(' ');
   return { number, state, head, merge };
 }
@@ -66,18 +73,24 @@ if (!resume) {
   sh('git', ['add', '-A']);
   sh('git', ['commit', '-q', '-m', `release: ${version}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`]);
   live('git', ['push', '-q', '-u', 'origin', branch]);
-  console.log(api('pr', `release: ${version}`));
+  gitea('pr', `release: ${version}`);
 }
 
-sh('git', ['fetch', '-q', '--tags', 'origin']);
-if (!sh('git', ['ls-remote', '--tags', 'origin', `refs/tags/${tag}`])) {
+// The commit the remote tag names (the peeled `^{}` line), or '' before the tag.
+const remoteTagged = () => sh('git', ['ls-remote', 'origin', `refs/tags/${tag}^{}`]).split(/\s/)[0] ?? '';
+let tagged = remoteTagged();
+if (!tagged) {
   let pr = releasePr();
   if (!pr) throw new Error(`no pull request from ${branch}: nothing to resume, run without --resume`);
   if (pr.state === 'closed') throw new Error(`#${pr.number} was closed without a merge`);
+  // A local release branch past the PR's head holds commits the merge would
+  // leave out, and the branch is deleted below: push them first.
+  const local = quiet('git', ['rev-parse', '--verify', '-q', `refs/heads/${branch}`]);
+  if (local && local !== pr.head) throw new Error(`local ${branch} is at ${local.slice(0, 7)}, the PR at ${pr.head.slice(0, 7)}: push it, then resume`);
   if (pr.state === 'open') {
     step(`CI for #${pr.number}`);
-    live('node', ['scripts/gitea-api.mjs', 'watch', pr.head]);
-    live('node', ['scripts/gitea-api.mjs', 'merge', pr.number]);
+    gitea('watch', pr.head);
+    gitea('merge', pr.number);
     pr = releasePr();
   }
   if (!pr?.merge) throw new Error(`#${pr?.number} reports no merge commit`);
@@ -85,13 +98,19 @@ if (!sh('git', ['ls-remote', '--tags', 'origin', `refs/tags/${tag}`])) {
   step(`tag ${tag} on ${pr.merge.slice(0, 7)}`);
   sh('git', ['checkout', '-q', 'main']);
   sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
-  try { sh('git', ['branch', '-D', branch], { stdio: ['ignore', 'pipe', 'ignore'] }); } catch { /* already gone */ }
-  sh('git', ['tag', '-a', tag, '-m', tag, pr.merge]);
+  if (local) sh('git', ['branch', '-D', branch]);
+  // A tag made by a run whose push failed is reused when it names the merge.
+  const existing = quiet('git', ['rev-parse', '--verify', '-q', `refs/tags/${tag}^{commit}`]);
+  if (existing && existing !== pr.merge) throw new Error(`local tag ${tag} is on ${existing.slice(0, 7)}, not the merge ${pr.merge.slice(0, 7)}`);
+  if (!existing) sh('git', ['tag', '-a', tag, '-m', tag, pr.merge]);
   live('git', ['push', '-q', 'origin', tag]);
+  tagged = pr.merge;
 }
 
 step('Gitea release run');
-live('node', ['scripts/gitea-api.mjs', 'watch', tag, 'release.yml']);
+// The tagged commit, which watch can name even when the tag is only remote.
+sh('git', ['fetch', '-q', 'origin', 'main']);
+gitea('watch', tagged, 'release.yml');
 
 step('GitHub release from the mirrored tag');
 for (let i = 0; i < 60; i++) {

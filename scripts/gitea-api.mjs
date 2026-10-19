@@ -19,7 +19,8 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 
 const REPO = process.env.GITEA_REPO ?? 'tebin-oss/tebin-style';
-const BASE = `${process.env.GITEA_URL ?? 'https://git.tebin.co'}/api/v1/repos/${REPO}`;
+const ROOT = `${process.env.GITEA_URL ?? 'https://git.tebin.co'}/api/v1`;
+const BASE = `${ROOT}/repos/${REPO}`;
 
 function token() {
   if (process.env.GITEA_TOKEN) return process.env.GITEA_TOKEN.trim();
@@ -28,15 +29,21 @@ function token() {
   process.exit(2);
 }
 
-async function api(path, init = {}) {
+/**
+ * A call to the repo's API (or, with `instance`, to the instance's). `soft`
+ * answers null instead of exiting on a 4xx or a failed read: for a hint the
+ * caller can do without.
+ */
+async function api(path, init = {}, { instance = false, soft = false } = {}) {
   // Only a read is retried. A POST that failed in flight (a reset after Gitea
   // took the merge) may have landed; sending it again would fail on its own
   // success, so the caller checks the state instead.
   const retry = (init.method ?? 'GET') === 'GET';
   for (let i = 0; i < 6; i++) {
     try {
-      const res = await fetch(`${BASE}${path}`, { ...init, headers: { Authorization: `token ${token()}`, 'Content-Type': 'application/json' } });
+      const res = await fetch(`${instance ? ROOT : BASE}${path}`, { ...init, headers: { Authorization: `token ${token()}`, 'Content-Type': 'application/json' } });
       if (res.status >= 500) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok && soft) return null;
       // A 4xx is no hiccup (expired token, wrong repo): retrying it would leave
       // a watcher waiting forever.
       if (!res.ok) {
@@ -52,7 +59,7 @@ async function api(path, init = {}) {
         console.error(`Gitea API ${init.method} ${path} failed (${e.message}); it may have landed: check before running it again.`);
         process.exit(2);
       }
-      if (i === 5) throw e;
+      if (i === 5) { if (soft) return null; throw e; }
       await new Promise((r) => setTimeout(r, 10_000));
     }
   }
@@ -73,16 +80,12 @@ async function runFor(sha, workflow) {
  * the list is an admin endpoint, and a missing answer only means no hint.
  */
 async function runners() {
-  try {
-    const res = await fetch(`${process.env.GITEA_URL ?? 'https://git.tebin.co'}/api/v1/admin/actions/runners`,
-      { headers: { Authorization: `token ${token()}` } });
-    if (!res.ok) return null;
-    const { runners: list = [] } = await res.json();
-    const name = (r) => r.name;
-    return { online: list.filter((r) => r.status !== 'offline').map(name), offline: list.filter((r) => r.status === 'offline').map(name) };
-  } catch {
-    return null;
-  }
+  const answer = await api('/admin/actions/runners', {}, { instance: true, soft: true });
+  // No answer, or no instance runner (they may sit at org or repo level): no hint.
+  const list = answer?.runners ?? [];
+  if (!list.length) return null;
+  const name = (r) => r.name;
+  return { online: list.filter((r) => r.status !== 'offline').map(name), offline: list.filter((r) => r.status === 'offline').map(name) };
 }
 
 async function printJobs(run) {
@@ -103,7 +106,7 @@ if (cmd === 'run-for') {
   for (let i = 0; i < 12 && !(run = await runFor(sha, workflow)); i++) await sleep(10_000);
   if (!run) { console.error(`no ${workflow} run for ${sha} after 2 minutes: was it pushed to origin?`); process.exit(1); }
   console.log(`run ${run.id} for ${sha.slice(0, 7)}`);
-  // A queued run waits as long as a runner is up, busy or not: a queue is no
+  // A queued run waits up to three hours: a queue behind a busy runner is no
   // failure. With every runner offline it says so, waits five minutes for one
   // to start, then stops. A run that started gets 30 minutes.
   const queuedAt = Date.now();
@@ -116,6 +119,9 @@ if (cmd === 'run-for') {
         console.error(`still ${run.status} after 30 minutes`);
         process.exit(1);
       }
+    } else if (Date.now() - queuedAt > 3 * 3600_000) {
+      console.error('still queued after 3 hours: does a runner carry the job\'s labels?');
+      process.exit(1);
     } else if (Date.now() - queuedAt > 2 * 60_000) {
       const state = await runners();
       if (state && state.online.length === 0) {
@@ -126,10 +132,10 @@ if (cmd === 'run-for') {
           console.error('no runner came online: start it, then run watch again');
           process.exit(1);
         }
-      } else if (state && !toldBusy) {
-        toldBusy = true;
+      } else if (state) {
         offlineSince = null;
-        console.log(`queued behind a busy runner (${state.online.join(', ')}); waiting`);
+        if (!toldBusy) console.log(`queued behind a busy runner (${state.online.join(', ')}); waiting`);
+        toldBusy = true;
       }
     }
     await sleep(20_000);
@@ -150,8 +156,10 @@ if (cmd === 'run-for') {
 } else if (cmd === 'pr-for') {
   // "<number> <open|merged|closed> <head sha> [merge sha]" for the newest PR
   // from a branch. Once the branch is deleted its name lives on in head.label.
-  const pulls = await api('/pulls?state=all&sort=newest&limit=50');
-  const pr = pulls.find((p) => p.head?.ref === arg || p.head?.label === arg);
+  // Gitea has no "newest" sort: take the recently updated, then the highest number.
+  const pulls = await api('/pulls?state=all&sort=recentupdate&limit=50');
+  const pr = pulls.filter((p) => p.head?.ref === arg || p.head?.label === arg)
+    .sort((a, b) => b.number - a.number)[0];
   if (!pr) { console.error(`no pull request from ${arg}`); process.exit(1); }
   console.log([pr.number, pr.merged ? 'merged' : pr.state, pr.head.sha, pr.merged ? pr.merge_commit_sha : ''].join(' ').trim());
 } else if (cmd === 'merge') {
