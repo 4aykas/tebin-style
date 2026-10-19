@@ -4,3 +4,4 @@ node_modules/
 .tmp/
 # Internal brand material: the 2017 style guide PDF stays out of the public repo.
 .input/
+.pnpm-store/
