@@ -11,6 +11,7 @@
 // the steps still to do.
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
+import { resumeStep, tagStep } from './decide.mjs';
 
 const [version] = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 if (!/^\d+\.\d+\.\d+$/.test(version ?? '')) throw new Error('usage: node scripts/release.mjs <version> --reviewed [--resume]');
@@ -78,31 +79,28 @@ if (!resume) {
 
 // The commit the remote tag names (the peeled `^{}` line), or '' before the tag.
 const remoteTagged = () => sh('git', ['ls-remote', 'origin', `refs/tags/${tag}^{}`]).split(/\s/)[0] ?? '';
+// Which step comes next, and when to refuse: scripts/decide.mjs.
 let tagged = remoteTagged();
-if (!tagged) {
-  let pr = releasePr();
-  if (!pr) throw new Error(`no pull request from ${branch}: nothing to resume, run without --resume`);
-  if (pr.state === 'closed') throw new Error(`#${pr.number} was closed without a merge`);
-  // A local release branch past the PR's head holds commits the merge would
-  // leave out, and the branch is deleted below: push them first.
-  const local = quiet('git', ['rev-parse', '--verify', '-q', `refs/heads/${branch}`]);
-  if (local && local !== pr.head) throw new Error(`local ${branch} is at ${local.slice(0, 7)}, the PR at ${pr.head.slice(0, 7)}: push it, then resume`);
-  if (pr.state === 'open') {
+let pr = tagged ? null : releasePr();
+const local = quiet('git', ['rev-parse', '--verify', '-q', `refs/heads/${branch}`]);
+const plan = resumeStep({ branch, remoteTag: tagged, pr, local });
+if (plan.refuse) throw new Error(plan.refuse);
+if (plan.next !== 'runs') {
+  if (plan.next === 'merge') {
     step(`CI for #${pr.number}`);
     gitea('watch', pr.head);
     gitea('merge', pr.number);
     pr = releasePr();
   }
-  if (!pr?.merge) throw new Error(`#${pr?.number} reports no merge commit`);
+  const existing = quiet('git', ['rev-parse', '--verify', '-q', `refs/tags/${tag}^{commit}`]);
+  const tagging = tagStep({ tag, pr, existing });
+  if (tagging.refuse) throw new Error(tagging.refuse);
 
   step(`tag ${tag} on ${pr.merge.slice(0, 7)}`);
   sh('git', ['checkout', '-q', 'main']);
   sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
   if (local) sh('git', ['branch', '-D', branch]);
-  // A tag made by a run whose push failed is reused when it names the merge.
-  const existing = quiet('git', ['rev-parse', '--verify', '-q', `refs/tags/${tag}^{commit}`]);
-  if (existing && existing !== pr.merge) throw new Error(`local tag ${tag} is on ${existing.slice(0, 7)}, not the merge ${pr.merge.slice(0, 7)}`);
-  if (!existing) sh('git', ['tag', '-a', tag, '-m', tag, pr.merge]);
+  if (tagging.create) sh('git', ['tag', '-a', tag, '-m', tag, pr.merge]);
   live('git', ['push', '-q', 'origin', tag]);
   tagged = pr.merge;
 }

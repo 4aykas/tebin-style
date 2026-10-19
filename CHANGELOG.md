@@ -27,6 +27,9 @@
   around each failure, without colour codes and timestamps; `watch` prints
   them when a run goes red. `gitea-api get <path> [fields]` reads any
   endpoint, as JSON or one tab-separated line per item.
+- The decisions of `release.mjs --resume` and `gitea-api watch` (what step
+  comes next, when to refuse, when to stop waiting) live in
+  `scripts/decide.mjs`, with a test per case a live Gitea cannot stage.
 - The project hook also denies `git push --no-verify`, `git commit
   --no-verify` and `git commit -n`. A flag named inside a quoted message or a
   heredoc body is not a command, and is let through.

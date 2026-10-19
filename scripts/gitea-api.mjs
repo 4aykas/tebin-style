@@ -19,6 +19,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { asksRunners, watchStart, watchStep } from './decide.mjs';
 
 const REPO = process.env.GITEA_REPO ?? 'tebin-oss/tebin-style';
 const ROOT = `${process.env.GITEA_URL ?? 'https://git.tebin.co'}/api/v1`;
@@ -141,37 +142,18 @@ if (cmd === 'run-for') {
   for (let i = 0; i < 12 && !(run = await runFor(sha, workflow)); i++) await sleep(10_000);
   if (!run) { console.error(`no ${workflow} run for ${sha} after 2 minutes: was it pushed to origin?`); process.exit(1); }
   console.log(`run ${run.id} for ${sha.slice(0, 7)}`);
-  // A queued run waits up to three hours: a queue behind a busy runner is no
-  // failure. With every runner offline it says so, waits five minutes for one
-  // to start, then stops. A run that started gets 30 minutes.
-  const queuedAt = Date.now();
-  let startedAt = null, offlineSince = null, toldBusy = false;
+  // How long it waits, and when it gives up: scripts/decide.mjs.
+  let s = watchStart(Date.now());
   while (run.status !== 'completed') {
-    if (run.status !== 'queued' && run.status !== 'waiting') {
-      startedAt ??= Date.now();
-      if (Date.now() - startedAt > 30 * 60_000) {
-        await printJobs(run.id);
-        console.error(`still ${run.status} after 30 minutes`);
-        process.exit(1);
-      }
-    } else if (Date.now() - queuedAt > 3 * 3600_000) {
-      console.error('still queued after 3 hours: does a runner carry the job\'s labels?');
+    const now = Date.now();
+    const step = watchStep(s, { status: run.status, now, runners: asksRunners(s, run.status, now) ? await runners() : null });
+    s = step.s;
+    if (step.say) console.log(step.say);
+    if (step.warn) console.error(step.warn);
+    if (step.stop) {
+      if (s.startedAt) await printJobs(run.id);
+      console.error(step.stop);
       process.exit(1);
-    } else if (Date.now() - queuedAt > 2 * 60_000) {
-      const state = await runners();
-      if (state && state.online.length === 0) {
-        if (!offlineSince) {
-          offlineSince = Date.now();
-          console.error(`queued, and every runner is offline (${state.offline.join(', ')}); waiting 5 minutes for one to start`);
-        } else if (Date.now() - offlineSince > 5 * 60_000) {
-          console.error('no runner came online: start it, then run watch again');
-          process.exit(1);
-        }
-      } else if (state) {
-        offlineSince = null;
-        if (!toldBusy) console.log(`queued behind a busy runner (${state.online.join(', ')}); waiting`);
-        toldBusy = true;
-      }
     }
     await sleep(20_000);
     run = await api(`/actions/runs/${run.id}`);
