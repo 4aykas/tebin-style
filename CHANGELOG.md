@@ -11,6 +11,15 @@
   warns when a theme with modes has a surface the scheme cannot be read
   from.
 
+### Repository
+- `pnpm verify`, and with it the pre-push hook, fails when a tracked file
+  holds a GitHub token, a private key, a 40-hex token beside the word
+  "token", or a hardcoded password or API key: the repo is public and
+  mirrored.
+- The project hook also denies `git push --no-verify`, `git commit
+  --no-verify` and `git commit -n`. A flag named inside a quoted message or a
+  heredoc body is not a command, and is let through.
+
 ## 1.13.0 — 2026-10-18
 
 ### Themes
