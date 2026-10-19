@@ -179,8 +179,8 @@ if (cmd === 'run-for') {
   // `/admin/...` into a file path.
   if (!arg || /^[A-Za-z]:/.test(arg)) { console.error('usage: get <path> [field,field.sub], e.g. get actions/runs/85 status'); process.exit(2); }
   const path = arg.startsWith('/') ? arg : `/${arg}`;
-  // Not topics or notifications: the repo has its own.
-  const instance = /^\/(admin|repos|orgs|users?|teams|packages|settings|markdown|version)\b/.test(path);
+  // Not notifications or topics: the repo has its own (bar topics/search).
+  const instance = /^\/(admin|repos|orgs|users?|teams|packages|settings|markdown|version|topics\/search)\b/.test(path);
   const answer = await api(path, {}, { instance });
   if (!extra) console.log(JSON.stringify(answer, null, 2));
   else {
@@ -203,14 +203,16 @@ if (cmd === 'run-for') {
 } else if (cmd === 'pr-for') {
   // "<number> <open|merged|closed> <head sha> [merge sha]" for the newest PR
   // from a branch. Once the branch is deleted its name lives on in head.label.
-  // Gitea has no "newest" sort: page through the recently updated (up to 500)
-  // until a page holds one, then take the highest number.
-  let pr;
-  for (let page = 1; page <= 10 && !pr; page++) {
+  // Gitea has no "newest" sort, and an older PR from the branch may have been
+  // updated later: read every page (up to 500 PRs; the server may cap a
+  // page below 50), then take the highest number.
+  const matches = [];
+  for (let page = 1; page <= 10; page++) {
     const pulls = await api(`/pulls?state=all&sort=recentupdate&limit=50&page=${page}`);
-    pr = pulls.filter((p) => p.head?.ref === arg || p.head?.label === arg).sort((a, b) => b.number - a.number)[0];
-    if (pulls.length < 50) break;
+    if (!pulls?.length) break;
+    matches.push(...pulls.filter((p) => p.head?.ref === arg || p.head?.label === arg));
   }
+  const pr = matches.sort((a, b) => b.number - a.number)[0];
   if (!pr) { console.error(`no pull request from ${arg}`); process.exit(1); }
   console.log([pr.number, pr.merged ? 'merged' : pr.state, pr.head.sha, pr.merged ? pr.merge_commit_sha : ''].join(' ').trim());
 } else if (cmd === 'merge') {
