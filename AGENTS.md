@@ -54,7 +54,8 @@ release read from it, so its `main` matches Gitea's. Push to `origin` only;
 `.claude/hooks/mirror-guard.mjs` denies `gh pr`, `gh issue`,
 `git push github` and `--no-verify`. `main` takes changes only through a Gitea PR with green
 CI: push a branch, then `node scripts/gitea-api.mjs pr "<title>" [body-file]`,
-`watch <sha>` and `merge <n>`. A PR that changes `src/`, `scripts/` or
+`watch <sha>` and `merge <n>`; `logs <run>` cuts a red run to its failures,
+`get <path>` reads any other endpoint. A PR that changes `src/`, `scripts/` or
 `mcp/` gets `/code-review` on its branch before `merge`.
 `.githooks/pre-push` runs `pnpm verify`.
 

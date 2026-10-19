@@ -4,9 +4,11 @@
 // ~/.env/.gitea and is never printed. Retries a read on a network error, so a
 // TLS hiccup does not read as a failed run; a failed POST stops instead.
 //
-//   node scripts/gitea-api.mjs watch [sha|ref] [workflow]   → waits for the run, prints jobs; exit 0 = green
+//   node scripts/gitea-api.mjs watch [sha|ref] [workflow]   → waits for the run, prints jobs; exit 0 = green, else the failures too
 //   node scripts/gitea-api.mjs run-for [sha|ref] [workflow] → run id, exit 1 if none
 //   node scripts/gitea-api.mjs jobs <run>                   → "  name: conclusion" lines
+//   node scripts/gitea-api.mjs logs <run>                   → the failed jobs' logs, cut to the failures
+//   node scripts/gitea-api.mjs get <path> [field,a.b]       → any read: JSON, or one tab-separated line per item
 //   node scripts/gitea-api.mjs rerun-failed <run>
 //   node scripts/gitea-api.mjs pr <title> [body-file]       → opens a PR from the current branch to main
 //   node scripts/gitea-api.mjs pr-for <branch>              → "<n> <open|merged|closed> <head sha> [merge sha]"
@@ -93,6 +95,34 @@ async function printJobs(run) {
   for (const j of jobs) console.log(`  ${j.name}: ${j.conclusion ?? j.status}`);
 }
 
+// A line that says why a job failed: a vitest FAIL, a thrown error, tsc, pnpm's exit.
+const FAILURE = /\bFAIL\b|\b[A-Za-z]*Error\b|\berror TS\d+|ERR_|ENOBUFS|ELIFECYCLE|✗|×|\bTests? +\d+ failed|exit code [1-9]/;
+
+/**
+ * The failed jobs' logs, cut to the lines around each failure. A job log
+ * runs to tens of kilobytes of colour codes and timestamps; the reason is a
+ * dozen lines of it.
+ */
+async function printFailures(run) {
+  const { jobs = [] } = await api(`/actions/runs/${run}/jobs`);
+  for (const j of jobs.filter((j) => j.conclusion === 'failure')) {
+    const res = await fetch(`${BASE}/actions/jobs/${j.id}/logs`, { headers: { Authorization: `token ${token()}` } }).catch(() => null);
+    if (!res?.ok) { console.log(`\n-- ${j.name}: no log (HTTP ${res?.status ?? 'error'})`); continue; }
+    const lines = (await res.text()).split('\n')
+      .map((l) => l.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '').replace(/^\S+Z /, '').trimEnd())
+      // A `::error` annotation repeats the failure above it with its whole stack.
+      .filter((l) => !l.startsWith('::'))
+      .map((l) => (l.length > 240 ? `${l.slice(0, 240)}…` : l));
+    const keep = new Set();
+    lines.forEach((l, i) => { if (FAILURE.test(l)) for (let k = i; k < Math.min(i + 5, lines.length); k++) keep.add(k); });
+    const shown = [...keep].sort((a, b) => a - b).slice(0, 120);
+    console.log(`\n-- ${j.name}: ${shown.length ? '' : 'no failure line found, the end of the log'}`);
+    if (!shown.length) for (let k = Math.max(0, lines.length - 20); k < lines.length; k++) shown.push(k);
+    shown.forEach((k, n) => { if (n && k !== shown[n - 1] + 1) console.log('  …'); console.log(`  ${lines[k]}`); });
+    if (keep.size > shown.length) console.log(`  … ${keep.size - shown.length} more lines`);
+  }
+}
+
 const [cmd, arg, extra] = process.argv.slice(2);
 const workflow = extra ?? 'ci.yml';
 if (cmd === 'run-for') {
@@ -143,9 +173,25 @@ if (cmd === 'run-for') {
   }
   await printJobs(run.id);
   console.log(`conclusion: ${run.conclusion}`);
-  if (run.conclusion !== 'success') process.exit(1);
+  if (run.conclusion !== 'success') { await printFailures(run.id); process.exit(1); }
 } else if (cmd === 'jobs') {
   await printJobs(arg);
+} else if (cmd === 'logs') {
+  await printFailures(arg);
+} else if (cmd === 'get') {
+  // A read of any endpoint, for what no command covers. A path under admin/,
+  // repos/, orgs/, user(s)/ or version is the instance's; any other, the repo's.
+  // The leading slash is optional: Git Bash turns `/admin/...` into a file path.
+  if (!arg || /^[A-Za-z]:/.test(arg)) { console.error('usage: get <path> [field,field.sub], e.g. get actions/runs/85 status'); process.exit(2); }
+  const path = arg.startsWith('/') ? arg : `/${arg}`;
+  const answer = await api(path, {}, { instance: /^\/(admin|repos|orgs|users?|version)\b/.test(path) });
+  if (!extra) { console.log(JSON.stringify(answer, null, 2)); process.exit(0); }
+  // A list comes wrapped ({ workflow_runs: [...], total_count }): unwrap it.
+  const values = answer && !Array.isArray(answer) ? Object.values(answer) : [];
+  const wrapped = values.filter(Array.isArray).length === 1 && values.every((v) => Array.isArray(v) || typeof v === 'number');
+  const rows = Array.isArray(answer) ? answer : wrapped ? values.find(Array.isArray) : [answer];
+  const pick = (o, path) => path.split('.').reduce((v, k) => v?.[k], o);
+  for (const row of rows) console.log(extra.split(',').map((f) => JSON.stringify(pick(row, f)) ?? '-').join('\t'));
 } else if (cmd === 'rerun-failed') {
   await api(`/actions/runs/${arg}/rerun-failed-jobs`, { method: 'POST' });
 } else if (cmd === 'pr') {
@@ -166,6 +212,6 @@ if (cmd === 'run-for') {
   await api(`/pulls/${arg}/merge`, { method: 'POST', body: JSON.stringify({ Do: 'merge', delete_branch_after_merge: true }) });
   console.log(`merged #${arg}`);
 } else {
-  console.error('usage: gitea-api.mjs watch [sha] [workflow] | run-for [sha] [workflow] | jobs <run> | rerun-failed <run> | pr <title> [body-file] | pr-for <branch> | merge <pr>');
+  console.error('usage: gitea-api.mjs watch [sha] [workflow] | run-for [sha] [workflow] | jobs <run> | logs <run> | get <path> [fields] | rerun-failed <run> | pr <title> [body-file] | pr-for <branch> | merge <pr>');
   process.exit(2);
 }
