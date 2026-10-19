@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.13.1 — 2026-10-19
 
 ### Formats
 - `tokens.css` and `tailwind.css` set `color-scheme` from each look's
