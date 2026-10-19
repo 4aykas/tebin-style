@@ -8,8 +8,8 @@
   `:root[data-theme="light"]`; a dark theme with one look gets `dark`, a
   light one keeps the browser default. Native inputs, scrollbars and
   autofill now follow the mode, as rule `theming-color-scheme` asks. Lint
-  warns when a theme with modes has a surface the scheme cannot be read
-  from.
+  warns when a surface is not an opaque hex, so the scheme cannot be read
+  from it.
 
 ### Repository
 - `pnpm verify`, and with it the pre-push hook, fails when a tracked file
@@ -31,8 +31,11 @@
   comes next, when to refuse, when to stop waiting) live in
   `scripts/decide.mjs`, with a test per case a live Gitea cannot stage.
 - The project hook also denies `git push --no-verify`, `git commit
-  --no-verify` and `git commit -n`. A flag named inside a quoted message or a
-  heredoc body is not a command, and is let through.
+  --no-verify` and `git commit -n`, also behind git's global options, as an
+  abbreviated flag, in a flag cluster, or as a `core.hooksPath` override. A
+  flag named inside a quoted message or a heredoc body is not a command, and
+  is let through; a quoted command a shell runs (`bash -c "..."`, `eval`)
+  is.
 
 ## 1.13.0 — 2026-10-18
 

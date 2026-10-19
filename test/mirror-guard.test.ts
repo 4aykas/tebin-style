@@ -10,6 +10,9 @@ describe('mirror guard hook', () => {
     'gh.exe issue view 12',
     'git push github main',
     'git push -q github v1.12.2',
+    'bash -c "gh pr create --title x"',
+    "pwsh -Command 'git push github main'",
+    'eval "gh issue list"',
   ])('denies %s', (command) => {
     expect(verdict(command)).toMatch(/Gitea|origin/);
   });
@@ -19,6 +22,19 @@ describe('mirror guard hook', () => {
     'git push -q -u origin feat/x --no-verify',
     'git commit --no-verify -m "wip"',
     'git add -A && git commit -n -m x',
+    'git -C . push --no-verify',
+    'git push --no-verif origin main',
+    'git commit -anm "x"',
+    'git -c core.hooksPath=/dev/null push origin main',
+    'bash -c "git push --no-verify"',
+    'bash -lc "git push --no-verify"',
+    'sh -ec "git commit -n -m x"',
+    'Invoke-Expression "git push --no-verify"',
+    'git --git-dir .git push --no-verify',
+    'git --work-tree x commit -n',
+    'git -c "core.hooksPath=/dev/null" push',
+    'git config core.hooksPath /dev/null && git push',
+    'GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=x git push',
   ])('denies skipping the hooks: %s', (command) => {
     expect(verdict(command)).toMatch(/hooks/);
   });
@@ -27,6 +43,13 @@ describe('mirror guard hook', () => {
     'git push -n origin main',
     'git commit -m "say --no-verify is banned"; echo done',
     'git commit -q -F - <<EOF\nnever pass --no-verify\nEOF',
+    'git commit -m "deny bash -c \'git push --no-verify\' now"',
+    'git commit -m "docs: eval \'gh pr list\'"',
+    'bash -c "git commit -m \\"skip --no-verify\\""',
+    'git commit -uno -m x',
+    'git commit -mdone',
+    'git commit -amn',
+    'git push --no-verbose origin main',
   ])('allows a dry run and a message that only names the flag: %s', (command) => {
     expect(verdict(command)).toBeNull();
   });
@@ -39,6 +62,8 @@ describe('mirror guard hook', () => {
     'git ls-remote github refs/heads/main',
     'node scripts/gitea-api.mjs watch HEAD',
     'grep -n "gh pr" docs/agents/issue-tracker.md',
+    'git commit --amend --no-edit',
+    'bash -c "git push origin main"',
   ])('allows %s', (command) => {
     expect(verdict(command)).toBeNull();
   });

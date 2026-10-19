@@ -16,7 +16,10 @@ export function resumeStep({ branch, remoteTag, pr, local, localInPr }) {
   if (pr.state === 'closed') return { refuse: `#${pr.number} was closed without a merge` };
   // A local release branch with commits the PR lacks would lose them: the
   // branch is deleted after the merge. One behind the PR loses nothing.
-  if (local && !localInPr) return { refuse: `local ${branch} at ${local.slice(0, 7)} has commits the PR (at ${pr.head.slice(0, 7)}) lacks: push them, then resume` };
+  if (local && !localInPr) {
+    const lacks = `local ${branch} at ${local.slice(0, 7)} has commits the PR (at ${pr.head.slice(0, 7)}) lacks`;
+    return { refuse: pr.state === 'open' ? `${lacks}: push them, then resume` : `${lacks}, and it is merged: take them to main in a new PR, delete the branch, then resume` };
+  }
   return { next: pr.state === 'open' ? 'merge' : 'tag' };
 }
 
