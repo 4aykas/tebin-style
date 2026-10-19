@@ -151,7 +151,7 @@ if (cmd === 'run-for') {
     if (step.say) console.log(step.say);
     if (step.warn) console.error(step.warn);
     if (step.stop) {
-      if (s.startedAt) await printJobs(run.id);
+      if (step.jobs) await printJobs(run.id);
       console.error(step.stop);
       process.exit(1);
     }

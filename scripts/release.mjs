@@ -83,14 +83,22 @@ const remoteTagged = () => sh('git', ['ls-remote', 'origin', `refs/tags/${tag}^{
 let tagged = remoteTagged();
 let pr = tagged ? null : releasePr();
 const local = quiet('git', ['rev-parse', '--verify', '-q', `refs/heads/${branch}`]);
-const plan = resumeStep({ branch, remoteTag: tagged, pr, local });
+let localInPr = false;
+if (local && pr) {
+  // The PR's head is on its branch, or in main's history once merged.
+  quiet('git', ['fetch', '-q', 'origin', 'main']);
+  quiet('git', ['fetch', '-q', 'origin', branch]);
+  try { sh('git', ['merge-base', '--is-ancestor', local, pr.head], { stdio: ['ignore', 'pipe', 'ignore'] }); localInPr = true; } catch { /* ahead, or the head is unknown here */ }
+}
+const plan = resumeStep({ branch, remoteTag: tagged, pr, local, localInPr });
 if (plan.refuse) throw new Error(plan.refuse);
 if (plan.next !== 'runs') {
   if (plan.next === 'merge') {
     step(`CI for #${pr.number}`);
     gitea('watch', pr.head);
     gitea('merge', pr.number);
-    pr = releasePr();
+    // Gitea may report the merge a moment after it answers.
+    for (let i = 0; i < 6 && !(pr = releasePr())?.merge; i++) await new Promise((r) => setTimeout(r, 5_000));
   }
   const existing = quiet('git', ['rev-parse', '--verify', '-q', `refs/tags/${tag}^{commit}`]);
   const tagging = tagStep({ tag, pr, existing });
