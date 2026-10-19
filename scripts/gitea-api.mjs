@@ -34,9 +34,9 @@ function token() {
 /**
  * A call to the repo's API (or, with `instance`, to the instance's). `soft`
  * answers null instead of exiting on a 4xx or a failed read: for a hint the
- * caller can do without.
+ * caller can do without. `raw` answers the body as text (a job log).
  */
-async function api(path, init = {}, { instance = false, soft = false } = {}) {
+async function api(path, init = {}, { instance = false, soft = false, raw = false } = {}) {
   // Only a read is retried. A POST that failed in flight (a reset after Gitea
   // took the merge) may have landed; sending it again would fail on its own
   // success, so the caller checks the state instead.
@@ -55,6 +55,7 @@ async function api(path, init = {}, { instance = false, soft = false } = {}) {
       // Some calls (a PR merge) answer 200 with an empty body; parsing it
       // would throw and retry a merge that already happened.
       const text = await res.text();
+      if (raw) return text;
       return text ? JSON.parse(text) : null;
     } catch (e) {
       if (!retry) {
@@ -95,8 +96,9 @@ async function printJobs(run) {
   for (const j of jobs) console.log(`  ${j.name}: ${j.conclusion ?? j.status}`);
 }
 
-// A line that says why a job failed: a vitest FAIL, a thrown error, tsc, pnpm's exit.
-const FAILURE = /\bFAIL\b|\b[A-Za-z]*Error\b|\berror TS\d+|ERR_|ENOBUFS|ELIFECYCLE|✗|×|\bTests? +\d+ failed|exit code [1-9]/;
+// A line that says why a job failed: a vitest FAIL, a thrown error, tsc, an
+// annotation, pnpm's exit, act_runner's step verdict.
+const FAILURE = /\bFAIL\b|\b[A-Z][A-Za-z]*Error:|\berror TS\d+|^::error|ERR_|ENOBUFS|ELIFECYCLE|✗|\bTests? +\d+ failed|exit ?code '?[1-9]|❌|\bFailure - /;
 
 /**
  * The failed jobs' logs, cut to the lines around each failure. A job log
@@ -105,22 +107,25 @@ const FAILURE = /\bFAIL\b|\b[A-Za-z]*Error\b|\berror TS\d+|ERR_|ENOBUFS|ELIFECYC
  */
 async function printFailures(run) {
   const { jobs = [] } = await api(`/actions/runs/${run}/jobs`);
-  for (const j of jobs.filter((j) => j.conclusion === 'failure')) {
-    const res = await fetch(`${BASE}/actions/jobs/${j.id}/logs`, { headers: { Authorization: `token ${token()}` } }).catch(() => null);
-    if (!res?.ok) { console.log(`\n-- ${j.name}: no log (HTTP ${res?.status ?? 'error'})`); continue; }
-    const lines = (await res.text()).split('\n')
+  const failed = jobs.filter((j) => j.conclusion === 'failure');
+  const logs = await Promise.all(failed.map((j) => api(`/actions/jobs/${j.id}/logs`, {}, { soft: true, raw: true })));
+  failed.forEach((j, n) => {
+    if (logs[n] == null) { console.log(`\n-- ${j.name}: no log`); return; }
+    const lines = logs[n].split('\n')
       .map((l) => l.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '').replace(/^\S+Z /, '').trimEnd())
-      // A `::error` annotation repeats the failure above it with its whole stack.
-      .filter((l) => !l.startsWith('::'))
+      // An annotation carries its whole stack after the first %0A.
+      .map((l) => l.replace(/%0A.*/, ''))
       .map((l) => (l.length > 240 ? `${l.slice(0, 240)}…` : l));
     const keep = new Set();
-    lines.forEach((l, i) => { if (FAILURE.test(l)) for (let k = i; k < Math.min(i + 5, lines.length); k++) keep.add(k); });
-    const shown = [...keep].sort((a, b) => a - b).slice(0, 120);
+    lines.forEach((l, i) => { if (FAILURE.test(l)) for (let k = Math.max(0, i - 2); k < Math.min(i + 5, lines.length); k++) keep.add(k); });
+    // The reason sits near the end of a red log; noise sits before it.
+    const all = [...keep].sort((a, b) => a - b);
+    const shown = all.slice(-120);
     console.log(`\n-- ${j.name}: ${shown.length ? '' : 'no failure line found, the end of the log'}`);
     if (!shown.length) for (let k = Math.max(0, lines.length - 20); k < lines.length; k++) shown.push(k);
-    shown.forEach((k, n) => { if (n && k !== shown[n - 1] + 1) console.log('  …'); console.log(`  ${lines[k]}`); });
-    if (keep.size > shown.length) console.log(`  … ${keep.size - shown.length} more lines`);
-  }
+    if (all.length > shown.length) console.log(`  … ${all.length - shown.length} earlier lines`);
+    shown.forEach((k, i) => { if (i && k !== shown[i - 1] + 1) console.log('  …'); console.log(`  ${lines[k]}`); });
+  });
 }
 
 const [cmd, arg, extra] = process.argv.slice(2);
@@ -173,25 +178,32 @@ if (cmd === 'run-for') {
   }
   await printJobs(run.id);
   console.log(`conclusion: ${run.conclusion}`);
-  if (run.conclusion !== 'success') { await printFailures(run.id); process.exit(1); }
+  // exitCode, not exit(): a pipe on macOS drains after the last log line.
+  if (run.conclusion !== 'success') { await printFailures(run.id); process.exitCode = 1; }
 } else if (cmd === 'jobs') {
   await printJobs(arg);
 } else if (cmd === 'logs') {
   await printFailures(arg);
 } else if (cmd === 'get') {
-  // A read of any endpoint, for what no command covers. A path under admin/,
-  // repos/, orgs/, user(s)/ or version is the instance's; any other, the repo's.
-  // The leading slash is optional: Git Bash turns `/admin/...` into a file path.
+  // A read of any endpoint, for what no command covers. A path under one of
+  // the instance's roots (admin, repos, orgs, users, ...) is the instance's;
+  // any other, the repo's. The leading slash is optional: Git Bash turns
+  // `/admin/...` into a file path.
   if (!arg || /^[A-Za-z]:/.test(arg)) { console.error('usage: get <path> [field,field.sub], e.g. get actions/runs/85 status'); process.exit(2); }
   const path = arg.startsWith('/') ? arg : `/${arg}`;
-  const answer = await api(path, {}, { instance: /^\/(admin|repos|orgs|users?|version)\b/.test(path) });
-  if (!extra) { console.log(JSON.stringify(answer, null, 2)); process.exit(0); }
-  // A list comes wrapped ({ workflow_runs: [...], total_count }): unwrap it.
-  const values = answer && !Array.isArray(answer) ? Object.values(answer) : [];
-  const wrapped = values.filter(Array.isArray).length === 1 && values.every((v) => Array.isArray(v) || typeof v === 'number');
-  const rows = Array.isArray(answer) ? answer : wrapped ? values.find(Array.isArray) : [answer];
-  const pick = (o, path) => path.split('.').reduce((v, k) => v?.[k], o);
-  for (const row of rows) console.log(extra.split(',').map((f) => JSON.stringify(pick(row, f)) ?? '-').join('\t'));
+  const instance = /^\/(admin|repos|orgs|users?|teams|notifications|packages|settings|topics|markdown|version)\b/.test(path);
+  const answer = await api(path, {}, { instance });
+  if (!extra) console.log(JSON.stringify(answer, null, 2));
+  else {
+    // A list comes wrapped ({ workflow_runs: [...], total_count }, { ok, data: [...] }): unwrap it.
+    const values = answer && !Array.isArray(answer) ? Object.values(answer) : [];
+    const wrapped = values.filter(Array.isArray).length === 1 && values.every((v) => Array.isArray(v) || typeof v !== 'object');
+    const rows = Array.isArray(answer) ? answer : wrapped ? values.find(Array.isArray) : [answer];
+    const pick = (o, path) => path.split('.').reduce((v, k) => v?.[k], o);
+    // A string prints bare, so a shell can compare it; anything else as JSON.
+    const cell = (v) => (v === undefined ? '-' : typeof v === 'string' ? v.replace(/[\t\n]/g, ' ') : JSON.stringify(v));
+    for (const row of rows) console.log(extra.split(',').map((f) => cell(pick(row, f))).join('\t'));
+  }
 } else if (cmd === 'rerun-failed') {
   await api(`/actions/runs/${arg}/rerun-failed-jobs`, { method: 'POST' });
 } else if (cmd === 'pr') {
