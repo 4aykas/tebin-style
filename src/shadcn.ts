@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, existsSync, rmSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { contrastRatio } from './contrast.js';
+import { contrastRatio, surfaceIsDark } from './contrast.js';
 import { hexToRgb } from './colors-csv.js';
 import { resolveString, baseTokens, modeNames, tokensForMode, type TokenTree } from './tokens.js';
 
@@ -47,10 +47,7 @@ export function buildShadcnItem(themeDir: string): ShadcnItem | null {
   // A theme with a light and a dark mode fills both; one with a single look
   // fills light only, and the project keeps its own dark values.
   const modes = modeNames(all);
-  const isDark = (t: TokenTree) => {
-    const surface = resolveString(t, ((t.role ?? {}) as Record<string, Leaf>).surface?.$value);
-    return Boolean(surface && hexToRgb(surface) && contrastRatio(surface, '#000000') < contrastRatio(surface, '#FFFFFF'));
-  };
+  const isDark = (t: TokenTree) => surfaceIsDark(t) === true;
   const views = [tokens, ...modes.map((m) => tokensForMode(all, m))];
   const lightTokens = views.find((t) => !isDark(t)) ?? tokens;
   const darkTokens = modes.length ? views.find(isDark) : undefined;

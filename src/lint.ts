@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { contrastRatio, AA_NORMAL, PAIR_FLOORS, type ContrastPair } from './contrast.js';
+import { contrastRatio, surfaceIsDark, AA_NORMAL, PAIR_FLOORS, type ContrastPair } from './contrast.js';
 import { hexToRgb } from './colors-csv.js';
 import { referencePath, resolveToken, resolveString, baseTokens, leavesOf, modeNames, tokensForMode, MODE_GROUP,
   type TokenTree } from './tokens.js';
@@ -191,6 +191,17 @@ export function lintTheme(themeDir: string): LintResult {
     const measured = findings.splice(start);
     findings.push(...measured.filter((f) =>
       !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
+  }
+  // The build sets each look's color-scheme from its surface; a theme with
+  // modes whose surface is not an opaque hex would lose it without a word.
+  const modes = modeNames(tokens);
+  if (modes.length) {
+    for (const [at, look] of [['role.surface', defaultTokens], ...modes.map((m) =>
+      [`${MODE_GROUP}.${m}:role.surface`, tokensForMode(tokens, m)] as const)] as const) {
+      if (surfaceIsDark(look) === null) {
+        push({ severity: 'warning', path: at, message: 'not an opaque hex, so the build cannot set this look\'s color-scheme' });
+      }
+    }
   }
 
   // Motion tokens time UI state, where overshoot is banned

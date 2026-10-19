@@ -129,7 +129,12 @@
   --components-input-border-color: var(--role-outline-control);
 }
 
+:root {
+  color-scheme: dark;
+}
+
 :root[data-theme="light"] {
+  color-scheme: light;
   --role-surface: var(--color-slate-50);
   --role-surface-raised: var(--color-slate-25);
   --role-on-surface: var(--color-slate-900);

@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Formats
+- `tokens.css` and `tailwind.css` set `color-scheme` from each look's
+  surface: `fleet` is `dark` in `:root` and `light` under
+  `:root[data-theme="light"]`; a dark theme with one look gets `dark`, a
+  light one keeps the browser default. Native inputs, scrollbars and
+  autofill now follow the mode, as rule `theming-color-scheme` asks. Lint
+  warns when a theme with modes has a surface the scheme cannot be read
+  from.
+
 ## 1.13.0 — 2026-10-18
 
 ### Themes
