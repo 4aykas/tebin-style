@@ -23,6 +23,10 @@
   three hours for a queued run, says when every instance runner is offline
   and stops five minutes later, and gives a started run 30 minutes. `gitea-api pr-for <branch>` reports a
   branch's newest PR. The secret scan also reads new files not yet added.
+- `gitea-api logs <run>` prints a red run's failed jobs cut to the lines
+  around each failure, without colour codes and timestamps; `watch` prints
+  them when a run goes red. `gitea-api get <path> [fields]` reads any
+  endpoint, as JSON or one tab-separated line per item.
 - The project hook also denies `git push --no-verify`, `git commit
   --no-verify` and `git commit -n`. A flag named inside a quoted message or a
   heredoc body is not a command, and is let through.
