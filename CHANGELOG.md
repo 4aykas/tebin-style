@@ -16,6 +16,12 @@
   holds a GitHub token, a private key, a 40-hex token beside the word
   "token", or a hardcoded password or API key: the repo is public and
   mirrored.
+- `release.mjs --resume` goes on with a stopped release: it reads the PR and
+  the tag from Gitea and runs only the steps left, tagging the PR's merge
+  commit. `gitea-api watch` waits for a queued run as long as a runner is
+  up, says when every runner is offline and stops five minutes later, and
+  gives a started run 30 minutes. `gitea-api pr-for <branch>` reports a
+  branch's newest PR. The secret scan also reads new files not yet added.
 - The project hook also denies `git push --no-verify`, `git commit
   --no-verify` and `git commit -n`. A flag named inside a quoted message or a
   heredoc body is not a command, and is let through.

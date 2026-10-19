@@ -63,7 +63,9 @@ CI: push a branch, then `node scripts/gitea-api.mjs pr "<title>" [body-file]`,
 - Review the diff since the last tag against `CODING_STANDARDS.md`
   (`/code-review`, base: the last `v*` tag), then run
   `node scripts/release.mjs <version> --reviewed` from `main`. It does every
-  step below through a PR and stops at the first red one.
+  step below through a PR and stops at the first red one; add `--resume` to
+  go on from there. It and `gitea-api watch` wait on CI for minutes: run
+  them in the background, unpiped, and read the exit code.
 - Push a tag `v<version>` from a commit on `main`. The tag must equal the
   `package.json` version, and `CHANGELOG.md` needs a `## <version> — <date>`
   entry (`scripts/check-release.mjs`).

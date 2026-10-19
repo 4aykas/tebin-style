@@ -9,6 +9,7 @@
 //   node scripts/gitea-api.mjs jobs <run>                   → "  name: conclusion" lines
 //   node scripts/gitea-api.mjs rerun-failed <run>
 //   node scripts/gitea-api.mjs pr <title> [body-file]       → opens a PR from the current branch to main
+//   node scripts/gitea-api.mjs pr-for <branch>              → "<n> <open|merged|closed> <head sha> [merge sha]"
 //   node scripts/gitea-api.mjs merge <pr>                   → merges once CI is green, deletes the branch
 // The workflow defaults to ci.yml; a tag's run is release.yml. `main` takes
 // changes only through a PR with a green `CI / verify (pull_request)`.
@@ -67,6 +68,23 @@ async function runFor(sha, workflow) {
   return workflow_runs.find((r) => (r.path ?? '').split('@')[0].endsWith(workflow));
 }
 
+/**
+ * The instance's runners by state, or null when the token may not see them:
+ * the list is an admin endpoint, and a missing answer only means no hint.
+ */
+async function runners() {
+  try {
+    const res = await fetch(`${process.env.GITEA_URL ?? 'https://git.tebin.co'}/api/v1/admin/actions/runners`,
+      { headers: { Authorization: `token ${token()}` } });
+    if (!res.ok) return null;
+    const { runners: list = [] } = await res.json();
+    const name = (r) => r.name;
+    return { online: list.filter((r) => r.status !== 'offline').map(name), offline: list.filter((r) => r.status === 'offline').map(name) };
+  } catch {
+    return null;
+  }
+}
+
 async function printJobs(run) {
   const { jobs = [] } = await api(`/actions/runs/${run}/jobs`);
   for (const j of jobs) console.log(`  ${j.name}: ${j.conclusion ?? j.status}`);
@@ -85,13 +103,39 @@ if (cmd === 'run-for') {
   for (let i = 0; i < 12 && !(run = await runFor(sha, workflow)); i++) await sleep(10_000);
   if (!run) { console.error(`no ${workflow} run for ${sha} after 2 minutes: was it pushed to origin?`); process.exit(1); }
   console.log(`run ${run.id} for ${sha.slice(0, 7)}`);
-  const deadline = Date.now() + 30 * 60_000;
-  while (run.status !== 'completed' && Date.now() < deadline) {
+  // A queued run waits as long as a runner is up, busy or not: a queue is no
+  // failure. With every runner offline it says so, waits five minutes for one
+  // to start, then stops. A run that started gets 30 minutes.
+  const queuedAt = Date.now();
+  let startedAt = null, offlineSince = null, toldBusy = false;
+  while (run.status !== 'completed') {
+    if (run.status !== 'queued' && run.status !== 'waiting') {
+      startedAt ??= Date.now();
+      if (Date.now() - startedAt > 30 * 60_000) {
+        await printJobs(run.id);
+        console.error(`still ${run.status} after 30 minutes`);
+        process.exit(1);
+      }
+    } else if (Date.now() - queuedAt > 2 * 60_000) {
+      const state = await runners();
+      if (state && state.online.length === 0) {
+        if (!offlineSince) {
+          offlineSince = Date.now();
+          console.error(`queued, and every runner is offline (${state.offline.join(', ')}); waiting 5 minutes for one to start`);
+        } else if (Date.now() - offlineSince > 5 * 60_000) {
+          console.error('no runner came online: start it, then run watch again');
+          process.exit(1);
+        }
+      } else if (state && !toldBusy) {
+        toldBusy = true;
+        offlineSince = null;
+        console.log(`queued behind a busy runner (${state.online.join(', ')}); waiting`);
+      }
+    }
     await sleep(20_000);
     run = await api(`/actions/runs/${run.id}`);
   }
   await printJobs(run.id);
-  if (run.status !== 'completed') { console.error(`still ${run.status} after 30 minutes`); process.exit(1); }
   console.log(`conclusion: ${run.conclusion}`);
   if (run.conclusion !== 'success') process.exit(1);
 } else if (cmd === 'jobs') {
@@ -103,10 +147,17 @@ if (cmd === 'run-for') {
   const body = extra ? readFileSync(extra, 'utf8') : '';
   const pr = await api('/pulls', { method: 'POST', body: JSON.stringify({ head, base: 'main', title: arg, body }) });
   console.log(`#${pr.number} ${pr.html_url}`);
+} else if (cmd === 'pr-for') {
+  // "<number> <open|merged|closed> <head sha> [merge sha]" for the newest PR
+  // from a branch. Once the branch is deleted its name lives on in head.label.
+  const pulls = await api('/pulls?state=all&sort=newest&limit=50');
+  const pr = pulls.find((p) => p.head?.ref === arg || p.head?.label === arg);
+  if (!pr) { console.error(`no pull request from ${arg}`); process.exit(1); }
+  console.log([pr.number, pr.merged ? 'merged' : pr.state, pr.head.sha, pr.merged ? pr.merge_commit_sha : ''].join(' ').trim());
 } else if (cmd === 'merge') {
   await api(`/pulls/${arg}/merge`, { method: 'POST', body: JSON.stringify({ Do: 'merge', delete_branch_after_merge: true }) });
   console.log(`merged #${arg}`);
 } else {
-  console.error('usage: gitea-api.mjs watch [sha] [workflow] | run-for [sha] [workflow] | jobs <run> | rerun-failed <run> | pr <title> [body-file] | merge <pr>');
+  console.error('usage: gitea-api.mjs watch [sha] [workflow] | run-for [sha] [workflow] | jobs <run> | rerun-failed <run> | pr <title> [body-file] | pr-for <branch> | merge <pr>');
   process.exit(2);
 }

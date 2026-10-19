@@ -3,66 +3,94 @@
 //   CHANGELOG "## Unreleased" → "## <version> — <today>", package.json version,
 //   pnpm build + verify, a release/v<version> PR on Gitea, its CI, the merge,
 //   the tag on the merge commit, then Gitea's release run and GitHub's.
-// usage: node scripts/release.mjs <version> --reviewed
+// usage: node scripts/release.mjs <version> --reviewed [--resume]
 // --reviewed says the diff since the last tag was reviewed against
 // CODING_STANDARDS.md (AGENTS.md, Release); there is no release without it.
+// --resume picks a stopped release up where it stopped (a runner down, a
+// watch that gave up): it reads the PR and the tag from Gitea and runs only
+// the steps still to do.
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const [version] = process.argv.slice(2).filter((a) => !a.startsWith('--'));
-if (!/^\d+\.\d+\.\d+$/.test(version ?? '')) throw new Error('usage: node scripts/release.mjs <version> --reviewed');
+if (!/^\d+\.\d+\.\d+$/.test(version ?? '')) throw new Error('usage: node scripts/release.mjs <version> --reviewed [--resume]');
 if (!process.argv.includes('--reviewed')) {
   console.error('review the diff since the last tag against CODING_STANDARDS.md first, then pass --reviewed');
   process.exit(2);
 }
+const resume = process.argv.includes('--resume');
 const tag = `v${version}`;
+const branch = `release/${tag}`;
 const sh = (cmd, args, opts = {}) => execFileSync(cmd, args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], shell: process.platform === 'win32' && cmd === 'pnpm', ...opts }).trim();
 const live = (cmd, args) => execFileSync(cmd, args, { stdio: 'inherit', shell: process.platform === 'win32' && cmd === 'pnpm' });
 const step = (s) => console.log(`\n== ${s}`);
+const api = (...args) => sh('node', ['scripts/gitea-api.mjs', ...args]);
 
-step('main is clean and current');
-if (sh('git', ['branch', '--show-current']) !== 'main') throw new Error('run from main');
-if (sh('git', ['status', '--porcelain'])) throw new Error('the tree has uncommitted changes');
-sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
+/** The release PR as `{ number, state, head, merge }`, or null when there is none. */
+function releasePr() {
+  let line;
+  try { line = sh('node', ['scripts/gitea-api.mjs', 'pr-for', branch], { stdio: ['ignore', 'pipe', 'ignore'] }); } catch { return null; }
+  const [number, state, head, merge] = line.split(' ');
+  return { number, state, head, merge };
+}
 
-// The release branch comes first, so a red step leaves main clean: switch
-// back with `git checkout -f main` and delete the branch to start over.
-const branch = `release/${tag}`;
-sh('git', ['checkout', '-q', '-b', branch]);
+if (!resume) {
+  step('main is clean and current');
+  if (sh('git', ['branch', '--show-current']) !== 'main') throw new Error('run from main');
+  if (sh('git', ['status', '--porcelain'])) throw new Error('the tree has uncommitted changes');
+  sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
 
-step(`changelog and package.json → ${version}`);
-const today = new Date().toISOString().slice(0, 10);
-const changelog = readFileSync('CHANGELOG.md', 'utf8');
-if (!/^## Unreleased$/m.test(changelog)) throw new Error('CHANGELOG.md has no "## Unreleased" section');
-writeFileSync('CHANGELOG.md', changelog.replace(/^## Unreleased$/m, `## ${version} — ${today}`));
-const pkg = readFileSync('package.json', 'utf8');
-writeFileSync('package.json', pkg.replace(/"version": "[^"]+"/, `"version": "${version}"`));
+  // The release branch comes first, so a red step leaves main clean: switch
+  // back with `git checkout -f main` and delete the branch to start over.
+  sh('git', ['checkout', '-q', '-b', branch]);
 
-step('build and verify');
-live('pnpm', ['build']);
-// The pre-push hook runs verify on the branch push; run it here only when the
-// hook is not installed, so one release runs the gate once on this machine.
-let hooks = '';
-try { hooks = sh('git', ['config', 'core.hooksPath']); } catch { /* unset */ }
-if (hooks !== '.githooks') live('pnpm', ['verify']);
+  step(`changelog and package.json → ${version}`);
+  const today = new Date().toISOString().slice(0, 10);
+  const changelog = readFileSync('CHANGELOG.md', 'utf8');
+  if (!/^## Unreleased$/m.test(changelog)) throw new Error('CHANGELOG.md has no "## Unreleased" section');
+  writeFileSync('CHANGELOG.md', changelog.replace(/^## Unreleased$/m, `## ${version} — ${today}`));
+  const pkg = readFileSync('package.json', 'utf8');
+  writeFileSync('package.json', pkg.replace(/"version": "[^"]+"/, `"version": "${version}"`));
 
-step('pull request');
-// The tree was clean at the start, so everything here is the bump and what
-// the build made from it, new generated files included.
-sh('git', ['add', '-A']);
-sh('git', ['commit', '-q', '-m', `release: ${version}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`]);
-live('git', ['push', '-q', '-u', 'origin', branch]);
-const pr = sh('node', ['scripts/gitea-api.mjs', 'pr', `release: ${version}`]).match(/^#(\d+)/)?.[1];
-if (!pr) throw new Error('no pull request number');
-live('node', ['scripts/gitea-api.mjs', 'watch', 'HEAD']);
-live('node', ['scripts/gitea-api.mjs', 'merge', pr]);
-sh('git', ['checkout', '-q', 'main']);
-sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
-sh('git', ['branch', '-D', branch]);
+  step('build and verify');
+  live('pnpm', ['build']);
+  // The pre-push hook runs verify on the branch push; run it here only when the
+  // hook is not installed, so one release runs the gate once on this machine.
+  let hooks = '';
+  try { hooks = sh('git', ['config', 'core.hooksPath']); } catch { /* unset */ }
+  if (hooks !== '.githooks') live('pnpm', ['verify']);
 
-step(`tag ${tag}`);
-sh('git', ['tag', '-a', tag, '-m', tag]);
-live('git', ['push', '-q', 'origin', tag]);
+  step('pull request');
+  // The tree was clean at the start, so everything here is the bump and what
+  // the build made from it, new generated files included.
+  sh('git', ['add', '-A']);
+  sh('git', ['commit', '-q', '-m', `release: ${version}\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`]);
+  live('git', ['push', '-q', '-u', 'origin', branch]);
+  console.log(api('pr', `release: ${version}`));
+}
+
+sh('git', ['fetch', '-q', '--tags', 'origin']);
+if (!sh('git', ['ls-remote', '--tags', 'origin', `refs/tags/${tag}`])) {
+  let pr = releasePr();
+  if (!pr) throw new Error(`no pull request from ${branch}: nothing to resume, run without --resume`);
+  if (pr.state === 'closed') throw new Error(`#${pr.number} was closed without a merge`);
+  if (pr.state === 'open') {
+    step(`CI for #${pr.number}`);
+    live('node', ['scripts/gitea-api.mjs', 'watch', pr.head]);
+    live('node', ['scripts/gitea-api.mjs', 'merge', pr.number]);
+    pr = releasePr();
+  }
+  if (!pr?.merge) throw new Error(`#${pr?.number} reports no merge commit`);
+
+  step(`tag ${tag} on ${pr.merge.slice(0, 7)}`);
+  sh('git', ['checkout', '-q', 'main']);
+  sh('git', ['pull', '-q', '--ff-only', 'origin', 'main']);
+  try { sh('git', ['branch', '-D', branch], { stdio: ['ignore', 'pipe', 'ignore'] }); } catch { /* already gone */ }
+  sh('git', ['tag', '-a', tag, '-m', tag, pr.merge]);
+  live('git', ['push', '-q', 'origin', tag]);
+}
+
+step('Gitea release run');
 live('node', ['scripts/gitea-api.mjs', 'watch', tag, 'release.yml']);
 
 step('GitHub release from the mirrored tag');
