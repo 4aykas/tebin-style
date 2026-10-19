@@ -94,25 +94,41 @@ function changedLeaves(leaves: Leaf[], defaults: Map<string, Leaf>): Array<[Leaf
   });
 }
 
+type Scheme = 'dark' | 'light';
+interface Schemes { base: Scheme | null; modes: Map<string, Scheme | null> }
+
+/** A look's `color-scheme`, from its surface; null when that is not an opaque hex. */
+function schemeOf(look: TokenTree): Scheme | null {
+  const dark = surfaceIsDark(look);
+  return dark === null ? null : dark ? 'dark' : 'light';
+}
+
+/**
+ * `:root { color-scheme }` for a dark theme or one with modes, so native
+ * controls, scrollbars and autofill follow the look (rule
+ * theming-color-scheme). A light theme with one look keeps the browser's
+ * default.
+ */
+function schemeBlock(schemes: Schemes): string {
+  if (!schemes.base || (schemes.base === 'light' && schemes.modes.size === 0)) return '';
+  return `\n:root {\n  color-scheme: ${schemes.base};\n}\n`;
+}
+
 /**
  * One `:root[data-theme="<mode>"]` block per mode, appended to the CSS and
  * Tailwind files: each redefines the default token's own variable (and, for
  * Tailwind, its utility names), so every rule written against the default
  * follows the mode without a rule of its own.
  *
- * Each look also sets `color-scheme` from its surface, the default in a
- * plain `:root` block, so native controls, scrollbars and autofill follow
- * the mode (rule theming-color-scheme).
+ * A mode whose surface flips the scheme also sets `color-scheme` (see
+ * schemeBlock).
  */
-function modeBlocks(source: TokenTree, perMode: Map<string, Leaf[]>, defaults: Map<string, Leaf>, tailwind: boolean): string {
-  const scheme = (look: TokenTree) => {
-    const dark = surfaceIsDark(look);
-    return dark === null ? [] : [`  color-scheme: ${dark ? 'dark' : 'light'};`];
-  };
-  const base = scheme(baseTokens(source));
-  let out = base.length ? `\n:root {\n${base.join('\n')}\n}\n` : '';
+function modeBlocks(source: TokenTree, perMode: Map<string, Leaf[]>, defaults: Map<string, Leaf>, tailwind: boolean,
+  schemes: Schemes): string {
+  let out = '';
   for (const [mode, leaves] of perMode) {
-    const lines: string[] = scheme(tokensForMode(source, mode));
+    const scheme = schemes.modes.get(mode);
+    const lines = scheme && scheme !== schemes.base ? [`  color-scheme: ${scheme};`] : [];
     if (tailwind) {
       for (const [t, base] of changedLeaves(leaves, defaults)) {
         lines.push(...tailwindNames(base.name, t.path, rawType(t)).map((n) => `  --${n}: ${outValue(t)};`));
@@ -284,10 +300,16 @@ export async function buildTheme(themeDir: string): Promise<void> {
 
   await sd.buildAllPlatforms();
 
-  if (cssModes.size === 0) return;
+  const schemes: Schemes = {
+    base: schemeOf(baseTokens(source)),
+    modes: new Map([...cssModes.keys()].map((m) => [m, schemeOf(tokensForMode(source, m))])),
+  };
   for (const [platform, file] of [['css', 'tokens.css'], ['tailwind', 'tailwind.css']] as const) {
-    const defaults = byPath(((await sd.getPlatformTokens(platform)).allTokens as unknown as Leaf[]).filter(notMode));
-    const blocks = modeBlocks(source, cssModes, defaults, platform === 'tailwind');
+    let blocks = schemeBlock(schemes);
+    if (cssModes.size) {
+      const defaults = byPath(((await sd.getPlatformTokens(platform)).allTokens as unknown as Leaf[]).filter(notMode));
+      blocks += modeBlocks(source, cssModes, defaults, platform === 'tailwind', schemes);
+    }
     if (blocks) appendFileSync(join(themeDir, 'dist', file), blocks);
   }
 }

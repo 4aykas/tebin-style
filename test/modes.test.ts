@@ -87,12 +87,30 @@ describe('build with a mode that a component follows', () => {
   });
   it('names a camelCase mode\'s variables after the default token', () => {
     const css = read('tokens.css');
-    expect(css).toContain(':root[data-theme="highContrast"] {\n  color-scheme: dark;\n  --role-surface: #000000;');
+    // highContrast is as dark as the default, so it sets no scheme of its own.
+    expect(css).toContain(':root[data-theme="highContrast"] {\n  --role-surface: #000000;');
     expect(css).not.toContain('---');
   });
 });
 
+describe('color-scheme without modes', () => {
+  it('sets dark for a dark theme with one look, nothing for a light one', async () => {
+    const dark = fixture('one-dark', { color: tokens.color, role: tokens.role });
+    const light = fixture('one-light', { color: tokens.color, role: tokens.mode.light.role });
+    await buildTheme(dark);
+    await buildTheme(light);
+    expect(readFileSync(join(dark, 'dist', 'tokens.css'), 'utf8')).toContain(':root {\n  color-scheme: dark;\n}');
+    expect(readFileSync(join(light, 'dist', 'tokens.css'), 'utf8')).not.toContain('color-scheme');
+  });
+});
+
 describe('lint with a mode', () => {
+  it('warns when a look\'s surface cannot give a color-scheme', () => {
+    const t = structuredClone(tokens) as any;
+    t.mode.light.role.surface = color('rgba(255, 255, 255, 0.9)');
+    const warnings = lintTheme(fixture('no-scheme', t)).findings.filter((f) => f.severity === 'warning');
+    expect(warnings.map((f) => f.path)).toContain('mode.light:role.surface');
+  });
   it('measures contrast in every mode, prefixed', () => {
     const r = lintTheme(fixture('measured', tokens));
     expect(r.findings.find((f) => f.path === 'role.on-surface')?.ratio).toBeGreaterThan(4.5);

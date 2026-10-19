@@ -21669,6 +21669,11 @@ function contrastRatio(a, b) {
   const [la, lb] = [relativeLuminance(a), relativeLuminance(b)];
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
+function surfaceIsDark(tokens) {
+  const surface = resolveString(tokens, (tokens.role ?? {}).surface?.$value);
+  if (!surface || !hexToRgb(surface)) return null;
+  return contrastRatio(surface, "#000000") < contrastRatio(surface, "#FFFFFF");
+}
 var AA_NORMAL = 4.5;
 var PAIR_FLOORS = [3, 4.5, 7];
 
@@ -21818,6 +21823,14 @@ function lintTheme(themeDir2) {
     measure(tokensForMode(tokens, mode), (p) => `${prefix}${p}`);
     const measured2 = findings.splice(start);
     findings.push(...measured2.filter((f) => !seen.has(JSON.stringify([f.path.slice(prefix.length), f.severity, f.message]))));
+  }
+  const modes = modeNames(tokens);
+  if (modes.length) {
+    for (const [at, look] of [["role.surface", defaultTokens], ...modes.map((m) => [`${MODE_GROUP}.${m}:role.surface`, tokensForMode(tokens, m)])]) {
+      if (surfaceIsDark(look) === null) {
+        push({ severity: "warning", path: at, message: "not an opaque hex, so the build cannot set this look's color-scheme" });
+      }
+    }
   }
   const motion = tokens.motion ?? {};
   for (const [name, leaf] of Object.entries(motion.easing ?? {})) {

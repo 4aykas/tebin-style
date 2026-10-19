@@ -116,10 +116,13 @@ So everything written against a token follows the mode; set `data-theme` on
 `<html>` before the first paint. `tailwind.css` and `theme.ts` hold resolved
 values, so their mode block also carries every token that follows an
 overridden one: `theme.mode.light.components.button` is the light button.
-Each look also sets `color-scheme` from its surface (`dark` in `:root` for
-`fleet`, `light` in its light block), so native inputs, scrollbars and
-autofill follow the mode without a rule of your own. `pnpm lint:themes` measures contrast in every
-mode, and fails an override whose path the default mode does not have.
+`tokens.css` and `tailwind.css` also set `color-scheme` from each look's
+surface (`dark` in `:root` for `fleet`, `light` in its light block), so
+native inputs, scrollbars and autofill follow the mode; a dark theme with
+one look gets `dark` too. `theme.ts` and `shadcn.json` carry no scheme: set
+it where you switch the theme. `pnpm lint:themes` measures contrast in every
+mode, fails an override whose path the default mode does not have, and warns
+when a look's surface is not an opaque hex, since its scheme cannot be set.
 
 ### Roles are pointers
 
