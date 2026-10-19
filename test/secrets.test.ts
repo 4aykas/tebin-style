@@ -22,9 +22,12 @@ const SECRETS: Array<[RegExp, string]> = [
 
 // Tracked files and new ones not yet added (minus .gitignore), so a secret
 // in a new file fails the first verify, before the commit.
+// A CI checkout can hold a package store the runner left unignored, so the
+// list is large and dependency folders are not ours to scan.
+const DEPENDENCIES = /(^|\/)(node_modules|\.pnpm-store)\//;
 const tracked = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'],
-  { cwd: root, encoding: 'utf8' }).split('\n')
-  .filter((f) => f && !BINARY.has(extname(f).toLowerCase()) && existsSync(join(root, f)));
+  { cwd: root, encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 }).split('\n')
+  .filter((f) => f && !DEPENDENCIES.test(f) && !BINARY.has(extname(f).toLowerCase()) && existsSync(join(root, f)));
 
 describe('tracked files', () => {
   it('carry no token, key or password', () => {
