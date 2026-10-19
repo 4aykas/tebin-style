@@ -2,7 +2,9 @@ import StyleDictionary from 'style-dictionary';
 import type { DesignTokens, PlatformConfig } from 'style-dictionary/types';
 import { appendFileSync, readFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
-import { MODE_GROUP, modeSelector, referencePath, modeNames, tokensForMode, leavesOf, type TokenTree } from './tokens.js';
+import { MODE_GROUP, modeSelector, referencePath, modeNames, tokensForMode, leavesOf, baseTokens,
+  type TokenTree } from './tokens.js';
+import { surfaceIsDark } from './contrast.js';
 
 interface Leaf {
   $type?: string;
@@ -97,11 +99,20 @@ function changedLeaves(leaves: Leaf[], defaults: Map<string, Leaf>): Array<[Leaf
  * Tailwind files: each redefines the default token's own variable (and, for
  * Tailwind, its utility names), so every rule written against the default
  * follows the mode without a rule of its own.
+ *
+ * Each look also sets `color-scheme` from its surface, the default in a
+ * plain `:root` block, so native controls, scrollbars and autofill follow
+ * the mode (rule theming-color-scheme).
  */
 function modeBlocks(source: TokenTree, perMode: Map<string, Leaf[]>, defaults: Map<string, Leaf>, tailwind: boolean): string {
-  let out = '';
+  const scheme = (look: TokenTree) => {
+    const dark = surfaceIsDark(look);
+    return dark === null ? [] : [`  color-scheme: ${dark ? 'dark' : 'light'};`];
+  };
+  const base = scheme(baseTokens(source));
+  let out = base.length ? `\n:root {\n${base.join('\n')}\n}\n` : '';
   for (const [mode, leaves] of perMode) {
-    const lines: string[] = [];
+    const lines: string[] = scheme(tokensForMode(source, mode));
     if (tailwind) {
       for (const [t, base] of changedLeaves(leaves, defaults)) {
         lines.push(...tailwindNames(base.name, t.path, rawType(t)).map((n) => `  --${n}: ${outValue(t)};`));

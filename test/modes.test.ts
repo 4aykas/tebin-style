@@ -55,11 +55,18 @@ describe('build with a mode', () => {
   it('keeps the default in :root and adds one block per mode', () => {
     const css = read('tokens.css');
     expect(css).not.toContain('--mode-');
-    expect(css).toContain(':root[data-theme="light"] {\n  --role-surface: var(--color-day);');
+    expect(css).toContain(':root[data-theme="light"] {\n  color-scheme: light;\n  --role-surface: var(--color-day);');
   });
   it('gives Tailwind the mode block with the utility names, resolved', () => {
     const tw = read('tailwind.css');
     expect(tw).toMatch(/:root\[data-theme="light"\] \{[^}]*--color-role-surface: #f8fafc;/i);
+  });
+  it('sets color-scheme for the dark default and the light mode, in both files', () => {
+    for (const file of ['tokens.css', 'tailwind.css']) {
+      const css = read(file);
+      expect(css, file).toContain(':root {\n  color-scheme: dark;\n}');
+      expect(css, file).toContain(':root[data-theme="light"] {\n  color-scheme: light;');
+    }
   });
 });
 
@@ -80,7 +87,7 @@ describe('build with a mode that a component follows', () => {
   });
   it('names a camelCase mode\'s variables after the default token', () => {
     const css = read('tokens.css');
-    expect(css).toContain(':root[data-theme="highContrast"] {\n  --role-surface: #000000;');
+    expect(css).toContain(':root[data-theme="highContrast"] {\n  color-scheme: dark;\n  --role-surface: #000000;');
     expect(css).not.toContain('---');
   });
 });

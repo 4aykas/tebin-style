@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Formats
+- A theme with modes sets `color-scheme` for each look in `tokens.css` and
+  `tailwind.css`, from whether its surface is dark: `fleet` is `dark` in
+  `:root` and `light` under `:root[data-theme="light"]`. Native inputs,
+  scrollbars and autofill now follow the mode, as rule
+  `theming-color-scheme` asks.
+
 ## 1.13.0 — 2026-10-18
 
 ### Themes

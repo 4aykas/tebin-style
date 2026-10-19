@@ -176,7 +176,12 @@
   --components-input-padding: 0.5rem 1rem;
 }
 
+:root {
+  color-scheme: dark;
+}
+
 :root[data-theme="light"] {
+  color-scheme: light;
   --role-surface: #f8fafc;
   --color-role-surface: #f8fafc;
   --role-surface-raised: #fbfcfe;

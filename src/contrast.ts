@@ -1,4 +1,5 @@
 import { hexToRgb } from './colors-csv.js';
+import { resolveString, type TokenTree } from './tokens.js';
 
 /** WCAG 2.x relative luminance. Opaque hex only — see contrastRatio. */
 export function relativeLuminance(hex: string): number {
@@ -21,6 +22,16 @@ export function relativeLuminance(hex: string): number {
 export function contrastRatio(a: string, b: string): number {
   const [la, lb] = [relativeLuminance(a), relativeLuminance(b)];
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+/**
+ * Whether a look is dark: its `role.surface` reads better against white than
+ * against black. Null when the surface is missing or not an opaque hex.
+ */
+export function surfaceIsDark(tokens: TokenTree): boolean | null {
+  const surface = resolveString(tokens, ((tokens.role ?? {}) as Record<string, { $value?: unknown }>).surface?.$value);
+  if (!surface || !hexToRgb(surface)) return null;
+  return contrastRatio(surface, '#000000') < contrastRatio(surface, '#FFFFFF');
 }
 
 /** WCAG AA for normal-size text. */
