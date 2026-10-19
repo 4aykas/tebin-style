@@ -51,8 +51,8 @@ The home is Gitea, `git.tebin.co/tebin-oss/tebin-style` (`origin`): pull
 requests, issues, CI and releases. GitHub `4aykas/tebin-style` (`github`)
 is a public push mirror. Raw URLs, the plugin marketplace and the GitHub
 release read from it, so its `main` matches Gitea's. Push to `origin` only;
-`.claude/hooks/mirror-guard.mjs` denies `gh pr`, `gh issue` and
-`git push github`. `main` takes changes only through a Gitea PR with green
+`.claude/hooks/mirror-guard.mjs` denies `gh pr`, `gh issue`,
+`git push github` and `--no-verify`. `main` takes changes only through a Gitea PR with green
 CI: push a branch, then `node scripts/gitea-api.mjs pr "<title>" [body-file]`,
 `watch <sha>` and `merge <n>`. A PR that changes `src/`, `scripts/` or
 `mcp/` gets `/code-review` on its branch before `merge`.

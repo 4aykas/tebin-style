@@ -15,6 +15,23 @@ describe('mirror guard hook', () => {
   });
 
   it.each([
+    'git push --no-verify origin main',
+    'git push -q -u origin feat/x --no-verify',
+    'git commit --no-verify -m "wip"',
+    'git add -A && git commit -n -m x',
+  ])('denies skipping the hooks: %s', (command) => {
+    expect(verdict(command)).toMatch(/hooks/);
+  });
+
+  it.each([
+    'git push -n origin main',
+    'git commit -m "say --no-verify is banned"; echo done',
+    'git commit -q -F - <<EOF\nnever pass --no-verify\nEOF',
+  ])('allows a dry run and a message that only names the flag: %s', (command) => {
+    expect(verdict(command)).toBeNull();
+  });
+
+  it.each([
     'git push origin main',
     'git push -q origin v1.12.2',
     'gh run list -R 4aykas/tebin-style',
